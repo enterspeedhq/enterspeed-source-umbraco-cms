@@ -1,0 +1,59 @@
+﻿using System.Collections.Generic;
+using System.Linq;
+using Enterspeed.Source.Sdk.Api.Models.Properties;
+using Enterspeed.Source.UmbracoCms.V8.Extensions;
+using Umbraco.Core;
+using Umbraco.Core.Composing;
+using Umbraco.Core.Models.Blocks;
+using Umbraco.Core.Models.PublishedContent;
+
+namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConverters
+{
+    public class DefaultBlockListPropertyValueConverter : IEnterspeedPropertyValueConverter
+    {
+        public bool IsConverter(IPublishedPropertyType propertyType)
+        {
+            return propertyType.EditorAlias.Equals("Umbraco.BlockList");
+        }
+
+        public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        {
+            var value = property.GetValue<BlockListModel>(culture);
+            var arrayItems = new List<IEnterspeedProperty>();
+
+            if (value != null)
+            {
+                // NOTE: This needs to be resolved manually, since it would cause a circular dependency if injected through constructor
+                var dataPropertyService = Current.Factory.GetInstance<IEnterspeedPropertyService>();
+
+                foreach (var item in value)
+                {
+                    var properties = new Dictionary<string, IEnterspeedProperty>();
+                    if (item.Content?.Properties != null)
+                    {
+                        var contentProperties = dataPropertyService.ConvertProperties(item.Content.Properties, culture);
+                        properties.Add("Content", new ObjectEnterspeedProperty(contentProperties));
+                    }
+
+                    if (item.Settings?.Properties != null)
+                    {
+                        var settingsProperties = dataPropertyService.ConvertProperties(item.Settings.Properties, culture);
+                        properties.Add("Settings", new ObjectEnterspeedProperty(settingsProperties));
+                    }
+
+                    if (item.Content?.ContentType != null)
+                    {
+                        properties.Add("ContentType", new StringEnterspeedProperty(item.Content.ContentType.Alias));
+                    }
+
+                    if (properties.Any())
+                    {
+                        arrayItems.Add(new ObjectEnterspeedProperty(properties));
+                    }
+                }
+            }
+
+            return new ArrayEnterspeedProperty(property.Alias, arrayItems.ToArray());
+        }
+    }
+}

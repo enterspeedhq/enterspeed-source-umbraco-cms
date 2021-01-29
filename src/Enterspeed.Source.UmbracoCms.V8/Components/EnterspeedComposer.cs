@@ -1,0 +1,94 @@
+﻿using System.Configuration;
+using Enterspeed.Source.Sdk.Api.Services;
+using Enterspeed.Source.Sdk.Domain.Client;
+using Enterspeed.Source.Sdk.Domain.Services;
+using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
+using Enterspeed.Source.UmbracoCms.V8.Data.MappingDefinitions;
+using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V8.Extensions;
+using Enterspeed.Source.UmbracoCms.V8.Handlers;
+using Enterspeed.Source.UmbracoCms.V8.Providers;
+using Enterspeed.Source.UmbracoCms.V8.Services;
+using Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConverters;
+using Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultGridConverters;
+using Umbraco.Core;
+using Umbraco.Core.Composing;
+using Umbraco.Core.Mapping;
+
+namespace Enterspeed.Source.UmbracoCms.V8.Components
+{
+    [RuntimeLevel(MinLevel = RuntimeLevel.Run)]
+    public class EnterspeedComposer : IUserComposer
+    {
+        public void Compose(Composition composition)
+        {
+            var webConfigMediaDomain = ConfigurationManager.AppSettings["Enterspeed.MediaDomain"];
+            if (!string.IsNullOrWhiteSpace(webConfigMediaDomain) && !webConfigMediaDomain.IsAbsoluteUrl())
+            {
+                throw new ConfigurationErrorsException(
+                    "Configuration value for Enterspeed.MediaDomain must be absolute url");
+            }
+
+            composition.Register<IEnterspeedPropertyService, EnterspeedPropertyService>(Lifetime.Transient);
+            composition.Register<IEnterspeedGridEditorService, EnterspeedGridEditorService>(Lifetime.Transient);
+            composition.Register<IEnterspeedJobRepository, EnterspeedJobRespository>(Lifetime.Request);
+            composition.Register<IEnterspeedJobHandler, EnterspeedJobHandler>(Lifetime.Request);
+            composition.Register<IUmbracoUrlService, UmbracoUrlService>(Lifetime.Request);
+            composition.Register<IUmbracoContextProvider, UmbracoContextProvider>(Lifetime.Request);
+            composition.Register<IEnterspeedIngestService, EnterspeedIngestService>(Lifetime.Singleton);
+            composition.Register<IEntityIdentityService, UmbracoEntityIdentityService>(Lifetime.Request);
+            composition.Register<IEnterspeedJobService, EnterspeedJobService>(Lifetime.Request);
+            composition.Register<IEnterspeedConfigurationService, EnterspeedConfigurationService>(Lifetime.Singleton);
+            composition.Register<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>(Lifetime.Request);
+
+            composition.RegisterUnique(c =>
+            {
+                var configurationService = c.GetInstance<IEnterspeedConfigurationService>();
+                return new EnterspeedConnection(configurationService);
+            });
+
+            composition.EnterspeedPropertyValueConverters()
+                .Append<DefaultBlockListPropertyValueConverter>()
+                .Append<DefaultCheckboxPropertyValueConverter>()
+                .Append<DefaultCheckboxListPropertyValueConverter>()
+                .Append<DefaultColorPickerPropertyValueConverter>()
+                .Append<DefaultContentPickerPropertyValueConverter>()
+                .Append<DefaultDateTimePropertyValueConverter>()
+                .Append<DefaultDecimalPropertyValueConverter>()
+                .Append<DefaultDropdownPropertyValueConverter>()
+                .Append<DefaultEmailAddressPropertyValueConverter>()
+                .Append<DefaultFileUploadPropertyValueConverter>()
+                .Append<DefaultGridLayoutPropertyValueConverter>()
+                .Append<DefaultImageCropperPropertyValueConverter>()
+                .Append<DefaultMarkdownEditorPropertyValueConverter>()
+                .Append<DefaultMediaPickerPropertyValueConverter>()
+                .Append<DefaultMemberGroupPickerPropertyValueConverter>()
+                .Append<DefaultMemberPickerPropertyValueConverter>()
+                .Append<DefaultMultiUrlPickerPropertyValueConverter>()
+                .Append<DefaultMultiNodeTreePickerPropertyValueConverter>()
+                .Append<DefaultNestedContentPropertyValueConverter>()
+                .Append<DefaultNumericPropertyValueConverter>()
+                .Append<DefaultRadioButtonListPropertyValueConverter>()
+                .Append<DefaultRepeatableTextStringPropertyValueConverter>()
+                .Append<DefaultRichTextEditorPropertyValueConverter>()
+                .Append<DefaultSliderPropertyValueConverter>()
+                .Append<DefaultTagsPropertyValueConverter>()
+                .Append<DefaultTextAreaPropertyValueConverter>()
+                .Append<DefaultTextboxPropertyValueConverter>()
+                .Append<DefaultUserPickerPropertyValueConverter>();
+
+            // Default grid editor value convertres
+            composition.EnterspeedGridEditorValueConverters()
+                .Append<DefaultRichTextEditorGridEditorValueConverter>();
+
+            // Mapping definitions
+            composition.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
+                .Add<EnterspeedJobMappingDefinition>();
+
+            // Register event componenents
+            composition.Components().Append<EnterspeedContentEventsComponent>();
+            composition.Components().Append<EnterspeedJobsComponent>();
+            composition.Components().Append<EnterspeedBackgroundTasksComponent>();
+        }
+    }
+}

@@ -1,0 +1,22 @@
+﻿<div ng-app id="enterspeedDashboard" ng-controller="DashboardController as vm" class="enterspeed-dashboard">
+	<umb-box>
+		<umb-box-content>
+
+			<umb-tabs-nav tabs="vm.tabs"
+						  on-tab-change="vm.changeTab(tab)">
+			</umb-tabs-nav>
+
+			<umb-tab-content ng-repeat="tab in vm.tabs"
+							 ng-show="tab.active"
+							 tab="tab">
+				<div ng-if="tab.alias === 'failedJobsTab'">
+					<div ng-include="'/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Views/failedjobs.view.html'"></div>
+				</div>
+				<div ng-if="tab.alias === 'seedsTab'">
+					<div ng-include="'/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Views/seed.view.html'"></div>
+				</div>
+			</umb-tab-content>
+
+		</umb-box-content>
+	</umb-box>
+</div>
