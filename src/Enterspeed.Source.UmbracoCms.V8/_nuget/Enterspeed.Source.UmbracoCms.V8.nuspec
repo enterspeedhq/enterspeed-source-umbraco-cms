@@ -13,6 +13,8 @@
     <tags>Enterspeed, Umbraco 8</tags>
     <dependencies>
       <dependency id="Enterspeed.Source.Sdk" version="[0.0,1.0)" />
+      <dependency id="UmbracoCms.Core" version="[8.7,9.0)" />
+      <dependency id="UmbracoCms.Web" version="[8.7,9.0)" />
     </dependencies>
   </metadata>
   <files>
