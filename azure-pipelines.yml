@@ -91,7 +91,7 @@ stages:
             displayName: Build solution
             inputs:
               solution: ./Enterspeed.Source.UmbracoCms.sln
-              msbuildArgs: '/p:WarningLevel=1'
+              logFileVerbosity: minimal
               platform: Any CPU
               configuration: Release
               maximumCpuCount: true
