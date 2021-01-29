@@ -102,7 +102,7 @@ stages:
               script: |
         
                 $version = $(semVersion)
-                $nuspecs =  Get-ChildItem -Path ..\*\*.nuspec -Recurse -Force;
+                $nuspecs =  Get-ChildItem -Path .\*\*.nuspec -Recurse -Force;
                 $nuspecs | Foreach-Object { 
           
                 [xml]$xml = Get-Content -path  $_.FullName -Raw
