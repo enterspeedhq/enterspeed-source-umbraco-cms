@@ -1,0 +1,23 @@
+﻿<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>Enterspeed.Source.UmbracoCms.V8</id>
+    <version></version>
+    <authors>Enterspeed</authors>
+    <owners>Enterspeed</owners>
+    <projectUrl>https://www.enterspeed.com/</projectUrl>
+    <repository type="git" url="https://github.com/enterspeedhq/enterspeed-source-umbraco-cms"></repository>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
+    <description>Enterspeed integration for Umbraco version 8</description>
+    <tags>Enterspeed, Umbraco 8</tags>
+    <dependencies>
+      <dependency id="Enterspeed.Source.Sdk" version="[0.0,1.0)" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\bin\Release\Enterspeed.Source.UmbracoCms.V8.dll" target="lib\net45" />
+    <file src="..\bin\Release\Enterspeed.Source.UmbracoCms.V8.pdb" target="lib\net45" />
+    <file src="..\_content\**\*" target="content" />
+  </files>
+</package>

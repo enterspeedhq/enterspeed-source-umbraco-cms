@@ -7,6 +7,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enterspeed.Source.UmbracoCm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.V8", "src\Enterspeed.Source.UmbracoCms.V8\Enterspeed.Source.UmbracoCms.V8.csproj", "{E6158BA2-5B73-46AB-9075-BE83BE773629}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{0215A9EA-3011-4D81-B588-FC322C54D8A6}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
+		CHANGELOG.md = CHANGELOG.md
+		NuGet.Config = NuGet.Config
+		README.md = README.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

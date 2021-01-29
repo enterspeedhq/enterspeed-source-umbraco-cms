@@ -320,8 +320,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Content\App_Plugins\Enterspeed.Dashboard\package.manifest" />
+    <None Include="_content\App_Plugins\Enterspeed.Dashboard\package.manifest" />
     <None Include="packages.config" />
+    <None Include="_nuget\Enterspeed.Source.UmbracoCms.V8.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\lib\settings\stylecop.json">
@@ -333,20 +334,21 @@
     <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\dashboard.controller.js" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\dashboard.html" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\configuration.controller.js" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\failedjobs.controller.js" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\seed.controller.js" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\lang\en-US.xml" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
-    <Content Include="Content\App_Plugins\Enterspeed.Dashboard\styles.css" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\configuration.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\failedjobs.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\seed.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\lang\en-US.xml" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\styles.css" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\..\lib\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets" Condition="Exists('..\..\lib\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
