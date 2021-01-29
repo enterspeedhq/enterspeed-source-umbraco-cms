@@ -81,6 +81,7 @@ stages:
           - task: NuGetCommand@2
             displayName: NuGet restore
             inputs:
+              command: 'restore'
               restoreSolution: '**\*.sln'
               feedsToUse: config
               nugetConfigPath: ./NuGet.Config
