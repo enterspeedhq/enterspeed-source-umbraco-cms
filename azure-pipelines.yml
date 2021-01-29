@@ -85,7 +85,6 @@ stages:
               restoreSolution: '**\*.sln'
               feedsToUse: config
               nugetConfigPath: ./NuGet.Config
-              restoreDirectory: ../lib/packages
 
           # Build solution
           - task: VSBuild@1
