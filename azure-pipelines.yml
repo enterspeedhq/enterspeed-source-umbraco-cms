@@ -95,35 +95,13 @@ stages:
               configuration: Release
               maximumCpuCount: true
 
-          # Insert version number to NuSpec
-          - task: PowerShell@2
-            inputs:
-              targetType: 'inline'
-              script: |
-        
-                $version = $(semVersion)
-                $nuspecs =  Get-ChildItem -Path .\*\*.nuspec -Recurse -Force;
-                $nuspecs | Foreach-Object { 
-          
-                [xml]$xml = Get-Content -path  $_.FullName -Raw
-
-                $ns = [System.Xml.XmlNamespaceManager]::new($xml.NameTable)
-                    $ns.AddNamespace('nuspec', 'http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd')
-              
-                    write-host [xml]$xml
-                    $xml.package.metadata.version = $version.ToString();
-              
-                    [xml]$xml.Save($_.FullName)
-                }
-
-                Write-Host "##vso[build.updatebuildnumber]$version"
-              workingDirectory: '$(System.DefaultWorkingDirectory)'
-
+          # Pack NuGet
           - task: NuGetCommand@2
             inputs:
               command: 'pack'
               packagesToPack: '**/*.nuspec'
-              versioningScheme: 'off'
+              versioningScheme: byEnvVar
+              versionEnvVar: semVersion
               includeSymbols: false
 
           # Publish artifacts
