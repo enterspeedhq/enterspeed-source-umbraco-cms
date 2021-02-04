@@ -50,6 +50,7 @@ trigger:
     exclude:
       - README.md
       - CHANGELOG.md
+      - documentation/*
    
 pr:
   branches:
@@ -60,6 +61,7 @@ pr:
     exclude:
       - README.md
       - CHANGELOG.md
+      - documentation/*
 
 stages:
   - stage: Build

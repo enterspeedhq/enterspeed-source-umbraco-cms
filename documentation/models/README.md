@@ -28,7 +28,7 @@ will be dispatched to Enterspeed.
 |updateDate         | `StringEnterspeedProperty` | The date time the node was updated |
 |level              | `StringEnterspeedProperty` | The level in the tree (1, 2, 3, etc.) |
 
-The meta data properties, are available from the _propeties_ object
+The meta data properties, are available from the _properties_ object
 like the example below.
 
 ```js
