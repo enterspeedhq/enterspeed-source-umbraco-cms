@@ -1,4 +1,4 @@
-# Configurering Umbraco with Enterspeed
+# Configuring Umbraco with Enterspeed
 
 Guide for how to configure Umbraco to call Enterspeed Ingest API.
 

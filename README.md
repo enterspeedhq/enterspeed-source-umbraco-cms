@@ -27,15 +27,15 @@ If you are going to install Enterspeed into an exisiting solution:
 
 ### Setting up the configuration
 
-Check out the configuration guide here: [Configurering Umbraco with Enterspeed](./documentation/configuration/README.md)
+Check out the configuration guide here: [Configuring Umbraco with Enterspeed](./documentation/configuration/README.md)
 
 ## Documentation
 
-For more in depth explainations check out [Enterspeed Umbraco 8 Source documentation](./documentation/README.md)
+For more in depth explanations check out [Enterspeed Umbraco 8 Source documentation](./documentation/README.md)
 
 ## Known limitations
 
-For a list and explaination of current known limitations check out [Known Limitations](./documentation/known-limitations/README.md)
+For a list and explanation of current known limitations check out [Known Limitations](./documentation/known-limitations/README.md)
 
 ## Contributing
 

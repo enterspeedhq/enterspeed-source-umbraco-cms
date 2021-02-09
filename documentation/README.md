@@ -1,6 +1,6 @@
 # Enterspeed Umbraco 8 source documentation
 
-## [Configurering Umbraco with Enterspeed](./configuration/README.md)
+## [Configuring Umbraco with Enterspeed](./configuration/README.md)
 
 Configuration of Source API key and Enterspeed Ingest endpoint.
 

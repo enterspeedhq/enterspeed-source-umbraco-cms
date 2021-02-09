@@ -1,7 +1,7 @@
 # Jobs
 
 A job is an instruction that needs to be executed in order
-to syncronize data with Enterspeed.  
+to synchronize data with Enterspeed.  
 A job contains information about what content from Umbraco,  
 that needs to be handled, and how it should be handled (ie. Publish or Delete).
 
