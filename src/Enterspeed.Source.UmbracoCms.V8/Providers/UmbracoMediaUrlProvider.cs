@@ -1,5 +1,5 @@
 ﻿using System;
-using Enterspeed.Source.Sdk.Api.Services;
+using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
 

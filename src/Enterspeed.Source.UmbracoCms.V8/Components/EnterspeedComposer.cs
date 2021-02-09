@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
+using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
-using Enterspeed.Source.Sdk.Domain.Client;
+using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Enterspeed.Source.UmbracoCms.V8.Data.MappingDefinitions;
@@ -39,12 +40,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IEntityIdentityService, UmbracoEntityIdentityService>(Lifetime.Request);
             composition.Register<IEnterspeedJobService, EnterspeedJobService>(Lifetime.Request);
             composition.Register<IEnterspeedConfigurationService, EnterspeedConfigurationService>(Lifetime.Singleton);
+            composition.Register<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>(Lifetime.Singleton);
             composition.Register<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>(Lifetime.Request);
 
             composition.RegisterUnique(c =>
             {
-                var configurationService = c.GetInstance<IEnterspeedConfigurationService>();
-                return new EnterspeedConnection(configurationService);
+                var configurationProvider = c.GetInstance<IEnterspeedConfigurationProvider>();
+                return new EnterspeedConnection(configurationProvider);
             });
 
             composition.EnterspeedPropertyValueConverters()

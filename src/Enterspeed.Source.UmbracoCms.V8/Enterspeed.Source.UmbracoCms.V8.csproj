@@ -48,7 +48,8 @@
       <HintPath>..\..\lib\packages\CSharpTest.Net.Collections.14.906.1403.1082\lib\net40\CSharpTest.Net.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Enterspeed.Source.Sdk, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\packages\Enterspeed.Source.Sdk.0.1.0\lib\netstandard2.0\Enterspeed.Source.Sdk.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\enterspeed-sdk-dotnet\src\Enterspeed.Source.Sdk\bin\Debug\netstandard2.0\Enterspeed.Source.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Examine, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Examine.1.0.2\lib\net452\Examine.dll</HintPath>
@@ -269,9 +270,12 @@
     <Compile Include="Handlers\EnterspeedJobHandler.cs" />
     <Compile Include="Models\Api\ApiResponse.cs" />
     <Compile Include="Models\Api\SeedResponse.cs" />
+    <Compile Include="Models\Configuration\EnterspeedUmbracoConfiguration.cs" />
     <Compile Include="Models\Grid\GridControl.cs" />
     <Compile Include="Models\UmbracoContentEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\EnterspeedUmbracoConfigurationProvider.cs" />
+    <Compile Include="Providers\InMemoryEnterspeedUmbracoConfigurationProvider.cs" />
     <Compile Include="Providers\IUmbracoMediaUrlProvider.cs" />
     <Compile Include="Providers\UmbracoMediaUrlProvider.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultUserPickerPropertyValueConverter.cs" />
@@ -309,6 +313,7 @@
     <Compile Include="Services\EnterspeedConfigurationService.cs" />
     <Compile Include="Services\EnterspeedJobService.cs" />
     <Compile Include="Services\EnterspeedGridEditorService.cs" />
+    <Compile Include="Services\IEnterspeedConfigurationService.cs" />
     <Compile Include="Services\IEnterspeedGridEditorService.cs" />
     <Compile Include="Services\IEnterspeedPropertyService.cs" />
     <Compile Include="Handlers\IEnterspeedJobHandler.cs" />
