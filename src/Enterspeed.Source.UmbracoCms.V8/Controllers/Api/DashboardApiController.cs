@@ -6,13 +6,15 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
-using Enterspeed.Source.Sdk.Api.Services;
+using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Configuration;
-using Enterspeed.Source.Sdk.Domain.Client;
+using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Models.Api;
+using Enterspeed.Source.UmbracoCms.V8.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Web.WebApi;
 
@@ -24,13 +26,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
-        private readonly EnterspeedConnection _enterspeedConnection;
+        private readonly IEnterspeedConnection _enterspeedConnection;
 
         public DashboardApiController(
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
-            EnterspeedConnection enterspeedConnection)
+            IEnterspeedConnection enterspeedConnection)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;
@@ -74,7 +76,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         }
 
         [HttpPost]
-        public HttpResponseMessage SaveConfiguration(EnterspeedConfiguration configuration)
+        public HttpResponseMessage SaveConfiguration(EnterspeedUmbracoConfiguration configuration)
         {
             if (string.IsNullOrEmpty(configuration?.ApiKey) || string.IsNullOrEmpty(configuration?.BaseUrl))
             {
@@ -130,7 +132,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
 
         private Response TestConnection(EnterspeedConfiguration configuration)
         {
-            var testConfigurationService = new InMemoryEnterspeedConfigurationService(configuration);
+            var testConfigurationService = new InMemoryEnterspeedUmbracoConfigurationProvider(configuration);
             var testConnection = new EnterspeedConnection(testConfigurationService);
             var enterspeedIngestService = new EnterspeedIngestService(testConnection);
 

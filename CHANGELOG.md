@@ -1,0 +1,12 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
+
+## [0.2.0 - 2021-02-10]
+
+- Update Enterspeed.Source.Sdk to 0.3.0
+- Add IEnterspeedConfigurationService + implementation
+- Add EnterspeedUmbracoConfigurationProvider + InMemoryEnterspeedUmbracoConfigurationProvider
+- Add EnterspeedUmbracoConfiguration with MediaDomain

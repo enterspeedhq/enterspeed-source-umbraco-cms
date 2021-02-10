@@ -1,7 +1,7 @@
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   majorVersion: 0
-  minorVersion: 1
+  minorVersion: 2
   patchVersion: 0
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
   agentPool: Enterspeed-Production
@@ -50,6 +50,7 @@ trigger:
     exclude:
       - README.md
       - CHANGELOG.md
+      - documentation/*
    
 pr:
   branches:
@@ -60,6 +61,7 @@ pr:
     exclude:
       - README.md
       - CHANGELOG.md
+      - documentation/*
 
 stages:
   - stage: Build
