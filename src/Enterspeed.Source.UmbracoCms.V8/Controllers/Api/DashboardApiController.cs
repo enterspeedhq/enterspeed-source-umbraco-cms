@@ -6,6 +6,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web;
 using System.Web.Http;
+using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
@@ -25,13 +26,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
-        private readonly EnterspeedConnection _enterspeedConnection;
+        private readonly IEnterspeedConnection _enterspeedConnection;
 
         public DashboardApiController(
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
-            EnterspeedConnection enterspeedConnection)
+            IEnterspeedConnection enterspeedConnection)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;

@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
@@ -43,11 +44,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>(Lifetime.Singleton);
             composition.Register<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>(Lifetime.Request);
 
-            composition.RegisterUnique(c =>
-            {
-                var configurationProvider = c.GetInstance<IEnterspeedConfigurationProvider>();
-                return new EnterspeedConnection(configurationProvider);
-            });
+            composition.Register<IEnterspeedConnection>(
+                c =>
+                {
+                    var configurationProvider = c.GetInstance<IEnterspeedConfigurationProvider>();
+                    return new EnterspeedConnection(configurationProvider);
+                }, Lifetime.Singleton);
 
             composition.EnterspeedPropertyValueConverters()
                 .Append<DefaultBlockListPropertyValueConverter>()
