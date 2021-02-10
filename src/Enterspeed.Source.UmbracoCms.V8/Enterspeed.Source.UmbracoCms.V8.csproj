@@ -47,8 +47,8 @@
     <Reference Include="CSharpTest.Net.Collections, Version=14.906.1403.1082, Culture=neutral, PublicKeyToken=06aee00cce822474, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\CSharpTest.Net.Collections.14.906.1403.1082\lib\net40\CSharpTest.Net.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="Enterspeed.Source.Sdk, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\packages\Enterspeed.Source.Sdk.0.1.0\lib\netstandard2.0\Enterspeed.Source.Sdk.dll</HintPath>
+    <Reference Include="Enterspeed.Source.Sdk, Version=0.3.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\Enterspeed.Source.Sdk.0.3.0\lib\netstandard2.0\Enterspeed.Source.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Examine, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Examine.1.0.2\lib\net452\Examine.dll</HintPath>
@@ -241,37 +241,41 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollectionBuilder.cs" />
-    <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollection.cs" />
-    <Compile Include="Components\EnterspeedContentEventsComponent.cs" />
     <Compile Include="Components\DataPropertyValueConverter\CompositionExtensions.cs" />
+    <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollection.cs" />
+    <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollectionBuilder.cs" />
     <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyValueConverterCollection.cs" />
     <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyValueConverterCollectionBuilder.cs" />
-    <Compile Include="Components\EnterspeedComposer.cs" />
-    <Compile Include="Components\EnterspeedJobsComponent.cs" />
     <Compile Include="Components\EnterspeedBackgroundTasksComponent.cs" />
+    <Compile Include="Components\EnterspeedComposer.cs" />
+    <Compile Include="Components\EnterspeedContentEventsComponent.cs" />
+    <Compile Include="Components\EnterspeedJobsComponent.cs" />
     <Compile Include="Components\Tasks\HandleEnterspeedJobsTask.cs" />
     <Compile Include="Components\Tasks\InvalidateEnterspeedJobsTask.cs" />
     <Compile Include="Controllers\Api\DashboardApiController.cs" />
-    <Compile Include="Dashboard\EnterspeedSettingsDashboard.cs" />
     <Compile Include="Dashboard\EnterspeedContentDashboard.cs" />
-    <Compile Include="Data\Models\EnterspeedJob.cs" />
-    <Compile Include="Data\Repositories\EnterspeedJobRespository.cs" />
-    <Compile Include="Data\Repositories\IEnterspeedJobRepository.cs" />
+    <Compile Include="Dashboard\EnterspeedSettingsDashboard.cs" />
     <Compile Include="Data\MappingDefinitions\EnterspeedJobMappingDefinition.cs" />
     <Compile Include="Data\Migration\EnterspeedJobsTableMigration.cs" />
-    <Compile Include="Data\Schemas\EnterspeedConfigurationSchema.cs" />
-    <Compile Include="Data\Schemas\EnterspeedJobSchema.cs" />
+    <Compile Include="Data\Models\EnterspeedJob.cs" />
     <Compile Include="Data\Models\EnterspeedJobState.cs" />
     <Compile Include="Data\Models\EnterspeedJobType.cs" />
+    <Compile Include="Data\Repositories\EnterspeedJobRespository.cs" />
+    <Compile Include="Data\Repositories\IEnterspeedJobRepository.cs" />
+    <Compile Include="Data\Schemas\EnterspeedConfigurationSchema.cs" />
+    <Compile Include="Data\Schemas\EnterspeedJobSchema.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Handlers\EnterspeedJobHandler.cs" />
+    <Compile Include="Handlers\IEnterspeedJobHandler.cs" />
     <Compile Include="Models\Api\ApiResponse.cs" />
     <Compile Include="Models\Api\SeedResponse.cs" />
+    <Compile Include="Models\Configuration\EnterspeedUmbracoConfiguration.cs" />
     <Compile Include="Models\Grid\GridControl.cs" />
     <Compile Include="Models\UmbracoContentEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Providers\EnterspeedUmbracoConfigurationProvider.cs" />
+    <Compile Include="Providers\InMemoryEnterspeedUmbracoConfigurationProvider.cs" />
     <Compile Include="Providers\IUmbracoMediaUrlProvider.cs" />
     <Compile Include="Providers\UmbracoMediaUrlProvider.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultUserPickerPropertyValueConverter.cs" />
@@ -309,9 +313,9 @@
     <Compile Include="Services\EnterspeedConfigurationService.cs" />
     <Compile Include="Services\EnterspeedJobService.cs" />
     <Compile Include="Services\EnterspeedGridEditorService.cs" />
+    <Compile Include="Services\IEnterspeedConfigurationService.cs" />
     <Compile Include="Services\IEnterspeedGridEditorService.cs" />
     <Compile Include="Services\IEnterspeedPropertyService.cs" />
-    <Compile Include="Handlers\IEnterspeedJobHandler.cs" />
     <Compile Include="Services\IEnterspeedJobService.cs" />
     <Compile Include="Services\IEntityIdentityService.cs" />
     <Compile Include="Services\IUmbracoContextProvider.cs" />

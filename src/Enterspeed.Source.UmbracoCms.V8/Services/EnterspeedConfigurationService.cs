@@ -1,7 +1,6 @@
 ﻿using System.Configuration;
-using Enterspeed.Source.Sdk.Api.Services;
-using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
+using Enterspeed.Source.UmbracoCms.V8.Models.Configuration;
 using Newtonsoft.Json;
 using Umbraco.Core.Services;
 
@@ -10,7 +9,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
     public class EnterspeedConfigurationService : IEnterspeedConfigurationService
     {
         private readonly IKeyValueService _keyValueService;
-        private EnterspeedConfiguration _configuration;
+        private EnterspeedUmbracoConfiguration _configuration;
         private readonly string _configurationDatabaseKey = "Enterspeed+Configuration";
 
         public EnterspeedConfigurationService(IKeyValueService keyValueService)
@@ -18,7 +17,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _keyValueService = keyValueService;
         }
 
-        public EnterspeedConfiguration GetConfiguration()
+        public EnterspeedUmbracoConfiguration GetConfiguration()
         {
             if (_configuration != null)
             {
@@ -34,7 +33,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             var webConfigEndpoint = ConfigurationManager.AppSettings["Enterspeed.Endpoint"];
             var webConfigMediaDomain = ConfigurationManager.AppSettings["Enterspeed.MediaDomain"];
             var webConfigApikey = ConfigurationManager.AppSettings["Enterspeed.Apikey"];
-            _configuration = new EnterspeedConfiguration
+            _configuration = new EnterspeedUmbracoConfiguration
             {
                 BaseUrl = webConfigEndpoint?.Trim(),
                 ApiKey = webConfigApikey?.Trim(),
@@ -43,7 +42,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return _configuration;
         }
 
-        public void Save(EnterspeedConfiguration configuration)
+        public void Save(EnterspeedUmbracoConfiguration configuration)
         {
             if (configuration == null)
             {
@@ -61,7 +60,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _configuration = configuration;
         }
 
-        private EnterspeedConfiguration GetConfigurationFromDatabase()
+        private EnterspeedUmbracoConfiguration GetConfigurationFromDatabase()
         {
             var savedConfigurationValue = _keyValueService.GetValue(_configurationDatabaseKey);
             if (string.IsNullOrWhiteSpace(savedConfigurationValue))
@@ -69,7 +68,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return null;
             }
 
-            return JsonConvert.DeserializeObject<EnterspeedConfiguration>(savedConfigurationValue);
+            return JsonConvert.DeserializeObject<EnterspeedUmbracoConfiguration>(savedConfigurationValue);
         }
     }
 }
