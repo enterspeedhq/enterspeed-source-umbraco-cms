@@ -24,26 +24,28 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 
         public string GetUrlFromIdUrl(string idUrl, string culture)
         {
-            string output = idUrl;
+            var output = idUrl;
 
             var id = GetIdFromIdUrl(idUrl);
 
-            if (id > 0)
+            if (id <= 0)
             {
-                var umbContext = _contextProvider.GetContext();
-                var domainsFromId = umbContext.Domains.GetAssigned(id, false);
-
-                var domain = domainsFromId.FirstOrDefault(x => x.Culture.IetfLanguageTag.ToLower().Equals(culture.ToLower()));
-
-                if (domain == null)
-                {
-                    return null;
-                }
-
-                var domainUrl = idUrl.Replace(id.ToString(), domain.Name);
-
-                output = PrepareUrl(domainUrl);
+                return output;
             }
+
+            var umbContext = _contextProvider.GetContext();
+            var domainsFromId = umbContext.Domains.GetAssigned(id, false);
+
+            var domain = domainsFromId.FirstOrDefault(x => x.Culture.IetfLanguageTag.ToLower().Equals(culture.ToLower()));
+
+            if (domain == null)
+            {
+                return idUrl.Replace(id.ToString(), string.Empty);
+            }
+
+            var domainUrl = idUrl.Replace(id.ToString(), domain.Name);
+
+            output = PrepareUrl(domainUrl);
 
             return output;
         }
@@ -55,7 +57,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return 0;
             }
 
-            var idFromUrlPattern = @"^(\d+)/?(.*)";
+            const string idFromUrlPattern = @"^(\d+)/?(.*)";
             var regexMatch = Regex.Match(idUrl, idFromUrlPattern);
             if (regexMatch.Success && regexMatch.Groups.Count >= 1)
             {

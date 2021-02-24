@@ -318,8 +318,10 @@
     <Compile Include="Services\IEnterspeedPropertyService.cs" />
     <Compile Include="Services\IEnterspeedJobService.cs" />
     <Compile Include="Services\IEntityIdentityService.cs" />
+    <Compile Include="Services\IUmbracoRedirectsService.cs" />
     <Compile Include="Services\IUmbracoContextProvider.cs" />
     <Compile Include="Services\IUmbracoUrlService.cs" />
+    <Compile Include="Services\UmbracoRedirectsService.cs" />
     <Compile Include="Services\UmbracoContextProvider.cs" />
     <Compile Include="Services\UmbracoEntityIdentityService.cs" />
     <Compile Include="Services\UmbracoUrlService.cs" />

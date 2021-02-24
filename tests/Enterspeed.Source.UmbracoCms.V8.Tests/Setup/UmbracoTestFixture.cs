@@ -19,7 +19,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Tests.Setup
     public class UmbracoTestFixture : Fixture
     {
         public IUmbracoContextAccessor ContextAccessor { get; set; }
-        public UmbracoContextFactory ContextFactory { get; set; }
         public IMediaUrlProvider MediaUrlProvider { get; set; }
         public IUrlProvider UrlProvider { get; set; }
         public IPublishedSnapshotService PublishedSnapshotService { get; set; }
@@ -27,8 +26,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Tests.Setup
         public IDefaultCultureAccessor DefaultCultureAccessor { get; set; }
         public IGlobalSettings GlobalSettings { get; set; }
         public IUserService UserService { get; set; }
+        public IDomainCache DomainCache { get; set; }
+        public IRedirectUrlService RedirectUrlService { get; set; }
         public UmbracoSettingsSection UmbracoSettingsSection { get; set; }
         public SimpleWorkerRequest SimpleWorkerRequest { get; set; }
+        public UmbracoContextFactory ContextFactory { get; set; }
 
         public UmbracoTestFixture()
         {
@@ -42,6 +44,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Tests.Setup
             DefaultCultureAccessor = this.Freeze<IDefaultCultureAccessor>();
             GlobalSettings = this.Freeze<IGlobalSettings>();
             UserService = this.Freeze<IUserService>();
+            DomainCache = this.Freeze<IDomainCache>();
+            RedirectUrlService = this.Freeze<IRedirectUrlService>();
             UmbracoSettingsSection = this.Freeze<UmbracoSettingsSection>();
 
             SimpleWorkerRequest = new SimpleWorkerRequest("/", @"c:\", "null.aspx", string.Empty, TextWriter.Null);
@@ -55,8 +59,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Tests.Setup
                 GlobalSettings,
                 new UrlProviderCollection(new[] { UrlProvider }),
                 new MediaUrlProviderCollection(new[] { MediaUrlProvider }),
-                UserService
-            );
+                UserService);
         }
 
         public UmbracoContextReference EnsureUmbracoContext()
