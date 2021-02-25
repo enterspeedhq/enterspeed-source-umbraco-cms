@@ -15,7 +15,6 @@ using Xunit;
 
 [assembly: Guid("dfb63d59-02d0-4f91-9c8e-bddd362c52cf")]
 
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerAssembly)]
