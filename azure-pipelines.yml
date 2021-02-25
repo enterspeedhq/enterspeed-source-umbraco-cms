@@ -45,7 +45,11 @@ trigger:
   branches:
     include:
       - master
+      - develop
       - release/*
+      - feature/*
+      - bugfix/*
+      - hotfix/*
   paths:
     exclude:
       - README.md
@@ -56,6 +60,7 @@ pr:
   branches:
     include:
       - master
+      - develop
       - release/*
   paths:
     exclude:
