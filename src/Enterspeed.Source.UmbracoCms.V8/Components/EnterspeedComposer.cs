@@ -43,6 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IEnterspeedConfigurationService, EnterspeedConfigurationService>(Lifetime.Singleton);
             composition.Register<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>(Lifetime.Singleton);
             composition.Register<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>(Lifetime.Request);
+            composition.Register<IUmbracoRedirectsService, UmbracoRedirectsService>(Lifetime.Request);
 
             composition.Register<IEnterspeedConnection>(
                 c =>

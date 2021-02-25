@@ -1,17 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.props" Condition="Exists('..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.props')" />
+  <Import Project="..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.props" Condition="Exists('..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E6158BA2-5B73-46AB-9075-BE83BE773629}</ProjectGuid>
+    <ProjectGuid>{DFB63D59-02D0-4F91-9C8E-BDDD362C52CF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Enterspeed.Source.UmbracoCms.V8</RootNamespace>
-    <AssemblyName>Enterspeed.Source.UmbracoCms.V8</AssemblyName>
+    <RootNamespace>Enterspeed.Source.UmbracoCms.V8.Tests</RootNamespace>
+    <AssemblyName>Enterspeed.Source.UmbracoCms.V8.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">15.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <ReferencePath>$(ProgramFiles)\Common Files\microsoft shared\VSTT\$(VisualStudioVersion)\UITestExtensionPackages</ReferencePath>
+    <IsCodedUITest>False</IsCodedUITest>
+    <TestProjectType>UnitTest</TestProjectType>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -24,7 +31,6 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
     <CodeAnalysisRuleSet>..\..\lib\settings\Enterspeed.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -34,10 +40,17 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <CodeAnalysisRuleSet>..\..\lib\settings\Enterspeed.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoFixture, Version=4.15.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\AutoFixture.4.15.0\lib\net452\AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="AutoFixture.AutoNSubstitute, Version=4.15.0.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\AutoFixture.AutoNSubstitute.4.15.0\lib\net452\AutoFixture.AutoNSubstitute.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\Castle.Core.4.4.1\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
     <Reference Include="ClientDependency.Core, Version=1.9.9.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\ClientDependency.1.9.9\lib\net45\ClientDependency.Core.dll</HintPath>
     </Reference>
@@ -52,6 +65,9 @@
     </Reference>
     <Reference Include="Examine, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Examine.1.0.2\lib\net452\Examine.dll</HintPath>
+    </Reference>
+    <Reference Include="Fare, Version=2.1.0.0, Culture=neutral, PublicKeyToken=ea68d375bf33a7c8, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\Fare.2.1.1\lib\net35\Fare.dll</HintPath>
     </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.14.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\HtmlAgilityPack.1.8.14\lib\Net45\HtmlAgilityPack.dll</HintPath>
@@ -92,6 +108,7 @@
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Microsoft.AspNet.SignalR.Core.2.4.0\lib\net45\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="Microsoft.Extensions.DependencyInjection.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Microsoft.Extensions.DependencyInjection.Abstractions.2.0.0\lib\netstandard2.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll</HintPath>
     </Reference>
@@ -110,6 +127,12 @@
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Microsoft.Owin.Security.OAuth.4.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\MSTest.TestFramework.2.1.1\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\MSTest.TestFramework.2.1.1\lib\net45\Microsoft.VisualStudio.TestPlatform.TestFramework.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
@@ -124,6 +147,9 @@
     </Reference>
     <Reference Include="NPoco, Version=3.9.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\NPoco.3.9.4\lib\net45\NPoco.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute, Version=4.2.0.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\NSubstitute.4.2.2\lib\net46\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -168,6 +194,8 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Data.SqlServerCe, Version=4.0.0.1, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Umbraco.SqlServerCE.4.0.0.1\lib\net472\System.Data.SqlServerCe.dll</HintPath>
     </Reference>
@@ -179,6 +207,7 @@
     </Reference>
     <Reference Include="System.IO" />
     <Reference Include="System.Linq.Expressions" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
@@ -190,11 +219,15 @@
     <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\System.Threading.Tasks.Dataflow.4.9.0\lib\netstandard2.0\System.Threading.Tasks.Dataflow.dll</HintPath>
     </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.1.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\System.Threading.Tasks.Extensions.4.3.0\lib\portable-net45+win8+wp8+wpa81\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
@@ -219,10 +252,6 @@
     <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="Umbraco.Core, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\UmbracoCms.Core.8.7.0\lib\net472\Umbraco.Core.dll</HintPath>
@@ -239,98 +268,34 @@
     <Reference Include="Umbraco.Web.UI, Version=8.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\UmbracoCms.Web.8.7.0\lib\net472\Umbraco.Web.UI.dll</HintPath>
     </Reference>
+    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\xunit.abstractions.2.0.3\lib\net35\xunit.abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.assert, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\xunit.assert.2.4.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.core, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\xunit.extensibility.core.2.4.1\lib\net452\xunit.core.dll</HintPath>
+    </Reference>
+    <Reference Include="xunit.execution.desktop, Version=2.4.1.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <HintPath>..\..\lib\packages\xunit.extensibility.execution.2.4.1\lib\net452\xunit.execution.desktop.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Components\DataPropertyValueConverter\CompositionExtensions.cs" />
-    <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollection.cs" />
-    <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollectionBuilder.cs" />
-    <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyValueConverterCollection.cs" />
-    <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyValueConverterCollectionBuilder.cs" />
-    <Compile Include="Components\EnterspeedBackgroundTasksComponent.cs" />
-    <Compile Include="Components\EnterspeedComposer.cs" />
-    <Compile Include="Components\EnterspeedContentEventsComponent.cs" />
-    <Compile Include="Components\EnterspeedJobsComponent.cs" />
-    <Compile Include="Components\Tasks\HandleEnterspeedJobsTask.cs" />
-    <Compile Include="Components\Tasks\InvalidateEnterspeedJobsTask.cs" />
-    <Compile Include="Controllers\Api\DashboardApiController.cs" />
-    <Compile Include="Dashboard\EnterspeedContentDashboard.cs" />
-    <Compile Include="Dashboard\EnterspeedSettingsDashboard.cs" />
-    <Compile Include="Data\MappingDefinitions\EnterspeedJobMappingDefinition.cs" />
-    <Compile Include="Data\Migration\EnterspeedJobsTableMigration.cs" />
-    <Compile Include="Data\Models\EnterspeedJob.cs" />
-    <Compile Include="Data\Models\EnterspeedJobState.cs" />
-    <Compile Include="Data\Models\EnterspeedJobType.cs" />
-    <Compile Include="Data\Repositories\EnterspeedJobRespository.cs" />
-    <Compile Include="Data\Repositories\IEnterspeedJobRepository.cs" />
-    <Compile Include="Data\Schemas\EnterspeedConfigurationSchema.cs" />
-    <Compile Include="Data\Schemas\EnterspeedJobSchema.cs" />
-    <Compile Include="Extensions\PropertyExtensions.cs" />
-    <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Handlers\EnterspeedJobHandler.cs" />
-    <Compile Include="Handlers\IEnterspeedJobHandler.cs" />
-    <Compile Include="Models\Api\ApiResponse.cs" />
-    <Compile Include="Models\Api\SeedResponse.cs" />
-    <Compile Include="Models\Configuration\EnterspeedUmbracoConfiguration.cs" />
-    <Compile Include="Models\Grid\GridControl.cs" />
-    <Compile Include="Models\UmbracoContentEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Providers\EnterspeedUmbracoConfigurationProvider.cs" />
-    <Compile Include="Providers\InMemoryEnterspeedUmbracoConfigurationProvider.cs" />
-    <Compile Include="Providers\IUmbracoMediaUrlProvider.cs" />
-    <Compile Include="Providers\UmbracoMediaUrlProvider.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultUserPickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultTagsPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMemberPickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMemberGroupPickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMediaPickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMarkdownEditorPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultImageCropperPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultGridLayoutPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultFileUploadPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultEmailAddressPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMultiNodeTreePickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMultiUrlPickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultNestedContentPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultSliderPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultNumericPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultRadioButtonListPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultRepeatableTextStringPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultRichTextEditorPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultTextboxPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultTextAreaPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultGridConverters\DefaultRichTextEditorGridEditorValueConverter.cs" />
-    <Compile Include="Services\DataProperties\IEnterspeedGridEditorValueConverter.cs" />
-    <Compile Include="Services\EnterspeedPropertyService.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultDropdownPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultDecimalPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultDateTimePropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultContentPickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultColorPickerPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultCheckboxListPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultCheckboxPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\DefaultConverters\DefaultBlockListPropertyValueConverter.cs" />
-    <Compile Include="Services\DataProperties\IEnterspeedPropertyValueConverter.cs" />
-    <Compile Include="Services\EnterspeedConfigurationService.cs" />
-    <Compile Include="Services\EnterspeedJobService.cs" />
-    <Compile Include="Services\EnterspeedGridEditorService.cs" />
-    <Compile Include="Services\IEnterspeedConfigurationService.cs" />
-    <Compile Include="Services\IEnterspeedGridEditorService.cs" />
-    <Compile Include="Services\IEnterspeedPropertyService.cs" />
-    <Compile Include="Services\IEnterspeedJobService.cs" />
-    <Compile Include="Services\IEntityIdentityService.cs" />
-    <Compile Include="Services\IUmbracoRedirectsService.cs" />
-    <Compile Include="Services\IUmbracoContextProvider.cs" />
-    <Compile Include="Services\IUmbracoUrlService.cs" />
-    <Compile Include="Services\UmbracoRedirectsService.cs" />
-    <Compile Include="Services\UmbracoContextProvider.cs" />
-    <Compile Include="Services\UmbracoEntityIdentityService.cs" />
-    <Compile Include="Services\UmbracoUrlService.cs" />
+    <Compile Include="Providers\UmbracoMediaUrlProviderTests.cs" />
+    <Compile Include="Services\UmbracoRedirectsServiceTests.cs" />
+    <Compile Include="Services\UmbracoUrlServiceTests.cs" />
+    <Compile Include="Setup\UmbracoTestFixture.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="_content\App_Plugins\Enterspeed.Dashboard\package.manifest" />
     <None Include="packages.config" />
-    <None Include="_nuget\Enterspeed.Source.UmbracoCms.V8.nuspec" />
+  </ItemGroup>
+  <ItemGroup>
+    <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+    <Analyzer Include="..\..\lib\packages\xunit.analyzers.0.10.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
     <AdditionalFiles Include="..\..\lib\settings\stylecop.json">
@@ -338,31 +303,25 @@
     </AdditionalFiles>
   </ItemGroup>
   <ItemGroup>
-    <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
-    <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.controller.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.html" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\configuration.controller.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\failedjobs.controller.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\seed.controller.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\lang\en-US.xml" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\styles.css" />
+    <ProjectReference Include="..\..\src\Enterspeed.Source.UmbracoCms.V8\Enterspeed.Source.UmbracoCms.V8.csproj">
+      <Project>{E6158BA2-5B73-46AB-9075-BE83BE773629}</Project>
+      <Name>Enterspeed.Source.UmbracoCms.V8</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
+  <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
+    <Error Condition="!Exists('..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.props'))" />
+    <Error Condition="!Exists('..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.targets'))" />
+    <Error Condition="!Exists('..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.props'))" />
+    <Error Condition="!Exists('..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.targets'))" />
     <Error Condition="!Exists('..\..\lib\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\lib\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets'))" />
   </Target>
+  <Import Project="..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.targets" Condition="Exists('..\..\lib\packages\MSTest.TestAdapter.2.1.1\build\net45\MSTest.TestAdapter.targets')" />
+  <Import Project="..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.targets" Condition="Exists('..\..\lib\packages\xunit.core.2.4.1\build\xunit.core.targets')" />
   <Import Project="..\..\lib\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets" Condition="Exists('..\..\lib\packages\Umbraco.SqlServerCE.4.0.0.1\build\Umbraco.SqlServerCE.targets')" />
 </Project>
