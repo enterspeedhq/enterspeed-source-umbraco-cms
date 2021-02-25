@@ -7,7 +7,6 @@ using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Models;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core.Logging;
-using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
@@ -23,6 +22,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
         private readonly IUmbracoUrlService _umbracoUrlService;
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
+        private readonly IUmbracoRedirectsService _redirectsService;
 
         public EnterspeedJobHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
@@ -32,7 +32,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             IRedirectUrlService redirectUrlService,
             IUmbracoUrlService umbracoUrlService,
             IEnterspeedIngestService enterspeedIngestService,
-            IEntityIdentityService entityIdentityService)
+            IEntityIdentityService entityIdentityService,
+            IUmbracoRedirectsService redirectsService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _umbracoContextFactory = umbracoContextFactory;
@@ -42,6 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             _umbracoUrlService = umbracoUrlService;
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
+            _redirectsService = redirectsService;
         }
 
         public void HandlePendingJobs(int batchSize)
@@ -130,7 +132,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
                             UmbracoContentEntity umbracoData;
                             try
                             {
-                                var redirects = GetRedirects(content, culture).ToArray();
+                                var redirects = _redirectsService.GetRedirects(content.Key, culture);
                                 umbracoData = new UmbracoContentEntity(content, _enterspeedPropertyService, _entityIdentityService, redirects, culture);
                             }
                             catch (Exception e)
@@ -201,25 +203,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
 
                 _enterspeedJobRepository.Save(oldJobs);
             }
-        }
-
-        private List<string> GetRedirects(IPublishedContent content, string culture)
-        {
-            var redirectUrls = new List<string>();
-
-            var redirects = _redirectUrlService.GetContentRedirectUrls(content.Key)
-                ?.Where(redirect => string.IsNullOrWhiteSpace(redirect.Culture) ||
-                                   redirect.Culture.ToLowerInvariant().Equals(culture.ToLowerInvariant()));
-
-            if (redirects != null)
-            {
-                foreach (var redirect in redirects)
-                {
-                    redirectUrls.Add(_umbracoUrlService.GetUrlFromIdUrl(redirect.Url, redirect.Culture));
-                }
-            }
-
-            return redirectUrls;
         }
 
         private EnterspeedJob GetFailedJob(EnterspeedJob handledJob, string exception)
