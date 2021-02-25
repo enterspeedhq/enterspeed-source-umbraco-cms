@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.3.0 - 2021-02-25]
+
+- Fix redirects returning null when no culture and hostname were set
+
 ## [0.2.0 - 2021-02-10]
 
 - Update Enterspeed.Source.Sdk to 0.3.0
