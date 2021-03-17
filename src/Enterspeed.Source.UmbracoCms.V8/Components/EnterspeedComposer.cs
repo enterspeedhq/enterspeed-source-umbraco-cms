@@ -4,6 +4,7 @@ using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
+using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Enterspeed.Source.UmbracoCms.V8.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
@@ -42,6 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IEnterspeedJobService, EnterspeedJobService>(Lifetime.Request);
             composition.Register<IEnterspeedConfigurationService, EnterspeedConfigurationService>(Lifetime.Singleton);
             composition.Register<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>(Lifetime.Singleton);
+            composition.Register<IJsonSerializer, SystemTextJsonSerializer>(Lifetime.Singleton);
             composition.Register<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>(Lifetime.Request);
             composition.Register<IUmbracoRedirectsService, UmbracoRedirectsService>(Lifetime.Request);
 
