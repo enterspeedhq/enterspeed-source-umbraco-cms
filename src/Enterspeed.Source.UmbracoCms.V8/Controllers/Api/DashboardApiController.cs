@@ -10,6 +10,7 @@ using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
+using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Models.Api;
@@ -134,7 +135,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         {
             var testConfigurationService = new InMemoryEnterspeedUmbracoConfigurationProvider(configuration);
             var testConnection = new EnterspeedConnection(testConfigurationService);
-            var enterspeedIngestService = new EnterspeedIngestService(testConnection);
+            var enterspeedIngestService = new EnterspeedIngestService(testConnection, new SystemTextJsonSerializer(), testConfigurationService);
 
             return enterspeedIngestService.Test();
         }
