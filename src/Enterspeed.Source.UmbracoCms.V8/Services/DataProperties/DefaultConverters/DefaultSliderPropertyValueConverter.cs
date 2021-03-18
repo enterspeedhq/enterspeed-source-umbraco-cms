@@ -22,8 +22,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
             {
                 var range = property.GetValue<Range<decimal>>(culture);
                 var properties = new Dictionary<string, IEnterspeedProperty>();
-                properties.Add("Minimum", new NumberEnterspeedProperty(ConvertToDouble(range.Minimum)));
-                properties.Add("Maximum", new NumberEnterspeedProperty(ConvertToDouble(range.Maximum)));
+                properties.Add("minimum", new NumberEnterspeedProperty(ConvertToDouble(range.Minimum)));
+                properties.Add("maximum", new NumberEnterspeedProperty(ConvertToDouble(range.Maximum)));
 
                 return new ObjectEnterspeedProperty(property.Alias, properties);
             }

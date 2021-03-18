@@ -30,8 +30,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                 var user = _userService.GetUserById(value.Value);
                 properties = new Dictionary<string, IEnterspeedProperty>
                 {
-                    { "Id", new NumberEnterspeedProperty(user.Id) },
-                    { "Name", new StringEnterspeedProperty(user.Name) },
+                    { "id", new NumberEnterspeedProperty(user.Id) },
+                    { "name", new StringEnterspeedProperty(user.Name) },
                 };
             }
 

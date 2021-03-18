@@ -21,9 +21,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
             {
                 properties = new Dictionary<string, IEnterspeedProperty>
                 {
-                    { "Id", new NumberEnterspeedProperty(value.Id) },
-                    { "Name", new StringEnterspeedProperty(value.Name) },
-                    { "MemberType", new StringEnterspeedProperty(value.ContentType.Alias) }
+                    { "id", new NumberEnterspeedProperty(value.Id) },
+                    { "name", new StringEnterspeedProperty(value.Name) },
+                    { "memberType", new StringEnterspeedProperty(value.ContentType.Alias) }
                 };
             }
 
