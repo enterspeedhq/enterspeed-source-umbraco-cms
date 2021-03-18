@@ -53,8 +53,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
             }
 
             var properties = new Dictionary<string, IEnterspeedProperty>();
-            properties.Add("Id", new NumberEnterspeedProperty(memberGroup.Id));
-            properties.Add("Name", new StringEnterspeedProperty(memberGroup.Name));
+            properties.Add("id", new NumberEnterspeedProperty(memberGroup.Id));
+            properties.Add("name", new StringEnterspeedProperty(memberGroup.Name));
 
             return new ObjectEnterspeedProperty(properties);
         }

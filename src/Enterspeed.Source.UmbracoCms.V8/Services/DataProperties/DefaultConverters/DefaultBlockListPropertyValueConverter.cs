@@ -32,18 +32,18 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                     if (item.Content?.Properties != null)
                     {
                         var contentProperties = dataPropertyService.ConvertProperties(item.Content.Properties, culture);
-                        properties.Add("Content", new ObjectEnterspeedProperty(contentProperties));
+                        properties.Add("content", new ObjectEnterspeedProperty(contentProperties));
                     }
 
                     if (item.Settings?.Properties != null)
                     {
                         var settingsProperties = dataPropertyService.ConvertProperties(item.Settings.Properties, culture);
-                        properties.Add("Settings", new ObjectEnterspeedProperty(settingsProperties));
+                        properties.Add("settings", new ObjectEnterspeedProperty(settingsProperties));
                     }
 
                     if (item.Content?.ContentType != null)
                     {
-                        properties.Add("ContentType", new StringEnterspeedProperty(item.Content.ContentType.Alias));
+                        properties.Add("contentType", new StringEnterspeedProperty(item.Content.ContentType.Alias));
                     }
 
                     if (properties.Any())

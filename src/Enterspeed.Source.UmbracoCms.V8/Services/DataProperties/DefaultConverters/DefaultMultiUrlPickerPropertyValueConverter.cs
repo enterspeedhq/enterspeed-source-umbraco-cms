@@ -75,12 +75,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
 
             var properties = new Dictionary<string, IEnterspeedProperty>
             {
-                { "Name", new StringEnterspeedProperty(link.Name) },
-                { "Target", new StringEnterspeedProperty(link.Target) }
+                { "name", new StringEnterspeedProperty(link.Name) },
+                { "target", new StringEnterspeedProperty(link.Target) }
             };
 
             var linkType = Enum.GetName(typeof(LinkType), link.Type);
-            properties.Add("Type", new StringEnterspeedProperty(linkType));
+            properties.Add("type", new StringEnterspeedProperty(linkType));
             var url = link.Url;
 
             StringEnterspeedProperty idProperty = null;
@@ -105,8 +105,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                 }
             }
 
-            properties.Add("Udi", idProperty);
-            properties.Add("Url", new StringEnterspeedProperty(url));
+            properties.Add("udi", idProperty);
+            properties.Add("url", new StringEnterspeedProperty(url));
 
             return new ObjectEnterspeedProperty(properties);
         }

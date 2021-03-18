@@ -34,8 +34,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
 
             var colorPickerProperties = new List<IEnterspeedProperty>
             {
-                new StringEnterspeedProperty("Color", colorValue),
-                new StringEnterspeedProperty("Label", colorLabel)
+                new StringEnterspeedProperty("color", colorValue),
+                new StringEnterspeedProperty("label", colorLabel)
             };
 
             var properties = colorPickerProperties.ToDictionary(x => x.Name, x => x);

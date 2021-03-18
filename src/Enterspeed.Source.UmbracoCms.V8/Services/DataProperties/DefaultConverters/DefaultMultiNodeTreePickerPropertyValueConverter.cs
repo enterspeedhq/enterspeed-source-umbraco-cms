@@ -83,9 +83,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
 
             var properties = new Dictionary<string, IEnterspeedProperty>
             {
-                { "Id", new StringEnterspeedProperty(id) },
-                { "Name", new StringEnterspeedProperty(node.Name) },
-                { "Url", new StringEnterspeedProperty(node.Url(culture, UrlMode.Absolute)) }
+                { "id", new StringEnterspeedProperty(id) },
+                { "name", new StringEnterspeedProperty(node.Name) },
+                { "url", new StringEnterspeedProperty(node.Url(culture, UrlMode.Absolute)) }
             };
 
             return new ObjectEnterspeedProperty(properties);
