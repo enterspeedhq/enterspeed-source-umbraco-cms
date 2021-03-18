@@ -29,7 +29,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                     var properties = dataPropertyService.ConvertProperties(item.Properties, culture);
                     if (properties != null && properties.Any())
                     {
-                        properties.Add("ContentType", new StringEnterspeedProperty(item.ContentType.Alias));
+                        properties.Add("contentType", new StringEnterspeedProperty(item.ContentType.Alias));
                         arrayItems.Add(new ObjectEnterspeedProperty(properties));
                     }
                 }

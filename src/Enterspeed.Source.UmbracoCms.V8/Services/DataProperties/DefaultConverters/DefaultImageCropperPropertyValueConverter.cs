@@ -24,13 +24,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                 properties = new Dictionary<string, IEnterspeedProperty>();
                 // Crops
                 var crops = GetCropsProperty(value);
-                properties.Add("Crops", crops.Any() ? new ArrayEnterspeedProperty("Crops", crops.ToArray()) : null);
+                properties.Add("crops", crops.Any() ? new ArrayEnterspeedProperty("crops", crops.ToArray()) : null);
 
                 // Src
-                properties.Add("Src", new StringEnterspeedProperty(value.Src));
+                properties.Add("src", new StringEnterspeedProperty(value.Src));
 
                 // FocalPoint
-                properties.Add("FocalPoint", GetFocalPoint(value));
+                properties.Add("focalPoint", GetFocalPoint(value));
             }
 
             return new ObjectEnterspeedProperty(property.Alias, properties);
@@ -45,9 +45,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                 {
                     var cropProperties = new Dictionary<string, IEnterspeedProperty>
                     {
-                        { "Alias", new StringEnterspeedProperty(crop.Alias) },
-                        { "Height", new NumberEnterspeedProperty(crop.Height) },
-                        { "Width", new NumberEnterspeedProperty(crop.Width) }
+                        { "alias", new StringEnterspeedProperty(crop.Alias) },
+                        { "height", new NumberEnterspeedProperty(crop.Height) },
+                        { "width", new NumberEnterspeedProperty(crop.Width) }
                     };
 
                     ObjectEnterspeedProperty cropCoordinatesProperty = null;
@@ -71,7 +71,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                         cropCoordinatesProperty = new ObjectEnterspeedProperty(cropCoordinatesProperties);
                     }
 
-                    cropProperties.Add("Coordinates", cropCoordinatesProperty);
+                    cropProperties.Add("coordinates", cropCoordinatesProperty);
                     crops.Add(new ObjectEnterspeedProperty(cropProperties));
                 }
             }
@@ -89,11 +89,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
             var focalPointProperties = new Dictionary<string, IEnterspeedProperty>
             {
                 {
-                    "Left", new NumberEnterspeedProperty(
+                    "left", new NumberEnterspeedProperty(
                         double.Parse(value.FocalPoint.Left.ToString(CultureInfo.InvariantCulture)))
                 },
                 {
-                    "Top", new NumberEnterspeedProperty(
+                    "top", new NumberEnterspeedProperty(
                         double.Parse(value.FocalPoint.Top.ToString(CultureInfo.InvariantCulture)))
                 }
             };
