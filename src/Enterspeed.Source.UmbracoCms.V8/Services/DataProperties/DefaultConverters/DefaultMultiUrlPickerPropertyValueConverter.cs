@@ -105,7 +105,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                 }
             }
 
-            properties.Add("udi", idProperty);
+            properties.Add("id", idProperty);
             properties.Add("url", new StringEnterspeedProperty(url));
 
             return new ObjectEnterspeedProperty(properties);
