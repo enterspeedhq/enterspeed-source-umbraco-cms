@@ -4,12 +4,11 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
 using Enterspeed.Source.UmbracoCms.V7.Data.Models;
 using Enterspeed.Source.UmbracoCms.V7.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.V7.Extensions;
 using Enterspeed.Source.UmbracoCms.V7.Models.Api;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
-using Umbraco.Web.Models;
+using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Services
 {
@@ -26,21 +25,11 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
 
         public SeedResponse Seed()
         {
-            var allContent = new List<IContent>();
+            var umbracoHelper = UmbracoContextHelper.GetUmbracoHelper();
 
-            // Add all root nodes
-            var rootContent = _contentService.GetRootContent().ToList();
-            allContent.AddRange(rootContent);
+            var allContent = umbracoHelper.TypedContentAtRoot()?.SelectMany(x => x.DescendantsOrSelf()).ToList();
 
-            // Add all descendants
-            foreach (var content in rootContent)
-            {
-                var descendants = _contentService.GetPagedDescendants(content.Id, 0L, int.MaxValue, out var total).ToList();
-                allContent.AddRange(descendants);
-            }
-
-            var jobs = new List<EnterspeedJob>();
-            if (!allContent.Any())
+            if (allContent == null || !allContent.Any())
             {
                 return new SeedResponse
                 {
@@ -49,8 +38,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 };
             }
 
-            UmbracoContextHelper.EnsureUmbracoContext();
-
+            var jobs = new List<EnterspeedJob>();
             foreach (var content in allContent)
             {
                 var contentJob = GetJobForContent(content);
@@ -71,7 +59,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             };
         }
 
-        private EnterspeedJob GetJobForContent(IContent content)
+        private EnterspeedJob GetJobForContent(IPublishedContent content)
         {
             var culture = content.GetCulture()?.ToString().ToLowerInvariant();
 
