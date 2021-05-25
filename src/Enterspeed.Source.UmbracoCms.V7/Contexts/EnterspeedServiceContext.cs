@@ -1,8 +1,8 @@
 ﻿using System;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Services;
-using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Enterspeed.Source.UmbracoCms.V7.Services;
+using Enterspeed.Source.UmbracoCms.V7.Services.Serializers;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Contexts
 {
@@ -25,7 +25,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Contexts
 
         public IEnterspeedIngestService IngestService => new EnterspeedIngestService(
             EnterspeedContext.Current.Connection,
-            new SystemTextJsonSerializer(),
+            new NewtonSoftJsonSerializer(),
             EnterspeedContext.Current.Providers.ConfigurationProvider);
     }
 }

@@ -9,12 +9,12 @@ using System.Web.Http;
 using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
-using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
 using Enterspeed.Source.UmbracoCms.V7.Data.Models;
 using Enterspeed.Source.UmbracoCms.V7.Models.Api;
 using Enterspeed.Source.UmbracoCms.V7.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.V7.Providers;
+using Enterspeed.Source.UmbracoCms.V7.Services.Serializers;
 using Umbraco.Web.WebApi;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
@@ -126,7 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
         {
             var testConfigurationService = new InMemoryEnterspeedUmbracoConfigurationProvider(configuration);
             var testConnection = new EnterspeedConnection(testConfigurationService);
-            var enterspeedIngestService = new EnterspeedIngestService(testConnection, new SystemTextJsonSerializer(), testConfigurationService);
+            var enterspeedIngestService = new EnterspeedIngestService(testConnection, new NewtonSoftJsonSerializer(), testConfigurationService);
 
             return enterspeedIngestService.Test();
         }
