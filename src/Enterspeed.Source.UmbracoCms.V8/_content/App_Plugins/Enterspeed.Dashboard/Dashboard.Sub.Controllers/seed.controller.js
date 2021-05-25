@@ -1,4 +1,4 @@
-﻿function seedController(dashboardResources, $scope, $filter, $timeout) {
+﻿function seedController(dashboardResources, notificationsService) {
     var vm = this;
     vm.seedState = "success";
     vm.seedResponse = null;
@@ -10,11 +10,14 @@
         vm.seedState = "busy";
         dashboardResources.seed().then(function (result) {
             if (result.data.isSuccess) {
+                notificationsService.success("Seed", "Successfully started seeding Enterspeed")
                 vm.seedResponse = result.data.data;
             } else {
                 vm.seedResponse = null;
             }
             vm.seedState = "success";
+        }, function (error) {
+            notificationsService.error("Seed", error.data.message);
         });
     };
 

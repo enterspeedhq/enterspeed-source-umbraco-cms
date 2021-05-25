@@ -54,15 +54,25 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         }
 
         [HttpGet]
-        public ApiResponse<SeedResponse> Seed()
+        public HttpResponseMessage Seed()
         {
+            if (!_enterspeedConfigurationService.GetConfiguration().IsConfigured)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, new Response
+                {
+                    Status = HttpStatusCode.BadRequest,
+                    Success = false,
+                    Message = "Enterspeed has not yet been configured"
+                });
+            }
+
             var response = _enterspeedJobService.Seed();
 
-            return new ApiResponse<SeedResponse>
+            return Request.CreateResponse(HttpStatusCode.OK, new ApiResponse<SeedResponse>
             {
                 Data = response,
                 IsSuccess = true
-            };
+            });
         }
 
         [HttpGet]
