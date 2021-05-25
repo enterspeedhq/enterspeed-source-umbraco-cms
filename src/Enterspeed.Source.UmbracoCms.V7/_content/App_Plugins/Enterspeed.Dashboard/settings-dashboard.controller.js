@@ -1,22 +1,13 @@
 ﻿function dashboardSettingsController() {
     var vm = this;
-    vm.changeTab = changeTab;
 
     // tabs
     vm.tabs = [
         {
-            "alias": "configurationTab",
-            "label": "Configuration",
-            "active": true
+            id: "configurationTab",
+            label: "Configuration"
         }
     ];
-
-    function changeTab(selectedTab) {
-        vm.tabs.forEach(function (tab) {
-            tab.active = false;
-        });
-        selectedTab.active = true;
-    }
 
     function init() {
     }

@@ -1,6 +1,5 @@
 ﻿function dashboardController() {
     var vm = this;
-    vm.changeTab = changeTab;
 
     vm.loadingFailedJobs = false;
     vm.failedJobs = [];
@@ -9,22 +8,15 @@
     // tabs
     vm.tabs = [
         {
-            "alias": "failedJobsTab",
-            "label": "Failed Jobs",
-            "active": true
+            id: "failedJobsTab",
+            label: "Failed Jobs",
+            active: true
         },
         {
-            "alias": "seedsTab",
-            "label": "Seed"
+            id: "seedsTab",
+            label: "Seed"
         }
     ];
-
-    function changeTab(selectedTab) {
-        vm.tabs.forEach(function (tab) {
-            tab.active = false;
-        });
-        selectedTab.active = true;
-    }
 
     function init() {
     }

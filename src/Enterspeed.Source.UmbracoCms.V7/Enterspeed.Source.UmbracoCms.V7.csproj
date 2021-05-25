@@ -238,7 +238,6 @@
     <Compile Include="Contexts\EnterspeedContext.cs" />
     <Compile Include="Contexts\EnterspeedHandlerContext.cs" />
     <Compile Include="Controllers\Api\DashboardApiController.cs" />
-    <Compile Include="Controllers\Api\EnterspeedTasksApiController.cs" />
     <Compile Include="Data\Models\EnterspeedJob.cs" />
     <Compile Include="Data\Models\EnterspeedJobState.cs" />
     <Compile Include="Data\Models\EnterspeedJobType.cs" />

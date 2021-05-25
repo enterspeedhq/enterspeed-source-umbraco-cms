@@ -37,6 +37,16 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
         [HttpGet]
         public ApiResponse<SeedResponse> Seed()
         {
+            if (EnterspeedContext.Current?.Configuration == null
+                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            {
+                return new ApiResponse<SeedResponse>
+                {
+                    ErrorCode = "400",
+                    IsSuccess = false
+                };
+            }
+
             var response = EnterspeedContext.Current.Services.JobService.Seed();
 
             return new ApiResponse<SeedResponse>

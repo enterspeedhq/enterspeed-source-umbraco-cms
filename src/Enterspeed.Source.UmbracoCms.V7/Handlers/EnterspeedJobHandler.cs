@@ -14,14 +14,12 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
     public class EnterspeedJobHandler
     {
         private readonly EnterspeedJobRepository _enterspeedJobRepository;
-        private readonly EnterspeedPropertyService _enterspeedPropertyService;
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly EntityIdentityService _entityIdentityService;
 
         public EnterspeedJobHandler()
         {
             _enterspeedJobRepository = EnterspeedContext.Current.Repositories.JobRepository;
-            _enterspeedPropertyService = EnterspeedContext.Current.Services.PropertyService;
             _enterspeedIngestService = EnterspeedContext.Current.Services.IngestService;
             _entityIdentityService = EnterspeedContext.Current.Services.EntityIdentityService;
         }
