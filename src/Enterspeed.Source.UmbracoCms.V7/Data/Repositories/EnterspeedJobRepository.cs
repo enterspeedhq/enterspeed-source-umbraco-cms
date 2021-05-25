@@ -17,9 +17,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             var failedJobs = db.Fetch<EnterspeedJobSchema>(
                 $"SELECT * FROM [{_tableName}] WHERE [JobState] = {EnterspeedJobState.Failed.GetHashCode()} ORDER BY [CreatedAt]");
 
-            var result = failedJobs.Select(MapFromSchema).Where(x => x != null).ToList();
+            var result = failedJobs?.Select(MapFromSchema).Where(x => x != null).ToList();
 
-            return result;
+            return result ?? new List<EnterspeedJob>();
         }
 
         public IList<EnterspeedJob> GetFailedJobs(List<int> contentIds)
@@ -34,9 +34,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             var failedJobs = db.Fetch<EnterspeedJobSchema>(
                 $"SELECT * FROM [{_tableName}] WHERE [ContentId] IN ({string.Join(",", contentIds)}) AND [JobState] = {EnterspeedJobState.Failed.GetHashCode()} ORDER BY [CreatedAt]");
 
-            var result = failedJobs.Select(MapFromSchema).Where(x => x != null).ToList();
+            var result = failedJobs?.Select(MapFromSchema).Where(x => x != null).ToList();
 
-            return result;
+            return result ?? new List<EnterspeedJob>();
         }
 
         public IList<EnterspeedJob> GetPendingJobs(int count)
@@ -51,9 +51,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             var pendingJobs = db.Fetch<EnterspeedJobSchema>(
                 $"SELECT TOP {count} * FROM [{_tableName}] WHERE [JobState] = {EnterspeedJobState.Pending.GetHashCode()} ORDER BY [CreatedAt]");
 
-            var result = pendingJobs.Select(MapFromSchema).Where(x => x != null).ToList();
+            var result = pendingJobs?.Select(MapFromSchema).Where(x => x != null).ToList();
 
-            return result;
+            return result ?? new List<EnterspeedJob>();
         }
 
         public IList<EnterspeedJob> GetOldProcessingTasks(int olderThanMinutes = 60)
@@ -64,9 +64,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             var pendingJobs = db.Fetch<EnterspeedJobSchema>(
                 $"SELECT * FROM [{_tableName}] WHERE [JobState] = {EnterspeedJobState.Processing.GetHashCode()} AND [UpdatedAt] <= '{dateThreshhold}.000'");
 
-            var result = pendingJobs.Select(MapFromSchema).Where(x => x != null).ToList();
+            var result = pendingJobs?.Select(MapFromSchema).Where(x => x != null).ToList();
 
-            return result;
+            return result ?? new List<EnterspeedJob>();
         }
 
         public void Save(List<EnterspeedJob> jobs)
