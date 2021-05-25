@@ -238,6 +238,7 @@
     <Compile Include="Contexts\EnterspeedContext.cs" />
     <Compile Include="Contexts\EnterspeedHandlerContext.cs" />
     <Compile Include="Controllers\Api\DashboardApiController.cs" />
+    <Compile Include="Controllers\Api\EnterspeedTasksApiController.cs" />
     <Compile Include="Data\Models\EnterspeedJob.cs" />
     <Compile Include="Data\Models\EnterspeedJobState.cs" />
     <Compile Include="Data\Models\EnterspeedJobType.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Contexts\EnterspeedServiceContext.cs" />
     <Compile Include="Services\EnterspeedPropertyService.cs" />
     <Compile Include="Services\EntityIdentityService.cs" />
+    <Compile Include="Services\SchedulerService.cs" />
     <Compile Include="UmbracoContextHelper.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -314,6 +316,8 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="_content\App_Plugins\Enterspeed.Dashboard\package.manifest" />
+    <None Include="_nuget\Enterspeed.Source.UmbracoCms.V7.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Components\" />
@@ -321,6 +325,22 @@
   <ItemGroup>
     <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.CodeFixes.dll" />
     <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\configuration.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\failedjobs.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\seed.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\lang\en-US.xml" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\styles.css" />
+    <None Include="_content\Config\Dashboard.config.install.xdt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -19,13 +19,6 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            // Do not configure if Enterspeed is not configured in Umbraco
-            if (EnterspeedContext.Current?.Configuration == null
-                || !EnterspeedContext.Current.Configuration.IsConfigured)
-            {
-                return;
-            }
-
             CacheRefresherBase<PageCacheRefresher>.CacheUpdated += CacheRefresherBaseOnCacheUpdated;
             ContentService.Moved += ContentServiceOnMoved;
             ContentService.UnPublishing += ContentServiceUnPublishing;
@@ -34,18 +27,39 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 
         private static void ContentServiceTrashing(IContentService sender, MoveEventArgs<IContent> e)
         {
+            // Do not configure if Enterspeed is not configured in Umbraco
+            if (EnterspeedContext.Current?.Configuration == null
+                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            {
+                return;
+            }
+
             var entities = e.MoveInfoCollection.Select(x => x.Entity).ToList();
             HandleUnpublishing(entities);
         }
 
         private static void ContentServiceUnPublishing(Umbraco.Core.Publishing.IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
+            // Do not configure if Enterspeed is not configured in Umbraco
+            if (EnterspeedContext.Current?.Configuration == null
+                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            {
+                return;
+            }
+
             var entities = e.PublishedEntities.ToList();
             HandleUnpublishing(entities);
         }
 
         private static void CacheRefresherBaseOnCacheUpdated(PageCacheRefresher sender, CacheRefresherEventArgs cacheRefresherEventArgs)
         {
+            // Do not configure if Enterspeed is not configured in Umbraco
+            if (EnterspeedContext.Current?.Configuration == null
+                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            {
+                return;
+            }
+
             var umbracoHelper = UmbracoContextHelper.GetUmbracoHelper();
             var jobs = new List<EnterspeedJob>();
 
@@ -95,6 +109,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 
         private static void ContentServiceOnMoved(IContentService sender, MoveEventArgs<IContent> moveEventArgs)
         {
+            // Do not configure if Enterspeed is not configured in Umbraco
+            if (EnterspeedContext.Current?.Configuration == null
+                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            {
+                return;
+            }
+
             var jobs = new List<EnterspeedJob>();
 
             foreach (var moveEventInfo in moveEventArgs.MoveInfoCollection)

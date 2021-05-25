@@ -12,17 +12,10 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
     {
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
-            // Do not configure if Enterspeed is not configured in Umbraco
-            if (EnterspeedContext.Current == null
-                || EnterspeedContext.Current.Configuration == null
-                || !EnterspeedContext.Current.Configuration.IsConfigured)
-            {
-                return;
-            }
-
             ConfigureDatabase(applicationContext);
             ConfigurePropertyValueConverters();
             ConfigureGridEditorValueConverters();
+            ConfigureScheduledTasks();
 
             // TOOD: Maybe handle this better?
             ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls | SecurityProtocolType.Tls11 | SecurityProtocolType.Tls12;
@@ -90,6 +83,21 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                 .Append<DefaultHeadlineGridEditorValueConverter>()
                 .Append<DefaultImageGridEditorValueConverter>()
                 .Append<DefaultQuoteGridEditorValueConverter>();
+        }
+
+        private void ConfigureScheduledTasks()
+        {
+            // Handle pending jobs every minute
+            EnterspeedContext.Current.Services.SchedulerService.ScheduleTask(60000, (sender, args) =>
+            {
+                EnterspeedContext.Current.Handlers.JobHandler.HandlePendingJobs(50);
+            });
+
+            // Invalidate old processing jobs every 10 minutes
+            EnterspeedContext.Current.Services.SchedulerService.ScheduleTask(600000, (sender, args) =>
+            {
+                EnterspeedContext.Current.Handlers.JobHandler.InvalidateOldProcessingJobs();
+            });
         }
     }
 }

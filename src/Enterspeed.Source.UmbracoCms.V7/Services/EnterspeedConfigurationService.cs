@@ -26,10 +26,16 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             var webConfigEndpoint = ConfigurationManager.AppSettings["Enterspeed.Endpoint"];
             var webConfigMediaDomain = ConfigurationManager.AppSettings["Enterspeed.MediaDomain"];
             var webConfigApikey = ConfigurationManager.AppSettings["Enterspeed.Apikey"];
+
+            if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
+            {
+                return new EnterspeedUmbracoConfiguration();
+            }
+
             _configuration = new EnterspeedUmbracoConfiguration
             {
-                BaseUrl = webConfigEndpoint?.Trim(),
-                ApiKey = webConfigApikey?.Trim(),
+                BaseUrl = webConfigEndpoint.Trim(),
+                ApiKey = webConfigApikey.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true
             };
@@ -43,6 +49,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 return;
             }
 
+            configuration.IsConfigured = true;
             configuration.MediaDomain = configuration.MediaDomain.TrimEnd('/');
             if (!configuration.MediaDomain.IsAbsoluteUrl())
             {
@@ -52,7 +59,17 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
 
             using (var db = ApplicationContext.Current.DatabaseContext.Database)
             {
-                db.Save(MapToSchema(configuration));
+                // In case of SQL CE we need to see if the config is already existing, so we can update it, or otherwise insert it
+                var existingConfig = GetConfigurationFromDatabase();
+                if (existingConfig == null)
+                {
+                    db.Insert(MapToSchema(configuration));
+                }
+                else
+                {
+                    db.Save(MapToSchema(configuration));
+                }
+
                 db.CompleteTransaction();
                 db.CloseSharedConnection();
             }

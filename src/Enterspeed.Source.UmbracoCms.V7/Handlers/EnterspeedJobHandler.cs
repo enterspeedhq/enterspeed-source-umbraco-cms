@@ -121,7 +121,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                             continue;
                         }
 
-                        /*var ingestResponse = _enterspeedIngestService.Save(umbracoData);
+                        var ingestResponse = _enterspeedIngestService.Save(umbracoData);
                         if (!ingestResponse.Success)
                         {
                             // Create a new failed job
@@ -133,7 +133,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                                 $"Failed ingesting entity ({newestJob.ContentId}/{newestJob.Culture}). Message: {message}";
                             failedJobs.Add(GetFailedJob(newestJob, exception));
                             LogHelper.Warn<EnterspeedJobHandler>(exception);
-                        }*/
+                        }
                     }
                     else if (shouldDelete)
                     {
