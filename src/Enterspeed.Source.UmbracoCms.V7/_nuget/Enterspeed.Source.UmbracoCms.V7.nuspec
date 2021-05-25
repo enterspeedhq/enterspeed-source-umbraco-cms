@@ -12,7 +12,7 @@
     <description>Enterspeed integration for Umbraco version 7</description>
     <tags>Enterspeed, Umbraco 7</tags>
     <dependencies>
-      <dependency id="Enterspeed.Source.Sdk" version="[0.0,1.0)" />
+      <dependency id="Enterspeed.Source.Sdk" version="[0.4,1.0)" />
       <dependency id="UmbracoCms" version="[7.4,7.16)" />
       <dependency id="UmbracoCms.Core" version="[7.4,7.16)" />
     </dependencies>
