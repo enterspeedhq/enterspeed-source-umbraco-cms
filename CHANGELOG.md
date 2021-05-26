@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.6.0 - 2021-05-26]
+
+- Add integration to Umbraco 7, min. version 7.4.0
+- Fix bug where Umbraco 8 throws an exception if Enterspeed is not configured
+
 ## [0.5.0 - 2021-05-20]
 
 - Update Enterspeed.Source.Sdk dependency version to lowest fuunctional version
