@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
@@ -162,7 +163,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
                         {
                             var id = _entityIdentityService.GetId(newestJob.ContentId, newestJob.Culture);
                             var deleteResponse = _enterspeedIngestService.Delete(id);
-                            if (!deleteResponse.Success)
+                            if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)
                             {
                                 // Create a new failed job
                                 var exception = $"Failed deleting entity ({newestJob.ContentId}/{newestJob.Culture}). Message: {deleteResponse.Message}";
