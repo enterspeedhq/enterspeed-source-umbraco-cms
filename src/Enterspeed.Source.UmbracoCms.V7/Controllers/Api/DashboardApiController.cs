@@ -126,7 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
         {
             var testConfigurationService = new InMemoryEnterspeedUmbracoConfigurationProvider(configuration);
             var testConnection = new EnterspeedConnection(testConfigurationService);
-            var enterspeedIngestService = new EnterspeedIngestService(testConnection, new NewtonSoftJsonSerializer(), testConfigurationService);
+            var enterspeedIngestService = new EnterspeedIngestService(testConnection, new NewtonsoftJsonSerializer(), testConfigurationService);
 
             return enterspeedIngestService.Test();
         }

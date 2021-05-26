@@ -4,7 +4,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Services.Serializers
 {
-    public class NewtonSoftJsonSerializer : IJsonSerializer
+    public class NewtonsoftJsonSerializer : IJsonSerializer
     {
         private readonly JsonSerializerSettings _settings = new JsonSerializerSettings()
         {

@@ -304,7 +304,7 @@
     <Compile Include="Services\EnterspeedPropertyService.cs" />
     <Compile Include="Services\EntityIdentityService.cs" />
     <Compile Include="Services\SchedulerService.cs" />
-    <Compile Include="Services\Serializers\NewtonSoftJsonSerializer.cs" />
+    <Compile Include="Services\Serializers\NewtonsoftJsonSerializer.cs" />
     <Compile Include="UmbracoContextHelper.cs" />
   </ItemGroup>
   <ItemGroup>

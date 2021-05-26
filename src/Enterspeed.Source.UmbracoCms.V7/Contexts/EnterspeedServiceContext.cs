@@ -25,7 +25,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Contexts
 
         public IEnterspeedIngestService IngestService => new EnterspeedIngestService(
             EnterspeedContext.Current.Connection,
-            new NewtonSoftJsonSerializer(),
+            new NewtonsoftJsonSerializer(),
             EnterspeedContext.Current.Providers.ConfigurationProvider);
     }
 }
