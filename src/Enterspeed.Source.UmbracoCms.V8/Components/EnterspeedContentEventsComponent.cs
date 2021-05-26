@@ -4,6 +4,7 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Handlers;
+using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Composing;
@@ -24,17 +25,20 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobHandler _enterspeedJobHandler;
+        private readonly IEnterspeedConfigurationService _configurationService;
         private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedContentEventsComponent(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobHandler = enterspeedJobHandler;
+            _configurationService = configurationService;
             _scopeProvider = scopeProvider;
         }
 
@@ -48,6 +52,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
         private void ContentServiceTrashing(IContentService sender, MoveEventArgs<IContent> e)
         {
+            if (!IsConfigured())
+            {
+                return;
+            }
+
             var entities = e.MoveInfoCollection.Select(x => x.Entity).ToList();
             HandleUnpublishing(entities);
         }
@@ -60,6 +69,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
         private void HandleUnpublishing(List<IContent> entities)
         {
+            if (!IsConfigured())
+            {
+                return;
+            }
+
             if (!entities.Any())
             {
                 return;
@@ -120,6 +134,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
         private void ContentServicePublishing(IContentService sender, ContentPublishingEventArgs e)
         {
+            if (!IsConfigured())
+            {
+                return;
+            }
+
             // This only handles variants that has been unpublished. Publishing is handled in the ContentCacheUpdated method
             var entities = e.PublishedEntities.ToList();
             var jobs = new List<EnterspeedJob>();
@@ -186,6 +205,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
         private void ContentCacheUpdated(ContentCacheRefresher sender, CacheRefresherEventArgs e)
         {
+            if (!IsConfigured())
+            {
+                return;
+            }
+
             var jsonPayloads = e.MessageObject as ContentCacheRefresher.JsonPayload[];
 
             if (jsonPayloads == null || !jsonPayloads.Any())
@@ -301,6 +325,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             {
                 _enterspeedJobHandler.HandleJobs(jobs);
             }
+        }
+
+        private bool IsConfigured()
+        {
+            return _configurationService.GetConfiguration().IsConfigured;
         }
 
         public void Terminate()

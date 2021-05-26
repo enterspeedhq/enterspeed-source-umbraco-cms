@@ -1,0 +1,12 @@
+﻿<div ng-app id="enterspeedDashboard" ng-controller="DashboardSettingsController as vm" class="enterspeed-dashboard">
+
+    <umb-tabs-nav model="vm.tabs"></umb-tabs-nav>
+
+    <umb-tabs-content>
+        <umb-tab id="tab{{tab.id}}" ng-repeat="tab in vm.tabs" rel="{{tab.id}}">
+            <div ng-if="tab.id === 'configurationTab'">
+                <div ng-include="'/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Views/configuration.view.html'"></div>
+            </div>
+        </umb-tab>
+    </umb-tabs-content>
+</div>

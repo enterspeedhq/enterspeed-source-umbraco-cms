@@ -1,0 +1,20 @@
+﻿<?xml version="1.0"?>
+<dashBoard xmlns:xdt="http://schemas.microsoft.com/XML-Document-Transform">
+  <section alias="StartupSettingsDashboardSection" xdt:Transform="InsertIfMissing" xdt:Locator="Match(alias)">
+    <tab caption="Enterspeed" xdt:Transform="InsertIfMissing" xdt:Locator="Match(caption)">
+      <control showOnce="true" addPanel="true" panelCaption="">
+        /App_Plugins/Enterspeed.Dashboard/settings-dashboard.html
+      </control>
+    </tab>
+  </section>
+  <section alias="StartupDashboardSection" xdt:Transform="InsertIfMissing" xdt:Locator="Match(alias)">
+    <tab caption="Enterspeed" xdt:Transform="InsertIfMissing" xdt:Locator="Match(caption)">
+      <access>
+        <grant>admin</grant>
+      </access>
+      <control showOnce="true" addPanel="true" panelCaption="">
+        /App_Plugins/Enterspeed.Dashboard/dashboard.html
+      </control>
+    </tab>
+  </section>
+</dashBoard>
