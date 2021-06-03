@@ -130,9 +130,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
 
             var response = enterspeedIngestService.Test();
 
-            if (response.StatusCode != 401
-                && response.StatusCode != 404
-                && !response.StatusCode.ToString().StartsWith("5"))
+            if (response.StatusCode == 422)
             {
                 return new Response
                 {
