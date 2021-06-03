@@ -33,8 +33,7 @@
 
         dashboardResources.saveEnterspeedConfiguration(vm.configuration)
             .then(function (result) {
-                var status = result.data.statusCode;
-                if (status === 204 || status === 200) {
+                if (result.data.success) {
                     notificationsService.success("Configuration saved");
                     vm.setPristine();
                 } else {
@@ -59,8 +58,7 @@
         }
 
         dashboardResources.testEnterspeedConfiguration(vm.configuration).then(function (result) {
-            var status = result.data.statusCode;
-            if (status === 204 || status === 200) {
+            if (result.data.success) {
                 notificationsService.success("Connection succeeded");
             } else {
                 notifyErrors(result.data);
