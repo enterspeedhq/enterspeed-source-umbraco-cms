@@ -128,7 +128,20 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
             var testConnection = new EnterspeedConnection(testConfigurationService);
             var enterspeedIngestService = new EnterspeedIngestService(testConnection, new NewtonsoftJsonSerializer(), testConfigurationService);
 
-            return enterspeedIngestService.Test();
+            var response = enterspeedIngestService.Test();
+
+            if (response.StatusCode == 422)
+            {
+                return new Response
+                {
+                    Exception = response.Exception,
+                    Message = response.Message,
+                    Status = response.Status,
+                    Success = true
+                };
+            }
+
+            return response;
         }
     }
 }
