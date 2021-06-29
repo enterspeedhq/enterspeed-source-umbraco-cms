@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.6.2 - 2021-06-29]
+
+-Fix null Enterspeed properties resulting in bad ingestions.
+
 ## [0.6.1 - 2021-06-03]
 
 -Fix testing Ingest API endpoint whren it returns 422
