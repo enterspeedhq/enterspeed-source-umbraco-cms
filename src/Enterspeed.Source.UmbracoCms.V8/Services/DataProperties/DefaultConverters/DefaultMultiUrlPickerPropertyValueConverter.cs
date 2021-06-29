@@ -83,7 +83,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
             properties.Add("type", new StringEnterspeedProperty(linkType));
             var url = link.Url;
 
-            StringEnterspeedProperty idProperty = null;
+            var idProperty = new StringEnterspeedProperty(string.Empty);
             if (link.Udi != null)
             {
                 if (link.Udi.EntityType == "document")
