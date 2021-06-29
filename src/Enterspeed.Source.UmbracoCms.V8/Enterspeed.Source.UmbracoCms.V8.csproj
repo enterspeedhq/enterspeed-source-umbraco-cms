@@ -274,6 +274,7 @@
     <Compile Include="Components\EnterspeedBackgroundTasksComponent.cs" />
     <Compile Include="Components\EnterspeedComposer.cs" />
     <Compile Include="Components\EnterspeedContentEventsComponent.cs" />
+    <Compile Include="Components\EnterspeedDictionaryEventsComponent.cs" />
     <Compile Include="Components\EnterspeedJobsComponent.cs" />
     <Compile Include="Components\Tasks\HandleEnterspeedJobsTask.cs" />
     <Compile Include="Components\Tasks\InvalidateEnterspeedJobsTask.cs" />
@@ -281,8 +282,10 @@
     <Compile Include="Dashboard\EnterspeedContentDashboard.cs" />
     <Compile Include="Dashboard\EnterspeedSettingsDashboard.cs" />
     <Compile Include="Data\MappingDefinitions\EnterspeedJobMappingDefinition.cs" />
+    <Compile Include="Data\Migration\AddEntityTypeToJobsTable.cs" />
     <Compile Include="Data\Migration\EnterspeedJobsTableMigration.cs" />
     <Compile Include="Data\Models\EnterspeedJob.cs" />
+    <Compile Include="Data\Models\EnterspeedJobEntityType.cs" />
     <Compile Include="Data\Models\EnterspeedJobState.cs" />
     <Compile Include="Data\Models\EnterspeedJobType.cs" />
     <Compile Include="Data\Repositories\EnterspeedJobRespository.cs" />
@@ -296,8 +299,10 @@
     <Compile Include="Models\Api\ApiResponse.cs" />
     <Compile Include="Models\Api\SeedResponse.cs" />
     <Compile Include="Models\Configuration\EnterspeedUmbracoConfiguration.cs" />
+    <Compile Include="Models\EnterspeedJobHandlerResponse.cs" />
     <Compile Include="Models\Grid\GridControl.cs" />
     <Compile Include="Models\UmbracoContentEntity.cs" />
+    <Compile Include="Models\UmbracoDictionaryEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Providers\EnterspeedUmbracoConfigurationProvider.cs" />
     <Compile Include="Providers\InMemoryEnterspeedUmbracoConfigurationProvider.cs" />
