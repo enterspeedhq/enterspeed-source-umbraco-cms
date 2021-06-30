@@ -22,9 +22,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             return result ?? new List<EnterspeedJob>();
         }
 
-        public IList<EnterspeedJob> GetFailedJobs(List<int> contentIds)
+        public IList<EnterspeedJob> GetFailedJobs(List<string> entityIds)
         {
-            if (contentIds == null || !contentIds.Any())
+            if (entityIds == null || !entityIds.Any())
             {
                 return new List<EnterspeedJob>();
             }
@@ -32,7 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             var db = ApplicationContext.Current.DatabaseContext.Database;
 
             var failedJobs = db.Fetch<EnterspeedJobSchema>(
-                $"SELECT * FROM [{_tableName}] WHERE [ContentId] IN ({string.Join(",", contentIds)}) AND [JobState] = {EnterspeedJobState.Failed.GetHashCode()} ORDER BY [CreatedAt]");
+                $"SELECT * FROM [{_tableName}] WHERE [EntityId] IN ({string.Join(",", entityIds.Select(x => $"'{x}'"))}) AND [JobState] = {EnterspeedJobState.Failed.GetHashCode()} ORDER BY [CreatedAt]");
 
             var result = failedJobs?.Select(MapFromSchema).Where(x => x != null).ToList();
 
@@ -101,13 +101,14 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             return new EnterspeedJob
             {
                 Id = job.Id,
-                ContentId = job.ContentId,
+                EntityId = job.EntityId,
                 CreatedAt = job.CreatedAt,
                 Culture = job.Culture,
                 Exception = job.Exception,
                 JobType = (EnterspeedJobType)job.JobType,
                 State = (EnterspeedJobState)job.JobState,
-                UpdatedAt = job.UpdatedAt
+                UpdatedAt = job.UpdatedAt,
+                EntityType = (EnterspeedJobEntityType)job.EntityType
             };
         }
 
@@ -121,13 +122,14 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
             return new EnterspeedJobSchema
             {
                 Id = job.Id,
-                ContentId = job.ContentId,
+                EntityId = job.EntityId,
                 CreatedAt = job.CreatedAt,
                 Culture = job.Culture,
                 Exception = job.Exception,
                 JobType = job.JobType.GetHashCode(),
                 JobState = job.State.GetHashCode(),
-                UpdatedAt = job.UpdatedAt
+                UpdatedAt = job.UpdatedAt,
+                EntityType = job.EntityType.GetHashCode()
             };
         }
     }

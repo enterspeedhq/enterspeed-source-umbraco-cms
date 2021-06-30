@@ -56,24 +56,21 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             var entities = e.SavedEntities.ToList();
             var jobs = new List<EnterspeedJob>();
-            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            foreach (var dictionaryItem in entities)
             {
-                foreach (var dictionaryItem in entities)
+                foreach (var translation in dictionaryItem.Translations)
                 {
-                    foreach (var translation in dictionaryItem.Translations)
+                    var now = DateTime.UtcNow;
+                    jobs.Add(new EnterspeedJob
                     {
-                        var now = DateTime.UtcNow;
-                        jobs.Add(new EnterspeedJob
-                        {
-                            EntityId = dictionaryItem.Key.ToString(),
-                            EntityType = EnterspeedJobEntityType.Dictionary,
-                            Culture = translation.Language.IsoCode,
-                            JobType = EnterspeedJobType.Publish,
-                            State = EnterspeedJobState.Pending,
-                            CreatedAt = now,
-                            UpdatedAt = now,
-                        });
-                    }
+                        EntityId = dictionaryItem.Key.ToString(),
+                        EntityType = EnterspeedJobEntityType.Dictionary,
+                        Culture = translation.Language.IsoCode,
+                        JobType = EnterspeedJobType.Publish,
+                        State = EnterspeedJobState.Pending,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                    });
                 }
             }
 

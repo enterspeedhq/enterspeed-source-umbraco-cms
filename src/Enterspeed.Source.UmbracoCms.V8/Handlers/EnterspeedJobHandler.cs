@@ -21,8 +21,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedPropertyService _enterspeedPropertyService;
         private readonly ILogger _logger;
-        private readonly IRedirectUrlService _redirectUrlService;
-        private readonly IUmbracoUrlService _umbracoUrlService;
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoRedirectsService _redirectsService;
@@ -32,8 +30,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedPropertyService enterspeedPropertyService,
             ILogger logger,
-            IRedirectUrlService redirectUrlService,
-            IUmbracoUrlService umbracoUrlService,
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IUmbracoRedirectsService redirectsService)
@@ -42,8 +38,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
             _logger = logger;
-            _redirectUrlService = redirectUrlService;
-            _umbracoUrlService = umbracoUrlService;
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _redirectsService = redirectsService;
