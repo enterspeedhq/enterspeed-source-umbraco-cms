@@ -32,12 +32,12 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Migrations
         {
             Delete.Table(JobsTableName);
             Create.Table(JobsTableName)
-                .WithColumn("Id").AsInt32().PrimaryKey("Id").Identity()
+                .WithColumn("Id").AsInt32().PrimaryKey("PK_EnterspeedJobs").Identity()
                 .WithColumn("ContentId").AsInt32().NotNullable()
                 .WithColumn("Culture").AsString(10).NotNullable()
                 .WithColumn("JobType").AsInt32().NotNullable()
                 .WithColumn("JobState").AsInt32().NotNullable()
-                .WithColumn("Exception").AsString()
+                .WithColumn("Exception").AsString().Nullable()
                 .WithColumn("CreatedAt").AsDateTime().NotNullable()
                 .WithColumn("UpdatedAt").AsDateTime().NotNullable();
         }
