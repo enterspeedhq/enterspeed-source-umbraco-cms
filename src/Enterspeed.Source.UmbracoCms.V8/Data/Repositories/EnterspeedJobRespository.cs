@@ -37,9 +37,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
             return result;
         }
 
-        public IList<EnterspeedJob> GetFailedJobs(List<int> contentIds)
+        public IList<EnterspeedJob> GetFailedJobs(List<string> entityIds)
         {
-            if (contentIds == null || !contentIds.Any())
+            if (entityIds == null || !entityIds.Any())
             {
                 return new List<EnterspeedJob>();
             }
@@ -48,7 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
             using (var scope = _scopeProvider.CreateScope(autoComplete: true))
             {
                 var failedJobs = scope.Database.Query<EnterspeedJobSchema>()
-                    .Where(x => contentIds.Contains(x.ContentId) && x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                    .Where(x => entityIds.Contains(x.EntityId) && x.JobState == EnterspeedJobState.Failed.GetHashCode())
                     .OrderBy(x => x.CreatedAt)
                     .ToList();
 

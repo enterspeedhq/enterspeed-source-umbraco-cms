@@ -1,15 +1,22 @@
-﻿using System.Net;
+﻿using System;
+using System.Linq;
+using System.Net;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
-using Enterspeed.Source.UmbracoCms.V7.Data.Schemas;
 using Enterspeed.Source.UmbracoCms.V7.Services.DataProperties.DefaultConverters;
 using Enterspeed.Source.UmbracoCms.V7.Services.DataProperties.DefaultGridConverters;
+using Semver;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Persistence;
+using Umbraco.Core.Persistence.Migrations;
 
 namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 {
     public class ConfigurationEventHandler : ApplicationEventHandler
     {
+        private readonly SemVersion _jobsTableVersion = new SemVersion(2, 0, 0);
+        private readonly SemVersion _configurationTableVersion = new SemVersion(1, 0, 0);
+
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {
             ConfigureDatabase(applicationContext);
@@ -23,20 +30,53 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 
         private void ConfigureDatabase(ApplicationContext applicationContext)
         {
+            SetupTable("EnterspeedJobs", _jobsTableVersion, applicationContext);
+            SetupTable("EnterspeedConfiguration", _configurationTableVersion, applicationContext);
+        }
+
+        private void SetupTable(string tableName, SemVersion version, ApplicationContext applicationContext)
+        {
             var databaseContext = applicationContext.DatabaseContext;
             var database = new DatabaseSchemaHelper(
                 databaseContext.Database,
                 applicationContext.ProfilingLogger.Logger,
                 databaseContext.SqlSyntax);
 
-            if (!database.TableExist("EnterspeedConfiguration"))
+            var currentVersion = new SemVersion(0, 0, 0);
+            var migrations = ApplicationContext.Current.Services.MigrationEntryService.GetAll(tableName);
+            var latestMigration = migrations.OrderByDescending(x => x.Version).FirstOrDefault();
+
+            if (latestMigration != null)
             {
-                database.CreateTable<EnterspeedConfigurationSchema>(false);
+                currentVersion = latestMigration.Version;
+            }
+            else
+            {
+                // If there is no existing migrations, and the table is created,
+                // this means that it was created before using migrations, so we need to delete it.
+                if (database.TableExist(tableName))
+                {
+                    database.DropTable(tableName);
+                }
             }
 
-            if (!database.TableExist("EnterspeedJobs"))
+            if (version != currentVersion)
             {
-                database.CreateTable<EnterspeedJobSchema>(false);
+                var migrationsRunner = new MigrationRunner(
+                    ApplicationContext.Current.Services.MigrationEntryService,
+                    ApplicationContext.Current.ProfilingLogger.Logger,
+                    currentVersion,
+                    version,
+                    tableName);
+
+                try
+                {
+                    migrationsRunner.Execute(applicationContext.DatabaseContext.Database);
+                }
+                catch (Exception e)
+                {
+                    LogHelper.Error<ConfigurationEventHandler>($"Error running {tableName} table migration", e);
+                }
             }
         }
 

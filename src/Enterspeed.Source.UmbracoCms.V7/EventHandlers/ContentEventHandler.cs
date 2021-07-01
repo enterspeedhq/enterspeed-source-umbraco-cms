@@ -28,8 +28,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
         private static void ContentServiceTrashing(IContentService sender, MoveEventArgs<IContent> e)
         {
             // Do not configure if Enterspeed is not configured in Umbraco
-            if (EnterspeedContext.Current?.Configuration == null
-                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            if (!IsConfigured())
             {
                 return;
             }
@@ -41,8 +40,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
         private static void ContentServiceUnPublishing(Umbraco.Core.Publishing.IPublishingStrategy sender, PublishEventArgs<IContent> e)
         {
             // Do not configure if Enterspeed is not configured in Umbraco
-            if (EnterspeedContext.Current?.Configuration == null
-                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            if (!IsConfigured())
             {
                 return;
             }
@@ -54,8 +52,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
         private static void CacheRefresherBaseOnCacheUpdated(PageCacheRefresher sender, CacheRefresherEventArgs cacheRefresherEventArgs)
         {
             // Do not configure if Enterspeed is not configured in Umbraco
-            if (EnterspeedContext.Current?.Configuration == null
-                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            if (!IsConfigured())
             {
                 return;
             }
@@ -74,12 +71,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                         var now = DateTime.UtcNow;
                         jobs.Add(new EnterspeedJob
                         {
-                            ContentId = refreshContent.Id,
+                            EntityId = refreshContent.Id.ToString(),
                             Culture = culture,
                             JobType = EnterspeedJobType.Publish,
                             State = EnterspeedJobState.Pending,
                             CreatedAt = now,
                             UpdatedAt = now,
+                            EntityType = EnterspeedJobEntityType.Content
                         });
                     }
 
@@ -92,12 +90,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                         var now = DateTime.UtcNow;
                         jobs.Add(new EnterspeedJob
                         {
-                            ContentId = node.Id,
+                            EntityId = node.Id.ToString(),
                             Culture = culture,
                             JobType = EnterspeedJobType.Publish,
                             State = EnterspeedJobState.Pending,
                             CreatedAt = now,
                             UpdatedAt = now,
+                            EntityType = EnterspeedJobEntityType.Content
                         });
                     }
 
@@ -110,8 +109,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
         private static void ContentServiceOnMoved(IContentService sender, MoveEventArgs<IContent> moveEventArgs)
         {
             // Do not configure if Enterspeed is not configured in Umbraco
-            if (EnterspeedContext.Current?.Configuration == null
-                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            if (!IsConfigured())
             {
                 return;
             }
@@ -128,12 +126,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                     var now = DateTime.UtcNow;
                     jobs.Add(new EnterspeedJob
                     {
-                        ContentId = entity.Id,
+                        EntityId = entity.Id.ToString(),
                         Culture = entity.GetCulture().IetfLanguageTag.ToLowerInvariant(),
                         JobType = EnterspeedJobType.Delete,
                         State = EnterspeedJobState.Pending,
                         CreatedAt = now,
                         UpdatedAt = now,
+                        EntityType = EnterspeedJobEntityType.Content
                     });
 
                     if (entity.Children().Any())
@@ -144,12 +143,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                         {
                             jobs.Add(new EnterspeedJob
                             {
-                                ContentId = content.Id,
+                                EntityId = content.Id.ToString(),
                                 Culture = content.GetCulture().IetfLanguageTag.ToLowerInvariant(),
                                 JobType = EnterspeedJobType.Delete,
                                 State = EnterspeedJobState.Pending,
                                 CreatedAt = now,
                                 UpdatedAt = now,
+                                EntityType = EnterspeedJobEntityType.Content
                             });
                         }
                     }
@@ -172,12 +172,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                 var now = DateTime.UtcNow;
                 jobs.Add(new EnterspeedJob
                 {
-                    ContentId = entity.Id,
+                    EntityId = entity.Id.ToString(),
                     Culture = entity.GetCulture().IetfLanguageTag.ToLowerInvariant(),
                     JobType = EnterspeedJobType.Delete,
                     State = EnterspeedJobState.Pending,
                     CreatedAt = now,
                     UpdatedAt = now,
+                    EntityType = EnterspeedJobEntityType.Content
                 });
 
                 if (entity.Children().Any())
@@ -188,12 +189,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                     {
                         jobs.Add(new EnterspeedJob
                         {
-                            ContentId = content.Id,
+                            EntityId = content.Id.ToString(),
                             Culture = content.GetCulture().IetfLanguageTag.ToLowerInvariant(),
                             JobType = EnterspeedJobType.Delete,
                             State = EnterspeedJobState.Pending,
                             CreatedAt = now,
                             UpdatedAt = now,
+                            EntityType = EnterspeedJobEntityType.Content
                         });
                     }
                 }
@@ -211,6 +213,12 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 
             EnterspeedContext.Current.Repositories.JobRepository.Save(jobs);
             EnterspeedContext.Current.Handlers.JobHandler.HandleJobs(jobs);
+        }
+
+        private static bool IsConfigured()
+        {
+            return EnterspeedContext.Current?.Configuration != null
+                   && EnterspeedContext.Current.Configuration.IsConfigured;
         }
     }
 }

@@ -13,8 +13,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Schemas
         [Column("Id")]
         public int Id { get; set; }
 
-        [Column("ContentId")]
-        public int ContentId { get; set; }
+        [Column("EntityId")]
+        public string EntityId { get; set; }
 
         [Column("Culture")]
         public string Culture { get; set; }
@@ -35,5 +35,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Schemas
 
         [Column("UpdatedAt")]
         public DateTime UpdatedAt { get; set; }
+
+        [Column("EntityType")]
+        public int EntityType { get; set; }
     }
 }

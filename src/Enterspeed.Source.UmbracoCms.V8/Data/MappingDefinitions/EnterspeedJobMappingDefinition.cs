@@ -15,25 +15,27 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.MappingDefinitions
         private void MapTo(EnterspeedJobSchema source, EnterspeedJob target, MapperContext context)
         {
             target.Id = source.Id;
-            target.ContentId = source.ContentId;
+            target.EntityId = source.EntityId;
             target.CreatedAt = source.CreatedAt;
             target.UpdatedAt = source.UpdatedAt;
             target.JobType = (EnterspeedJobType)source.JobType;
             target.State = (EnterspeedJobState)source.JobState;
             target.Exception = source.Exception;
             target.Culture = source.Culture;
+            target.EntityType = (EnterspeedJobEntityType)source.EntityType;
         }
 
         private void MapFrom(EnterspeedJob source, EnterspeedJobSchema target, MapperContext context)
         {
             target.Id = source.Id;
-            target.ContentId = source.ContentId;
+            target.EntityId = source.EntityId;
             target.CreatedAt = source.CreatedAt;
             target.UpdatedAt = source.UpdatedAt;
             target.JobType = source.JobType.GetHashCode();
             target.JobState = source.State.GetHashCode();
             target.Exception = source.Exception;
             target.Culture = source.Culture;
+            target.EntityType = source.EntityType.GetHashCode();
         }
     }
 }

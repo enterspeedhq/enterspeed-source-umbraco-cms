@@ -14,21 +14,42 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
     public class EnterspeedJobService : IEnterspeedJobService
     {
         private readonly IContentService _contentService;
+        private readonly ILocalizationService _localizationService;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
 
         public EnterspeedJobService(
             IContentService contentService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IUmbracoContextFactory umbracoContextFactory)
+            IUmbracoContextFactory umbracoContextFactory,
+            ILocalizationService localizationService)
         {
             _contentService = contentService;
             _enterspeedJobRepository = enterspeedJobRepository;
             _umbracoContextFactory = umbracoContextFactory;
+            _localizationService = localizationService;
         }
 
         public SeedResponse Seed()
         {
+            var contentJobs = GetContentJobs(out var contentCount);
+            var dictionaryJobs = GetDictionaryJobs(out var dictionaryCount);
+
+            var jobs = contentJobs.Union(dictionaryJobs).ToList();
+
+            _enterspeedJobRepository.Save(jobs);
+
+            return new SeedResponse
+            {
+                ContentCount = contentCount,
+                DictionaryCount = dictionaryCount,
+                JobsAdded = jobs.Count
+            };
+        }
+
+        private List<EnterspeedJob> GetContentJobs(out int nodesCount)
+        {
+            var jobs = new List<EnterspeedJob>();
             var allContent = new List<IContent>();
 
             // Add all root nodes
@@ -42,14 +63,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 allContent.AddRange(descendants);
             }
 
-            var jobs = new List<EnterspeedJob>();
+            nodesCount = allContent.Count;
             if (!allContent.Any())
             {
-                return new SeedResponse
-                {
-                    JobsAdded = 0,
-                    Nodes = 0,
-                };
+                return jobs;
             }
 
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
@@ -66,13 +83,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 }
             }
 
-            _enterspeedJobRepository.Save(jobs);
-
-            return new SeedResponse
-            {
-                Nodes = allContent.Count,
-                JobsAdded = jobs.Count
-            };
+            return jobs;
         }
 
         private List<EnterspeedJob> GetJobsForContent(IContent content, UmbracoContextReference context)
@@ -98,7 +109,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             {
                 jobs.Add(new EnterspeedJob
                 {
-                    ContentId = content.Id,
+                    EntityId = content.Id.ToString(),
+                    EntityType = EnterspeedJobEntityType.Content,
                     Culture = culture,
                     JobType = EnterspeedJobType.Publish,
                     State = EnterspeedJobState.Pending,
@@ -106,6 +118,35 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                     UpdatedAt = now,
                 });
             }
+
+            return jobs;
+        }
+
+        private List<EnterspeedJob> GetDictionaryJobs(out int dictionaryCount)
+        {
+            var jobs = new List<EnterspeedJob>();
+            var allDictionaryItems = _localizationService.GetDictionaryItemDescendants(null).ToList();
+
+            var now = DateTime.UtcNow;
+
+            foreach (var dictionaryItem in allDictionaryItems)
+            {
+                foreach (var translation in dictionaryItem.Translations)
+                {
+                    jobs.Add(new EnterspeedJob
+                    {
+                        EntityId = dictionaryItem.Key.ToString(),
+                        EntityType = EnterspeedJobEntityType.Dictionary,
+                        Culture = translation.Language.IsoCode,
+                        JobType = EnterspeedJobType.Publish,
+                        State = EnterspeedJobState.Pending,
+                        CreatedAt = now,
+                        UpdatedAt = now,
+                    });
+                }
+            }
+
+            dictionaryCount = allDictionaryItems.Count;
 
             return jobs;
         }

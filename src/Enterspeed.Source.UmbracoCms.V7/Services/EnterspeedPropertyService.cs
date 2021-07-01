@@ -64,6 +64,26 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             return output;
         }
 
+        public IDictionary<string, IEnterspeedProperty> GetProperties(IDictionaryItem dictionaryItem, string culture)
+        {
+            var output = new Dictionary<string, IEnterspeedProperty>();
+
+            if (dictionaryItem?.Translations != null)
+            {
+                var value = dictionaryItem.Translations
+                    .FirstOrDefault(x => x.Language.IsoCode.Equals(culture, StringComparison.OrdinalIgnoreCase))?.Value;
+
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
+                    output.Add("translation", new StringEnterspeedProperty(value));
+                    output.Add("culture", new StringEnterspeedProperty(culture));
+                }
+            }
+
+            return output;
+        }
+
         private IEnterspeedProperty CreateMetaData(IPublishedContent content)
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
