@@ -63,7 +63,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services.DataProperties.DefaultConvert
                         { "width", new NumberEnterspeedProperty(crop.Width) }
                     };
 
-                    ObjectEnterspeedProperty cropCoordinatesProperty = null;
+                    var cropCoordinatesProperty = new ObjectEnterspeedProperty(new Dictionary<string, IEnterspeedProperty>());
                     if (crop.Coordinates != null)
                     {
                         var cropCoordinatesProperties = new Dictionary<string, IEnterspeedProperty>
