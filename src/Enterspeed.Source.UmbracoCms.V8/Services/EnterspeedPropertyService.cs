@@ -65,12 +65,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 var value = dictionaryItem.Translations
                     .FirstOrDefault(x => x.Language.IsoCode.Equals(culture, StringComparison.OrdinalIgnoreCase))?.Value;
 
-                if (!string.IsNullOrWhiteSpace(value))
-                {
-                    output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
-                    output.Add("translation", new StringEnterspeedProperty(value));
-                    output.Add("culture", new StringEnterspeedProperty(culture));
-                }
+                output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
+                output.Add("translation", new StringEnterspeedProperty(value ?? string.Empty));
+                output.Add("culture", new StringEnterspeedProperty(culture));
             }
 
             return output;
