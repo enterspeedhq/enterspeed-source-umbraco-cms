@@ -96,6 +96,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Components().Append<EnterspeedContentEventsComponent>();
             composition.Components().Append<EnterspeedJobsComponent>();
             composition.Components().Append<EnterspeedBackgroundTasksComponent>();
+            composition.Components().Append<EnterspeedDictionaryEventsComponent>();
         }
     }
 }

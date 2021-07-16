@@ -5,6 +5,7 @@ using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
+using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
@@ -55,9 +56,29 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return output;
         }
 
+        public IDictionary<string, IEnterspeedProperty> GetProperties(IDictionaryItem dictionaryItem, string culture)
+        {
+            var output = new Dictionary<string, IEnterspeedProperty>();
+
+            if (dictionaryItem?.Translations != null)
+            {
+                var value = dictionaryItem.Translations
+                    .FirstOrDefault(x => x.Language.IsoCode.Equals(culture, StringComparison.OrdinalIgnoreCase))?.Value;
+
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
+                    output.Add("translation", new StringEnterspeedProperty(value));
+                    output.Add("culture", new StringEnterspeedProperty(culture));
+                }
+            }
+
+            return output;
+        }
+
         private IEnterspeedProperty CreateMetaData(IPublishedContent content, string culture)
         {
-            var metaData = new Dictionary<string, IEnterspeedProperty>()
+            var metaData = new Dictionary<string, IEnterspeedProperty>
             {
                 ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
                 ["culture"] = new StringEnterspeedProperty("culture", culture),

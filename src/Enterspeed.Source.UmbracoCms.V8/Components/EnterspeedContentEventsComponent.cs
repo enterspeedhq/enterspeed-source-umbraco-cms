@@ -94,7 +94,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                         var now = DateTime.UtcNow;
                         jobs.Add(new EnterspeedJob
                         {
-                            ContentId = content.Id,
+                            EntityId = content.Id.ToString(),
+                            EntityType = EnterspeedJobEntityType.Content,
                             Culture = culture,
                             JobType = EnterspeedJobType.Delete,
                             State = EnterspeedJobState.Pending,
@@ -116,7 +117,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                             {
                                 jobs.Add(new EnterspeedJob
                                 {
-                                    ContentId = descendant.Id,
+                                    EntityId = descendant.Id.ToString(),
+                                    EntityType = EnterspeedJobEntityType.Content,
                                     Culture = descendantCulture,
                                     JobType = EnterspeedJobType.Delete,
                                     State = EnterspeedJobState.Pending,
@@ -162,7 +164,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                             var now = DateTime.UtcNow;
                             jobs.Add(new EnterspeedJob
                             {
-                                ContentId = content.Id,
+                                EntityId = content.Id.ToString(),
+                                EntityType = EnterspeedJobEntityType.Content,
                                 Culture = culture,
                                 JobType = EnterspeedJobType.Delete,
                                 State = EnterspeedJobState.Pending,
@@ -185,7 +188,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                                     {
                                         jobs.Add(new EnterspeedJob
                                         {
-                                            ContentId = descendant.Id,
+                                            EntityId = descendant.Id.ToString(),
+                                            EntityType = EnterspeedJobEntityType.Content,
                                             Culture = culture,
                                             JobType = EnterspeedJobType.Delete,
                                             State = EnterspeedJobState.Pending,
@@ -251,7 +255,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                         var now = DateTime.UtcNow;
                         jobs.Add(new EnterspeedJob
                         {
-                            ContentId = node.Id,
+                            EntityId = node.Id.ToString(),
+                            EntityType = EnterspeedJobEntityType.Content,
                             Culture = culture,
                             JobType = EnterspeedJobType.Publish,
                             State = EnterspeedJobState.Pending,
@@ -276,7 +281,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                                 {
                                     jobs.Add(new EnterspeedJob
                                     {
-                                        ContentId = descendant.Id,
+                                        EntityId = descendant.Id.ToString(),
+                                        EntityType = EnterspeedJobEntityType.Content,
                                         Culture = descendantCulture,
                                         JobType = EnterspeedJobType.Publish,
                                         State = EnterspeedJobState.Pending,

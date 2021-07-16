@@ -8,7 +8,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Models
     {
         public int Id { get; set; }
 
-        public int ContentId { get; set; }
+        public string EntityId { get; set; }
 
         public string Culture { get; set; }
 
@@ -22,5 +22,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Models
         public string Exception { get; set; }
 
         public DateTime UpdatedAt { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EnterspeedJobEntityType EntityType { get; set; }
     }
 }
