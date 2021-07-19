@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.7.0 - 2021-07-19]
+
+- Add support for ingesting dictionary items into Enterspeed.
+  All dictionary items will now automatically be ingested.
+
 ## [0.6.2 - 2021-06-29]
 
 -Fix null Enterspeed properties resulting in bad ingestions.
