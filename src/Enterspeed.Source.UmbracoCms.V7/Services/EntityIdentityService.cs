@@ -1,4 +1,5 @@
-﻿using Umbraco.Core.Models;
+﻿using System;
+using Umbraco.Core.Models;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Services
 {
@@ -32,6 +33,31 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             }
 
             return null;
+        }
+
+        public string GetId(IDictionaryItem dictionaryItem, string culture)
+        {
+            if (dictionaryItem == null || string.IsNullOrWhiteSpace(culture))
+            {
+                return null;
+            }
+
+            return GetId(dictionaryItem.Key, culture);
+        }
+
+        public string GetId(Guid? id, string culture)
+        {
+            if (!id.HasValue || string.IsNullOrWhiteSpace(culture))
+            {
+                return null;
+            }
+
+            return GetId(id.Value.ToString(), culture);
+        }
+
+        public string GetId(string contentId, string culture)
+        {
+            return $"{contentId}-{culture}";
         }
     }
 }
