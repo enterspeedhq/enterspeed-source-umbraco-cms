@@ -12,6 +12,7 @@ using Umbraco.Core.Logging;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 using Umbraco.Web.Composing;
+using Umbraco.Web.Routing;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Handlers
 {
@@ -24,7 +25,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoRedirectsService _redirectsService;
-
+        private readonly IPublishedRouter _publishedRouter;
         public EnterspeedJobHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
             IUmbracoContextFactory umbracoContextFactory,
@@ -32,7 +33,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             ILogger logger,
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
-            IUmbracoRedirectsService redirectsService)
+            IUmbracoRedirectsService redirectsService,
+            IPublishedRouter publishedRouter)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _umbracoContextFactory = umbracoContextFactory;
@@ -41,6 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _redirectsService = redirectsService;
+            _publishedRouter = publishedRouter;
         }
 
         public void HandlePendingJobs(int batchSize)
@@ -134,6 +137,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
                                 try
                                 {
                                     var redirects = _redirectsService.GetRedirects(content.Key, culture);
+                                    Current.UmbracoContext.PublishedRequest = _publishedRouter.CreateRequest(context.UmbracoContext);
+                                    Current.UmbracoContext.PublishedRequest.PublishedContent = content;
                                     umbracoData = new UmbracoContentEntity(content, _enterspeedPropertyService, _entityIdentityService, redirects, culture);
                                 }
                                 catch (Exception e)
