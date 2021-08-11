@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.7.1 - 2021-08-11]
+
+- Added a published request when processing property values.
+
 ## [0.7.0 - 2021-07-19]
 
 - Add support for ingesting dictionary items into Enterspeed.
