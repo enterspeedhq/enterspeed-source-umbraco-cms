@@ -11,12 +11,11 @@ using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Scoping;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Services.Changes;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Components.NotificationHandlers
+namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
     public class EnterspeedContentCacheRefresherNotificationHandler : INotificationHandler<ContentCacheRefresherNotification>
     {
@@ -24,7 +23,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Components.NotificationHandlers
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobHandler _enterspeedJobHandler;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
-        private readonly IContentService _contentService;
         private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedContentCacheRefresherNotificationHandler(
@@ -32,14 +30,12 @@ namespace Enterspeed.Source.UmbracoCms.V9.Components.NotificationHandlers
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
-            IContentService contentService,
             IScopeProvider scopeProvider)
         {
             _configurationService = configurationService;
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobHandler = enterspeedJobHandler;
             _umbracoContextFactory = umbracoContextFactory;
-            _contentService = contentService;
             _scopeProvider = scopeProvider;
         }
         

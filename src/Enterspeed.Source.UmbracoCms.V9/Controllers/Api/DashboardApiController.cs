@@ -115,7 +115,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
             var response = TestConnection(configuration);
             if (!response.Success)
             {
-                // TODO: why is this OK?
                 return Ok(response);
             }
 

@@ -139,9 +139,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                 try
                                 {
                                     var redirects = _redirectsService.GetRedirects(content.Key, culture);
-                                    // TODO: is needed?
-                                    // Current.UmbracoContext.PublishedRequest = _publishedRouter.CreateRequestAsync(context.UmbracoContext).GetAwaiter().GetResult(); // TODO: async
-                                    // Current.UmbracoContext.PublishedRequest.PublishedContent = content;
                                     umbracoData = new UmbracoContentEntity(content, _enterspeedPropertyService, _entityIdentityService, redirects, culture);
                                 }
                                 catch (Exception e)

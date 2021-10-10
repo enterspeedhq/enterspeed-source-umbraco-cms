@@ -13,7 +13,7 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Components.NotificationHandlers
+namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
     public class EnterspeedContentPublishingNotificationHandler : INotificationHandler<ContentPublishingNotification>
     {

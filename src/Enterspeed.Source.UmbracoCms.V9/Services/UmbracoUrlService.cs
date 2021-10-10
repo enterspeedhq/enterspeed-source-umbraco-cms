@@ -1,17 +1,25 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Options;
+using Umbraco.Cms.Core.Configuration.Models;
 
 namespace Enterspeed.Source.UmbracoCms.V9.Services
 {
     public class UmbracoUrlService : IUmbracoUrlService
     {
         private readonly IUmbracoContextProvider _contextProvider;
+        private readonly IOptions<GlobalSettings> _globalSettings;
+        private readonly IOptions<RequestHandlerSettings> _requestHandlerSettings;
 
         public UmbracoUrlService(
-            IUmbracoContextProvider contextProvider)
+            IUmbracoContextProvider contextProvider,
+            IOptions<GlobalSettings> globalSettings, 
+            IOptions<RequestHandlerSettings> requestHandlerSettings)
         {
             _contextProvider = contextProvider;
+            _globalSettings = globalSettings;
+            _requestHandlerSettings = requestHandlerSettings;
         }
 
         public string GetUrlFromIdUrl(string idUrl, string culture)
@@ -68,18 +76,16 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             }
 
             var includesProtocol = Uri.TryCreate(url, UriKind.Absolute, out var uriResult);
+            if (!includesProtocol && !url.StartsWith("/"))
+            {
+                var protocol = _globalSettings?.Value.UseHttps ?? false ? "https" : "http";
+                url = $"{protocol}://{url}";
+            }
 
-            // TODO: global settings + request settingds
-            // if (!includesProtocol && !url.StartsWith("/"))
-            // {
-            //     var protocol = _globalSettings.UseHttps ? "https" : "http";
-            //     url = $"{protocol}://{url}";
-            // }
-            //
-            // if (_requestSettings.AddTrailingSlash)
-            // {
-            //     url += "/";
-            // }
+            if (_requestHandlerSettings.Value?.AddTrailingSlash ?? false)
+            {
+                url += "/";
+            }
 
             return url;
         }

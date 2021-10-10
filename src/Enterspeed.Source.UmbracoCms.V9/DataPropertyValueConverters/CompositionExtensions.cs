@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Core.DependencyInjection;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Components.DataPropertyValueConverter
+namespace Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters
 {
     public static class CompositionExtensions
     {

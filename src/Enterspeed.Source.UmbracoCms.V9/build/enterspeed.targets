@@ -1,0 +1,27 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <EnterspeedContentFilesPath>$(MSBuildThisFileDirectory)..\_content\App_Plugins\Enterspeed.Dashboard\**\*.*</EnterspeedContentFilesPath>
+    </PropertyGroup>
+
+    <Target Name="CopyEnterspeedAssets" BeforeTargets="Build">
+        <ItemGroup>
+            <EnterspeedContentFiles Include="$(EnterspeedContentFilesPath)" />
+        </ItemGroup>
+        <Message Text="Copying Enterspeed files: $(EnterspeedContentFilesPath) - #@(EnterspeedContentFiles->Count()) files"  Importance="high" />
+        <Copy
+            SourceFiles="@(EnterspeedContentFiles)"
+            DestinationFiles="@(EnterspeedContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\%(RecursiveDir)%(Filename)%(Extension)')"
+            SkipUnchangedFiles="true" />
+
+    </Target>
+
+    <Target Name="ClearEnterspeedAssets" BeforeTargets="Clean">
+        <ItemGroup>
+            <EnterspeedDir Include="$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\" />
+        </ItemGroup>
+        <Message Text="Clear old Enterspeed data"  Importance="high" />
+        <RemoveDir Directories="@(EnterspeedDir)"  />
+    </Target>
+
+</Project>

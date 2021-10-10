@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.V9.Components.DataPropertyValueConverter;
+using Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;

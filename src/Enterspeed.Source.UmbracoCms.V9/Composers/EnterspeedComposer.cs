@@ -5,42 +5,30 @@ using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
-using Enterspeed.Source.UmbracoCms.V9.Components.DataPropertyValueConverter;
-using Enterspeed.Source.UmbracoCms.V9.Components.NotificationHandlers;
+using Enterspeed.Source.UmbracoCms.V9.Components;
 using Enterspeed.Source.UmbracoCms.V9.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
+using Enterspeed.Source.UmbracoCms.V9.HostedServices;
+using Enterspeed.Source.UmbracoCms.V9.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.V9.Providers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
-using Enterspeed.Source.UmbracoCms.V9.Services.DataProperties;
 using Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConverters;
 using Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultGridConverters;
 using Microsoft.Extensions.DependencyInjection;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Notifications;
-using Umbraco.Cms.Core.Services;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Components
+namespace Enterspeed.Source.UmbracoCms.V9.Composers
 {
     public class EnterspeedComposer : IComposer
     {
-        //private readonly IRuntimeState _runtimeState;
-
-        //public EnterspeedComposer(IRuntimeState runtimeState)
-        //{
-        //    _runtimeState = runtimeState;
-        //}
-
         public void Compose(IUmbracoBuilder builder)
         {
-            //if (_runtimeState.Level != RuntimeLevel.Run)
-            //{
-            //    return;
-            //}
             var webConfigMediaDomain = builder.Config["Enterspeed:MediaDomain"];
             if (!string.IsNullOrWhiteSpace(webConfigMediaDomain) && !webConfigMediaDomain.IsAbsoluteUrl())
             {
@@ -63,8 +51,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Components
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>();
             builder.Services.AddSingleton<IJsonSerializer, SystemTextJsonSerializer>();
-
-            //var enterspeedConfigurationProvider = builder.Services.BuildServiceProvider().GetService<IEnterspeedConfigurationProvider>();
             builder.Services.AddSingleton<IEnterspeedConnection, EnterspeedConnection>();
 
             builder.EnterspeedPropertyValueConverters()
@@ -105,7 +91,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Components
             builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
                 .Add<EnterspeedJobMappingDefinition>();
 
-            // Register event componenents
+            // Notification handlers
             builder
                 .AddNotificationHandler<ContentPublishingNotification,
                     EnterspeedContentPublishingNotificationHandler>();
@@ -119,10 +105,20 @@ namespace Enterspeed.Source.UmbracoCms.V9.Components
                 .AddNotificationHandler<ContentUnpublishingNotification,
                     EnterspeedContentUnpublishingNotificationHandler>();
 
-            // builder.Components().Append<EnterspeedContentEventsComponent>();
+            builder
+                .AddNotificationHandler<DictionaryItemSavedNotification,
+                    EnterspeedDictionaryItemSavedNotificationHandler>();
+
+            builder
+               .AddNotificationHandler<DictionaryItemDeletingNotification,
+                    EnterspeedDictionaryItemDeletingNotificationHandler>();
+
+            // Components
             builder.Components().Append<EnterspeedJobsComponent>();
-            //builder.Components().Append<EnterspeedBackgroundTasksComponent>();
-            // builder.Components().Append<EnterspeedDictionaryEventsComponent>();
+
+            // Hosted Services
+            builder.Services.AddHostedService<HandleEnterspeedJobsHostedService>();
+            builder.Services.AddHostedService<InvalidateEnterspeedJobsHostedService>();
         }
     }
 }

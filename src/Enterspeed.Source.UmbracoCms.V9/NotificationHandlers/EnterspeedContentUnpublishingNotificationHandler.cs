@@ -14,7 +14,7 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Components.NotificationHandlers
+namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
     public class EnterspeedContentUnpublishingNotificationHandler
         : INotificationHandler<ContentUnpublishingNotification>,
@@ -26,6 +26,22 @@ namespace Enterspeed.Source.UmbracoCms.V9.Components.NotificationHandlers
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IContentService _contentService;
         private readonly IScopeProvider _scopeProvider;
+
+        public EnterspeedContentUnpublishingNotificationHandler(
+            IEnterspeedConfigurationService configurationService,
+            IEnterspeedJobRepository enterspeedJobRepository,
+            IEnterspeedJobHandler enterspeedJobHandler,
+            IUmbracoContextFactory umbracoContextFactory,
+            IContentService contentService,
+            IScopeProvider scopeProvider)
+        {
+            _configurationService = configurationService;
+            _enterspeedJobRepository = enterspeedJobRepository;
+            _enterspeedJobHandler = enterspeedJobHandler;
+            _umbracoContextFactory = umbracoContextFactory;
+            _contentService = contentService;
+            _scopeProvider = scopeProvider;
+        }
 
         public void Handle(ContentUnpublishingNotification notification)
         {

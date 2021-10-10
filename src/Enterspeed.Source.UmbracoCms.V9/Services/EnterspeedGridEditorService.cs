@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.V9.Components.DataPropertyValueConverter;
+using Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.V9.Models.Grid;
 
 namespace Enterspeed.Source.UmbracoCms.V9.Services
