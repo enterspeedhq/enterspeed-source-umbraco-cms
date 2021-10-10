@@ -1,0 +1,26 @@
+﻿<div ng-controller="SeedController as vm" class="seed-dashboard">
+	<div class="seed-dashboard-response" ng-if="vm.seedResponse !== null">
+		<h4>Seed Response</h4>
+		<div>
+			Jobs added: {{vm.seedResponse.jobsAdded}}
+		</div>
+		<div>
+			Content items: {{vm.seedResponse.contentCount}}
+		</div>
+        <div>
+            Dictionary items: {{vm.seedResponse.dictionaryCount}}
+        </div>
+	</div>
+	<div class="seed-dashboard-text">
+		Seeding will queue publishing jobs for all published content within this Umbraco installation. This action can take a while to finish.
+	</div>
+	<div class="seed-dashboard-content">
+		<umb-button action="vm.seed()"
+					type="button"
+					button-style="action"
+					state="vm.seedState"
+					label="Seed"
+					disabled="vm.seedState === 'busy'">
+		</umb-button>
+	</div>
+</div>

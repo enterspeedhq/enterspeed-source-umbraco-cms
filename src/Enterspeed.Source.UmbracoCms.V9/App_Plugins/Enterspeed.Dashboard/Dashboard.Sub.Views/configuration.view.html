@@ -1,0 +1,37 @@
+﻿<div ng-controller="ConfigurationController as vm" class="configuration-dashboard">
+
+	<umb-load-indicator ng-if="vm.loadingConfiguration || vm.buttonState === 'busy'">
+	</umb-load-indicator>
+
+	<div class="configuration-dashboard-content" ng-if="!vm.loadingConfiguration">
+
+		<div class="configuration-dashboard-property">
+			<label for="api-key">Enterspeed endpoint</label><br />
+			<input type="text" id="api-key" class="input-field" ng-model="vm.configuration.baseUrl" placeholder="Enterspeed base url" ng-disabled="vm.buttonState === 'busy'" />
+		</div>
+		<div class="configuration-dashboard-property">
+            <label for="media-domain">Media domain</label><br />
+            <input type="text" id="media-domain" class="input-field" ng-model="vm.configuration.mediaDomain" placeholder="Media domain" ng-disabled="vm.buttonState === 'busy'" />
+        </div>
+		<div class="configuration-dashboard-property">
+			<label for="api-key">Api key</label><br />
+			<input type="text" id="api-key" class="input-field" ng-model="vm.configuration.apiKey" placeholder="Enterspeed API Key" ng-disabled="vm.buttonState === 'busy'" />
+		</div>
+
+		<umb-button action="vm.saveConfiguration()"
+					type="button"
+					button-style="success"
+					state="vm.configState"
+					label="Save configuration"
+					disabled="vm.buttonState === 'busy' || !vm.configuration.baseUrl || !vm.configuration.apiKey">
+		</umb-button>
+
+		<umb-button action="vm.testConnection()"
+					type="button"
+					button-style="primary"
+					state="vm.configState"
+					label="Test connection"
+					disabled="vm.buttonState === 'busy' || !vm.configuration.baseUrl || !vm.configuration.apiKey">
+		</umb-button>
+	</div>
+</div>
