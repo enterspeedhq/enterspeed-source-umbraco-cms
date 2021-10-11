@@ -4,6 +4,7 @@ using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.HostedServices;
@@ -17,20 +18,23 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
         private readonly ILogger<InvalidateEnterspeedJobsHostedService> _logger;
         private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IEnterspeedConfigurationService _configurationService;
+        private readonly IScopeProvider _scopeProvider;
 
         public InvalidateEnterspeedJobsHostedService(
             IRuntimeState runtimeState,
             IEnterspeedJobHandler enterspeedJobHandler,
             ILogger<InvalidateEnterspeedJobsHostedService> logger,
             IServerRoleAccessor serverRoleAccessor,
-            IEnterspeedConfigurationService configurationService)
-            : base(TimeSpan.FromMinutes(10), TimeSpan.FromMinutes(1))
+            IEnterspeedConfigurationService configurationService, 
+            IScopeProvider scopeProvider)
+            : base(TimeSpan.FromMinutes(10), TimeSpan.FromSeconds(1))
         {
             _runtimeState = runtimeState;
             _enterspeedJobHandler = enterspeedJobHandler;
             _logger = logger;
             _serverRoleAccessor = serverRoleAccessor;
             _configurationService = configurationService;
+            _scopeProvider = scopeProvider;
         }
 
         public override Task PerformExecuteAsync(object state)
@@ -41,9 +45,11 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
                 return Task.CompletedTask;
             }
 
+            using IScope scope = _scopeProvider.CreateScope();
             if (!_configurationService.GetConfiguration().IsConfigured)
             {
-                // Enterspeed is not yet configured, but we still want the background task to run.
+                // Remember to complete the scope when done.
+                scope.Complete();
                 return Task.CompletedTask;
             }
 
@@ -56,6 +62,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
                 _logger.LogDebug("Does not run on servers with {role} role.", _serverRoleAccessor.CurrentServerRole.ToString());
             }
 
+            // Remember to complete the scope when done.
+            scope.Complete();
             return Task.CompletedTask;
         }
     }

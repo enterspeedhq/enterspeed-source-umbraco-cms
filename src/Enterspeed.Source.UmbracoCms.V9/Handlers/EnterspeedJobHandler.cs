@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
@@ -26,6 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
         private readonly IUmbracoRedirectsService _redirectsService;
         private readonly IPublishedRouter _publishedRouter;
         private readonly ILocalizationService _localizationService;
+
         public EnterspeedJobHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
             IUmbracoContextFactory umbracoContextFactory,
@@ -34,7 +36,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IUmbracoRedirectsService redirectsService,
-            IPublishedRouter publishedRouter, 
+            IPublishedRouter publishedRouter,
             ILocalizationService localizationService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
@@ -95,7 +97,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                 .ToDictionary(x => x, x => jobs.Where(j => j.EntityId == x).Select(j => j.Culture).Distinct().ToList());
 
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
-            var failedJobsToHandle = _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
+            var failedJobsToHandle =
+                _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
 
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
@@ -110,8 +113,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                             .ToList();
 
                         // Get the failed jobs and add it to the batch of jobs that needs to be handled, so we can delete them afterwards
-                        failedJobsToDelete.AddRange(failedJobsToHandle.Where(x =>
-                            x.EntityId == jobInfo.Key && x.Culture == culture));
+                        failedJobsToDelete.AddRange(
+                            failedJobsToHandle.Where(
+                                x =>
+                                    x.EntityId == jobInfo.Key && x.Culture == culture));
 
                         // We only need to execute the latest jobs instruction.
                         var newestJob = jobsToRun.LastOrDefault();
@@ -139,12 +144,15 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                 try
                                 {
                                     var redirects = _redirectsService.GetRedirects(content.Key, culture);
-                                    umbracoData = new UmbracoContentEntity(content, _enterspeedPropertyService, _entityIdentityService, redirects, culture);
+                                    umbracoData = new UmbracoContentEntity(
+                                        content, _enterspeedPropertyService, _entityIdentityService, redirects,
+                                        culture);
                                 }
                                 catch (Exception e)
                                 {
                                     // Create a new failed job
-                                    var exception = $"Failed creating entity ({newestJob.EntityId}/{newestJob.Culture}). Message: {e.Message}. StackTrace: {e.StackTrace}";
+                                    var exception =
+                                        $"Failed creating entity ({newestJob.EntityId}/{newestJob.Culture}). Message: {e.Message}. StackTrace: {e.StackTrace}";
                                     failedJobs.Add(GetFailedJob(newestJob, exception));
                                     _logger.LogWarning(exception);
                                     continue;
@@ -153,7 +161,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                             else if (newestJob.EntityType == EnterspeedJobEntityType.Dictionary)
                             {
                                 var isDictionaryId = Guid.TryParse(newestJob.EntityId, out var dictionaryId);
-                                var dictionaryItem = isDictionaryId ? _localizationService.GetDictionaryItemById(dictionaryId) : null;
+                                var dictionaryItem = isDictionaryId
+                                    ? _localizationService.GetDictionaryItemById(dictionaryId)
+                                    : null;
                                 if (dictionaryItem == null)
                                 {
                                     // Create a new failed job
@@ -166,12 +176,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                 // Create Umbraco Enterspeed Entity
                                 try
                                 {
-                                    umbracoData = new UmbracoDictionaryEntity(dictionaryItem, _enterspeedPropertyService, _entityIdentityService, culture);
+                                    umbracoData = new UmbracoDictionaryEntity(
+                                        dictionaryItem, _enterspeedPropertyService, _entityIdentityService, culture);
                                 }
                                 catch (Exception e)
                                 {
                                     // Create a new failed job
-                                    var exception = $"Failed creating entity ({newestJob.EntityId}/{newestJob.Culture}). Message: {e.Message}. StackTrace: {e.StackTrace}";
+                                    var exception =
+                                        $"Failed creating entity ({newestJob.EntityId}/{newestJob.Culture}). Message: {e.Message}. StackTrace: {e.StackTrace}";
                                     failedJobs.Add(GetFailedJob(newestJob, exception));
                                     _logger.LogWarning(exception);
                                     continue;
@@ -199,7 +211,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                             if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)
                             {
                                 // Create a new failed job
-                                var exception = $"Failed deleting entity ({newestJob.EntityId}/{newestJob.Culture}). Message: {deleteResponse.Message}";
+                                var exception =
+                                    $"Failed deleting entity ({newestJob.EntityId}/{newestJob.Culture}). Message: {deleteResponse.Message}";
                                 failedJobs.Add(GetFailedJob(newestJob, exception));
                                 _logger.LogWarning(exception);
                                 continue;
@@ -213,7 +226,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             _enterspeedJobRepository.Save(failedJobs);
 
             // Delete all jobs - Note, that it's safe to delete all jobs because failed jobs will be created as a new job
-            _enterspeedJobRepository.Delete(jobs.Select(x => x.Id).Concat(failedJobsToDelete.Select(x => x.Id)).ToList());
+            _enterspeedJobRepository.Delete(
+                jobs.Select(x => x.Id).Concat(failedJobsToDelete.Select(x => x.Id)).ToList());
 
             // Throw exception with a combined exception message for all jobs that failed if any
             if (failedJobs.Any())
