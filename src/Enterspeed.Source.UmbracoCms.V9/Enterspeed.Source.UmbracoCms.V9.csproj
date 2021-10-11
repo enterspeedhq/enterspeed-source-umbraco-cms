@@ -1,22 +1,39 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
+		<PackageId>Enterspeed.Source.UmbracoCms.V9</PackageId>
+		
 		<TargetFramework>net5.0</TargetFramework>
+		<PackageVersion>0.0.0</PackageVersion>
+		<Authors>Enterspeed</Authors>
+
+		<ContentTargetFolders>.</ContentTargetFolders>
+		<Description>Enterspeed integration for Umbraco version 9</Description>
+		<PackageTags>Enterspeed, Umbraco 9</PackageTags>
+		
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+		<PackageProjectUrl>https://www.enterspeed.com/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Enterspeed.Source.Sdk" Version="0.4.1" />
+		<PackageReference Include="Enterspeed.Source.Sdk" Version="[0.4,1.0)" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="9.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.0.0" />
-		<PackageReference Include="Umbraco.Cms.Core" Version="9.0.0" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[9.0,10.0)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[9.0,10.0)" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[9.0,10.0)" />
 	</ItemGroup>
-	
+
 	<ItemGroup>
-		<Content Include="_content\App_Plugins\**\*.*">
+		<Content Include="App_Plugins\Enterspeed.Dashboard\**\*.*">
 			<ExcludeFromSingleFile>true</ExcludeFromSingleFile>
 			<CopyToPublishDirectory>Always</CopyToPublishDirectory>
 		</Content>
+		<None Include="build\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>buildTransitive</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>
