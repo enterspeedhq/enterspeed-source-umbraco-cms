@@ -24,7 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConvert
 
         public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
-            var value = property.GetValue<HtmlString>(culture).ToString();
+            var value = property.GetValue<Umbraco.Cms.Core.Strings.HtmlEncodedString>(culture).ToString();
             value = PrefixRelativeImagesWithDomain(value, _enterspeedConfigurationService.GetConfiguration().MediaDomain);
             return new StringEnterspeedProperty(property.Alias, value);
         }
