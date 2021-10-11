@@ -1,6 +1,7 @@
 ﻿using System.Configuration;
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
 using Enterspeed.Source.UmbracoCms.V9.Models.Configuration;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Services;
 
@@ -9,38 +10,43 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
     public class EnterspeedConfigurationService : IEnterspeedConfigurationService
     {
         private readonly IKeyValueService _keyValueService;
-        private EnterspeedUmbracoConfiguration _configuration;
+        private readonly IConfiguration _configuration;
+        
+        private EnterspeedUmbracoConfiguration _enterspeedUmbracoConfiguration;
         private readonly string _configurationDatabaseKey = "Enterspeed+Configuration";
 
-        public EnterspeedConfigurationService(IKeyValueService keyValueService)
+        public EnterspeedConfigurationService(
+            IKeyValueService keyValueService,
+            IConfiguration configuration)
         {
             _keyValueService = keyValueService;
+            _configuration = configuration;
         }
 
         public EnterspeedUmbracoConfiguration GetConfiguration()
         {
-            if (_configuration != null)
+            if (_enterspeedUmbracoConfiguration != null)
             {
-                return _configuration;
+                return _enterspeedUmbracoConfiguration;
             }
 
-            _configuration = GetConfigurationFromDatabase();
+            _enterspeedUmbracoConfiguration = GetConfigurationFromDatabase();
 
-            if (_configuration != null)
+            if (_enterspeedUmbracoConfiguration != null)
             {
-                return _configuration;
+                return _enterspeedUmbracoConfiguration;
             }
 
-            var webConfigEndpoint = ConfigurationManager.AppSettings["Enterspeed.Endpoint"];
-            var webConfigMediaDomain = ConfigurationManager.AppSettings["Enterspeed.MediaDomain"];
-            var webConfigApikey = ConfigurationManager.AppSettings["Enterspeed.Apikey"];
+            var webConfigEndpoint = _configuration["Enterspeed:Endpoint"];
+            var webConfigMediaDomain = _configuration["Enterspeed:MediaDomain"];
+            var webConfigApikey = _configuration["Enterspeed:Apikey"];
 
             if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
             {
                 return new EnterspeedUmbracoConfiguration();
             }
 
-            _configuration = new EnterspeedUmbracoConfiguration
+            _enterspeedUmbracoConfiguration = new EnterspeedUmbracoConfiguration
             {
                 BaseUrl = webConfigEndpoint?.Trim(),
                 ApiKey = webConfigApikey?.Trim(),
@@ -48,7 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 IsConfigured = true
             };
 
-            return _configuration;
+            return _enterspeedUmbracoConfiguration;
         }
 
         public void Save(EnterspeedUmbracoConfiguration configuration)
@@ -68,7 +74,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             configuration.IsConfigured = true;
 
             _keyValueService.SetValue(_configurationDatabaseKey, JsonConvert.SerializeObject(configuration));
-            _configuration = configuration;
+            _enterspeedUmbracoConfiguration = configuration;
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromDatabase()

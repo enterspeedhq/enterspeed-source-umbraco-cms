@@ -25,7 +25,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoRedirectsService _redirectsService;
-        private readonly IPublishedRouter _publishedRouter;
         private readonly ILocalizationService _localizationService;
 
         public EnterspeedJobHandler(
@@ -36,7 +35,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IUmbracoRedirectsService redirectsService,
-            IPublishedRouter publishedRouter,
             ILocalizationService localizationService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
@@ -46,7 +44,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _redirectsService = redirectsService;
-            _publishedRouter = publishedRouter;
             _localizationService = localizationService;
         }
 
