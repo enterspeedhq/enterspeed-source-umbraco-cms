@@ -113,13 +113,6 @@ stages:
               versionEnvVar: semVersion
               includeSymbols: false
 
-          # Publish artifacts
-          - task: PublishPipelineArtifact@1
-            displayName: Publish artifact - nupkg
-            inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)'
-              artifact: nupkg
-
   - stage: Build
     displayName: Build
     jobs:
@@ -149,17 +142,21 @@ stages:
             displayName: Dotnet pack
             inputs:
               command: pack
-              outputDir: '$(Build.ArtifactStagingDirectory)/NuGet'
-              arguments: '-p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg'
               packagesToPack: 'src/Enterspeed.Source.UmbracoCms.V9/*.csproj'
               versioningScheme: byEnvVar
               versionEnvVar: semVersion
+
+  - stage: PublishArtifacts
+    displayName: Publish NuGet artifacts
+    jobs:
+      - job: Publish
+        displayName: Publish
+        steps:
 
           # Publish artifacts
           - task: PublishPipelineArtifact@1
             displayName: Publish artifact - nupkg
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)/NuGet'
               artifact: nupkg
 
   - stage: Release
