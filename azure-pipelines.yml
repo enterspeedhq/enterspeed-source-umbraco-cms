@@ -156,10 +156,10 @@ stages:
 
           # Publish artifacts
           - task: PublishPipelineArtifact@1
-              displayName: Publish artifact - nupkg
-              inputs:
-                targetPath: '$(Build.ArtifactStagingDirectory)/NuGet'
-                artifact: nupkg
+            displayName: Publish artifact - nupkg
+            inputs:
+              targetPath: '$(Build.ArtifactStagingDirectory)/NuGet'
+              artifact: nupkg
 
   - stage: Release
     displayName: Release
