@@ -5,7 +5,6 @@ using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
-using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Notifications;
@@ -17,15 +16,11 @@ using Umbraco.Extensions;
 namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
     public class EnterspeedContentUnpublishingNotificationHandler
-        : INotificationHandler<ContentUnpublishingNotification>,
+        : BaseEnterspeedNotificationHandler,
+        INotificationHandler<ContentUnpublishingNotification>,
             INotificationHandler<ContentMovedToRecycleBinNotification>
     {
-        private readonly IEnterspeedConfigurationService _configurationService;
-        private readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        private readonly IEnterspeedJobHandler _enterspeedJobHandler;
-        private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IContentService _contentService;
-        private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedContentUnpublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -33,14 +28,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             IEnterspeedJobHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
             IContentService contentService,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider) : base(
+                  configurationService,
+                  enterspeedJobRepository,
+                  enterspeedJobHandler,
+                  umbracoContextFactory,
+                  scopeProvider)
         {
-            _configurationService = configurationService;
-            _enterspeedJobRepository = enterspeedJobRepository;
-            _enterspeedJobHandler = enterspeedJobHandler;
-            _umbracoContextFactory = umbracoContextFactory;
             _contentService = contentService;
-            _scopeProvider = scopeProvider;
         }
 
         public void Handle(ContentUnpublishingNotification notification)
@@ -53,25 +48,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
         {
             var entities = notification.MoveInfoCollection.Select(x => x.Entity).ToList();
             HandleUnpublishing(entities);
-        }
-
-        private bool IsConfigured()
-        {
-            return _configurationService.GetConfiguration().IsConfigured;
-        }
-
-        private void HandleJobs(bool scopeCompleted, List<EnterspeedJob> jobs)
-        {
-            // Do not continue if the scope did not complete - the transaction may have been canceled and rolled back
-            if (scopeCompleted)
-            {
-                _enterspeedJobHandler.HandleJobs(jobs);
-            }
-        }
-
-        private string GetDefaultCulture(UmbracoContextReference context)
-        {
-            return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
         }
 
         private void HandleUnpublishing(List<IContent> entities)
@@ -142,26 +118,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             }
 
             EnqueueJobs(jobs);
-        }
-
-        private void EnqueueJobs(List<EnterspeedJob> jobs)
-        {
-            if (!jobs.Any())
-            {
-                return;
-            }
-
-            _enterspeedJobRepository.Save(jobs);
-
-            using (_umbracoContextFactory.EnsureUmbracoContext())
-            {
-                if (_scopeProvider.Context != null)
-                {
-                    var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
-                    // Add a callback to the current Scope which will execute when it's completed
-                    _scopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
-                }
-            }
         }
     }
 }

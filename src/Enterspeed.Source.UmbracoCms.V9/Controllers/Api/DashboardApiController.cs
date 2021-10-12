@@ -18,6 +18,7 @@ using Enterspeed.Source.UmbracoCms.V9.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.BackOffice.Filters;
 
@@ -26,6 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
     [JsonCamelCaseFormatter]
     public class DashboardApiController : UmbracoAuthorizedApiController
     {
+        private readonly IScopeProvider _scopeProvider;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
@@ -37,25 +39,29 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
             IEnterspeedJobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IScopeProvider scopeProvider)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;
             _enterspeedConfigurationService = enterspeedConfigurationService;
             _enterspeedConnection = enterspeedConnection;
             _httpContextAccessor = httpContextAccessor;
+            _scopeProvider = scopeProvider;
         }
 
         [HttpGet]
         public ApiResponse<List<EnterspeedJob>> GetFailedJobs()
         {
-            var result = _enterspeedJobRepository.GetFailedJobs().ToList();
-
-            return new ApiResponse<List<EnterspeedJob>>
+            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
             {
-                IsSuccess = true,
-                Data = result
-            };
+                var result = _enterspeedJobRepository.GetFailedJobs().ToList();
+                return new ApiResponse<List<EnterspeedJob>>
+                {
+                    IsSuccess = true,
+                    Data = result
+                };
+            }
         }
 
         [HttpGet]
@@ -72,13 +78,16 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
                     });
             }
 
-            var response = _enterspeedJobService.Seed();
-            return Ok(
-                new ApiResponse<SeedResponse>
-                {
-                    Data = response,
-                    IsSuccess = true
-                });
+            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            {
+                var response = _enterspeedJobService.Seed();
+                return Ok(
+                   new ApiResponse<SeedResponse>
+                   {
+                       Data = response,
+                       IsSuccess = true
+                   });
+            }
         }
 
         [HttpGet]

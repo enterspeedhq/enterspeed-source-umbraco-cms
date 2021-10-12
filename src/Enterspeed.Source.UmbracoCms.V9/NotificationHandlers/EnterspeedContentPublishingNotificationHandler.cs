@@ -15,14 +15,9 @@ using Umbraco.Extensions;
 
 namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
-    public class EnterspeedContentPublishingNotificationHandler : INotificationHandler<ContentPublishingNotification>
+    public class EnterspeedContentPublishingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<ContentPublishingNotification>
     {
-        private readonly IEnterspeedConfigurationService _configurationService;
-        private readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        private readonly IEnterspeedJobHandler _enterspeedJobHandler;
-        private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IContentService _contentService;
-        private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedContentPublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -31,23 +26,18 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             IUmbracoContextFactory umbracoContextFactory,
             IContentService contentService,
             IScopeProvider scopeProvider)
+            : base(
+                  configurationService,
+                  enterspeedJobRepository,
+                  enterspeedJobHandler,
+                  umbracoContextFactory,
+                  scopeProvider)
         {
-            _configurationService = configurationService;
-            _enterspeedJobRepository = enterspeedJobRepository;
-            _enterspeedJobHandler = enterspeedJobHandler;
-            _umbracoContextFactory = umbracoContextFactory;
-            _contentService = contentService;
-            _scopeProvider = scopeProvider;
         }
 
         public void Handle(ContentPublishingNotification notification)
         {
             ContentServicePublishing(notification.PublishedEntities.ToList());
-        }
-
-        private bool IsConfigured()
-        {
-            return _configurationService.GetConfiguration().IsConfigured;
         }
 
         private void ContentServicePublishing(List<IContent> entities)
@@ -121,35 +111,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             }
 
             EnqueueJobs(jobs);
-        }
-
-        private void EnqueueJobs(List<EnterspeedJob> jobs)
-        {
-            if (!jobs.Any())
-            {
-                return;
-            }
-
-            _enterspeedJobRepository.Save(jobs);
-
-            using (_umbracoContextFactory.EnsureUmbracoContext())
-            {
-                if (_scopeProvider.Context != null)
-                {
-                    var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
-                    // Add a callback to the current Scope which will execute when it's completed
-                    _scopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
-                }
-            }
-        }
-
-        private void HandleJobs(bool scopeCompleted, List<EnterspeedJob> jobs)
-        {
-            // Do not continue if the scope did not complete - the transaction may have been canceled and rolled back
-            if (scopeCompleted)
-            {
-                _enterspeedJobHandler.HandleJobs(jobs);
-            }
         }
     }
 }

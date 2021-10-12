@@ -14,14 +14,9 @@ using Umbraco.Cms.Core.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
-    public class EnterspeedDictionaryItemDeletingNotificationHandler : INotificationHandler<DictionaryItemDeletingNotification>
+    public class EnterspeedDictionaryItemDeletingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemDeletingNotification>
     {
-        private readonly IEnterspeedConfigurationService _configurationService;
-        private readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        private readonly IEnterspeedJobHandler _enterspeedJobHandler;
-        private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly ILocalizationService _localizationService;
-        private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedDictionaryItemDeletingNotificationHandler(
             IEnterspeedConfigurationService configurationService, 
@@ -29,14 +24,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             IEnterspeedJobHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
             ILocalizationService localizationService,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider) : base(
+                  configurationService,
+                  enterspeedJobRepository,
+                  enterspeedJobHandler,
+                  umbracoContextFactory,
+                  scopeProvider)
         {
-            _configurationService = configurationService;
-            _enterspeedJobRepository = enterspeedJobRepository;
-            _enterspeedJobHandler = enterspeedJobHandler;
-            _umbracoContextFactory = umbracoContextFactory;
             _localizationService = localizationService;
-            _scopeProvider = scopeProvider;
         }
 
         public void Handle(DictionaryItemDeletingNotification notification)
@@ -93,40 +88,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             }
 
             EnqueueJobs(jobs);
-        }
-
-        private bool IsConfigured()
-        {
-            return _configurationService.GetConfiguration().IsConfigured;
-        }
-
-        private void EnqueueJobs(List<EnterspeedJob> jobs)
-        {
-            if (!jobs.Any())
-            {
-                return;
-            }
-
-            _enterspeedJobRepository.Save(jobs);
-
-            using (_umbracoContextFactory.EnsureUmbracoContext())
-            {
-                if (_scopeProvider.Context != null)
-                {
-                    var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
-                    // Add a callback to the current Scope which will execute when it's completed
-                    _scopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
-                }
-            }
-        }
-
-        private void HandleJobs(bool scopeCompleted, List<EnterspeedJob> jobs)
-        {
-            // Do not continue if the scope did not complete - the transaction may have been canceled and rolled back
-            if (scopeCompleted)
-            {
-                _enterspeedJobHandler.HandleJobs(jobs);
-            }
         }
     }
 }

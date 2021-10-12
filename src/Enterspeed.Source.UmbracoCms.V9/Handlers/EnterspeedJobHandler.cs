@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
@@ -10,7 +9,6 @@ using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V9.Models;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Routing;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 
