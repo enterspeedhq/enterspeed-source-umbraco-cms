@@ -55,7 +55,7 @@ trigger:
       - README.md
       - CHANGELOG.md
       - documentation/*
-
+   
 pr:
   branches:
     include:
@@ -69,61 +69,40 @@ pr:
       - documentation/*
 
 stages:
-  - stage: Build
-    displayName: Build
+  - stage: BuildNetFramework
+    displayName: Build .NET framework projects
     jobs:
-      - job: BuildPlatform
-        displayName: Build Platform
+      - job: Build
+        displayName: Build
         pool:
           name: '$(agentPool)'
           demands:
-            - msbuild
-            - visualstudio
+          - msbuild
+          - visualstudio
         steps:
-          - task: UseDotNet@2
-            inputs:
-              packageType: 'sdk'
-              version: '5.0.x'
-
-          - task: DotNetCoreCLI@2
-            displayName: 'dotnet restore'
-            inputs:
-              command: restore
-              projects: '**/*.csproj'
-              nugetConfigPath: '$(System.DefaultWorkingDirectory)/NuGet.Config'
-
-          - task: DotNetCoreCLI@2
-            displayName: 'dotnet build'
-            inputs:
-              command: 'build'
-              projects: '**/*.csproj'
-              arguments: '--no-restore --configuration Release /p:Version=$(semVersion)'
-
           # NuGet
           - task: NuGetToolInstaller@1
             displayName: NuGet install
             inputs:
               versionSpec: 4.8.1
-
-          # Pack NuGet 
-          - task: DotNetCoreCLI@2
-            displayName: Dotnet pack
+              
+          - task: NuGetCommand@2
+            displayName: NuGet restore
             inputs:
-              command: pack
-              outputDir: '$(Build.ArtifactStagingDirectory)'
-              packagesToPack: 'src/Enterspeed.Source.UmbracoCms.V9/Enterspeed.Source.UmbracoCms.V9.csproj'
-              versioningScheme: byEnvVar
-              versionEnvVar: semVersion
+              command: 'restore'
+              restoreSolution: './Enterspeed.Source.UmbracoCms.netframework.sln'
+              feedsToUse: config
+              nugetConfigPath: ./NuGet.Config
 
-          #          # Build solution
-          #          - task: VSBuild@1
-          #            displayName: Build solution
-          #            inputs:
-          #              solution: ./Enterspeed.Source.UmbracoCms.sln
-          #              logFileVerbosity: minimal
-          #              platform: Any CPU
-          #              configuration: Release
-          #              maximumCpuCount: true
+          # Build solution
+          - task: VSBuild@1
+            displayName: Build solution
+            inputs:
+              solution: ./Enterspeed.Source.UmbracoCms.netframework.sln
+              logFileVerbosity: minimal
+              platform: Any CPU
+              configuration: Release
+              maximumCpuCount: true
 
           # Pack NuGet
           - task: NuGetCommand@2
@@ -167,7 +146,7 @@ stages:
                     script: |
                       git tag $(semVersion)
                       git push --tags
-
+                      
                 - task: NuGetCommand@2
                   displayName: Release on NuGet.org
                   inputs:

@@ -326,12 +326,6 @@
       <Link>stylecop.json</Link>
     </AdditionalFiles>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Enterspeed.Source.UmbracoCms.V8\Enterspeed.Source.UmbracoCms.V8.csproj">
-      <Project>{E6158BA2-5B73-46AB-9075-BE83BE773629}</Project>
-      <Name>Enterspeed.Source.UmbracoCms.V8</Name>
-    </ProjectReference>
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

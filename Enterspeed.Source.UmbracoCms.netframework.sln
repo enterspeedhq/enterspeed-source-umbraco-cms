@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enterspeed.Source.UmbracoCms", "Enterspeed.Source.UmbracoCms", "{E824C1D6-7128-450F-9D7E-381D3891FCD7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.V8", "src\Enterspeed.Source.UmbracoCms.V8\Enterspeed.Source.UmbracoCms.V8.csproj", "{E6158BA2-5B73-46AB-9075-BE83BE773629}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{0215A9EA-3011-4D81-B588-FC322C54D8A6}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		azure-pipelines.yml = azure-pipelines.yml
+		CHANGELOG.md = CHANGELOG.md
+		NuGet.Config = NuGet.Config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7971E102-218B-4A98-962E-BF881CBA2B2C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.V8.Tests", "tests\Enterspeed.Source.UmbracoCms.V8.Tests\Enterspeed.Source.UmbracoCms.V8.Tests.csproj", "{DFB63D59-02D0-4F91-9C8E-BDDD362C52CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.V7", "src\Enterspeed.Source.UmbracoCms.V7\Enterspeed.Source.UmbracoCms.V7.csproj", "{5088B8BA-5E3D-4D36-BEC9-C0FD52B0DB2D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E6158BA2-5B73-46AB-9075-BE83BE773629}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6158BA2-5B73-46AB-9075-BE83BE773629}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6158BA2-5B73-46AB-9075-BE83BE773629}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6158BA2-5B73-46AB-9075-BE83BE773629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFB63D59-02D0-4F91-9C8E-BDDD362C52CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFB63D59-02D0-4F91-9C8E-BDDD362C52CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFB63D59-02D0-4F91-9C8E-BDDD362C52CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFB63D59-02D0-4F91-9C8E-BDDD362C52CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5088B8BA-5E3D-4D36-BEC9-C0FD52B0DB2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5088B8BA-5E3D-4D36-BEC9-C0FD52B0DB2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5088B8BA-5E3D-4D36-BEC9-C0FD52B0DB2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5088B8BA-5E3D-4D36-BEC9-C0FD52B0DB2D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E6158BA2-5B73-46AB-9075-BE83BE773629} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
+		{DFB63D59-02D0-4F91-9C8E-BDDD362C52CF} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
+		{5088B8BA-5E3D-4D36-BEC9-C0FD52B0DB2D} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E57FEE32-F9D9-4173-8300-40CF8BC054E1}
+	EndGlobalSection
+EndGlobal
