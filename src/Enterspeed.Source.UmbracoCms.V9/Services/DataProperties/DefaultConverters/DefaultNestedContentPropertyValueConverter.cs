@@ -24,7 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConvert
 
         public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
-            var elementItems = property.GetValue<IEnumerable<PublishedElementModel>>(culture);
+            var elementItems = property.GetValue<IEnumerable<IPublishedElement>>(culture);
             var arrayItems = new List<IEnterspeedProperty>();
 
             if (elementItems != null)
