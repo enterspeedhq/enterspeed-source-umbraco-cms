@@ -11,17 +11,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.Data.Repositories
     public class EnterspeedJobRespository : IEnterspeedJobRepository
     {
         private readonly IScopeProvider _scopeProvider;
-        private readonly IScopeAccessor _scopeAccessor;
         private readonly IUmbracoMapper _mapper;
 
         public EnterspeedJobRespository(
             IScopeProvider scopeProvider,
-            IUmbracoMapper mapper,
-            IScopeAccessor scopeAccessor)
+            IUmbracoMapper mapper)
         {
             _scopeProvider = scopeProvider;
             _mapper = mapper;
-            _scopeAccessor = scopeAccessor;
         }
 
         public IList<EnterspeedJob> GetFailedJobs()
