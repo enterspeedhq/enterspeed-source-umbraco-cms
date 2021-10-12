@@ -23,4 +23,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Enterspeed.Source.UmbracoCms.V9\Enterspeed.Source.UmbracoCms.V9.csproj" />
+    </ItemGroup>
+
 </Project>
