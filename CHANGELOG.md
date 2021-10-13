@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.7.2 - 2021-08-11]
+
+- Add integration to Umbraco 9, min. version 9.0.0
+
 ## [0.7.1 - 2021-08-11]
 
 - Added a published request when processing property values.
