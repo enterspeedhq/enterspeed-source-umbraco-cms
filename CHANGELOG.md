@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.8.1 - 2021-10-14]
+
+- Fix Umbraco 9 plugin resources access paths.
+
 ## [0.8.0 - 2021-10-13]
 
 - Add integration to Umbraco 9, min. version 9.0.0
