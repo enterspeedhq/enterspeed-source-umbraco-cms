@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Dashboards;
 
@@ -8,7 +9,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Dashboard
     public class EnterspeedSettingsDashboard : IDashboard
     {
         public string Alias => "enterspeedSettingsDashboard";
-        public string View => "/App_Plugins/Enterspeed.Dashboard/settings-dashboard.html";
+        public string View => Path.Combine("/", "App_Plugins", "Enterspeed.Dashboard", "settings-dashboard.html");
         public string[] Sections => new[] { "Settings" };
 
         public IAccessRule[] AccessRules => Array.Empty<IAccessRule>();
