@@ -33,6 +33,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                   umbracoContextFactory,
                   scopeProvider)
         {
+            _contentService = contentService;
         }
 
         public void Handle(ContentPublishingNotification notification)

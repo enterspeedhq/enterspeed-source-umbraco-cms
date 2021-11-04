@@ -24,6 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoRedirectsService _redirectsService;
         private readonly ILocalizationService _localizationService;
+        private readonly IEnterspeedGuardService _enterspeedGuardService;
 
         public EnterspeedJobHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
@@ -33,7 +34,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IUmbracoRedirectsService redirectsService,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            IEnterspeedGuardService enterspeedGuardService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _umbracoContextFactory = umbracoContextFactory;
@@ -43,6 +45,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             _entityIdentityService = entityIdentityService;
             _redirectsService = redirectsService;
             _localizationService = localizationService;
+            _enterspeedGuardService = enterspeedGuardService;
         }
 
         public void HandlePendingJobs(int batchSize)
@@ -135,6 +138,13 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                     continue;
                                 }
 
+                                // Check if any of guards are against it
+                                if (!_enterspeedGuardService.CanPublish(content, culture))
+                                {
+                                    // Skip it, if is not valid.
+                                    continue;
+                                }
+
                                 // Create Umbraco Enterspeed Entity
                                 try
                                 {
@@ -165,6 +175,13 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                     var exception = $"Dictionary with id {newestJob.EntityId} not in database";
                                     failedJobs.Add(GetFailedJob(newestJob, exception));
                                     _logger.LogWarning(exception);
+                                    continue;
+                                }
+                                
+                                // Check if any of guards are against it
+                                if (!_enterspeedGuardService.CanPublish(dictionaryItem, culture))
+                                {
+                                    // Skip it, if is not valid.
                                     continue;
                                 }
 
