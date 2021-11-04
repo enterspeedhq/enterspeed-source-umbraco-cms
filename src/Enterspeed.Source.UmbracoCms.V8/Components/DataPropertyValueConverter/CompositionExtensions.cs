@@ -1,13 +1,24 @@
-﻿using Umbraco.Core.Composing;
+﻿using Enterspeed.Source.UmbracoCms.V8.Guards;
+using Umbraco.Core.Composing;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter
 {
     public static class CompositionExtensions
     {
-        public static EnterspeedPropertyValueConverterCollectionBuilder EnterspeedPropertyValueConverters(this Composition composition)
+        public static EnterspeedPropertyValueConverterCollectionBuilder EnterspeedPropertyValueConverters(
+            this Composition composition)
             => composition.WithCollectionBuilder<EnterspeedPropertyValueConverterCollectionBuilder>();
 
-        public static EnterspeedGridEditorValueConverterCollectionBuilder EnterspeedGridEditorValueConverters(this Composition composition)
+        public static EnterspeedGridEditorValueConverterCollectionBuilder EnterspeedGridEditorValueConverters(
+            this Composition composition)
             => composition.WithCollectionBuilder<EnterspeedGridEditorValueConverterCollectionBuilder>();
+
+        public static EnterspeedContentHandlingGuardCollectionBuilder EnterspeedContentHandlingGuards(
+            this Composition composition)
+            => composition.WithCollectionBuilder<EnterspeedContentHandlingGuardCollectionBuilder>();
+
+        public static EnterspeedDictionaryItemHandlingGuardCollectionBuilder EnterspeedDictionaryItemHandlingGuards(
+            this Composition composition)
+            => composition.WithCollectionBuilder<EnterspeedDictionaryItemHandlingGuardCollectionBuilder>();
     }
 }

@@ -9,6 +9,7 @@ using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Enterspeed.Source.UmbracoCms.V8.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
+using Enterspeed.Source.UmbracoCms.V8.Guards;
 using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
@@ -34,6 +35,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             composition.Register<IEnterspeedPropertyService, EnterspeedPropertyService>(Lifetime.Transient);
             composition.Register<IEnterspeedGridEditorService, EnterspeedGridEditorService>(Lifetime.Transient);
+
             composition.Register<IEnterspeedJobRepository, EnterspeedJobRespository>(Lifetime.Request);
             composition.Register<IEnterspeedJobHandler, EnterspeedJobHandler>(Lifetime.Request);
             composition.Register<IUmbracoUrlService, UmbracoUrlService>(Lifetime.Request);
@@ -46,6 +48,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IJsonSerializer, SystemTextJsonSerializer>(Lifetime.Singleton);
             composition.Register<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>(Lifetime.Request);
             composition.Register<IUmbracoRedirectsService, UmbracoRedirectsService>(Lifetime.Request);
+            composition.Register<IUmbracoRedirectsService, UmbracoRedirectsService>(Lifetime.Request);
+            composition.Register<IEnterspeedGuardService, EnterspeedGuardService>(Lifetime.Request);
 
             composition.Register<IEnterspeedConnection>(
                 c =>
@@ -84,15 +88,22 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                 .Append<DefaultTextboxPropertyValueConverter>()
                 .Append<DefaultUserPickerPropertyValueConverter>();
 
-            // Default grid editor value convertres
+            // Default grid editor value converters
             composition.EnterspeedGridEditorValueConverters()
                 .Append<DefaultRichTextEditorGridEditorValueConverter>();
+
+            // Content handling guards
+            composition.EnterspeedContentHandlingGuards()
+                .Append<ContentCultureUrlRequiredGuard>();
+
+            // Dictionary items handling guards
+            composition.EnterspeedDictionaryItemHandlingGuards();
 
             // Mapping definitions
             composition.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
                 .Add<EnterspeedJobMappingDefinition>();
 
-            // Register event componenents
+            // Register event components
             composition.Components().Append<EnterspeedContentEventsComponent>();
             composition.Components().Append<EnterspeedJobsComponent>();
             composition.Components().Append<EnterspeedBackgroundTasksComponent>();
