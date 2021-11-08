@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.9.0 - 2021-11-08]
+
+- Umbraco 8 & Umbraco 9 to support ingesting guards.
+
+
 ## [0.8.1 - 2021-10-14]
 
 - Fix Umbraco 9 plugin resources access paths.
