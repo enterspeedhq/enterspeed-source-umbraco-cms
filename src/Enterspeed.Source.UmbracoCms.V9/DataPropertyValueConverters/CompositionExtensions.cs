@@ -1,4 +1,5 @@
-﻿using Umbraco.Cms.Core.DependencyInjection;
+﻿using Enterspeed.Source.UmbracoCms.V9.Guards;
+using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters
 {
@@ -9,5 +10,11 @@ namespace Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters
 
         public static EnterspeedGridEditorValueConverterCollectionBuilder EnterspeedGridEditorValueConverters(this IUmbracoBuilder  composition)
             => composition.WithCollectionBuilder<EnterspeedGridEditorValueConverterCollectionBuilder>();
+        
+        public static EnterspeedContentHandlingGuardCollectionBuilder EnterspeedContentHandlingGuards(this IUmbracoBuilder  composition)
+            => composition.WithCollectionBuilder<EnterspeedContentHandlingGuardCollectionBuilder>();
+        
+        public static EnterspeedDictionaryItemHandlingGuardCollectionBuilder EnterspeedDictionaryItemHandlingGuards(this IUmbracoBuilder  composition)
+            => composition.WithCollectionBuilder<EnterspeedDictionaryItemHandlingGuardCollectionBuilder>();
     }
 }

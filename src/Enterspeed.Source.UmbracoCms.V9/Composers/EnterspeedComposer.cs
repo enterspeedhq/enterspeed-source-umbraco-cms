@@ -10,6 +10,7 @@ using Enterspeed.Source.UmbracoCms.V9.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
+using Enterspeed.Source.UmbracoCms.V9.Guards;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.HostedServices;
 using Enterspeed.Source.UmbracoCms.V9.NotificationHandlers;
@@ -46,6 +47,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
             builder.Services.AddTransient<IEnterspeedJobHandler, EnterspeedJobHandler>();
+            builder.Services.AddTransient<IEnterspeedGuardService, EnterspeedGuardService>();
 
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
@@ -87,6 +89,13 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.EnterspeedGridEditorValueConverters()
                 .Append<DefaultRichTextEditorGridEditorValueConverter>();
 
+            // Content handling guards
+            builder.EnterspeedContentHandlingGuards()
+                .Append<ContentCultureUrlRequiredGuard>();
+
+            // Dictionary items handling guards
+            builder.EnterspeedDictionaryItemHandlingGuards();
+
             // Mapping definitions
             builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
                 .Add<EnterspeedJobMappingDefinition>();
@@ -110,7 +119,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
                     EnterspeedDictionaryItemSavedNotificationHandler>();
 
             builder
-               .AddNotificationHandler<DictionaryItemDeletingNotification,
+                .AddNotificationHandler<DictionaryItemDeletingNotification,
                     EnterspeedDictionaryItemDeletingNotificationHandler>();
 
             // Components
