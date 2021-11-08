@@ -22,33 +22,33 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _logger = logger;
         }
 
-        public bool CanPublish(IPublishedContent content, string culture)
+        public bool CanIngest(IPublishedContent content, string culture)
         {
-            var blockingGuard = _contentGuards.FirstOrDefault(guard => !guard.CanPublish(content, culture));
+            var blockingGuard = _contentGuards.FirstOrDefault(guard => !guard.CanIngest(content, culture));
             if (blockingGuard == null)
             {
                 return true;
             }
 
             _logger.Debug<EnterspeedGuardService>(
-                "Content {contentId} with {culture} culture, publishing avoided by '{guard}'.",
+                "Content {contentId} with {culture} culture, ingest avoided by '{guard}'.",
                 content.Id,
                 culture,
                 blockingGuard.GetType().Name);
             return false;
         }
 
-        public bool CanPublish(IDictionaryItem dictionaryItem, string culture)
+        public bool CanIngest(IDictionaryItem dictionaryItem, string culture)
         {
             var blockingGuard =
-                _dictionaryItemGuards.FirstOrDefault(guard => !guard.CanPublish(dictionaryItem, culture));
+                _dictionaryItemGuards.FirstOrDefault(guard => !guard.CanIngest(dictionaryItem, culture));
             if (blockingGuard == null)
             {
                 return true;
             }
 
             _logger.Debug<EnterspeedGuardService>(
-                "Dictionary item {dictionaryItemId} with {culture} culture, publishing avoided by '{guard}'.",
+                "Dictionary item {dictionaryItemId} with {culture} culture, ingest avoided by '{guard}'.",
                 dictionaryItem.Id,
                 culture,
                 blockingGuard.GetType().Name);

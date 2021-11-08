@@ -22,27 +22,27 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             _logger = logger;
         }
 
-        public bool CanPublish(IPublishedContent content, string culture)
+        public bool CanIngest(IPublishedContent content, string culture)
         {
-            var blockingGuard = _contentGuards.FirstOrDefault(guard => !guard.CanPublish(content, culture));
+            var blockingGuard = _contentGuards.FirstOrDefault(guard => !guard.CanIngest(content, culture));
             if (blockingGuard == null)
             {
                 return true;
             }
             
-            _logger.LogDebug("Content {contentId} with {culture} culture, publishing avoided by '{guard}'.", content.Id, culture, blockingGuard.GetType().Name);
+            _logger.LogDebug("Content {contentId} with {culture} culture, ingest avoided by '{guard}'.", content.Id, culture, blockingGuard.GetType().Name);
             return false;
         }
 
-        public bool CanPublish(IDictionaryItem dictionaryItem, string culture)
+        public bool CanIngest(IDictionaryItem dictionaryItem, string culture)
         {
-            var blockingGuard = _dictionaryItemGuards.FirstOrDefault(guard => !guard.CanPublish(dictionaryItem, culture));
+            var blockingGuard = _dictionaryItemGuards.FirstOrDefault(guard => !guard.CanIngest(dictionaryItem, culture));
             if (blockingGuard == null)
             {
                 return true;
             }
             
-            _logger.LogDebug("Dictionary item {dictionaryItemId} with {culture} culture, publishing avoided by '{guard}'.", dictionaryItem.Id, culture, blockingGuard.GetType().Name);
+            _logger.LogDebug("Dictionary item {dictionaryItemId} with {culture} culture, ingest avoided by '{guard}'.", dictionaryItem.Id, culture, blockingGuard.GetType().Name);
             return false;
         }
     }

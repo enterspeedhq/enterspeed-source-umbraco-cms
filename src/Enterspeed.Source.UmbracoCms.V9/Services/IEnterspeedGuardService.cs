@@ -5,7 +5,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
 {
     public interface IEnterspeedGuardService
     {
-        bool CanPublish(IPublishedContent content, string culture);
-        bool CanPublish(IDictionaryItem dictionaryItem, string culture);
+        bool CanIngest(IPublishedContent content, string culture);
+        bool CanIngest(IDictionaryItem dictionaryItem, string culture);
     }
 }

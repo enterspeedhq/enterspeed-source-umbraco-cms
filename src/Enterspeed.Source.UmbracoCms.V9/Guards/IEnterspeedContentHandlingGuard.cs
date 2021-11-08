@@ -5,11 +5,11 @@ namespace Enterspeed.Source.UmbracoCms.V9.Guards
     public interface IEnterspeedContentHandlingGuard
     {
         /// <summary>
-        /// Validates if content can be published.
+        /// Validates if content can be ingested.
         /// </summary>
-        /// <param name="content">Content for publishing.</param>
+        /// <param name="content">Content for ingest.</param>
         /// <param name="culture">Culture of content.</param>
-        /// <returns>True or false, if is valid for publishing or not.</returns>
-        bool CanPublish(IPublishedContent content, string culture);
+        /// <returns>True or false, if is valid for ingest or not.</returns>
+        bool CanIngest(IPublishedContent content, string culture);
     }
 }

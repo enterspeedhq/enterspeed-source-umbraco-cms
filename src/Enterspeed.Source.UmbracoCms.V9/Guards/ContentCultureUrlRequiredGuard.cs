@@ -5,7 +5,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Guards
 {
     public class ContentCultureUrlRequiredGuard : IEnterspeedContentHandlingGuard
     {
-        public bool CanPublish(IPublishedContent content, string culture)
+        public bool CanIngest(IPublishedContent content, string culture)
         {
             if (string.IsNullOrWhiteSpace(culture))
             {

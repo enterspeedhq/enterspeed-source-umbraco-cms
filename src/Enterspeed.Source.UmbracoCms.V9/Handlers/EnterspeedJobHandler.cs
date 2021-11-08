@@ -139,7 +139,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                 }
 
                                 // Check if any of guards are against it
-                                if (!_enterspeedGuardService.CanPublish(content, culture))
+                                if (!_enterspeedGuardService.CanIngest(content, culture))
                                 {
                                     // Skip it, if is not valid.
                                     continue;
@@ -179,7 +179,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                 }
                                 
                                 // Check if any of guards are against it
-                                if (!_enterspeedGuardService.CanPublish(dictionaryItem, culture))
+                                if (!_enterspeedGuardService.CanIngest(dictionaryItem, culture))
                                 {
                                     // Skip it, if is not valid.
                                     continue;
