@@ -1,3 +1,4 @@
+using Enterspeed.Source.UmbracoCms.V9.Extensions;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
@@ -12,7 +13,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Guards
                 return true;
             }
 
-            var url = content.Url(culture);
+            var url = content.GetUrl(culture);
             return !string.IsNullOrWhiteSpace(url) && !url.Equals("#");
         }
     }
