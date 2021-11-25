@@ -151,7 +151,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                                     var redirects = _redirectsService.GetRedirects(content.Key, culture);
                                     umbracoData = new UmbracoContentEntity(
                                         content, _enterspeedPropertyService, _entityIdentityService, redirects,
-                                        culture);
+                                        _logger, culture);
                                 }
                                 catch (Exception e)
                                 {
