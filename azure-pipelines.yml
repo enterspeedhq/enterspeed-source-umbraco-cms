@@ -106,11 +106,13 @@ stages:
 
           # Pack NuGet
           - task: NuGetCommand@2
+            env:
+              PACKAGE_VERSION: $(semVersion)
             inputs:
               command: 'pack'
               packagesToPack: '**/*.nuspec'
               versioningScheme: byEnvVar
-              versionEnvVar: semVersion
+              versionEnvVar: PACKAGE_VERSION
               includeSymbols: false
 
           # Publish artifacts
