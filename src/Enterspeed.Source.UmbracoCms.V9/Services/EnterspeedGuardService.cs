@@ -30,7 +30,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 return true;
             }
             
-            _logger.LogDebug("Content {contentId} with {culture} culture, ingest avoided by '{guard}'.", content.Id, culture, blockingGuard.GetType().Name);
+            _logger.LogInformation("Content {contentId} with {culture} culture, ingest avoided by '{guard}'.", content.Id, culture, blockingGuard.GetType().Name);
             return false;
         }
 
