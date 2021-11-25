@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Extensions;
@@ -11,10 +12,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConvert
     public class DefaultMultiNodeTreePickerPropertyValueConverter : IEnterspeedPropertyValueConverter
     {
         private readonly IEntityIdentityService _entityIdentityService;
+        private readonly ILogger<DefaultMultiNodeTreePickerPropertyValueConverter> _logger;
 
-        public DefaultMultiNodeTreePickerPropertyValueConverter(IEntityIdentityService entityIdentityService)
+        public DefaultMultiNodeTreePickerPropertyValueConverter(
+            IEntityIdentityService entityIdentityService,
+            ILogger<DefaultMultiNodeTreePickerPropertyValueConverter> logger)
         {
             _entityIdentityService = entityIdentityService;
+            _logger = logger;
         }
 
         public bool IsConverter(IPublishedPropertyType propertyType)
@@ -84,7 +89,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConvert
             {
                 { "id", new StringEnterspeedProperty(id) },
                 { "name", new StringEnterspeedProperty(node.Name) },
-                { "url", new StringEnterspeedProperty(node.GetUrl(culture, UrlMode.Absolute)) }
+                { "url", new StringEnterspeedProperty(node.GetUrl(_logger, culture, UrlMode.Absolute)) }
             };
 
             return new ObjectEnterspeedProperty(properties);
