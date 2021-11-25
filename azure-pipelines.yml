@@ -38,6 +38,13 @@ variables:
     semVersionRev: $[counter(variables.semVersionBase, 0)]
     semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
     buildName: $[format('Pull Request - {0}', variables.semVersion)]
+  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/bugfix/') }}:
+    # Versioning: 1.0.0-bugfix.branch.123
+    releaseOnNuget: false
+    semVersionBase: $[format('{0}-bugfix.{1}', variables.version, variables['Build.SourceBranchName'])]
+    semVersionRev: $[counter(variables.semVersionBase, 0)]
+    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
+    buildName: $[format('Bugfix - {0}', variables.semVersion)]
 
 name: $(BuildID) - $(buildName)
 
@@ -106,13 +113,11 @@ stages:
 
           # Pack NuGet
           - task: NuGetCommand@2
-            env:
-              PACKAGE_VERSION: $(semVersion)
             inputs:
               command: 'pack'
               packagesToPack: '**/*.nuspec'
               versioningScheme: byEnvVar
-              versionEnvVar: PACKAGE_VERSION
+              versionEnvVar: semVersion
               includeSymbols: false
 
           # Publish artifacts
