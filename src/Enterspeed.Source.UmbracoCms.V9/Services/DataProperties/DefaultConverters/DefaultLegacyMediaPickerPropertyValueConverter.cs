@@ -7,23 +7,23 @@ using Umbraco.Cms.Core.PropertyEditors;
 
 namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConverters
 {
-    public class DefaultMediaPickerPropertyValueConverter : IEnterspeedPropertyValueConverter
+    public class DefaultLegacyMediaPickerPropertyValueConverter : IEnterspeedPropertyValueConverter
     {
         private readonly IUmbracoMediaUrlProvider _mediaUrlProvider;
 
-        public DefaultMediaPickerPropertyValueConverter(IUmbracoMediaUrlProvider mediaUrlProvider)
+        public DefaultLegacyMediaPickerPropertyValueConverter(IUmbracoMediaUrlProvider mediaUrlProvider)
         {
             _mediaUrlProvider = mediaUrlProvider;
         }
 
         public bool IsConverter(IPublishedPropertyType propertyType)
         {
-            return propertyType.EditorAlias.Equals("Umbraco.MediaPicker3");
+            return propertyType.EditorAlias.Equals("Umbraco.MediaPicker");
         }
 
         public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
-            var isMultiple = property.PropertyType.DataType.ConfigurationAs<MediaPicker3Configuration>().Multiple;
+            var isMultiple = property.PropertyType.DataType.ConfigurationAs<MediaPickerConfiguration>().Multiple;
             var arrayItems = new List<IEnterspeedProperty>();
             if (isMultiple)
             {
