@@ -6,6 +6,7 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 
 ## [0.9.1 - 2021-11-25]
 
+- Fix retrieval of culture specific content url for Umbraco 9.1
 - Split configuration keys for Umbraco 8 & Umbraco 9
 
 ## [0.9.0 - 2021-11-08]
