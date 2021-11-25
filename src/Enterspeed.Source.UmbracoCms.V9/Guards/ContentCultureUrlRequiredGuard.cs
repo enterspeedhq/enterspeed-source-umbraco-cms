@@ -22,7 +22,13 @@ namespace Enterspeed.Source.UmbracoCms.V9.Guards
             }
 
             var url = content.GetUrl(_logger, culture);
-            return !string.IsNullOrWhiteSpace(url) && !url.Equals("#");
+            if (!string.IsNullOrWhiteSpace(url) && !url.Equals("#"))
+            {
+                return true;
+            }
+            
+            _logger.LogInformation("Content '{contentId}' does not have available url '{contentUrl}' for '{culture}' culture.", content.Id, url, culture);
+            return false;
         }
     }
 }
