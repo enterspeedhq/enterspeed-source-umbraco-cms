@@ -252,6 +252,7 @@
     <Compile Include="EventHandlers\ContentEventHandler.cs" />
     <Compile Include="EventHandlers\DictionaryEventHandler.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Handlers\EnterspeedJobHandler.cs" />
     <Compile Include="Models\Api\ApiResponse.cs" />
     <Compile Include="Models\Api\SeedResponse.cs" />
