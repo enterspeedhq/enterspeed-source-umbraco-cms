@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.9.2 - 2021-11-26]
+- Fix media url provider bug, where media domain url is not correctly combined with media path.
+
 ## [0.9.1 - 2021-11-25]
 
 - Fix retrieval of culture specific content url for Umbraco 9.1
