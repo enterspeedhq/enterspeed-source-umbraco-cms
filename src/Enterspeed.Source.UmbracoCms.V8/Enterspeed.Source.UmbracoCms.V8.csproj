@@ -294,6 +294,7 @@
     <Compile Include="Data\Schemas\EnterspeedJobSchema.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Guards\ContentCultureUrlRequiredGuard.cs" />
     <Compile Include="Guards\EnterspeedContentHandlingGuardCollection.cs" />
     <Compile Include="Guards\EnterspeedContentHandlingGuardCollectionBuilder.cs" />
