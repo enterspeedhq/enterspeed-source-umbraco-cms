@@ -1,4 +1,5 @@
 ﻿using System;
+using Enterspeed.Source.UmbracoCms.V8.Extensions;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
@@ -23,7 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Providers
             if (!string.IsNullOrWhiteSpace(enterspeedMediaDomain))
             {
                 var mediaDomainUrl = new Uri(enterspeedMediaDomain);
-                return new Uri(mediaDomainUrl, relativeUrl).ToString();
+                return mediaDomainUrl.AppendPath(relativeUrl).ToString();
             }
 
             return relativeUrl;
