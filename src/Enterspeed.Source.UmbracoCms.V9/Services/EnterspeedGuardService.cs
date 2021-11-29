@@ -42,7 +42,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 return true;
             }
             
-            _logger.LogDebug("Dictionary item {dictionaryItemId} with {culture} culture, ingest avoided by '{guard}'.", dictionaryItem.Id, culture, blockingGuard.GetType().Name);
+            _logger.LogInformation("Dictionary item {dictionaryItemId} with {culture} culture, ingest avoided by '{guard}'.", dictionaryItem.Id, culture, blockingGuard.GetType().Name);
             return false;
         }
     }
