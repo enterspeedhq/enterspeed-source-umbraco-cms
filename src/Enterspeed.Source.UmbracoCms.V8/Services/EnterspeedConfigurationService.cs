@@ -33,8 +33,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return _configuration;
             }
 
-            _configuration = GetConfigurationFromDatabase();
+            _configuration = GetCombinedConfigurationFromDatabase();
+            if (_configuration != null)
+            {
+                return _configuration;
+            }
 
+            _configuration = GetConfigurationFromDatabase();
             if (_configuration != null)
             {
                 return _configuration;
@@ -100,28 +105,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
 
             return JsonConvert.DeserializeObject<EnterspeedUmbracoConfiguration>(savedConfigurationValue);
-        }
-
-        private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()
-        {
-            var webConfigEndpoint = ConfigurationManager.AppSettings["Enterspeed.Endpoint"];
-            var webConfigMediaDomain = ConfigurationManager.AppSettings["Enterspeed.MediaDomain"];
-            var webConfigApikey = ConfigurationManager.AppSettings["Enterspeed.Apikey"];
-
-            if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
-            {
-                return new EnterspeedUmbracoConfiguration();
-            }
-
-            _configuration = new EnterspeedUmbracoConfiguration
-            {
-                BaseUrl = webConfigEndpoint?.Trim(),
-                ApiKey = webConfigApikey?.Trim(),
-                MediaDomain = webConfigMediaDomain?.Trim(),
-                IsConfigured = true
-            };
-
-            return _configuration;
         }
 
         private EnterspeedUmbracoConfiguration GetCombinedConfigurationFromDatabase()
