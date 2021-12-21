@@ -30,7 +30,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return true;
             }
 
-            _logger.Debug<EnterspeedGuardService>(
+            _logger.Info<EnterspeedGuardService>(
                 "Content {contentId} with {culture} culture, ingest avoided by '{guard}'.",
                 content.Id,
                 culture,
@@ -47,7 +47,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return true;
             }
 
-            _logger.Debug<EnterspeedGuardService>(
+            _logger.Info<EnterspeedGuardService>(
                 "Dictionary item {dictionaryItemId} with {culture} culture, ingest avoided by '{guard}'.",
                 dictionaryItem.Id,
                 culture,
