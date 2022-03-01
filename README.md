@@ -3,17 +3,17 @@
 ## Umbraco 9
 
 To get started with Enterspeed for Umbraco 9, please see:  
-[Umbraco v9 documentation - Getting started](https://docs.enterspeed.com/source-integrations/umbraco-v9/getting-started)
+[Umbraco v9 documentation - Getting started](https://docs.enterspeed.com/integrations/umbraco/umbraco-v9/getting-started/)
 
 ## Umbraco 8
 
 To get started with Enterspeed for Umbraco 8, please see:  
-[Umbraco v8 documentation - Getting started](https://docs.enterspeed.com/source-integrations/umbraco-v8/getting-started)
+[Umbraco v8 documentation - Getting started](https://docs.enterspeed.com/integrations/umbraco/umbraco-v8/getting-started/)
 
 ## Umbraco 7
 
 To get started with Enterspeed for Umbraco 7, please see:  
-[Umbraco v7 documentation - Getting started](https://docs.enterspeed.com/source-integrations/umbraco-v7/getting-started)
+[Umbraco v7 documentation - Getting started](https://docs.enterspeed.com/integrations/umbraco/umbraco-v7/getting-started/)
 
 ## Contributing
 
