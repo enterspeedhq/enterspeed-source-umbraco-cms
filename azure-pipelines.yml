@@ -4,7 +4,6 @@ variables:
   minorVersion: 10
   patchVersion: 0
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
-  agentPool: Enterspeed-Production
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     releaseOnNuget: true
     # Versioning: 1.0.0
@@ -82,7 +81,7 @@ stages:
       - job: Build
         displayName: Build
         pool:
-          name: '$(agentPool)'
+          vmImage: windows-latest
           demands:
             - msbuild
             - visualstudio
@@ -96,8 +95,8 @@ stages:
           - task: NuGetCommand@2
             displayName: NuGet restore
             inputs:
-              command: 'restore'
-              restoreSolution: './Enterspeed.Source.UmbracoCms.netframework.sln'
+              command: "restore"
+              restoreSolution: "./Enterspeed.Source.UmbracoCms.netframework.sln"
               feedsToUse: config
               nugetConfigPath: ./NuGet.Config
 
@@ -114,8 +113,8 @@ stages:
           # Pack NuGet
           - task: NuGetCommand@2
             inputs:
-              command: 'pack'
-              packagesToPack: '**/*.nuspec'
+              command: "pack"
+              packagesToPack: "**/*.nuspec"
               versioningScheme: byEnvVar
               versionEnvVar: semVersion
               includeSymbols: false
@@ -124,7 +123,7 @@ stages:
           - task: PublishPipelineArtifact@1
             displayName: Publish artifact - nupkg
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)'
+              targetPath: "$(Build.ArtifactStagingDirectory)"
               artifact: nupkg_net_framework
 
   - stage: Build
@@ -135,31 +134,30 @@ stages:
         pool:
           vmImage: ubuntu-latest
         steps:
-
           # Restore packages
           - task: DotNetCoreCLI@2
             displayName: Dotnet restore
             inputs:
               command: restore
-              projects: './Enterspeed.Source.UmbracoCms.sln'
+              projects: "./Enterspeed.Source.UmbracoCms.sln"
               feedsToUse: config
-              nugetConfigPath: '$(System.DefaultWorkingDirectory)/NuGet.Config'
+              nugetConfigPath: "$(System.DefaultWorkingDirectory)/NuGet.Config"
 
           # Build solution
           - task: DotNetCoreCLI@2
             displayName: Dotnet build
             inputs:
               command: build
-              projects: 'Enterspeed.Source.UmbracoCms.sln'
-              arguments: '--no-restore --configuration Release /p:Version=$(semVersion)'
+              projects: "Enterspeed.Source.UmbracoCms.sln"
+              arguments: "--no-restore --configuration Release /p:Version=$(semVersion)"
 
-          # Pack NuGet 
+          # Pack NuGet
           - task: DotNetCoreCLI@2
             displayName: Dotnet pack
             inputs:
               command: pack
-              outputDir: '$(Build.ArtifactStagingDirectory)/NuGet'
-              packagesToPack: 'src/Enterspeed.Source.UmbracoCms.V9/*.csproj'
+              outputDir: "$(Build.ArtifactStagingDirectory)/NuGet"
+              packagesToPack: "src/Enterspeed.Source.UmbracoCms.V9/*.csproj"
               versioningScheme: byEnvVar
               versionEnvVar: semVersion
 
@@ -167,7 +165,7 @@ stages:
           - task: PublishPipelineArtifact@1
             displayName: Publish artifact - nupkg
             inputs:
-              targetPath: '$(Build.ArtifactStagingDirectory)/NuGet'
+              targetPath: "$(Build.ArtifactStagingDirectory)/NuGet"
               artifact: nupkg
 
   - stage: Release
@@ -201,6 +199,6 @@ stages:
                   displayName: Release on NuGet.org
                   inputs:
                     command: push
-                    packagesToPush: '$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg'
+                    packagesToPush: "$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg"
                     nuGetFeedType: external
                     publishFeedCredentials: NuGet.org
