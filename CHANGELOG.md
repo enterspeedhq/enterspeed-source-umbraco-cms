@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.10.0 - 2021-03-07]
+
+- Media picker 3 support for Umbraco 9.
+
 ## [0.9.2 - 2021-11-26]
 - Fix media url provider bug, where media domain url is not correctly combined with media path.
 
@@ -40,7 +44,6 @@ The format is based on Keep a Changelog, and this project adheres to Semantic Ve
 ## [0.6.1 - 2021-06-03]
 
 -Fix testing Ingest API endpoint whren it returns 422
-
 
 ## [0.6.0 - 2021-05-26]
 
