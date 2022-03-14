@@ -14,5 +14,6 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Schemas
         public int ConnectionTimeout { get; set; }
         public string IngestVersion { get; set; }
         public string MediaDomain { get; set; }
+        public string PreviewApiKey { get; set; }
     }
 }

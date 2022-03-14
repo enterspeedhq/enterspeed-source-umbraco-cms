@@ -1,13 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
@@ -19,18 +20,25 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
-            IScopeProvider scopeProvider) : base(
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IAuditService auditService) : base(
                   configurationService,
                   enterspeedJobRepository,
                   enterspeedJobHandler,
                   umbracoContextFactory,
-                  scopeProvider)
+                  scopeProvider,
+                  enterspeedJobFactory,
+                  auditService)
         {
         }
 
         public void Handle(DictionaryItemSavedNotification notification)
         {
-            if (!IsConfigured())
+            var isPublishConfigured = IsPublishConfigured();
+            var isPreviewConfigured = IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -41,17 +49,15 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             {
                 foreach (var translation in dictionaryItem.Translations)
                 {
-                    var now = DateTime.UtcNow;
-                    jobs.Add(new EnterspeedJob
+                    if (isPublishConfigured)
                     {
-                        EntityId = dictionaryItem.Key.ToString(),
-                        EntityType = EnterspeedJobEntityType.Dictionary,
-                        Culture = translation.Language.IsoCode,
-                        JobType = EnterspeedJobType.Publish,
-                        State = EnterspeedJobState.Pending,
-                        CreatedAt = now,
-                        UpdatedAt = now,
-                    });
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                    }
+
+                    if (isPreviewConfigured)
+                    {
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                    }
                 }
             }
 

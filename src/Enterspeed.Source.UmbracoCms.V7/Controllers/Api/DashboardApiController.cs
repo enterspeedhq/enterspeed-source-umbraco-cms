@@ -11,6 +11,7 @@ using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
 using Enterspeed.Source.UmbracoCms.V7.Data.Models;
+using Enterspeed.Source.UmbracoCms.V7.Extensions;
 using Enterspeed.Source.UmbracoCms.V7.Models.Api;
 using Enterspeed.Source.UmbracoCms.V7.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.V7.Providers;
@@ -37,8 +38,12 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
         [HttpGet]
         public ApiResponse<SeedResponse> Seed()
         {
-            if (EnterspeedContext.Current?.Configuration == null
-                || !EnterspeedContext.Current.Configuration.IsConfigured)
+            var publishConfigured = EnterspeedContext.Current?.Configuration != null && EnterspeedContext.Current.Configuration.IsConfigured;
+            var previewConfigured = EnterspeedContext.Current?.Configuration != null
+                                    && EnterspeedContext.Current.Configuration.IsConfigured
+                                    && !string.IsNullOrWhiteSpace(EnterspeedContext.Current.Configuration.PreviewApiKey);
+
+            if (!publishConfigured && !previewConfigured)
             {
                 return new ApiResponse<SeedResponse>
                 {
@@ -47,7 +52,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
                 };
             }
 
-            var response = EnterspeedContext.Current.Services.JobService.Seed();
+            var response = EnterspeedContext.Current.Services.JobService.Seed(publishConfigured, previewConfigured);
 
             return new ApiResponse<SeedResponse>
             {
@@ -85,7 +90,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
                 configuration.MediaDomain = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
             }
 
-            var response = TestConnection(configuration);
+            var response = TestConnections(configuration);
 
             if (!response.Success)
             {
@@ -107,7 +112,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
                 });
             }
 
-            EnterspeedContext.Current.Connection.Flush();
+            EnterspeedContext.Current.PublishConnection.Flush();
+            EnterspeedContext.Current.PreviewConnection?.Flush();
 
             return Request.CreateResponse(HttpStatusCode.OK, new Response
             {
@@ -117,9 +123,34 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
         }
 
         [HttpPost]
-        public HttpResponseMessage TestConfigurationConnection(EnterspeedConfiguration configuration)
+        public HttpResponseMessage TestConfigurationConnection(EnterspeedUmbracoConfiguration configuration)
         {
-            return Request.CreateResponse(HttpStatusCode.OK, TestConnection(configuration));
+            return Request.CreateResponse(HttpStatusCode.OK, TestConnections(configuration));
+        }
+
+        private Response TestConnections(EnterspeedUmbracoConfiguration configuration)
+        {
+            var publishConfiguration = configuration.GetPublishConfiguration();
+            var previewConfiguration = configuration.GetPreviewConfiguration();
+
+            var publishResponse = TestConnection(publishConfiguration);
+            if (!publishResponse.Success || previewConfiguration == null)
+            {
+                if (!publishResponse.Success && publishResponse.StatusCode == 401)
+                {
+                    publishResponse.Message = "Publish API key is invalid";
+                }
+
+                return publishResponse;
+            }
+
+            var previewResponse = TestConnection(previewConfiguration);
+            if (!previewResponse.Success && previewResponse.StatusCode == 401)
+            {
+                previewResponse.Message = "Preview API key is invalid";
+            }
+
+            return previewResponse;
         }
 
         private Response TestConnection(EnterspeedConfiguration configuration)

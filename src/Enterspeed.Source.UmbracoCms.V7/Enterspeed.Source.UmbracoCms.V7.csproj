@@ -237,9 +237,12 @@
     <Compile Include="Contexts\EnterspeedContext.cs" />
     <Compile Include="Contexts\EnterspeedHandlerContext.cs" />
     <Compile Include="Controllers\Api\DashboardApiController.cs" />
+    <Compile Include="Data\Migrations\AddContentStateToEnterspeedJobsTable.cs" />
     <Compile Include="Data\Migrations\AddEntityTypeToEnterspeedJobsTable.cs" />
+    <Compile Include="Data\Migrations\AddPreviewApiKeyToEnterspeedConfigurationTable.cs" />
     <Compile Include="Data\Migrations\CreateEnterspeedConfigurationTable.cs" />
     <Compile Include="Data\Migrations\CreateEnterspeedJobsTable.cs" />
+    <Compile Include="Data\Models\EnterspeedContentState.cs" />
     <Compile Include="Data\Models\EnterspeedJob.cs" />
     <Compile Include="Data\Models\EnterspeedJobEntityType.cs" />
     <Compile Include="Data\Models\EnterspeedJobState.cs" />
@@ -251,6 +254,13 @@
     <Compile Include="EventHandlers\ConfigurationEventHandler.cs" />
     <Compile Include="EventHandlers\ContentEventHandler.cs" />
     <Compile Include="EventHandlers\DictionaryEventHandler.cs" />
+    <Compile Include="Extensions\ContentBaseExtensions.cs" />
+    <Compile Include="Extensions\ContentExtensions.cs" />
+    <Compile Include="Extensions\EnterspeedConfigurationExtensions.cs" />
+    <Compile Include="Extensions\UrlStringExtensions.cs" />
+    <Compile Include="Factories\EnterspeedJobFactory.cs" />
+    <Compile Include="Models\UmbracoModels\PublishedPropertyBase.cs" />
+    <Compile Include="Models\UmbracoModels\PublishedProperty.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Handlers\EnterspeedJobHandler.cs" />
@@ -312,6 +322,7 @@
     <Compile Include="Services\EntityIdentityService.cs" />
     <Compile Include="Services\SchedulerService.cs" />
     <Compile Include="Services\Serializers\NewtonsoftJsonSerializer.cs" />
+    <Compile Include="Factories\UrlFactory.cs" />
     <Compile Include="UmbracoContextHelper.cs" />
   </ItemGroup>
   <ItemGroup>

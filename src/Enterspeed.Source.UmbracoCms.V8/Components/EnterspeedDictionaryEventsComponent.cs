@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core.Composing;
@@ -22,19 +23,22 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
         private readonly IEnterspeedJobHandler _enterspeedJobHandler;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IScopeProvider _scopeProvider;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedDictionaryEventsComponent(
             IEnterspeedConfigurationService configurationService,
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobHandler enterspeedJobHandler,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory)
         {
             _configurationService = configurationService;
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedJobHandler = enterspeedJobHandler;
             _enterspeedJobRepository = enterspeedJobRepository;
             _scopeProvider = scopeProvider;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Initialize()
@@ -49,7 +53,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
         private void LocalizationServiceOnSavedDictionaryItem(ILocalizationService sender, SaveEventArgs<IDictionaryItem> e)
         {
-            if (!IsConfigured())
+            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -60,17 +67,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             {
                 foreach (var translation in dictionaryItem.Translations)
                 {
-                    var now = DateTime.UtcNow;
-                    jobs.Add(new EnterspeedJob
+                    if (isPublishConfigured)
                     {
-                        EntityId = dictionaryItem.Key.ToString(),
-                        EntityType = EnterspeedJobEntityType.Dictionary,
-                        Culture = translation.Language.IsoCode,
-                        JobType = EnterspeedJobType.Publish,
-                        State = EnterspeedJobState.Pending,
-                        CreatedAt = now,
-                        UpdatedAt = now,
-                    });
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                    }
+
+                    if (isPreviewConfigured)
+                    {
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                    }
                 }
             }
 
@@ -79,7 +84,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
         private void LocalizationServiceOnDeletedDictionaryItem(ILocalizationService sender, DeleteEventArgs<IDictionaryItem> e)
         {
-            if (!IsConfigured())
+            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -93,17 +101,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                     List<IDictionaryItem> descendants = null;
                     foreach (var translation in dictionaryItem.Translations)
                     {
-                        var now = DateTime.UtcNow;
-                        jobs.Add(new EnterspeedJob
+                        if (isPublishConfigured)
                         {
-                            EntityId = dictionaryItem.Key.ToString(),
-                            EntityType = EnterspeedJobEntityType.Dictionary,
-                            Culture = translation.Language.IsoCode,
-                            JobType = EnterspeedJobType.Delete,
-                            State = EnterspeedJobState.Pending,
-                            CreatedAt = now,
-                            UpdatedAt = now,
-                        });
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                        }
+
+                        if (isPreviewConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                        }
 
                         if (descendants == null)
                         {
@@ -114,16 +120,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                         {
                             foreach (var descendanttranslation in descendant.Translations)
                             {
-                                jobs.Add(new EnterspeedJob
+                                if (isPublishConfigured)
                                 {
-                                    EntityId = descendant.Key.ToString(),
-                                    EntityType = EnterspeedJobEntityType.Dictionary,
-                                    Culture = descendanttranslation.Language.IsoCode,
-                                    JobType = EnterspeedJobType.Delete,
-                                    State = EnterspeedJobState.Pending,
-                                    CreatedAt = now,
-                                    UpdatedAt = now,
-                                });
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Publish));
+                                }
+
+                                if (isPreviewConfigured)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Preview));
+                                }
                             }
                         }
                     }
@@ -160,11 +165,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             {
                 _enterspeedJobHandler.HandleJobs(jobs);
             }
-        }
-
-        private bool IsConfigured()
-        {
-            return _configurationService.GetConfiguration().IsConfigured;
         }
     }
 }

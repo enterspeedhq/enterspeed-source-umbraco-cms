@@ -18,12 +18,12 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConvert
 
         public bool IsConverter(IPublishedPropertyType propertyType)
         {
-            return propertyType.EditorAlias.Equals("Umbraco.MediaPicker3");
+            return propertyType.EditorAlias.Equals("Umbraco.MediaPicker");
         }
 
         public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
-            var isMultiple = property.PropertyType.DataType.ConfigurationAs<MediaPicker3Configuration>().Multiple;
+            var isMultiple = property.PropertyType.DataType.ConfigurationAs<MediaPickerConfiguration>().Multiple;
             var arrayItems = new List<IEnterspeedProperty>();
             if (isMultiple)
             {

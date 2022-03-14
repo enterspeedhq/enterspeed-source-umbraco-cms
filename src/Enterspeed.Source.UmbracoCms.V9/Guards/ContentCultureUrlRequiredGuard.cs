@@ -1,4 +1,5 @@
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
@@ -7,11 +8,16 @@ namespace Enterspeed.Source.UmbracoCms.V9.Guards
 {
     public class ContentCultureUrlRequiredGuard : IEnterspeedContentHandlingGuard
     {
-        private ILogger<ContentCultureUrlRequiredGuard> _logger;
+        private readonly ILogger<ContentCultureUrlRequiredGuard> _logger;
+        private readonly IUrlFactory _urlFactory;
 
-        public ContentCultureUrlRequiredGuard(ILogger<ContentCultureUrlRequiredGuard> logger)
+
+        public ContentCultureUrlRequiredGuard(
+            ILogger<ContentCultureUrlRequiredGuard> logger,
+            IUrlFactory urlFactory)
         {
             _logger = logger;
+            _urlFactory = urlFactory;
         }
 
         public bool CanIngest(IPublishedContent content, string culture)
@@ -21,7 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Guards
                 return true;
             }
 
-            var url = content.GetUrl(_logger, culture);
+            var url = _urlFactory.GetUrl(content, content.IsDraft(), culture);
             if (!string.IsNullOrWhiteSpace(url) && !url.Equals("#"))
             {
                 return true;

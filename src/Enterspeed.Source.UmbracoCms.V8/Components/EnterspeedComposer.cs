@@ -9,6 +9,7 @@ using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Enterspeed.Source.UmbracoCms.V8.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Guards;
 using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
@@ -50,6 +51,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IUmbracoRedirectsService, UmbracoRedirectsService>(Lifetime.Request);
             composition.Register<IUmbracoRedirectsService, UmbracoRedirectsService>(Lifetime.Request);
             composition.Register<IEnterspeedGuardService, EnterspeedGuardService>(Lifetime.Request);
+            composition.Register<IUrlFactory, UrlFactory>(Lifetime.Request);
+            composition.Register<IEnterspeedJobFactory, EnterspeedJobFactory>(Lifetime.Request);
 
             composition.Register<IEnterspeedConnection>(
                 c =>
@@ -57,6 +60,17 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                     var configurationProvider = c.GetInstance<IEnterspeedConfigurationProvider>();
                     return new EnterspeedConnection(configurationProvider);
                 }, Lifetime.Singleton);
+
+            composition.Register<IEnterspeedConnectionProvider>(
+                c =>
+            {
+                var configurationProvider = c.GetInstance<IEnterspeedConfigurationProvider>();
+                var configurationService = c.GetInstance<IEnterspeedConfigurationService>();
+
+                var connectionProvider = new EnterspeedConnectionProvider(configurationService, configurationProvider);
+
+                return connectionProvider;
+            }, Lifetime.Singleton);
 
             composition.EnterspeedPropertyValueConverters()
                 .Append<DefaultBlockListPropertyValueConverter>()

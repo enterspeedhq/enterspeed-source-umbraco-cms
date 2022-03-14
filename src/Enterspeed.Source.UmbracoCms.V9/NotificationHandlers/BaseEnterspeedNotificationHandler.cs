@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
@@ -18,24 +20,35 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
         internal readonly IEnterspeedJobHandler _enterspeedJobHandler;
         internal readonly IUmbracoContextFactory _umbracoContextFactory;
         internal readonly IScopeProvider _scopeProvider;
+        internal readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        internal readonly IAuditService _auditService;
 
         protected BaseEnterspeedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IAuditService auditService)
         {
             _configurationService = configurationService;
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobHandler = enterspeedJobHandler;
             _umbracoContextFactory = umbracoContextFactory;
             _scopeProvider = scopeProvider;
+            _enterspeedJobFactory = enterspeedJobFactory;
+            _auditService = auditService;
         }
 
-        internal bool IsConfigured()
+        internal bool IsPublishConfigured()
         {
-            return _configurationService.GetConfiguration().IsConfigured;
+            return _configurationService.IsPublishConfigured();
+        }
+
+        internal bool IsPreviewConfigured()
+        {
+            return _configurationService.IsPreviewConfigured();
         }
 
         internal string GetDefaultCulture(UmbracoContextReference context)

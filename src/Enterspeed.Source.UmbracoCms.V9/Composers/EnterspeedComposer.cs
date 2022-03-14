@@ -10,6 +10,7 @@ using Enterspeed.Source.UmbracoCms.V9.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Guards;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.HostedServices;
@@ -48,12 +49,26 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
             builder.Services.AddTransient<IEnterspeedJobHandler, EnterspeedJobHandler>();
             builder.Services.AddTransient<IEnterspeedGuardService, EnterspeedGuardService>();
+            builder.Services.AddTransient<IUrlFactory, UrlFactory>();
+            builder.Services.AddTransient<IEnterspeedJobFactory, EnterspeedJobFactory>();
 
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>();
             builder.Services.AddSingleton<IJsonSerializer, SystemTextJsonSerializer>();
             builder.Services.AddSingleton<IEnterspeedConnection, EnterspeedConnection>();
+
+            builder.Services.AddSingleton<IEnterspeedConnectionProvider>(
+                c =>
+                {
+                    var configurationProvider = c.GetService<IEnterspeedConfigurationProvider>();
+                    var configurationService = c.GetService<IEnterspeedConfigurationService>();
+
+                    var connectionProvider =
+                        new EnterspeedConnectionProvider(configurationService, configurationProvider);
+
+                    return connectionProvider;
+                });
 
             builder.EnterspeedPropertyValueConverters()
                 .Append<DefaultBlockListPropertyValueConverter>()
@@ -70,7 +85,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
                 .Append<DefaultImageCropperPropertyValueConverter>()
                 .Append<DefaultMarkdownEditorPropertyValueConverter>()
                 .Append<DefaultMediaPickerPropertyValueConverter>()
-                .Append<DefaultLegacyMediaPickerPropertyValueConverter>()
                 .Append<DefaultMemberGroupPickerPropertyValueConverter>()
                 .Append<DefaultMemberPickerPropertyValueConverter>()
                 .Append<DefaultMultiUrlPickerPropertyValueConverter>()
