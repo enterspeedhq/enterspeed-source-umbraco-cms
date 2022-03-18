@@ -66,19 +66,21 @@ namespace Enterspeed.Source.UmbracoCms.V9.Factories
 
             var cleanedUrlArray = urlSegments.Select(x =>
             {
-                var isSegmentAbsolute = Uri.TryCreate(x, UriKind.Absolute, out var segmeentUri);
+                var isSegmentAbsolute = Uri.TryCreate(x, UriKind.Absolute, out var segmentUri);
                 if (isSegmentAbsolute)
                 {
                     return x.Trim('/');
                 }
 
-                return x.Trim('/');
+                return x.Equals("/") ? x : x.Trim('/');
             });
 
             var url = string.Join("/", cleanedUrlArray);
-            if (!Uri.TryCreate(url, UriKind.Absolute, out var uri))
+
+            // Make sure theres only one slash at the start of a relative url
+            if (Uri.IsWellFormedUriString(url, UriKind.Relative))
             {
-                url = GetAbsoluteUrl(url);
+                url = $"/{url.TrimStart('/')}";
             }
 
             return url.EnsureTrailingSlash();
@@ -132,12 +134,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Factories
                 isAssignedDomain = false;
                 return null;
             }
-        }
-
-        private string GetAbsoluteUrl(string relativeUrl)
-        {
-            var domain = $"http://localhost";
-            return domain + (!relativeUrl.StartsWith("/") ? $"/{relativeUrl}" : relativeUrl);
         }
     }
 }
