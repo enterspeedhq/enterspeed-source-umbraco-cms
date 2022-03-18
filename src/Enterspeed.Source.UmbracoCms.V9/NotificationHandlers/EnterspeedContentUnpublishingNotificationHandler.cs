@@ -21,6 +21,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             INotificationHandler<ContentMovedToRecycleBinNotification>
     {
         private readonly IContentService _contentService;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedContentUnpublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -37,10 +38,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                   enterspeedJobHandler,
                   umbracoContextFactory,
                   scopeProvider,
-                  enterspeedJobFactory,
                   auditService)
         {
             _contentService = contentService;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Handle(ContentUnpublishingNotification notification)

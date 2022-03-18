@@ -18,6 +18,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
     public class EnterspeedContentPublishingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<ContentPublishingNotification>
     {
         private readonly IContentService _contentService;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedContentPublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -34,10 +35,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                   enterspeedJobHandler,
                   umbracoContextFactory,
                   scopeProvider,
-                  enterspeedJobFactory,
                   auditService)
         {
             _contentService = contentService;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Handle(ContentPublishingNotification notification)
@@ -73,7 +74,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                         var isCultureUnpublished = content.IsPropertyDirty(ContentBase.ChangeTrackingPrefix.UnpublishedCulture + culture);
                         if (isCultureUnpublished)
                         {
-                            if (isPreviewConfigured)
+                            if (isPublishConfigured)
                             {
                                 jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Publish));
                             }

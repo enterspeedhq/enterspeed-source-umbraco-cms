@@ -15,6 +15,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
     public class EnterspeedDictionaryItemSavedNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemSavedNotification>
     {
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+
         public EnterspeedDictionaryItemSavedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
@@ -28,9 +30,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                   enterspeedJobHandler,
                   umbracoContextFactory,
                   scopeProvider,
-                  enterspeedJobFactory,
                   auditService)
         {
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Handle(DictionaryItemSavedNotification notification)

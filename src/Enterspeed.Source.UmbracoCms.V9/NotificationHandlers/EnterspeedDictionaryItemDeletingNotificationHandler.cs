@@ -17,6 +17,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
     public class EnterspeedDictionaryItemDeletingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemDeletingNotification>
     {
         private readonly ILocalizationService _localizationService;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedDictionaryItemDeletingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -33,10 +34,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                   enterspeedJobHandler,
                   umbracoContextFactory,
                   scopeProvider,
-                  enterspeedJobFactory,
                   auditService)
         {
             _localizationService = localizationService;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Handle(DictionaryItemDeletingNotification notification)

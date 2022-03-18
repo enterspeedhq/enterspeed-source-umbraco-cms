@@ -85,6 +85,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
                 .Append<DefaultImageCropperPropertyValueConverter>()
                 .Append<DefaultMarkdownEditorPropertyValueConverter>()
                 .Append<DefaultMediaPickerPropertyValueConverter>()
+                .Append<DefaultLegacyMediaPickerPropertyValueConverter>()
                 .Append<DefaultMemberGroupPickerPropertyValueConverter>()
                 .Append<DefaultMemberPickerPropertyValueConverter>()
                 .Append<DefaultMultiUrlPickerPropertyValueConverter>()
