@@ -28,7 +28,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
             {
                 var serviceProvider = serviceScope.ServiceProvider;
                 var runtimeState = serviceProvider.GetRequiredService<IRuntimeState>();
-                var enterspeedJobHandler = serviceProvider.GetRequiredService<IEnterspeedJobHandler>();
+                var enterspeedJobsHandlingService = serviceProvider.GetRequiredService<IEnterspeedJobsHandlingService>();
                 var logger = serviceProvider.GetRequiredService<ILogger<HandleEnterspeedJobsHostedService>>();
                 var serverRoleAccessor = serviceProvider.GetRequiredService<IServerRoleAccessor>();
                 var configurationService = serviceProvider.GetRequiredService<IEnterspeedConfigurationService>();
@@ -50,7 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
                     // Handle jobs in batches of 50
                     using (var scope = scopeProvider.CreateScope(autoComplete: true))
                     {
-                        enterspeedJobHandler.InvalidateOldProcessingJobs();
+                        enterspeedJobsHandlingService.InvalidateOldProcessingJobs();
                     }
                 }
                 else

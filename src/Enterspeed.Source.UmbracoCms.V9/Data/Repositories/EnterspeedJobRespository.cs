@@ -77,7 +77,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Data.Repositories
             return result;
         }
 
-        public void Save(List<EnterspeedJob> jobs)
+        public void Save(IList<EnterspeedJob> jobs)
         {
             if (jobs == null || !jobs.Any())
             {
@@ -92,7 +92,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Data.Repositories
             }
         }
 
-        public void Delete(List<int> ids)
+        public void Delete(IList<int> ids)
         {
             Database.DeleteMany<EnterspeedJobSchema>()
                 .Where(x => ids.Contains(x.Id))

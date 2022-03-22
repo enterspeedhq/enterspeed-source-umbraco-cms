@@ -15,14 +15,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
     {
         internal readonly IEnterspeedConfigurationService _configurationService;
         internal readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        internal readonly IEnterspeedJobHandler _enterspeedJobHandler;
+        internal readonly IEnterspeedJobsHandler _enterspeedJobHandler;
         internal readonly IUmbracoContextFactory _umbracoContextFactory;
         internal readonly IScopeProvider _scopeProvider;
 
         protected BaseEnterspeedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider)
         {

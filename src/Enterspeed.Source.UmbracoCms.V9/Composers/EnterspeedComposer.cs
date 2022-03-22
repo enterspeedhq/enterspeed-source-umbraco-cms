@@ -46,8 +46,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.Services.AddTransient<IUmbracoUrlService, UmbracoUrlService>();
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
-            builder.Services.AddTransient<IEnterspeedJobHandler, EnterspeedJobHandler>();
+            builder.Services.AddTransient<IEnterspeedJobsHandler, EnterspeedJobsHandler>();
             builder.Services.AddTransient<IEnterspeedGuardService, EnterspeedGuardService>();
+            builder.Services.AddTransient<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>();
 
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
@@ -96,6 +97,12 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
 
             // Dictionary items handling guards
             builder.EnterspeedDictionaryItemHandlingGuards();
+
+            // Job handlers
+            builder.EnterspeedJobHandlers()
+                .Append<EnterspeedPublishedContentJobHandler>()
+                .Append<EnterspeedPublishedDictionaryItemJobHandler>()
+                .Append<EnterspeedDeletedEntityJobHandler>();
 
             // Mapping definitions
             builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
