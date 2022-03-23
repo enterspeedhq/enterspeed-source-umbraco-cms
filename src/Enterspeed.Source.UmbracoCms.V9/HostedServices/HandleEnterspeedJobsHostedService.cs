@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -28,7 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
             {
                 var serviceProvider = serviceScope.ServiceProvider;
                 var runtimeState = serviceProvider.GetRequiredService<IRuntimeState>();
-                var enterspeedJobHandler = serviceProvider.GetRequiredService<IEnterspeedJobHandler>();
+                var enterspeedJobsHandlingService = serviceProvider.GetRequiredService<IEnterspeedJobsHandlingService>();
                 var logger = serviceProvider.GetRequiredService<ILogger<HandleEnterspeedJobsHostedService>>();
                 var serverRoleAccessor = serviceProvider.GetRequiredService<IServerRoleAccessor>();
                 var configurationService = serviceProvider.GetRequiredService<IEnterspeedConfigurationService>();
@@ -50,7 +49,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
                     // Handle jobs in batches of 50
                     using (var scope = scopeProvider.CreateScope(autoComplete: true))
                     {
-                        enterspeedJobHandler.HandlePendingJobs(50);
+                        enterspeedJobsHandlingService.HandlePendingJobs(50);
                     }
                 }
                 else
