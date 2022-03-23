@@ -10,7 +10,7 @@ using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.V9.Handlers
 {
-    internal class EnterspeedPublishedDictionaryItemJobHandler : IEnterspeedJobHandler
+    public class EnterspeedPublishedDictionaryItemJobHandler : IEnterspeedJobHandler
     {
         private readonly IEnterspeedPropertyService _enterspeedPropertyService;
         private readonly IEnterspeedIngestService _enterspeedIngestService;

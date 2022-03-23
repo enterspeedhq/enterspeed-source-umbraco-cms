@@ -102,7 +102,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.EnterspeedJobHandlers()
                 .Append<EnterspeedPublishedContentJobHandler>()
                 .Append<EnterspeedPublishedDictionaryItemJobHandler>()
-                .Append<EnterspeedDeletedEntityJobHandler>();
+                .Append<EnterspeedDeletedContentJobHandler>()
+                .Append<EnterspeedDeletedDictionaryItemJobHandler>();
 
             // Mapping definitions
             builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()

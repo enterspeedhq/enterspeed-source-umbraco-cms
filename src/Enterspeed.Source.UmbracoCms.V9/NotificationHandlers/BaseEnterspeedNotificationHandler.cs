@@ -33,17 +33,17 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             _scopeProvider = scopeProvider;
         }
 
-        internal bool IsConfigured()
+        protected bool IsConfigured()
         {
             return _configurationService.GetConfiguration().IsConfigured;
         }
 
-        internal string GetDefaultCulture(UmbracoContextReference context)
+        protected string GetDefaultCulture(UmbracoContextReference context)
         {
             return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
         }
 
-        internal void EnqueueJobs(List<EnterspeedJob> jobs)
+        protected void EnqueueJobs(List<EnterspeedJob> jobs)
         {
             if (!jobs.Any())
             {
