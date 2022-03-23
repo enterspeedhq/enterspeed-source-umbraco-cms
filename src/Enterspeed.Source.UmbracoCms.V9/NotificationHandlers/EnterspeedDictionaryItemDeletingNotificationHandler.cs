@@ -21,7 +21,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
         public EnterspeedDictionaryItemDeletingNotificationHandler(
             IEnterspeedConfigurationService configurationService, 
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
             ILocalizationService localizationService,
             IScopeProvider scopeProvider) : base(

@@ -25,7 +25,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
         public EnterspeedContentUnpublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandler enterspeedJobHandler,
             IUmbracoContextFactory umbracoContextFactory,
             IContentService contentService,
             IScopeProvider scopeProvider) : base(
