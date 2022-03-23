@@ -47,7 +47,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.HostedServices
 
                 if (serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher || serverRoleAccessor.CurrentServerRole == ServerRole.Single)
                 {
-                    // Handle jobs in batches of 50
                     using (var scope = scopeProvider.CreateScope(autoComplete: true))
                     {
                         enterspeedJobsHandlingService.InvalidateOldProcessingJobs();

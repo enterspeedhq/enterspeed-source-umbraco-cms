@@ -26,8 +26,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
 
         public virtual void HandlePendingJobs(int batchSize)
         {
-            var jobCount = 1;
-            while (jobCount > 0)
+            int jobCount;
+            do
             {
                 var jobs = _enterspeedJobRepository.GetPendingJobs(batchSize).ToList();
                 jobCount = jobs.Count;
@@ -39,7 +39,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 {
                     _logger.LogError(e, "Error has happened");
                 }
-            }
+            } while (jobCount > 0);
         }
 
         public virtual void HandleJobs(IList<EnterspeedJob> jobs)
