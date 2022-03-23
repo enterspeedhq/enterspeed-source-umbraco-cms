@@ -100,7 +100,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             }
         }
 
-        private EnterspeedJob GetFailedJob(EnterspeedJob handledJob, string exception)
+        protected EnterspeedJob GetFailedJob(EnterspeedJob handledJob, string exception)
         {
             return new EnterspeedJob
             {

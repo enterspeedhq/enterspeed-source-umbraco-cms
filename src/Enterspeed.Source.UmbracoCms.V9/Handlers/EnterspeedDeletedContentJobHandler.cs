@@ -7,12 +7,12 @@ using Enterspeed.Source.UmbracoCms.V9.Services;
 
 namespace Enterspeed.Source.UmbracoCms.V9.Handlers
 {
-    public class EnterspeedDeletedEntityJobHandler : IEnterspeedJobHandler
+    public class EnterspeedDeletedContentJobHandler : IEnterspeedJobHandler
     {
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
 
-        public EnterspeedDeletedEntityJobHandler(
+        public EnterspeedDeletedContentJobHandler(
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService)
         {
@@ -23,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
         public bool CanHandle(EnterspeedJob job)
         {
             return 
-                (job.EntityType == EnterspeedJobEntityType.Content || job.EntityType == EnterspeedJobEntityType.Dictionary)
+                (job.EntityType == EnterspeedJobEntityType.Content)
                 && job.JobType == EnterspeedJobType.Delete;
         }
 
