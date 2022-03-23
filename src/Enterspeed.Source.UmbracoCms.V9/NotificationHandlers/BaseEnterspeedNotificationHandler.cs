@@ -15,20 +15,20 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
     {
         internal readonly IEnterspeedConfigurationService _configurationService;
         internal readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        internal readonly IEnterspeedJobsHandler _enterspeedJobHandler;
+        internal readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         internal readonly IUmbracoContextFactory _umbracoContextFactory;
         internal readonly IScopeProvider _scopeProvider;
 
         protected BaseEnterspeedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobsHandler enterspeedJobHandler,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider)
         {
             _configurationService = configurationService;
             _enterspeedJobRepository = enterspeedJobRepository;
-            _enterspeedJobHandler = enterspeedJobHandler;
+            _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
             _umbracoContextFactory = umbracoContextFactory;
             _scopeProvider = scopeProvider;
         }
@@ -73,7 +73,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             {
                 using (var scope = _scopeProvider.CreateScope(autoComplete: true))
                 {
-                    _enterspeedJobHandler.HandleJobs(jobs);
+                    _enterspeedJobsHandlingService.HandleJobs(jobs);
                 }
             }
         }
