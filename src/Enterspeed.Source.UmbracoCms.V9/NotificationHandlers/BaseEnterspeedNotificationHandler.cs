@@ -16,7 +16,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
     {
         internal readonly IEnterspeedConfigurationService _configurationService;
         internal readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        internal readonly IEnterspeedJobHandler _enterspeedJobHandler;
+        internal readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         internal readonly IUmbracoContextFactory _umbracoContextFactory;
         internal readonly IScopeProvider _scopeProvider;
         internal readonly IAuditService _auditService;
@@ -24,14 +24,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
         protected BaseEnterspeedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider,
             IAuditService auditService)
         {
             _configurationService = configurationService;
             _enterspeedJobRepository = enterspeedJobRepository;
-            _enterspeedJobHandler = enterspeedJobHandler;
+            _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
             _umbracoContextFactory = umbracoContextFactory;
             _scopeProvider = scopeProvider;
             _auditService = auditService;
@@ -47,12 +47,12 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             return _configurationService.IsPreviewConfigured();
         }
 
-        internal string GetDefaultCulture(UmbracoContextReference context)
+        protected string GetDefaultCulture(UmbracoContextReference context)
         {
             return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
         }
 
-        internal void EnqueueJobs(List<EnterspeedJob> jobs)
+        protected void EnqueueJobs(List<EnterspeedJob> jobs)
         {
             if (!jobs.Any())
             {
@@ -82,7 +82,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             {
                 using (var scope = _scopeProvider.CreateScope(autoComplete: true))
                 {
-                    _enterspeedJobHandler.HandleJobs(jobs);
+                    _enterspeedJobsHandlingService.HandleJobs(jobs);
                 }
             }
         }

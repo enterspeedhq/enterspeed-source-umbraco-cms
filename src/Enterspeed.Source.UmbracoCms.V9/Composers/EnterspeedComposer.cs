@@ -13,6 +13,10 @@ using Enterspeed.Source.UmbracoCms.V9.Extensions;
 using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Guards;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.Content;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.Dictionaries;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.PreviewContent;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.PreviewDictionaries;
 using Enterspeed.Source.UmbracoCms.V9.HostedServices;
 using Enterspeed.Source.UmbracoCms.V9.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.V9.Providers;
@@ -47,10 +51,11 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.Services.AddTransient<IUmbracoUrlService, UmbracoUrlService>();
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
-            builder.Services.AddTransient<IEnterspeedJobHandler, EnterspeedJobHandler>();
+            builder.Services.AddTransient<IEnterspeedJobsHandler, EnterspeedJobsHandler>();
             builder.Services.AddTransient<IEnterspeedGuardService, EnterspeedGuardService>();
             builder.Services.AddTransient<IUrlFactory, UrlFactory>();
             builder.Services.AddTransient<IEnterspeedJobFactory, EnterspeedJobFactory>();
+            builder.Services.AddTransient<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>();
 
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
@@ -111,6 +116,25 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
 
             // Dictionary items handling guards
             builder.EnterspeedDictionaryItemHandlingGuards();
+
+            // Job handlers
+            builder.EnterspeedJobHandlers()
+                // Content
+                .Append<EnterspeedContentPublishJobHandler>()
+                .Append<EnterspeedContentDeleteJobHandler>()
+
+                // Dictionaries
+                .Append<EnterspeedDictionaryItemPublishJobHandler>()
+                .Append<EnterspeedDictionaryItemDeleteJobHandler>()
+
+                // Preview content
+                .Append<EnterspeedPreviewContentPublishJobHandler>()
+                .Append<EnterspeedPreviewContentDeleteJobHandler>()
+
+                // Preview dictionaries
+                .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
+                .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
+               
 
             // Mapping definitions
             builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()

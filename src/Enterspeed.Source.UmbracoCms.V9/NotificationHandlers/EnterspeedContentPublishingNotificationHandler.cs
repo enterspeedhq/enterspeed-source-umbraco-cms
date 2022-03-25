@@ -23,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
         public EnterspeedContentPublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             IContentService contentService,
             IScopeProvider scopeProvider,
@@ -32,7 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             : base(
                   configurationService,
                   enterspeedJobRepository,
-                  enterspeedJobHandler,
+                  enterspeedJobsHandlingService,
                   umbracoContextFactory,
                   scopeProvider,
                   auditService)

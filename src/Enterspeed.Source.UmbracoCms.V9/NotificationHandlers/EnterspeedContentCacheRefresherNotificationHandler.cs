@@ -26,7 +26,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
         public EnterspeedContentCacheRefresherNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
@@ -34,7 +34,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             : base(
                   configurationService,
                   enterspeedJobRepository,
-                  enterspeedJobHandler,
+                  enterspeedJobsHandlingService,
                   umbracoContextFactory,
                   scopeProvider,
                   auditService)
