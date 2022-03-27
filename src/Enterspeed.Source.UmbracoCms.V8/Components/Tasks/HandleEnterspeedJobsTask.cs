@@ -1,5 +1,5 @@
-﻿using Enterspeed.Source.UmbracoCms.V8.Handlers;
-using Enterspeed.Source.UmbracoCms.V8.Services;
+﻿using Enterspeed.Source.UmbracoCms.V8.Services;
+using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Sync;
@@ -11,7 +11,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.Tasks
     {
         private readonly IRuntimeState _runtime;
         private readonly IProfilingLogger _logger;
-        private readonly IEnterspeedJobHandler _enterspeedJobHandler;
+        private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         private readonly IEnterspeedConfigurationService _configurationService;
 
         public HandleEnterspeedJobsTask(
@@ -20,14 +20,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.Tasks
             int periodMilliseconds,
             IRuntimeState runtime,
             IProfilingLogger logger,
-            IEnterspeedJobHandler enterspeedJobHandler,
-            IEnterspeedConfigurationService configurationService)
+            IEnterspeedConfigurationService configurationService,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService)
             : base(runner, delayMilliseconds, periodMilliseconds)
         {
             _runtime = runtime;
             _logger = logger;
-            _enterspeedJobHandler = enterspeedJobHandler;
             _configurationService = configurationService;
+            _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
         }
 
         public override bool IsAsync => false;
@@ -43,7 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.Tasks
             if (_runtime.ServerRole == ServerRole.Master || _runtime.ServerRole == ServerRole.Single)
             {
                 // Handle jobs in batches of 50
-                _enterspeedJobHandler.HandlePendingJobs(50);
+                _enterspeedJobsHandlingService.HandlePendingJobs(50);
             }
             else
             {

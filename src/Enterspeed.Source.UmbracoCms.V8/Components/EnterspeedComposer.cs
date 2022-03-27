@@ -8,10 +8,10 @@ using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Enterspeed.Source.UmbracoCms.V8.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V8.EventHandlers;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
 using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Guards;
-using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConverters;
@@ -38,14 +38,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IEnterspeedGridEditorService, EnterspeedGridEditorService>(Lifetime.Transient);
 
             composition.Register<IEnterspeedJobRepository, EnterspeedJobRespository>(Lifetime.Request);
-            composition.Register<IEnterspeedJobHandler, EnterspeedJobHandler>(Lifetime.Request);
             composition.Register<IUmbracoUrlService, UmbracoUrlService>(Lifetime.Request);
             composition.Register<IUmbracoContextProvider, UmbracoContextProvider>(Lifetime.Request);
             composition.Register<IEnterspeedIngestService, EnterspeedIngestService>(Lifetime.Singleton);
             composition.Register<IEntityIdentityService, UmbracoEntityIdentityService>(Lifetime.Request);
             composition.Register<IEnterspeedJobService, EnterspeedJobService>(Lifetime.Request);
             composition.Register<IEnterspeedConfigurationService, EnterspeedConfigurationService>(Lifetime.Singleton);
-            composition.Register<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>(Lifetime.Singleton);
+            composition.Register<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>(
+                Lifetime.Singleton);
             composition.Register<IJsonSerializer, SystemTextJsonSerializer>(Lifetime.Singleton);
             composition.Register<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>(Lifetime.Request);
             composition.Register<IUmbracoRedirectsService, UmbracoRedirectsService>(Lifetime.Request);
@@ -53,6 +53,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IEnterspeedGuardService, EnterspeedGuardService>(Lifetime.Request);
             composition.Register<IUrlFactory, UrlFactory>(Lifetime.Request);
             composition.Register<IEnterspeedJobFactory, EnterspeedJobFactory>(Lifetime.Request);
+            composition.Register<IEnterspeedJobsHandler, EnterspeedJobsHandler>(Lifetime.Transient);
+            composition.Register<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>(Lifetime.Transient);
 
             composition.Register<IEnterspeedConnection>(
                 c =>
@@ -113,15 +115,28 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             // Dictionary items handling guards
             composition.EnterspeedDictionaryItemHandlingGuards();
 
+            // Job handlers
+            composition.EnterspeedJobHandlers()
+                .Append<EnterspeedPublishedContentJobHandler>()
+                .Append<EnterspeedPublishedDictionaryItemJobHandler>()
+                .Append<EnterspeedDeletedContentJobHandler>()
+                .Append<EnterspeedDeletedDictionaryItemJobHandler>();
+
             // Mapping definitions
             composition.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
                 .Add<EnterspeedJobMappingDefinition>();
 
             // Register event components
-            composition.Components().Append<EnterspeedContentEventsComponent>();
+            composition.Components().Append<EnterspeedContentPublishingEventHandler>();
+            composition.Components().Append<EnterspeedContentCacheRefresherEventHandler>();
+            composition.Components().Append<EnterspeedContentTrashingEventHandler>();
+            composition.Components().Append<EnterspeedContentUnpublishingEventHandler>();
+
+            composition.Components().Append<EnterspeedDictionaryItemSavedEventHandler>();
+            composition.Components().Append<EnterspeedDictionaryItemDeletingEventHandler>();
+
             composition.Components().Append<EnterspeedJobsComponent>();
             composition.Components().Append<EnterspeedBackgroundTasksComponent>();
-            composition.Components().Append<EnterspeedDictionaryEventsComponent>();
         }
     }
 }

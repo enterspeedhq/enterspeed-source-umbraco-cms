@@ -6,10 +6,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
     public interface IEnterspeedJobRepository
     {
         IList<EnterspeedJob> GetFailedJobs();
-        IList<EnterspeedJob> GetFailedJobs(List<string> entityIds);
+        IList<EnterspeedJob> GetFailedJobs(IList<string> entityIds);
         IList<EnterspeedJob> GetPendingJobs(int count);
         IList<EnterspeedJob> GetOldProcessingTasks(int olderThanMinutes = 60);
-        void Save(List<EnterspeedJob> jobs);
-        void Delete(List<int> ids);
+        void Save(IList<EnterspeedJob> jobs);
+        void Delete(IList<int> ids);
     }
 }
