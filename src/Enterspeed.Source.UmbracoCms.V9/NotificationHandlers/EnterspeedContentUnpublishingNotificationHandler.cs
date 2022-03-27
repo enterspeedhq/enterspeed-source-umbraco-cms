@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core.Events;
@@ -21,38 +21,47 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             INotificationHandler<ContentMovedToRecycleBinNotification>
     {
         private readonly IContentService _contentService;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedContentUnpublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             IContentService contentService,
-            IScopeProvider scopeProvider) : base(
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IAuditService auditService)
+            : base(
                   configurationService,
                   enterspeedJobRepository,
-                  enterspeedJobHandler,
+                  enterspeedJobsHandlingService,
                   umbracoContextFactory,
-                  scopeProvider)
+                  scopeProvider,
+                  auditService)
         {
             _contentService = contentService;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Handle(ContentUnpublishingNotification notification)
         {
             var entities = notification.UnpublishedEntities.ToList();
-            HandleUnpublishing(entities);
+            HandleUnpublishing(entities, false);
         }
 
         public void Handle(ContentMovedToRecycleBinNotification notification)
         {
             var entities = notification.MoveInfoCollection.Select(x => x.Entity).ToList();
-            HandleUnpublishing(entities);
+            HandleUnpublishing(entities, true);
         }
 
-        private void HandleUnpublishing(List<IContent> entities)
+        private void HandleUnpublishing(List<IContent> entities, bool unpublishFromPreview)
         {
-            if (!IsConfigured())
+            var isPublishConfigured = IsPublishConfigured();
+            var isPreviewConfigured = IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -74,18 +83,15 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                     List<IContent> descendants = null;
                     foreach (var culture in cultures)
                     {
-                        var now = DateTime.UtcNow;
-                        jobs.Add(
-                            new EnterspeedJob
-                            {
-                                EntityId = content.Id.ToString(),
-                                EntityType = EnterspeedJobEntityType.Content,
-                                Culture = culture,
-                                JobType = EnterspeedJobType.Delete,
-                                State = EnterspeedJobState.Pending,
-                                CreatedAt = now,
-                                UpdatedAt = now,
-                            });
+                        if (isPublishConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Publish));
+                        }
+
+                        if (isPreviewConfigured && unpublishFromPreview)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Preview));
+                        }
 
                         if (descendants == null)
                         {
@@ -100,17 +106,15 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                                 : new List<string> { GetDefaultCulture(context) };
                             foreach (var descendantCulture in descendantCultures)
                             {
-                                jobs.Add(
-                                    new EnterspeedJob
-                                    {
-                                        EntityId = descendant.Id.ToString(),
-                                        EntityType = EnterspeedJobEntityType.Content,
-                                        Culture = descendantCulture,
-                                        JobType = EnterspeedJobType.Delete,
-                                        State = EnterspeedJobState.Pending,
-                                        CreatedAt = now,
-                                        UpdatedAt = now,
-                                    });
+                                if (isPublishConfigured)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendantCulture, EnterspeedContentState.Publish));
+                                }
+
+                                if (isPreviewConfigured && unpublishFromPreview)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendantCulture, EnterspeedContentState.Preview));
+                                }
                             }
                         }
                     }

@@ -7,6 +7,7 @@ using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
@@ -15,35 +16,43 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
     {
         internal readonly IEnterspeedConfigurationService _configurationService;
         internal readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        internal readonly IEnterspeedJobHandler _enterspeedJobHandler;
+        internal readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         internal readonly IUmbracoContextFactory _umbracoContextFactory;
         internal readonly IScopeProvider _scopeProvider;
+        internal readonly IAuditService _auditService;
 
         protected BaseEnterspeedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobHandler enterspeedJobHandler,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IAuditService auditService)
         {
             _configurationService = configurationService;
             _enterspeedJobRepository = enterspeedJobRepository;
-            _enterspeedJobHandler = enterspeedJobHandler;
+            _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
             _umbracoContextFactory = umbracoContextFactory;
             _scopeProvider = scopeProvider;
+            _auditService = auditService;
         }
 
-        internal bool IsConfigured()
+        internal bool IsPublishConfigured()
         {
-            return _configurationService.GetConfiguration().IsConfigured;
+            return _configurationService.IsPublishConfigured();
         }
 
-        internal string GetDefaultCulture(UmbracoContextReference context)
+        internal bool IsPreviewConfigured()
+        {
+            return _configurationService.IsPreviewConfigured();
+        }
+
+        protected string GetDefaultCulture(UmbracoContextReference context)
         {
             return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
         }
 
-        internal void EnqueueJobs(List<EnterspeedJob> jobs)
+        protected void EnqueueJobs(List<EnterspeedJob> jobs)
         {
             if (!jobs.Any())
             {
@@ -73,7 +82,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             {
                 using (var scope = _scopeProvider.CreateScope(autoComplete: true))
                 {
-                    _enterspeedJobHandler.HandleJobs(jobs);
+                    _enterspeedJobsHandlingService.HandleJobs(jobs);
                 }
             }
         }

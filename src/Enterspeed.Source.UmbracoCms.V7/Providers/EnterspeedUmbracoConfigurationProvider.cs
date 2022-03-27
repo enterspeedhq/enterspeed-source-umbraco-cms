@@ -1,19 +1,19 @@
 ﻿using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
-using Enterspeed.Source.UmbracoCms.V7.Services;
+using Enterspeed.Source.UmbracoCms.V7.Extensions;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Providers
 {
     public class EnterspeedUmbracoConfigurationProvider : IEnterspeedConfigurationProvider
     {
-        private readonly EnterspeedConfigurationService _enterspeedConfigurationService;
-
-        public EnterspeedUmbracoConfigurationProvider()
+        public EnterspeedUmbracoConfigurationProvider(bool preview)
         {
-            _enterspeedConfigurationService = EnterspeedContext.Current.Services.ConfigurationService;
+            var enterspeedConfigurationService = EnterspeedContext.Current.Services.ConfigurationService;
+            var configuration = enterspeedConfigurationService.GetConfiguration();
+            Configuration = preview ? configuration.GetPreviewConfiguration() : configuration.GetPublishConfiguration();
         }
 
-        public EnterspeedConfiguration Configuration => _enterspeedConfigurationService.GetConfiguration();
+        public EnterspeedConfiguration Configuration { get; }
     }
 }

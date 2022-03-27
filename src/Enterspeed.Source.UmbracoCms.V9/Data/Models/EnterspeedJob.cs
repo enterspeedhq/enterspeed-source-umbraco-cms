@@ -25,5 +25,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Data.Models
 
         [JsonConverter(typeof(StringEnumConverter))]
         public EnterspeedJobEntityType EntityType { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        public EnterspeedContentState ContentState { get; set; }
     }
 }

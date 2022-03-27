@@ -13,7 +13,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Contexts
         private EnterspeedProviderContext _providerContext;
         private EnterspeedRepositoryContext _repositoryContext;
         private EnterspeedHandlerContext _handlerContext;
-        private IEnterspeedConnection _connection;
+        private IEnterspeedConnection _publishConnection;
+        private IEnterspeedConnection _previewConnection;
         private OrderedCollection<IEnterspeedPropertyValueConverter> _propertyValueConverters;
         private OrderedCollection<IEnterspeedGridEditorValueConverter> _gridEditorValueConverters;
 
@@ -25,7 +26,12 @@ namespace Enterspeed.Source.UmbracoCms.V7.Contexts
 
         public EnterspeedHandlerContext Handlers => _handlerContext ?? (_handlerContext = new EnterspeedHandlerContext());
 
-        public IEnterspeedConnection Connection => _connection ?? (_connection = new EnterspeedConnection(Providers.ConfigurationProvider));
+        public IEnterspeedConnection PublishConnection => _publishConnection ?? (_publishConnection = new EnterspeedConnection(Providers.PublishConfigurationProvider));
+
+        public IEnterspeedConnection PreviewConnection => _previewConnection ?? (_previewConnection =
+            Providers.PreviewConfigurationProvider != null
+                ? new EnterspeedConnection(Providers.PreviewConfigurationProvider)
+                : null);
         public UmbracoGlobalSettings UmbracoGlobalSettings => new UmbracoGlobalSettings();
         public EnterspeedUmbracoConfiguration Configuration => Services.ConfigurationService.GetConfiguration();
 
