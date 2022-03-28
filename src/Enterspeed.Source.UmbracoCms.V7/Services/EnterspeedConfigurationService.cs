@@ -26,6 +26,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             var webConfigEndpoint = ConfigurationManager.AppSettings["Enterspeed.Endpoint"];
             var webConfigMediaDomain = ConfigurationManager.AppSettings["Enterspeed.MediaDomain"];
             var webConfigApikey = ConfigurationManager.AppSettings["Enterspeed.Apikey"];
+            var webConfigPreviewApikey = ConfigurationManager.AppSettings["Enterspeed.PreviewApikey"];
 
             if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
             {
@@ -37,7 +38,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 BaseUrl = webConfigEndpoint.Trim(),
                 ApiKey = webConfigApikey.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
-                IsConfigured = true
+                IsConfigured = true,
+                PreviewApiKey = webConfigPreviewApikey
             };
             return _configuration;
         }
@@ -77,6 +79,20 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             _configuration = configuration;
         }
 
+        public bool IsPublishConfigured()
+        {
+            var configuration = GetConfiguration();
+            return configuration != null && configuration.IsConfigured;
+        }
+
+        public bool IsPreviewConfigured()
+        {
+            var configuration = GetConfiguration();
+            return configuration != null
+                   && configuration.IsConfigured
+                   && !string.IsNullOrWhiteSpace(configuration.PreviewApiKey);
+        }
+
         private EnterspeedUmbracoConfiguration GetConfigurationFromDatabase()
         {
             EnterspeedConfigurationSchema configuration;
@@ -110,6 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 MediaDomain = config.MediaDomain,
                 BaseUrl = config.BaseUrl,
                 IngestVersion = config.IngestVersion,
+                PreviewApiKey = config.PreviewApiKey
             };
         }
 
@@ -126,7 +143,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 ConnectionTimeout = config.ConnectionTimeout,
                 MediaDomain = config.MediaDomain,
                 BaseUrl = config.BaseUrl,
-                IsConfigured = true
+                IsConfigured = true,
+                PreviewApiKey = config.PreviewApiKey
             };
         }
     }

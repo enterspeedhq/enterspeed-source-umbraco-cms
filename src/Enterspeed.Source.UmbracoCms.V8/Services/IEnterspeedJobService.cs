@@ -4,6 +4,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
     public interface IEnterspeedJobService
     {
-        SeedResponse Seed();
+        SeedResponse Seed(bool publish, bool preview);
     }
 }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.V9.Handlers;
+using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Umbraco.Core.Logging;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Services
+namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
     public class EnterspeedJobsHandlingService : IEnterspeedJobsHandlingService
     {

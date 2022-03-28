@@ -1,6 +1,5 @@
 ﻿using Enterspeed.Source.UmbracoCms.V8.Components.Tasks;
 using Enterspeed.Source.UmbracoCms.V8.Services;
-using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Logging;

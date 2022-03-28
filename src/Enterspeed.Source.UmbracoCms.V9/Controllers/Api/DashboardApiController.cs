@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
@@ -11,6 +10,7 @@ using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V9.Extensions;
 using Enterspeed.Source.UmbracoCms.V9.Models.Api;
 using Enterspeed.Source.UmbracoCms.V9.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.V9.Providers;
@@ -67,7 +67,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
         [HttpGet]
         public IActionResult Seed()
         {
-            if (!_enterspeedConfigurationService.GetConfiguration().IsConfigured)
+            var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();
+            var previewConfigured = _enterspeedConfigurationService.IsPreviewConfigured();
+
+            if (!publishConfigured && !previewConfigured)
             {
                 return BadRequest(
                     new Response
@@ -80,7 +83,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
 
             using (var scope = _scopeProvider.CreateScope(autoComplete: true))
             {
-                var response = _enterspeedJobService.Seed();
+                var response = _enterspeedJobService.Seed(publishConfigured, previewConfigured);
                 return Ok(
                    new ApiResponse<SeedResponse>
                    {
@@ -91,10 +94,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
         }
 
         [HttpGet]
-        public ApiResponse<EnterspeedConfiguration> GetEnterspeedConfiguration()
+        public ApiResponse<EnterspeedUmbracoConfiguration> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();
-            return new ApiResponse<EnterspeedConfiguration>
+            return new ApiResponse<EnterspeedUmbracoConfiguration>
             {
                 Data = config,
                 IsSuccess = true
@@ -154,9 +157,34 @@ namespace Enterspeed.Source.UmbracoCms.V9.Controllers.Api
         }
 
         [HttpPost]
-        public IActionResult TestConfigurationConnection(EnterspeedConfiguration configuration)
+        public IActionResult TestConfigurationConnection(EnterspeedUmbracoConfiguration configuration)
         {
-            return Ok(TestConnection(configuration));
+            return Ok(TestConnections(configuration));
+        }
+
+        private Response TestConnections(EnterspeedUmbracoConfiguration configuration)
+        {
+            var publishConfiguration = configuration.GetPublishConfiguration();
+            var previewConfiguration = configuration.GetPreviewConfiguration();
+
+            var publishResponse = TestConnection(publishConfiguration);
+            if (!publishResponse.Success || previewConfiguration == null)
+            {
+                if (!publishResponse.Success && publishResponse.StatusCode == 401)
+                {
+                    publishResponse.Message = "Publish API key is invalid";
+                }
+
+                return publishResponse;
+            }
+
+            var previewResponse = TestConnection(previewConfiguration);
+            if (!previewResponse.Success && previewResponse.StatusCode == 401)
+            {
+                previewResponse.Message = "Preview API key is invalid";
+            }
+
+            return previewResponse;
         }
 
         private Response TestConnection(EnterspeedConfiguration configuration)

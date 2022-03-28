@@ -108,7 +108,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
                 JobType = (EnterspeedJobType)job.JobType,
                 State = (EnterspeedJobState)job.JobState,
                 UpdatedAt = job.UpdatedAt,
-                EntityType = (EnterspeedJobEntityType)job.EntityType
+                EntityType = (EnterspeedJobEntityType)job.EntityType,
+                ContentState = (EnterspeedContentState)job.ContentState
             };
         }
 
@@ -129,7 +130,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
                 JobType = job.JobType.GetHashCode(),
                 JobState = job.State.GetHashCode(),
                 UpdatedAt = job.UpdatedAt,
-                EntityType = job.EntityType.GetHashCode()
+                EntityType = job.EntityType.GetHashCode(),
+                ContentState = job.ContentState.GetHashCode()
             };
         }
     }

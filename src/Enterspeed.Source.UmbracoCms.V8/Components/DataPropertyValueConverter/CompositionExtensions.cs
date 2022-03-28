@@ -1,5 +1,5 @@
 ﻿using Enterspeed.Source.UmbracoCms.V8.Guards;
-using Enterspeed.Source.UmbracoCms.V9.Handlers;
+using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Umbraco.Core.Composing;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter

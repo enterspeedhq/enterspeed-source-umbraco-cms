@@ -38,5 +38,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Schemas
 
         [Column("EntityType")]
         public int EntityType { get; set; }
+
+        [Column("ContentState")]
+        public int ContentState { get; set; }
     }
 }

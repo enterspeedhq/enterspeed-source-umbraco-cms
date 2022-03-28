@@ -3,24 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Umbraco.Core.Logging;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Handlers
+namespace Enterspeed.Source.UmbracoCms.V8.Handlers
 {
     public class EnterspeedJobsHandler : IEnterspeedJobsHandler
     {
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly ILogger _logger;
         private readonly EnterspeedJobHandlerCollection _jobHandlers;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedJobsHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
             ILogger logger,
-            EnterspeedJobHandlerCollection jobHandlers)
+            EnterspeedJobHandlerCollection jobHandlers,
+            IEnterspeedJobFactory enterspeedJobFactory)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _logger = logger;
             _jobHandlers = jobHandlers;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void HandleJobs(IList<EnterspeedJob> jobs)
@@ -29,59 +33,46 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             var failedJobs = new List<EnterspeedJob>();
             var failedJobsToDelete = new List<EnterspeedJob>();
 
-            // Get a dictionary of contentid and cultures to handle
-            var jobsToHandle = jobs
-                .Select(x => x.EntityId)
-                .Distinct()
-                .ToDictionary(x => x, x => jobs.Where(j => j.EntityId == x).Select(j => j.Culture).Distinct().ToList());
-
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
             var failedJobsToHandle =
                 _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
-
-            foreach (var jobInfo in jobsToHandle)
+            var jobsByEntityIdAndContentState = jobs.GroupBy(x => new { x.EntityId, x.ContentState, x.Culture });
+            foreach (var jobInfo in jobsByEntityIdAndContentState)
             {
-                foreach (var culture in jobInfo.Value)
+                var newestJob = jobInfo
+                    .OrderBy(x => x.CreatedAt)
+                    .LastOrDefault();
+
+                // We only need to execute the latest jobs instruction.
+                if (newestJob == null)
                 {
-                    // List of all jobs with this contentid and culture
-                    var jobsToRun = jobs
-                        .Where(x => x.EntityId == jobInfo.Key && x.Culture == culture)
-                        .OrderBy(x => x.CreatedAt)
-                        .ToList();
+                    continue;
+                }
 
-                    // Get the failed jobs and add it to the batch of jobs that needs to be handled, so we can delete them afterwards
-                    failedJobsToDelete.AddRange(
-                        failedJobsToHandle.Where(
-                            x =>
-                                x.EntityId == jobInfo.Key && x.Culture == culture));
+                // Get the failed jobs and add it to the batch of jobs that needs to be handled, so we can delete them afterwards
+                failedJobsToDelete.AddRange(
+                    failedJobsToHandle.Where(
+                        x =>
+                            x.EntityId == jobInfo.Key.EntityId && x.Culture == jobInfo.Key.Culture && x.ContentState == jobInfo.Key.ContentState));
 
-                    // We only need to execute the latest jobs instruction.
-                    var newestJob = jobsToRun.LastOrDefault();
-                    if (newestJob == null)
-                    {
-                        continue;
-                    }
+                var handler = _jobHandlers.FirstOrDefault(f => f.CanHandle(newestJob));
+                if (handler == null)
+                {
+                    var message = $"No job handler available for {newestJob.EntityId} {newestJob.EntityType}";
+                    failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, message));
+                    _logger.Warn<EnterspeedJobsHandler>(message);
+                    continue;
+                }
 
-                    var handler = _jobHandlers.FirstOrDefault(f => f.CanHandle(newestJob));
-                    if (handler == null)
-                    {
-                        var message = $"No job handler available for {newestJob.EntityId} {newestJob.EntityType}";
-                        failedJobs.Add(GetFailedJob(newestJob, message));
-                        _logger.Warn<EnterspeedJobsHandler>(message);
-                        continue;
-                    }
-
-                    try
-                    {
-                        handler.Handle(newestJob);
-                    }
-                    catch (Exception exception)
-                    {
-                        var message = exception?.Message ?? "Failed to handle the job";
-                        failedJobs.Add(GetFailedJob(newestJob, message));
-                        _logger.Warn<EnterspeedJobsHandler>(message);
-                        continue;
-                    }
+                try
+                {
+                    handler.Handle(newestJob);
+                }
+                catch (Exception exception)
+                {
+                    var message = exception?.Message ?? "Failed to handle the job";
+                    failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, message));
+                    _logger.Warn<EnterspeedJobsHandler>(message);
                 }
             }
 
@@ -98,21 +89,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                 var failedJobExceptions = string.Join(Environment.NewLine, failedJobs.Select(x => x.Exception));
                 throw new Exception(failedJobExceptions);
             }
-        }
-
-        protected EnterspeedJob GetFailedJob(EnterspeedJob handledJob, string exception)
-        {
-            return new EnterspeedJob
-            {
-                EntityId = handledJob.EntityId,
-                EntityType = handledJob.EntityType,
-                Culture = handledJob.Culture,
-                CreatedAt = handledJob.CreatedAt,
-                UpdatedAt = DateTime.UtcNow,
-                JobType = handledJob.JobType,
-                State = EnterspeedJobState.Failed,
-                Exception = exception
-            };
         }
     }
 }
