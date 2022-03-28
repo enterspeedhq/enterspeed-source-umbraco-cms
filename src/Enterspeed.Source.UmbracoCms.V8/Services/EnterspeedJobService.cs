@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Models.Api;
 using Umbraco.Core;
 using Umbraco.Core.Models;
@@ -17,23 +17,26 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly ILocalizationService _localizationService;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedJobService(
             IContentService contentService,
             IEnterspeedJobRepository enterspeedJobRepository,
             IUmbracoContextFactory umbracoContextFactory,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            IEnterspeedJobFactory enterspeedJobFactory)
         {
             _contentService = contentService;
             _enterspeedJobRepository = enterspeedJobRepository;
             _umbracoContextFactory = umbracoContextFactory;
             _localizationService = localizationService;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
-        public SeedResponse Seed()
+        public SeedResponse Seed(bool publish, bool preview)
         {
-            var contentJobs = GetContentJobs(out var contentCount);
-            var dictionaryJobs = GetDictionaryJobs(out var dictionaryCount);
+            var contentJobs = GetContentJobs(publish, preview, out var contentCount);
+            var dictionaryJobs = GetDictionaryJobs(publish, preview, out var dictionaryCount);
 
             var jobs = contentJobs.Union(dictionaryJobs).ToList();
 
@@ -47,9 +50,16 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             };
         }
 
-        private List<EnterspeedJob> GetContentJobs(out int nodesCount)
+        private IEnumerable<EnterspeedJob> GetContentJobs(bool publish, bool preview, out int nodesCount)
         {
             var jobs = new List<EnterspeedJob>();
+            nodesCount = 0;
+
+            if (!publish && !preview)
+            {
+                return jobs;
+            }
+
             var allContent = new List<IContent>();
 
             // Add all root nodes
@@ -73,7 +83,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             {
                 foreach (var content in allContent)
                 {
-                    var contentJobs = GetJobsForContent(content, context);
+                    var contentJobs = GetJobsForContent(content, context, publish, preview);
                     if (contentJobs == null || !contentJobs.Any())
                     {
                         continue;
@@ -86,63 +96,76 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return jobs;
         }
 
-        private List<EnterspeedJob> GetJobsForContent(IContent content, UmbracoContextReference context)
+        private List<EnterspeedJob> GetJobsForContent(IContent content, UmbracoContextReference context, bool publish, bool preview)
         {
             var jobs = new List<EnterspeedJob>();
 
             var culturesToPublish = new List<string>();
+            var culturesToPreview = new List<string>();
             if (content.ContentType.VariesByCulture())
             {
-                culturesToPublish = content.PublishedCultures.ToList();
+                if (publish)
+                {
+                    culturesToPublish = content.PublishedCultures.ToList();
+                }
+
+                if (preview)
+                {
+                    culturesToPreview = content.PublishedCultures.ToList();
+                }
             }
             else
             {
                 var defaultCulture = GetDefaultCulture(context);
-                if (content.Published)
+                if (publish && content.Published)
                 {
                     culturesToPublish.Add(defaultCulture);
                 }
+
+                if (preview)
+                {
+                    culturesToPreview.Add(defaultCulture);
+                }
             }
 
-            var now = DateTime.UtcNow;
             foreach (var culture in culturesToPublish)
             {
-                jobs.Add(new EnterspeedJob
-                {
-                    EntityId = content.Id.ToString(),
-                    EntityType = EnterspeedJobEntityType.Content,
-                    Culture = culture,
-                    JobType = EnterspeedJobType.Publish,
-                    State = EnterspeedJobState.Pending,
-                    CreatedAt = now,
-                    UpdatedAt = now,
-                });
+                jobs.Add(_enterspeedJobFactory.GetPublishJob(content, culture, EnterspeedContentState.Publish));
+            }
+
+            foreach (var culture in culturesToPreview)
+            {
+                jobs.Add(_enterspeedJobFactory.GetPublishJob(content, culture, EnterspeedContentState.Preview));
             }
 
             return jobs;
         }
 
-        private List<EnterspeedJob> GetDictionaryJobs(out int dictionaryCount)
+        private IEnumerable<EnterspeedJob> GetDictionaryJobs(bool publish, bool preview, out int dictionaryCount)
         {
+            dictionaryCount = 0;
             var jobs = new List<EnterspeedJob>();
-            var allDictionaryItems = _localizationService.GetDictionaryItemDescendants(null).ToList();
 
-            var now = DateTime.UtcNow;
+            if (!publish && !preview)
+            {
+                return jobs;
+            }
+
+            var allDictionaryItems = _localizationService.GetDictionaryItemDescendants(null).ToList();
 
             foreach (var dictionaryItem in allDictionaryItems)
             {
                 foreach (var translation in dictionaryItem.Translations)
                 {
-                    jobs.Add(new EnterspeedJob
+                    if (publish)
                     {
-                        EntityId = dictionaryItem.Key.ToString(),
-                        EntityType = EnterspeedJobEntityType.Dictionary,
-                        Culture = translation.Language.IsoCode,
-                        JobType = EnterspeedJobType.Publish,
-                        State = EnterspeedJobState.Pending,
-                        CreatedAt = now,
-                        UpdatedAt = now,
-                    });
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                    }
+
+                    if (preview)
+                    {
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                    }
                 }
             }
 

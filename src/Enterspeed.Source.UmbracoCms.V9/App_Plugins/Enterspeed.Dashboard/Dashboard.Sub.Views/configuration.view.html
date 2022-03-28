@@ -17,6 +17,10 @@
 			<label for="api-key">Api key</label><br />
 			<input type="text" id="api-key" class="input-field" ng-model="vm.configuration.apiKey" placeholder="Enterspeed API Key" ng-disabled="vm.buttonState === 'busy'" />
 		</div>
+		<div class="configuration-dashboard-property">
+            <label for="preview-api-key">Preview api key</label><br />
+            <input type="text" id="preview-api-key" class="input-field" ng-model="vm.configuration.previewApiKey" placeholder="Enterspeed preview API Key" ng-disabled="vm.buttonState === 'busy'" />
+        </div>
 
 		<umb-button action="vm.saveConfiguration()"
 					type="button"

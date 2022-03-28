@@ -37,7 +37,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
             return result;
         }
 
-        public IList<EnterspeedJob> GetFailedJobs(List<string> entityIds)
+        public IList<EnterspeedJob> GetFailedJobs(IList<string> entityIds)
         {
             if (entityIds == null || !entityIds.Any())
             {
@@ -91,7 +91,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
             return result;
         }
 
-        public void Save(List<EnterspeedJob> jobs)
+        public void Save(IList<EnterspeedJob> jobs)
         {
             if (jobs == null || !jobs.Any())
             {
@@ -109,7 +109,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
             }
         }
 
-        public void Delete(List<int> ids)
+        public void Delete(IList<int> ids)
         {
             using (var scope = _scopeProvider.CreateScope(autoComplete: true))
             {

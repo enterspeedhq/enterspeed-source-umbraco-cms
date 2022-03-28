@@ -1,5 +1,4 @@
 ﻿using Enterspeed.Source.UmbracoCms.V8.Components.Tasks;
-using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
@@ -14,19 +13,19 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
         private readonly BackgroundTaskRunner<IBackgroundTask> _invalidateJobsRunner;
         private readonly IProfilingLogger _logger;
         private readonly IRuntimeState _runtimeState;
-        private readonly IEnterspeedJobHandler _enterspeedJobHandler;
+        private readonly IEnterspeedJobsHandlingService _enterspeedJobHandlerHandlingService;
         private readonly IEnterspeedConfigurationService _configurationService;
 
         public EnterspeedBackgroundTasksComponent(
             IProfilingLogger logger,
             IRuntimeState runtimeState,
-            IEnterspeedJobHandler enterspeedJobHandler,
-            IEnterspeedConfigurationService configurationService)
+            IEnterspeedConfigurationService configurationService,
+            IEnterspeedJobsHandlingService enterspeedJobHandlerHandlingService)
         {
             _logger = logger;
             _runtimeState = runtimeState;
-            _enterspeedJobHandler = enterspeedJobHandler;
             _configurationService = configurationService;
+            _enterspeedJobHandlerHandlingService = enterspeedJobHandlerHandlingService;
             _handleJobsRunner = new BackgroundTaskRunner<IBackgroundTask>("HandleEnterspeedJobs", _logger);
             _invalidateJobsRunner = new BackgroundTaskRunner<IBackgroundTask>("InvalidateEnterspeedJobs", _logger);
         }
@@ -48,8 +47,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                 repeatAfter,
                 _runtimeState,
                 _logger,
-                _enterspeedJobHandler,
-                _configurationService);
+                _configurationService,
+                _enterspeedJobHandlerHandlingService);
 
             _handleJobsRunner.TryAdd(task);
         }
@@ -65,8 +64,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                 repeatAfter,
                 _runtimeState,
                 _logger,
-                _enterspeedJobHandler,
-                _configurationService);
+                _configurationService,
+                _enterspeedJobHandlerHandlingService);
 
             _invalidateJobsRunner.TryAdd(task);
         }

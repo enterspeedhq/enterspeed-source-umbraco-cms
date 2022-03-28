@@ -10,8 +10,13 @@ using Enterspeed.Source.UmbracoCms.V9.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Guards;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.Content;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.Dictionaries;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.PreviewContent;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.PreviewDictionaries;
 using Enterspeed.Source.UmbracoCms.V9.HostedServices;
 using Enterspeed.Source.UmbracoCms.V9.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.V9.Providers;
@@ -48,6 +53,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
             builder.Services.AddTransient<IEnterspeedJobsHandler, EnterspeedJobsHandler>();
             builder.Services.AddTransient<IEnterspeedGuardService, EnterspeedGuardService>();
+            builder.Services.AddTransient<IUrlFactory, UrlFactory>();
+            builder.Services.AddTransient<IEnterspeedJobFactory, EnterspeedJobFactory>();
             builder.Services.AddTransient<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>();
 
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
@@ -55,6 +62,18 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             builder.Services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>();
             builder.Services.AddSingleton<IJsonSerializer, SystemTextJsonSerializer>();
             builder.Services.AddSingleton<IEnterspeedConnection, EnterspeedConnection>();
+
+            builder.Services.AddSingleton<IEnterspeedConnectionProvider>(
+                c =>
+                {
+                    var configurationProvider = c.GetService<IEnterspeedConfigurationProvider>();
+                    var configurationService = c.GetService<IEnterspeedConfigurationService>();
+
+                    var connectionProvider =
+                        new EnterspeedConnectionProvider(configurationService, configurationProvider);
+
+                    return connectionProvider;
+                });
 
             builder.EnterspeedPropertyValueConverters()
                 .Append<DefaultBlockListPropertyValueConverter>()
@@ -100,10 +119,22 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
 
             // Job handlers
             builder.EnterspeedJobHandlers()
-                .Append<EnterspeedPublishedContentJobHandler>()
-                .Append<EnterspeedPublishedDictionaryItemJobHandler>()
-                .Append<EnterspeedDeletedContentJobHandler>()
-                .Append<EnterspeedDeletedDictionaryItemJobHandler>();
+                // Content
+                .Append<EnterspeedContentPublishJobHandler>()
+                .Append<EnterspeedContentDeleteJobHandler>()
+
+                // Dictionaries
+                .Append<EnterspeedDictionaryItemPublishJobHandler>()
+                .Append<EnterspeedDictionaryItemDeleteJobHandler>()
+
+                // Preview content
+                .Append<EnterspeedPreviewContentPublishJobHandler>()
+                .Append<EnterspeedPreviewContentDeleteJobHandler>()
+
+                // Preview dictionaries
+                .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
+                .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
+               
 
             // Mapping definitions
             builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()

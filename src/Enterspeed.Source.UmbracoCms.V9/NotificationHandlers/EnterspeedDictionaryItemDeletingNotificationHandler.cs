@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core.Events;
@@ -17,26 +17,35 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
     public class EnterspeedDictionaryItemDeletingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemDeletingNotification>
     {
         private readonly ILocalizationService _localizationService;
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
         public EnterspeedDictionaryItemDeletingNotificationHandler(
-            IEnterspeedConfigurationService configurationService, 
+            IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             ILocalizationService localizationService,
-            IScopeProvider scopeProvider) : base(
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IAuditService auditService)
+            : base(
                   configurationService,
                   enterspeedJobRepository,
                   enterspeedJobsHandlingService,
                   umbracoContextFactory,
-                  scopeProvider)
+                  scopeProvider,
+                  auditService)
         {
             _localizationService = localizationService;
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Handle(DictionaryItemDeletingNotification notification)
         {
-            if (!IsConfigured())
+            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -50,17 +59,15 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                     List<IDictionaryItem> descendants = null;
                     foreach (var translation in dictionaryItem.Translations)
                     {
-                        var now = DateTime.UtcNow;
-                        jobs.Add(new EnterspeedJob
+                        if (isPublishConfigured)
                         {
-                            EntityId = dictionaryItem.Key.ToString(),
-                            EntityType = EnterspeedJobEntityType.Dictionary,
-                            Culture = translation.Language.IsoCode,
-                            JobType = EnterspeedJobType.Delete,
-                            State = EnterspeedJobState.Pending,
-                            CreatedAt = now,
-                            UpdatedAt = now,
-                        });
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                        }
+
+                        if (isPreviewConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                        }
 
                         if (descendants == null)
                         {
@@ -71,16 +78,15 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                         {
                             foreach (var descendanttranslation in descendant.Translations)
                             {
-                                jobs.Add(new EnterspeedJob
+                                if (isPublishConfigured)
                                 {
-                                    EntityId = descendant.Key.ToString(),
-                                    EntityType = EnterspeedJobEntityType.Dictionary,
-                                    Culture = descendanttranslation.Language.IsoCode,
-                                    JobType = EnterspeedJobType.Delete,
-                                    State = EnterspeedJobState.Pending,
-                                    CreatedAt = now,
-                                    UpdatedAt = now,
-                                });
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Publish));
+                                }
+
+                                if (isPreviewConfigured)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Preview));
+                                }
                             }
                         }
                     }

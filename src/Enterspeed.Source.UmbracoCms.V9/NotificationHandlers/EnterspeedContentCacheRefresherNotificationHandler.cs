@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Events;
+using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Services.Changes;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
@@ -18,24 +21,33 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 {
     public class EnterspeedContentCacheRefresherNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<ContentCacheRefresherNotification>
     {
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+
         public EnterspeedContentCacheRefresherNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IAuditService auditService)
             : base(
-                  configurationService, 
-                  enterspeedJobRepository, 
+                  configurationService,
+                  enterspeedJobRepository,
                   enterspeedJobsHandlingService,
-                  umbracoContextFactory, 
-                  scopeProvider)
+                  umbracoContextFactory,
+                  scopeProvider,
+                  auditService)
         {
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
-        
+
         public void Handle(ContentCacheRefresherNotification notification)
         {
-            if (!IsConfigured())
+            var isPublishConfigured = IsPublishConfigured();
+            var isPreviewConfigured = IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -55,67 +67,99 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                 {
                     var node = umb.Content.GetById(payload.Id);
                     var savedNode = umb.Content.GetById(true, payload.Id);
-                    if (node == null || savedNode == null)
+                    if (node == null && savedNode == null)
                     {
                         continue;
                     }
 
-                    var cultures = node.ContentType.VariesByCulture()
-                        ? node.Cultures.Keys
-                        : new List<string> { GetDefaultCulture(context) };
-
-                    List<IPublishedContent> descendants = null;
-
-                    foreach (var culture in cultures)
+                    if (node != null && isPublishConfigured)
                     {
-                        var publishedUpdateDate = node.CultureDate(culture);
-                        var savedUpdateDate = savedNode.CultureDate(culture);
+                        var audit = _auditService.GetPagedItemsByEntity(payload.Id, 0, 2, out var totalLogs)
+                            .FirstOrDefault();
 
-                        if (savedUpdateDate > publishedUpdateDate)
+                        if (audit == null)
                         {
-                            // This means that the nodes was only saved, so we skip creating any jobs for this node and culture
                             continue;
                         }
 
-                        var now = DateTime.UtcNow;
-                        jobs.Add(
-                            new EnterspeedJob
-                            {
-                                EntityId = node.Id.ToString(),
-                                EntityType = EnterspeedJobEntityType.Content,
-                                Culture = culture,
-                                JobType = EnterspeedJobType.Publish,
-                                State = EnterspeedJobState.Pending,
-                                CreatedAt = now,
-                                UpdatedAt = now,
-                            });
-
-                        if (payload.ChangeTypes == TreeChangeTypes.RefreshBranch)
+                        if (audit.AuditType.Equals(AuditType.PublishVariant)
+                                || audit.AuditType.Equals(AuditType.Publish)
+                                || audit.AuditType.Equals(AuditType.Move))
                         {
-                            if (descendants == null)
-                            {
-                                descendants = node.Descendants("*").ToList();
-                            }
+                            var cultures = node.ContentType.VariesByCulture()
+                                ? node.Cultures.Keys
+                                : new List<string> { GetDefaultCulture(context) };
 
-                            foreach (var descendant in descendants)
-                            {
-                                var descendantCultures = descendant.ContentType.VariesByCulture()
-                                    ? descendant.Cultures.Keys
-                                    : new List<string> { GetDefaultCulture(context) };
+                            List<IPublishedContent> descendants = null;
 
-                                foreach (var descendantCulture in descendantCultures)
+                            foreach (var culture in cultures)
+                            {
+                                var publishedUpdateDate = node.CultureDate(culture);
+                                var savedUpdateDate = savedNode.CultureDate(culture);
+
+                                if (savedUpdateDate > publishedUpdateDate)
                                 {
-                                    jobs.Add(
-                                        new EnterspeedJob
+                                    // This means that the nodes was only saved, so we skip creating any jobs for this node and culture
+                                    continue;
+                                }
+
+                                var now = DateTime.UtcNow;
+                                jobs.Add(_enterspeedJobFactory.GetPublishJob(node, culture, EnterspeedContentState.Publish));
+
+                                if (payload.ChangeTypes == TreeChangeTypes.RefreshBranch)
+                                {
+                                    if (descendants == null)
+                                    {
+                                        descendants = node.Descendants("*").ToList();
+                                    }
+
+                                    foreach (var descendant in descendants)
+                                    {
+                                        var descendantCultures = descendant.ContentType.VariesByCulture()
+                                            ? descendant.Cultures.Keys
+                                            : new List<string> { GetDefaultCulture(context) };
+
+                                        foreach (var descendantCulture in descendantCultures)
                                         {
-                                            EntityId = descendant.Id.ToString(),
-                                            EntityType = EnterspeedJobEntityType.Content,
-                                            Culture = descendantCulture,
-                                            JobType = EnterspeedJobType.Publish,
-                                            State = EnterspeedJobState.Pending,
-                                            CreatedAt = now,
-                                            UpdatedAt = now,
-                                        });
+                                            jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Publish));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if (savedNode != null && isPreviewConfigured)
+                    {
+                        var cultures = savedNode.ContentType.VariesByCulture()
+                            ? savedNode.Cultures.Keys
+                            : new List<string> { GetDefaultCulture(context) };
+
+                        List<IPublishedContent> descendants = null;
+
+                        foreach (var culture in cultures)
+                        {
+                            var now = DateTime.UtcNow;
+
+                            jobs.Add(_enterspeedJobFactory.GetPublishJob(savedNode, culture, EnterspeedContentState.Preview));
+
+                            if (payload.ChangeTypes == TreeChangeTypes.RefreshBranch)
+                            {
+                                if (descendants == null)
+                                {
+                                    descendants = savedNode.Descendants("*").ToList();
+                                }
+
+                                foreach (var descendant in descendants)
+                                {
+                                    var descendantCultures = descendant.ContentType.VariesByCulture()
+                                        ? descendant.Cultures.Keys
+                                        : new List<string> { GetDefaultCulture(context) };
+
+                                    foreach (var descendantCulture in descendantCultures)
+                                    {
+                                        jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Preview));
+                                    }
                                 }
                             }
                         }
