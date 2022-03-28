@@ -34,7 +34,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             IUmbracoRedirectsService redirectsService,
             IEnterspeedGuardService enterspeedGuardService,
             IPublishedRouter publishedRouter,
-            IUrlFactory urlFactory)
+            IUrlFactory urlFactory,
+            IEnterspeedConnectionProvider enterspeedConnectionProvider)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
@@ -44,6 +45,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             _enterspeedGuardService = enterspeedGuardService;
             _publishedRouter = publishedRouter;
             _urlFactory = urlFactory;
+            _enterspeedConnectionProvider = enterspeedConnectionProvider;
         }
 
         public virtual bool CanHandle(EnterspeedJob job)

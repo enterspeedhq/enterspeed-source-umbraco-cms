@@ -18,7 +18,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Migration
 
             var entityTypeColumnName = "ContentState";
 
-            // If column doesnt exist, drop table and recreate it
+            // If column doesnt exist, create it
             if (!ColumnExists(jobsTableName, entityTypeColumnName))
             {
                 Create
