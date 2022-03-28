@@ -1,10 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Services;
-using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Events;
@@ -18,16 +17,20 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
     public class EnterspeedContentUnpublishingEventHandler : BaseEnterspeedEventHandler, IComponent
     {
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+
         public EnterspeedContentUnpublishingEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory)
             : base(
                 umbracoContextFactory, enterspeedJobRepository, jobsHandlingService, configurationService,
                 scopeProvider)
         {
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Initialize()
@@ -37,16 +40,19 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         public void ContentServiceUnpublishing(IContentService sender, PublishEventArgs<IContent> e)
         {
-            var entities = e.PublishedEntities.ToList();
-            if (!IsConfigured())
+            if (!_configurationService.IsPublishConfigured() && !_configurationService.IsPreviewConfigured())
             {
                 return;
             }
 
+            var entities = e.PublishedEntities.ToList();
             if (!entities.Any())
             {
                 return;
             }
+
+            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
 
             var jobs = new List<EnterspeedJob>();
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
@@ -60,23 +66,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                     List<IContent> descendants = null;
                     foreach (var culture in cultures)
                     {
-                        var now = DateTime.UtcNow;
-                        jobs.Add(
-                            new EnterspeedJob
-                            {
-                                EntityId = content.Id.ToString(),
-                                EntityType = EnterspeedJobEntityType.Content,
-                                Culture = culture,
-                                JobType = EnterspeedJobType.Delete,
-                                State = EnterspeedJobState.Pending,
-                                CreatedAt = now,
-                                UpdatedAt = now,
-                            });
+                        if (isPublishConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Publish));
+                        }
 
                         if (descendants == null)
                         {
-                            descendants = Current.Services.ContentService.GetPagedDescendants(
-                                content.Id, 0, int.MaxValue, out var totalRecords).ToList();
+                            descendants = Current.Services.ContentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out var totalRecords).ToList();
                         }
 
                         foreach (var descendant in descendants)
@@ -86,17 +83,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                                 : new List<string> { GetDefaultCulture(context) };
                             foreach (var descendantCulture in descendantCultures)
                             {
-                                jobs.Add(
-                                    new EnterspeedJob
-                                    {
-                                        EntityId = descendant.Id.ToString(),
-                                        EntityType = EnterspeedJobEntityType.Content,
-                                        Culture = descendantCulture,
-                                        JobType = EnterspeedJobType.Delete,
-                                        State = EnterspeedJobState.Pending,
-                                        CreatedAt = now,
-                                        UpdatedAt = now,
-                                    });
+                                if (isPublishConfigured)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendantCulture, EnterspeedContentState.Publish));
+                                }
                             }
                         }
                     }

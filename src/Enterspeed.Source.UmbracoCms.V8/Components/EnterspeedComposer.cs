@@ -12,6 +12,9 @@ using Enterspeed.Source.UmbracoCms.V8.EventHandlers;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
 using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Guards;
+using Enterspeed.Source.UmbracoCms.V8.Handlers;
+using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent;
+using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConverters;
@@ -117,10 +120,21 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             // Job handlers
             composition.EnterspeedJobHandlers()
-                .Append<EnterspeedPublishedContentJobHandler>()
-                .Append<EnterspeedPublishedDictionaryItemJobHandler>()
-                .Append<EnterspeedDeletedContentJobHandler>()
-                .Append<EnterspeedDeletedDictionaryItemJobHandler>();
+                 // Content
+                 .Append<EnterspeedContentPublishJobHandler>()
+                 .Append<EnterspeedContentDeleteJobHandler>()
+
+                 // Dictionaries
+                 .Append<EnterspeedDictionaryItemPublishJobHandler>()
+                 .Append<EnterspeedDictionaryItemDeleteJobHandler>()
+
+                 // Preview content
+                 .Append<EnterspeedPreviewContentPublishJobHandler>()
+                 .Append<EnterspeedPreviewContentDeleteJobHandler>()
+
+                 // Preview dictionaries
+                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
+                 .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
 
             // Mapping definitions
             composition.WithCollectionBuilder<MapDefinitionCollectionBuilder>()

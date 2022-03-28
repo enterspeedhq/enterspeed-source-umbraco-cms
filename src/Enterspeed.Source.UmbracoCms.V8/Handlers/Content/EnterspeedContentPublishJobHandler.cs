@@ -3,16 +3,18 @@ using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Exceptions;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Models;
+using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
 using Umbraco.Web.Composing;
 using Umbraco.Web.Routing;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Handlers
+namespace Enterspeed.Source.UmbracoCms.V8.Handlers
 {
-    public class EnterspeedPublishedContentJobHandler : IEnterspeedJobHandler
+    public class EnterspeedContentPublishJobHandler : IEnterspeedJobHandler
     {
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedPropertyService _enterspeedPropertyService;
@@ -21,15 +23,18 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
         private readonly IUmbracoRedirectsService _redirectsService;
         private readonly IEnterspeedGuardService _enterspeedGuardService;
         private readonly IPublishedRouter _publishedRouter;
+        private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
+        private readonly IUrlFactory _urlFactory;
 
-        public EnterspeedPublishedContentJobHandler(
+        public EnterspeedContentPublishJobHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedPropertyService enterspeedPropertyService,
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IUmbracoRedirectsService redirectsService,
             IEnterspeedGuardService enterspeedGuardService,
-            IPublishedRouter publishedRouter)
+            IPublishedRouter publishedRouter,
+            IUrlFactory urlFactory)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
@@ -38,11 +43,16 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             _redirectsService = redirectsService;
             _enterspeedGuardService = enterspeedGuardService;
             _publishedRouter = publishedRouter;
+            _urlFactory = urlFactory;
         }
 
         public virtual bool CanHandle(EnterspeedJob job)
         {
-            return job.EntityType == EnterspeedJobEntityType.Content && job.JobType == EnterspeedJobType.Publish;
+            return
+                _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
+                && job.EntityType == EnterspeedJobEntityType.Content
+                && job.JobType == EnterspeedJobType.Publish
+                && job.ContentState == EnterspeedContentState.Publish;
         }
 
         public virtual void Handle(EnterspeedJob job)
@@ -55,9 +65,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
                     return;
                 }
 
-                var umbracoData = CreateUmbracoContentEntity(content, job);
                 Current.UmbracoContext.PublishedRequest = _publishedRouter.CreateRequest(context.UmbracoContext);
                 Current.UmbracoContext.PublishedRequest.PublishedContent = content;
+                var umbracoData = CreateUmbracoContentEntity(content, job);
                 Ingest(umbracoData, job);
             }
         }
@@ -86,7 +96,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
             {
                 var redirects = _redirectsService.GetRedirects(content.Key, job.Culture);
                 return new UmbracoContentEntity(
-                    content, _enterspeedPropertyService, _entityIdentityService, redirects, job.Culture);
+                    content, _enterspeedPropertyService, _entityIdentityService, _urlFactory, redirects, job.Culture);
             }
             catch (Exception e)
             {
@@ -97,7 +107,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers
 
         protected virtual void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
         {
-            var ingestResponse = _enterspeedIngestService.Save(umbracoData);
+            var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
             if (!ingestResponse.Success)
             {
                 var message = ingestResponse.Exception != null

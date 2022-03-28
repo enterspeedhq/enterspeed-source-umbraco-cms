@@ -4,7 +4,6 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Services;
-using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Core.Scoping;
 using Umbraco.Web;
 
@@ -66,9 +65,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             }
         }
 
-        protected bool IsConfigured()
+        protected bool IsPublishConfigured()
         {
-            return _configurationService.GetConfiguration().IsConfigured;
+            return _configurationService.IsPublishConfigured();
+        }
+
+        protected bool IsPreviewConfigured()
+        {
+            return _configurationService.IsPreviewConfigured();
         }
     }
 }

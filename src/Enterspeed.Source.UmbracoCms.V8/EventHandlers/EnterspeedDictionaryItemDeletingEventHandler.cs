@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Services;
-using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Events;
 using Umbraco.Core.Models;
@@ -17,12 +17,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
     public class EnterspeedDictionaryItemDeletingEventHandler : BaseEnterspeedEventHandler, IComponent
     {
+        private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+
         public EnterspeedDictionaryItemDeletingEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IEnterspeedJobFactory enterspeedJobFactory)
             : base(
                 umbracoContextFactory,
                 enterspeedJobRepository,
@@ -30,6 +33,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                 configurationService,
                 scopeProvider)
         {
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Initialize()
@@ -40,7 +44,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
         public void LocalizationServiceOnDeletedDictionaryItem(
             ILocalizationService sender, DeleteEventArgs<IDictionaryItem> e)
         {
-            if (!IsConfigured())
+            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -54,40 +61,34 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                     List<IDictionaryItem> descendants = null;
                     foreach (var translation in dictionaryItem.Translations)
                     {
-                        var now = DateTime.UtcNow;
-                        jobs.Add(
-                            new EnterspeedJob
-                            {
-                                EntityId = dictionaryItem.Key.ToString(),
-                                EntityType = EnterspeedJobEntityType.Dictionary,
-                                Culture = translation.Language.IsoCode,
-                                JobType = EnterspeedJobType.Delete,
-                                State = EnterspeedJobState.Pending,
-                                CreatedAt = now,
-                                UpdatedAt = now,
-                            });
+                        if (isPublishConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                        }
+
+                        if (isPreviewConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                        }
 
                         if (descendants == null)
                         {
-                            descendants = Current.Services.LocalizationService
-                                .GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
+                            descendants = Current.Services.LocalizationService.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
                         }
 
                         foreach (var descendant in descendants)
                         {
                             foreach (var descendanttranslation in descendant.Translations)
                             {
-                                jobs.Add(
-                                    new EnterspeedJob
-                                    {
-                                        EntityId = descendant.Key.ToString(),
-                                        EntityType = EnterspeedJobEntityType.Dictionary,
-                                        Culture = descendanttranslation.Language.IsoCode,
-                                        JobType = EnterspeedJobType.Delete,
-                                        State = EnterspeedJobState.Pending,
-                                        CreatedAt = now,
-                                        UpdatedAt = now,
-                                    });
+                                if (isPublishConfigured)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Publish));
+                                }
+
+                                if (isPreviewConfigured)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Preview));
+                                }
                             }
                         }
                     }
