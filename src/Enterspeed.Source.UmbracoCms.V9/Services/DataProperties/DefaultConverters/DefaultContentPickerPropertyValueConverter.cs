@@ -21,6 +21,11 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultConvert
 
         public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
+            if (property.GetSourceValue(culture) == null)
+            {
+                return null;
+            }
+
             var value = property.GetValue<IPublishedContent>(culture);
             var contentId = _entityIdentityService.GetId(value, culture);
             return new StringEnterspeedProperty(property.Alias, contentId);
