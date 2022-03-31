@@ -112,11 +112,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 _keyValueService.SetValue(_configurationDatabaseKey, null);
             }
 
+            _configuration = configuration;
+
             // Reinitialize connections in case of changes in the configuration
             var connectionProvider = Current.Factory.GetInstance<IEnterspeedConnectionProvider>();
             connectionProvider.Initialize();
-
-            _configuration = configuration;
         }
 
         [Obsolete("Use GetCombinedConfigurationFromDatabase() instead.", false)]
