@@ -92,6 +92,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                     if (content != null)
                     {
                         idProperty = new StringEnterspeedProperty(_entityIdentityService.GetId(content, culture));
+                        url = !string.IsNullOrWhiteSpace(culture)
+                            ? content.Url(culture)
+                            : content.Url(null, UrlMode.Absolute);
                     }
                 }
                 else if (link.Udi.EntityType == "media")
