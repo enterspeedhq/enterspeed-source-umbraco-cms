@@ -2,7 +2,10 @@
 using System.Configuration;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
 using Enterspeed.Source.UmbracoCms.V8.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Newtonsoft.Json;
+using Umbraco.Core;
+using Umbraco.Core.Composing;
 using Umbraco.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
@@ -17,6 +20,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 
         private readonly string _configurationMediaDomainDatabaseKey = "Enterspeed+Configuration+MediaDomain";
         private readonly string _configurationApiKeyDatabaseKey = "Enterspeed+Configuration+ApiKey";
+        private readonly string _configurationPreviewApiKeyDatabaseKey = "Enterspeed+Configuration+PreviewApiKey";
         private readonly string _configurationConnectionTimeoutDatabaseKey =
             "Enterspeed+Configuration+ConnectionTimeout";
         private readonly string _configurationBaseUrlDatabaseKey = "Enterspeed+Configuration+BaseUrl";
@@ -48,6 +52,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             var webConfigEndpoint = ConfigurationManager.AppSettings["Enterspeed.Endpoint"];
             var webConfigMediaDomain = ConfigurationManager.AppSettings["Enterspeed.MediaDomain"];
             var webConfigApikey = ConfigurationManager.AppSettings["Enterspeed.Apikey"];
+            var webConfigPreviewApikey = ConfigurationManager.AppSettings["Enterspeed.PreviewApikey"];
 
             if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
             {
@@ -59,10 +64,25 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 BaseUrl = webConfigEndpoint?.Trim(),
                 ApiKey = webConfigApikey?.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
-                IsConfigured = true
+                IsConfigured = true,
+                PreviewApiKey = webConfigPreviewApikey?.Trim(),
             };
 
             return _configuration;
+        }
+
+        public bool IsPublishConfigured()
+        {
+            var configuration = GetConfiguration();
+            return configuration != null && configuration.IsConfigured;
+        }
+
+        public bool IsPreviewConfigured()
+        {
+            var configuration = GetConfiguration();
+            return configuration != null
+                   && configuration.IsConfigured
+                   && !string.IsNullOrWhiteSpace(configuration.PreviewApiKey);
         }
 
         public void Save(EnterspeedUmbracoConfiguration configuration)
@@ -85,6 +105,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _keyValueService.SetValue(_configurationBaseUrlDatabaseKey, configuration.BaseUrl);
             _keyValueService.SetValue(_configurationConnectionTimeoutDatabaseKey, configuration.ConnectionTimeout.ToString());
             _keyValueService.SetValue(_configurationMediaDomainDatabaseKey, configuration.MediaDomain);
+            _keyValueService.SetValue(_configurationPreviewApiKeyDatabaseKey, configuration.PreviewApiKey);
 
             if (_keyValueService.GetValue(_configurationDatabaseKey) != null)
             {
@@ -92,6 +113,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
 
             _configuration = configuration;
+
+            // Reinitialize connections in case of changes in the configuration
+            var connectionProvider = Current.Factory.GetInstance<IEnterspeedConnectionProvider>();
+            connectionProvider.Initialize();
         }
 
         [Obsolete("Use GetCombinedConfigurationFromDatabase() instead.", false)]
@@ -119,12 +144,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 
             var mediaDomain = _keyValueService.GetValue(_configurationMediaDomainDatabaseKey);
             var connectionTimeoutAsString = _keyValueService.GetValue(_configurationConnectionTimeoutDatabaseKey);
+            var previewApiKey = _keyValueService.GetValue(_configurationPreviewApiKeyDatabaseKey);
+
             var configuration = new EnterspeedUmbracoConfiguration()
             {
                 IsConfigured = true,
                 ApiKey = apiKey,
                 BaseUrl = baseUrl,
-                MediaDomain = mediaDomain
+                MediaDomain = mediaDomain,
+                PreviewApiKey = previewApiKey
             };
 
             if (int.TryParse(connectionTimeoutAsString, out var connectionTimeout))

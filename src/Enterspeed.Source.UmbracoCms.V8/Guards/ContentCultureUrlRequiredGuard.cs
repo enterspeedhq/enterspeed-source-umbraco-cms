@@ -1,4 +1,4 @@
-using Umbraco.Core.Logging;
+using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
 
@@ -6,11 +6,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Guards
 {
     public class ContentCultureUrlRequiredGuard : IEnterspeedContentHandlingGuard
     {
-        private readonly ILogger _logger;
-
-        public ContentCultureUrlRequiredGuard(ILogger logger)
+        private readonly IUrlFactory _urlFactory;
+        public ContentCultureUrlRequiredGuard(
+            IUrlFactory urlFactory)
         {
-            _logger = logger;
+            _urlFactory = urlFactory;
         }
 
         public bool CanIngest(IPublishedContent content, string culture)
@@ -20,18 +20,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Guards
                 return true;
             }
 
-            var url = content.Url(culture);
-            if (!string.IsNullOrWhiteSpace(url) && !url.Equals("#"))
-            {
-                return true;
-            }
-
-            _logger.Info<ContentCultureUrlRequiredGuard>(
-                "Content '{contentId}' does not have available url '{contentUrl}' for '{culture}' culture.",
-                content.Id,
-                url,
-                culture);
-            return false;
+            var url = _urlFactory.GetUrl(content, content.IsDraft(), culture);
+            return !string.IsNullOrWhiteSpace(url) && !url.Equals("#");
         }
     }
 }

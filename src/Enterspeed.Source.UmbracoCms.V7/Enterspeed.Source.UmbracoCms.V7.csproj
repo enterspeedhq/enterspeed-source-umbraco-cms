@@ -60,8 +60,9 @@
     <Reference Include="CookComputing.XmlRpcV2, Version=2.5.0.0, Culture=neutral, PublicKeyToken=a7d6e17aa302004d, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\xmlrpcnet.2.5.0\lib\net20\CookComputing.XmlRpcV2.dll</HintPath>
     </Reference>
-    <Reference Include="Enterspeed.Source.Sdk, Version=0.4.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\packages\Enterspeed.Source.Sdk.0.4.0\lib\netstandard1.1\Enterspeed.Source.Sdk.dll</HintPath>
+    <Reference Include="Enterspeed.Source.Sdk, Version=0.7.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\lib\packages\Enterspeed.Source.Sdk.0.7.0\lib\netstandard1.1\Enterspeed.Source.Sdk.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Examine, Version=0.1.68.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Examine.0.1.68.0\lib\Examine.dll</HintPath>
@@ -237,9 +238,12 @@
     <Compile Include="Contexts\EnterspeedContext.cs" />
     <Compile Include="Contexts\EnterspeedHandlerContext.cs" />
     <Compile Include="Controllers\Api\DashboardApiController.cs" />
+    <Compile Include="Data\Migrations\AddContentStateToEnterspeedJobsTable.cs" />
     <Compile Include="Data\Migrations\AddEntityTypeToEnterspeedJobsTable.cs" />
+    <Compile Include="Data\Migrations\AddPreviewApiKeyToEnterspeedConfigurationTable.cs" />
     <Compile Include="Data\Migrations\CreateEnterspeedConfigurationTable.cs" />
     <Compile Include="Data\Migrations\CreateEnterspeedJobsTable.cs" />
+    <Compile Include="Data\Models\EnterspeedContentState.cs" />
     <Compile Include="Data\Models\EnterspeedJob.cs" />
     <Compile Include="Data\Models\EnterspeedJobEntityType.cs" />
     <Compile Include="Data\Models\EnterspeedJobState.cs" />
@@ -251,6 +255,13 @@
     <Compile Include="EventHandlers\ConfigurationEventHandler.cs" />
     <Compile Include="EventHandlers\ContentEventHandler.cs" />
     <Compile Include="EventHandlers\DictionaryEventHandler.cs" />
+    <Compile Include="Extensions\ContentBaseExtensions.cs" />
+    <Compile Include="Extensions\ContentExtensions.cs" />
+    <Compile Include="Extensions\EnterspeedConfigurationExtensions.cs" />
+    <Compile Include="Extensions\UrlStringExtensions.cs" />
+    <Compile Include="Factories\EnterspeedJobFactory.cs" />
+    <Compile Include="Models\UmbracoModels\PublishedPropertyBase.cs" />
+    <Compile Include="Models\UmbracoModels\PublishedProperty.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\UriExtensions.cs" />
     <Compile Include="Handlers\EnterspeedJobHandler.cs" />
@@ -312,6 +323,7 @@
     <Compile Include="Services\EntityIdentityService.cs" />
     <Compile Include="Services\SchedulerService.cs" />
     <Compile Include="Services\Serializers\NewtonsoftJsonSerializer.cs" />
+    <Compile Include="Factories\UrlFactory.cs" />
     <Compile Include="UmbracoContextHelper.cs" />
   </ItemGroup>
   <ItemGroup>

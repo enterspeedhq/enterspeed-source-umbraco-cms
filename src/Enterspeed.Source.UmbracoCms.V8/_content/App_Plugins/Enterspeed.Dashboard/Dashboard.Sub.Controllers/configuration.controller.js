@@ -17,6 +17,7 @@
                     vm.configuration.baseUrl = result.data.data.baseUrl;
                     vm.configuration.apiKey = result.data.data.apiKey;
                     vm.configuration.mediaDomain = result.data.data.mediaDomain;
+                    vm.configuration.previewApiKey = result.data.data.previewApiKey;
                     vm.loadingConfiguration = false;
                     vm.buttonState = null;
                 }
@@ -73,7 +74,7 @@
         errorMessage = errorMessage || "Something went wrong";
 
         if (status === 401) {
-            notificationsService.error("Api key is invalid");
+            notificationsService.error(data.message);
         } else if (status === 404) {
             notificationsService.error("Url does not exist");
         } else {

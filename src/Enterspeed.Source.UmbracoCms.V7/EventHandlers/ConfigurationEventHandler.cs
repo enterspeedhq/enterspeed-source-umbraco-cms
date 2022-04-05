@@ -14,8 +14,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 {
     public class ConfigurationEventHandler : ApplicationEventHandler
     {
-        private readonly SemVersion _jobsTableVersion = new SemVersion(2, 0, 0);
-        private readonly SemVersion _configurationTableVersion = new SemVersion(1, 0, 0);
+        private readonly SemVersion _jobsTableVersion = new SemVersion(3, 0, 0);
+        private readonly SemVersion _configurationTableVersion = new SemVersion(2, 0, 0);
 
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
         {

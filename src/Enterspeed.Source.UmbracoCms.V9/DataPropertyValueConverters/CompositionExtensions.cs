@@ -1,4 +1,5 @@
 ﻿using Enterspeed.Source.UmbracoCms.V9.Guards;
+using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters
@@ -16,5 +17,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.DataPropertyValueConverters
         
         public static EnterspeedDictionaryItemHandlingGuardCollectionBuilder EnterspeedDictionaryItemHandlingGuards(this IUmbracoBuilder  composition)
             => composition.WithCollectionBuilder<EnterspeedDictionaryItemHandlingGuardCollectionBuilder>();
+
+        public static EnterspeedJobHandlerCollectionBuilder EnterspeedJobHandlers(this IUmbracoBuilder composition)
+            => composition.WithCollectionBuilder<EnterspeedJobHandlerCollectionBuilder>();
     }
 }

@@ -4,11 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [0.10.0 - 2021-03-07]
+## [0.12.0 - 2022-03-28]
+
+- Job and event handling extendability improvements for Umbraco 8.
+- Preview functionality for Umbraco 7, 8, and 9.
+
+## [0.11.0 - 2022-03-23]
+
+- Job and notification handling extendability improvements for Umbraco 9.
+
+## [0.10.0 - 2022-03-07]
 
 - Media picker 3 support for Umbraco 9.
 
 ## [0.9.2 - 2021-11-26]
+
 - Fix media url provider bug, where media domain url is not correctly combined with media path.
 
 ## [0.9.1 - 2021-11-25]

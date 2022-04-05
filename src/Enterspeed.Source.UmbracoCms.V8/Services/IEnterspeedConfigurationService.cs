@@ -6,5 +6,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
     {
         void Save(EnterspeedUmbracoConfiguration configuration);
         EnterspeedUmbracoConfiguration GetConfiguration();
+        bool IsPublishConfigured();
+        bool IsPreviewConfigured();
     }
 }

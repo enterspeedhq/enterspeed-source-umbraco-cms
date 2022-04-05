@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.V9.Extensions;
+using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Extensions;
 
 namespace Enterspeed.Source.UmbracoCms.V9.Models
 {
@@ -13,7 +12,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Models
     {
         private readonly IPublishedContent _content;
         private readonly IEntityIdentityService _entityIdentityService;
-        private readonly ILogger _logger;
+        private readonly IUrlFactory _urlFactory;
         private readonly string _culture;
 
         public UmbracoContentEntity(
@@ -21,20 +20,20 @@ namespace Enterspeed.Source.UmbracoCms.V9.Models
             IEnterspeedPropertyService propertyService,
             IEntityIdentityService entityIdentityService,
             string[] redirects,
-            ILogger logger,
+            IUrlFactory urlFactory,
             string culture = null)
         {
             _content = content;
             _culture = culture;
             _entityIdentityService = entityIdentityService;
-            _logger = logger;
+            _urlFactory = urlFactory;
             Redirects = redirects;
             Properties = propertyService.GetProperties(_content, _culture);
         }
 
         public string Id => _entityIdentityService.GetId(_content, _culture);
         public string Type => _content.ContentType.Alias;
-        public string Url => _culture != null ? _content.GetUrl(_logger, _culture) : _content.GetUrl(_logger, null, UrlMode.Absolute);
+        public string Url => _urlFactory.GetUrl(_content, _content.IsDraft(_culture), _culture);
         public string[] Redirects { get; }
         public string ParentId => _entityIdentityService.GetId(_content.Parent, _culture);
         public IDictionary<string, IEnterspeedProperty> Properties { get; }
