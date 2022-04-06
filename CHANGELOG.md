@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.12.4 - 2022-04-07]
+
+- Fix bug of Multi Url Picker always resolving url for english culture in Umbraco 8.
+
+## [0.12.3 - 2022-03-31]
+
+- Fix bug of Enterspeed connections configuration being stale for Umbraco 8 & Umbraco 9.
+
+## [0.12.1/0.12.2 - 2022-03-30]
+
+- Content picker to support selection of unpublished content for Umbraco 9.
+
 ## [0.12.0 - 2022-03-28]
 
 - Job and event handling extendability improvements for Umbraco 8.
