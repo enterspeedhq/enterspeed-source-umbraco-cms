@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
 using Umbraco.Web.PropertyEditors;
@@ -12,10 +13,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
     public class DefaultMultiNodeTreePickerPropertyValueConverter : IEnterspeedPropertyValueConverter
     {
         private readonly IEntityIdentityService _entityIdentityService;
+        private readonly ILogger _logger;
 
-        public DefaultMultiNodeTreePickerPropertyValueConverter(IEntityIdentityService entityIdentityService)
+        public DefaultMultiNodeTreePickerPropertyValueConverter(IEntityIdentityService entityIdentityService, ILogger logger)
         {
             _entityIdentityService = entityIdentityService;
+            _logger = logger;
         }
 
         public bool IsConverter(IPublishedPropertyType propertyType)
@@ -31,6 +34,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
 
             if (string.IsNullOrWhiteSpace(objectType))
             {
+                _logger.Warn<DefaultMultiNodeTreePickerPropertyValueConverter>($"Missing ObjectType/NodeType for MultiNodeTreePicker: {property.Alias}");
                 throw new Exception($"Missing ObjectType/NodeType for MultiNodeTreePicker: {property.Alias}");
             }
 
