@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.12.5 - 2022-05-23]
+
+- Fix casting exception for Nested Content in Umbraco 8.
+
+
 ## [0.12.4 - 2022-04-07]
 
 - Fix bug of Multi Url Picker always resolving url for english culture in Umbraco 8.
