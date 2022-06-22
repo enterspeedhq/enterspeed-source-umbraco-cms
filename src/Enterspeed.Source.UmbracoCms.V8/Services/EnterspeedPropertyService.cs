@@ -73,6 +73,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return output;
         }
 
+        public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media, string culture)
+        {
+            var enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
+            enterspeedProperties.Add("name", new StringEnterspeedProperty("name", media.Name));
+
+            return enterspeedProperties;
+        }
+
         private IEnterspeedProperty CreateMetaData(IPublishedContent content, string culture)
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>

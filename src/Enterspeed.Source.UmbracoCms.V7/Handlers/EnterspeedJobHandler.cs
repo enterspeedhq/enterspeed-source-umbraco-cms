@@ -307,7 +307,6 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                                 var exception = $"Failed deleting entity ({newestPreviewJob.EntityId}/{newestPreviewJob.Culture}). Message: {deleteResponse.Message}";
                                 failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestPreviewJob, exception));
                                 LogHelper.Warn<EnterspeedJobHandler>(exception);
-                                continue;
                             }
                         }
                     }

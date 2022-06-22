@@ -31,7 +31,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 
         public string GetId(string contentId, string culture)
         {
-            return $"{contentId}-{culture}";
+            if (!string.IsNullOrWhiteSpace(culture))
+            {
+                return $"{contentId}-{culture}";
+            }
+
+            return $"{contentId}";
         }
 
         public string GetId(IDictionaryItem dictionaryItem, string culture)
@@ -44,6 +49,16 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return GetId(dictionaryItem.Key, culture);
         }
 
+        public string GetId(IMedia mediaItem)
+        {
+            if (mediaItem == null)
+            {
+                return null;
+            }
+
+            return GetId(mediaItem.Key);
+        }
+
         public string GetId(Guid? id, string culture)
         {
             if (!id.HasValue || string.IsNullOrWhiteSpace(culture))
@@ -52,6 +67,17 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
 
             return GetId(id.ToString(), culture);
+        }
+
+
+        public string GetId(Guid? id)
+        {
+            if (!id.HasValue)
+            {
+                return null;
+            }
+
+            return GetId(id.ToString(), string.Empty);
         }
 
         private static string GetDefaultCulture()

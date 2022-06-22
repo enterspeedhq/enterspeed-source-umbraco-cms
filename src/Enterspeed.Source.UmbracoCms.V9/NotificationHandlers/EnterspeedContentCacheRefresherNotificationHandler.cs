@@ -74,8 +74,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
 
                     if (node != null && isPublishConfigured)
                     {
-                        var audit = _auditService.GetPagedItemsByEntity(payload.Id, 0, 2, out var totalLogs)
-                            .FirstOrDefault();
+                        var audit = _auditService.GetPagedItemsByEntity(payload.Id, 0, 2, out var totalLogs).FirstOrDefault();
 
                         if (audit == null)
                         {

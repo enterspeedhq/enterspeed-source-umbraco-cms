@@ -254,6 +254,7 @@
     <Compile Include="Data\Schemas\EnterspeedJobSchema.cs" />
     <Compile Include="EventHandlers\ConfigurationEventHandler.cs" />
     <Compile Include="EventHandlers\ContentEventHandler.cs" />
+    <Compile Include="EventHandlers\MediaEventHandler.cs" />
     <Compile Include="EventHandlers\DictionaryEventHandler.cs" />
     <Compile Include="Extensions\ContentBaseExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />

@@ -11,5 +11,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         string GetId(string contentId, string culture);
         string GetId(IDictionaryItem dictionaryItem, string culture);
         string GetId(Guid? id, string culture);
+        string GetId(IMedia mediaItem);
     }
 }
