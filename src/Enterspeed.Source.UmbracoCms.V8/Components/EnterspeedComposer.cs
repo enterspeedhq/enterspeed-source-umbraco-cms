@@ -134,7 +134,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
                  // Media 
                  .Append<EnterspeedMediaPublishJobHandler>()
-                 .Append<EnterspeedMediaTrashingJobHandler>()
+                 .Append<EnterspeedMediaTrashedJobHandler>()
 
                  // Preview content
                  .Append<EnterspeedPreviewContentPublishJobHandler>()
@@ -158,7 +158,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Components().Append<EnterspeedDictionaryItemDeletingEventHandler>();
 
             composition.Components().Append<EnterspeedMediaItemSavedEventHandler>();
-            composition.Components().Append<EnterspeedMediaItemDeletingEventHandler>();
+            composition.Components().Append<EnterspeedMediaTrashedEventHandler>();
 
             composition.Components().Append<EnterspeedJobsComponent>();
             composition.Components().Append<EnterspeedBackgroundTasksComponent>();

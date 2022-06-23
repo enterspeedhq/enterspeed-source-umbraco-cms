@@ -9,13 +9,13 @@ using Umbraco.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
 {
-    public class EnterspeedMediaTrashingJobHandler : IEnterspeedJobHandler
+    public class EnterspeedMediaTrashedJobHandler : IEnterspeedJobHandler
     {
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
         private readonly IMediaService _mediaService;
 
-        public EnterspeedMediaTrashingJobHandler
+        public EnterspeedMediaTrashedJobHandler
         (
             IEnterspeedIngestService enterspeedIngestService,
             IEnterspeedConnectionProvider enterspeedConnectionProvider,
@@ -37,8 +37,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
 
         public void Handle(EnterspeedJob job)
         {
-            var isMediaId = Guid.TryParse(job.EntityId, out var mediaId);
-            var media = isMediaId ? _mediaService.GetById(mediaId) : null;
+            var parsed = int.TryParse(job.EntityId, out var parsedId);
+            var media = parsed ? _mediaService.GetById(parsedId) : null;
 
             var deleteResponse = _enterspeedIngestService.Delete(media?.Id.ToString(), _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
             if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)

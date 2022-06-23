@@ -76,7 +76,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Factories
             var now = DateTime.UtcNow;
             return new EnterspeedJob
             {
-                EntityId = media.Key.ToString(),
+                EntityId = media.Id.ToString(),
                 EntityType = EnterspeedJobEntityType.Media,
                 Culture = culture,
                 JobType = EnterspeedJobType.Publish,
@@ -110,7 +110,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Factories
             var now = DateTime.UtcNow;
             return new EnterspeedJob
             {
-                EntityId = media.Key.ToString(),
+                EntityId = media.Id.ToString(),
                 EntityType = EnterspeedJobEntityType.Media,
                 Culture = culture,
                 JobType = EnterspeedJobType.Delete,

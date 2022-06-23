@@ -298,7 +298,7 @@
     <Compile Include="EventHandlers\EnterspeedContentPublishingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentTrashingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentUnpublishingEventHandler.cs" />
-    <Compile Include="EventHandlers\EnterspeedMediaItemDeletingEventHandler.cs" />
+    <Compile Include="EventHandlers\EnterspeedMediaTrashedEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedDictionaryItemDeletingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedMediaItemSavedEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedDictionaryItemSavedEventHandler.cs" />
@@ -322,7 +322,7 @@
     <Compile Include="Guards\IEnterspeedMediaHandlingGuard.cs" />
     <Compile Include="Guards\IEnterspeedDictionaryItemHandlingGuard.cs" />
     <Compile Include="Handlers\Content\EnterspeedContentDeleteJobHandler.cs" />
-    <Compile Include="Handlers\Media\EnterspeedMediaTrashingJobHandler.cs" />
+    <Compile Include="Handlers\Media\EnterspeedMediaTrashedJobHandler.cs" />
     <Compile Include="Handlers\Media\EnterspeedMediaPublishJobHandler.cs" />
     <Compile Include="Handlers\Dictionaries\EnterspeedDictionaryItemDeleteJobHandler.cs" />
     <Compile Include="Handlers\EnterspeedJobHandlerCollection.cs" />

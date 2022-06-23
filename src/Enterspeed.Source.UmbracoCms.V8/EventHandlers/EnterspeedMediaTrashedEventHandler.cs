@@ -14,11 +14,11 @@ using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
-    public class EnterspeedMediaItemDeletingEventHandler : BaseEnterspeedEventHandler, IComponent
+    public class EnterspeedMediaTrashedEventHandler : BaseEnterspeedEventHandler, IComponent
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
-        public EnterspeedMediaItemDeletingEventHandler(
+        public EnterspeedMediaTrashedEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService jobsHandlingService,

@@ -59,9 +59,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
 
         protected virtual IMedia GetMedia(EnterspeedJob job)
         {
-            var isMediaId = Guid.TryParse(job.EntityId, out var mediaId);
+            var parsed = int.TryParse(job.EntityId, out var parsedId);
+            var media = parsed ? _mediaService.GetById(parsedId) : null;
 
-            var media = isMediaId ? _mediaService.GetById(mediaId) : null;
             if (media == null)
             {
                 throw new JobHandlingException($"Media with id {job.EntityId} not in database");
