@@ -37,58 +37,25 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         public void Initialize()
         {
-            MediaService.Deleting += MediaService_Deleting;
+            MediaService.Trashed += MediaService_Trashed;
         }
 
-        private void MediaService_Deleting(IMediaService sender, DeleteEventArgs<IMedia> e)
+        private void MediaService_Trashed(IMediaService sender, MoveEventArgs<IMedia> e)
         {
             var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
 
-            if (!isPublishConfigured && !isPreviewConfigured)
+            if (!isPublishConfigured)
             {
                 return;
             }
 
-            var entities = e.DeletedEntities.ToList();
+            var entities = e.MoveInfoCollection.ToList();
             var jobs = new List<EnterspeedJob>();
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
-                foreach (var mediaItem in entities)
+                foreach (var mediaItem in entities.Select(ei => ei.Entity))
                 {
-                    List<IMedia> descendants = null;
-                    foreach (var culture in mediaItem.AvailableCultures)
-                    {
-                        if (isPublishConfigured)
-                        {
-                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(mediaItem, culture, EnterspeedContentState.Publish));
-                        }
-
-                        if (isPreviewConfigured)
-                        {
-                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(mediaItem, culture, EnterspeedContentState.Preview));
-                        }
-
-                        if (descendants != null)
-                        {
-                            continue;
-                        }
-
-                        descendants = Current.Services.MediaService.GetPagedDescendants(mediaItem.Id, int.MaxValue, int.MaxValue, out var totalRecords).ToList();
-
-                        if (totalRecords <= 0)
-                        {
-                            continue;
-                        }
-
-                        foreach (var descendant in descendants)
-                        {
-                            if (isPublishConfigured)
-                            {
-                                jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, "*", EnterspeedContentState.Publish));
-                            }
-                        }
-                    }
+                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
                 }
             }
 

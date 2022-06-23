@@ -56,7 +56,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return null;
             }
 
-            return GetId(mediaItem.Key);
+            return GetId(mediaItem.Id.ToString());
         }
 
         public string GetId(Guid? id, string culture)
@@ -70,14 +70,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         }
 
 
-        public string GetId(Guid? id)
+        public string GetId(string id)
         {
-            if (!id.HasValue)
+            if (string.IsNullOrEmpty(id))
             {
                 return null;
             }
 
-            return GetId(id.ToString(), string.Empty);
+            return GetId(id, string.Empty);
         }
 
         private static string GetDefaultCulture()

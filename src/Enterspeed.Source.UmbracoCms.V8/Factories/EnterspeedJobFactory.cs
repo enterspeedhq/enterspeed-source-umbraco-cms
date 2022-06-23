@@ -111,7 +111,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Factories
             return new EnterspeedJob
             {
                 EntityId = media.Key.ToString(),
-                EntityType = EnterspeedJobEntityType.Dictionary,
+                EntityType = EnterspeedJobEntityType.Media,
                 Culture = culture,
                 JobType = EnterspeedJobType.Delete,
                 State = EnterspeedJobState.Pending,

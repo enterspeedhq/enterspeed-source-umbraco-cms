@@ -80,12 +80,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
         {
             try
             {
-                return new UmbracoMediaEntity(media, _enterspeedPropertyService, _entityIdentityService, job.Culture);
+                return new UmbracoMediaEntity(media, _enterspeedPropertyService, _entityIdentityService);
             }
             catch (Exception e)
             {
                 throw new JobHandlingException(
-                    $"Failed creating entity ({job.EntityId}/{job.Culture}). Message: {e.Message}. StackTrace: {e.StackTrace}");
+                    $"Failed creating entity ({job.EntityId}). Message: {e.Message}. StackTrace: {e.StackTrace}");
             }
         }
 
