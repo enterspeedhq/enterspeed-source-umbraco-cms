@@ -11,24 +11,21 @@ using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
 using Umbraco.Core.Services.Implement;
 using Umbraco.Web;
-using Umbraco.Web.Security;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
-    public class EnterspeedMediaItemSavedEventHandler : BaseEnterspeedEventHandler, IComponent
+    public class EnterspeedMediaMovedEventHandler : BaseEnterspeedEventHandler, IComponent
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IMediaService _mediaService;
 
-        public EnterspeedMediaItemSavedEventHandler(
+        public EnterspeedMediaMovedEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
-            IEnterspeedJobFactory enterspeedJobFactory,
-            IMediaService mediaService
-        )
+            IEnterspeedJobFactory enterspeedJobFactory, IMediaService mediaService)
             : base(
                 umbracoContextFactory,
                 enterspeedJobRepository,
@@ -42,10 +39,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         public void Initialize()
         {
-            MediaService.Saved += MediaService_Saved;
+            MediaService.Moved += MediaService_Moved;
+
         }
 
-        private void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
+        private void MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e)
         {
             var isPublishConfigured = _configurationService.IsPublishConfigured();
 
@@ -54,10 +52,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                 return;
             }
 
-            var entities = e.SavedEntities.ToList();
+            var entities = e.MoveInfoCollection.ToList();
             var jobs = new List<EnterspeedJob>();
 
-            foreach (var mediaItem in entities)
+            foreach (var mediaItem in entities.Select(ei => ei.Entity))
             {
                 if (mediaItem.ContentType.Alias.Equals("Folder"))
                 {

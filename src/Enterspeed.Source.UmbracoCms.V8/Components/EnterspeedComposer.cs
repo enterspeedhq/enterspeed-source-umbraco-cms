@@ -159,6 +159,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             composition.Components().Append<EnterspeedMediaItemSavedEventHandler>();
             composition.Components().Append<EnterspeedMediaTrashedEventHandler>();
+            composition.Components().Append<EnterspeedMediaMovedEventHandler>();
 
             composition.Components().Append<EnterspeedJobsComponent>();
             composition.Components().Append<EnterspeedBackgroundTasksComponent>();

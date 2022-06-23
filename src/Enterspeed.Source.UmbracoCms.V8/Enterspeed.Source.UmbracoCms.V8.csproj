@@ -298,6 +298,7 @@
     <Compile Include="EventHandlers\EnterspeedContentPublishingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentTrashingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentUnpublishingEventHandler.cs" />
+    <Compile Include="EventHandlers\EnterspeedMediaMovedEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedMediaTrashedEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedDictionaryItemDeletingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedMediaItemSavedEventHandler.cs" />
