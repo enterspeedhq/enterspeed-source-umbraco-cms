@@ -172,6 +172,31 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                                 continue;
                             }
                         }
+                        else if (newestPublishJob.EntityType == EnterspeedJobEntityType.Media)
+                        {
+                            var parsed = int.TryParse(newestPublishJob.EntityId, out var parsedId);
+                            var media = parsed ? context.Application.Services.MediaService.GetById(parsedId) : null;
+
+                            if (media == null)
+                            {
+                                var exception = $"Media with id {newestPublishJob.EntityId} not in database";
+                                failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestPublishJob, exception));
+                                LogHelper.Warn<EnterspeedJobHandler>(exception);
+                            }
+
+                            try
+                            {
+                                umbracoData = new UmbracoMediaEntity(media);
+                            }
+                            catch (Exception e)
+                            {
+                                // Create a new failed job
+                                var exception = $"Failed creating entity ({newestPublishJob.EntityId}). Message: {e.Message}. StackTrace: {e.StackTrace}";
+                                failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestPublishJob, exception));
+                                LogHelper.Warn<EnterspeedJobHandler>(exception);
+                                continue;
+                            }
+                        }
 
                         var ingestResponse = _enterspeedPublishIngestService.Save(umbracoData);
                         if (!ingestResponse.Success)
@@ -197,6 +222,10 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                         else if (newestPublishJob.EntityType == EnterspeedJobEntityType.Dictionary)
                         {
                             id = _entityIdentityService.GetId(newestPublishJob.EntityId, newestPublishJob.Culture);
+                        }
+                        else if (newestPublishJob.EntityType == EnterspeedJobEntityType.Media)
+                        {
+                            id = _entityIdentityService.GetId(newestPublishJob.EntityId);
                         }
 
                         if (!string.IsNullOrWhiteSpace(id))
@@ -294,6 +323,10 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                             id = _entityIdentityService.GetId(newestPreviewJob.EntityId);
                         }
                         else if (newestPreviewJob.EntityType == EnterspeedJobEntityType.Dictionary)
+                        {
+                            id = _entityIdentityService.GetId(newestPreviewJob.EntityId, newestPreviewJob.Culture);
+                        }
+                        else if (newestPreviewJob.EntityType == EnterspeedJobEntityType.Media)
                         {
                             id = _entityIdentityService.GetId(newestPreviewJob.EntityId, newestPreviewJob.Culture);
                         }
