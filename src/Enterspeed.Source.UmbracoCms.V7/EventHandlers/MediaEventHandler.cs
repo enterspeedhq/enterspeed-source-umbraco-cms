@@ -112,7 +112,6 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                     jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
                 }
             }
-
             EnqueueJobs(jobs);
         }
 

@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Umbraco.Core;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.Configuration.UmbracoSettings;
+using Umbraco.Core.Models;
+using Umbraco.Core.PropertyEditors.ValueConverters;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
@@ -90,6 +94,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
 
             return url;
+        }
+
+        public string GetMediaSrc(IMedia media)
+        {
+            var umbracoFile = media?.GetValue<string>(Constants.Conventions.Media.File);
+            return umbracoFile != null ? JsonConvert.DeserializeObject<ImageCropperValue>(umbracoFile)?.Src : string.Empty;
         }
     }
 }

@@ -52,7 +52,6 @@ namespace Enterspeed.Source.UmbracoCms.V7.Data.Repositories
                 $"SELECT TOP {count} * FROM [{_tableName}] WHERE [JobState] = {EnterspeedJobState.Pending.GetHashCode()} ORDER BY [CreatedAt]");
 
             var result = pendingJobs?.Select(MapFromSchema).Where(x => x != null).ToList();
-
             return result ?? new List<EnterspeedJob>();
         }
 

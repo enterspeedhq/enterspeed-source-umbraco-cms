@@ -2,10 +2,7 @@
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V8.Services;
-using Newtonsoft.Json;
-using Umbraco.Core;
 using Umbraco.Core.Models;
-using Umbraco.Core.PropertyEditors.ValueConverters;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Models
 {
@@ -17,13 +14,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Models
         public UmbracoMediaEntity(
             IMedia media,
             IEnterspeedPropertyService propertyService,
-            IEntityIdentityService entityIdentityService)
+            IEntityIdentityService entityIdentityService,
+            IUmbracoUrlService urlService)
         {
             _media = media;
             _entityIdentityService = entityIdentityService;
-            var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
-            var url = JsonConvert.DeserializeObject<ImageCropperValue>(umbracoFile).Src;
-            Url = url;
+
+            Url = urlService.GetMediaSrc(media);
             Properties = propertyService.GetProperties(_media);
         }
 

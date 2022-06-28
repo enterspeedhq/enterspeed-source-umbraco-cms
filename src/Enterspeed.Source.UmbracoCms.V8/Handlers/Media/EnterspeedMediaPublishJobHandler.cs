@@ -19,6 +19,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
         private readonly IEnterspeedGuardService _enterspeedGuardService;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
         private readonly IMediaService _mediaService;
+        private readonly IUmbracoUrlService _umbracoUrlService;
 
         public EnterspeedMediaPublishJobHandler(
             IEnterspeedPropertyService enterspeedPropertyService,
@@ -26,7 +27,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
             IEntityIdentityService entityIdentityService,
             IEnterspeedGuardService enterspeedGuardService,
             IEnterspeedConnectionProvider enterspeedConnectionProvider,
-            IMediaService mediaService)
+            IMediaService mediaService,
+            IUmbracoUrlService umbracoUrlService)
         {
             _enterspeedPropertyService = enterspeedPropertyService;
             _enterspeedIngestService = enterspeedIngestService;
@@ -34,6 +36,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
             _enterspeedGuardService = enterspeedGuardService;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
             _mediaService = mediaService;
+            _umbracoUrlService = umbracoUrlService;
         }
 
         public bool CanHandle(EnterspeedJob job)
@@ -80,7 +83,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
         {
             try
             {
-                return new UmbracoMediaEntity(media, _enterspeedPropertyService, _entityIdentityService);
+                return new UmbracoMediaEntity(media, _enterspeedPropertyService, _entityIdentityService, _umbracoUrlService);
             }
             catch (Exception e)
             {
