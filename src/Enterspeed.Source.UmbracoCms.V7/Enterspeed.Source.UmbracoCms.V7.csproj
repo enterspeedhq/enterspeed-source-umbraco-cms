@@ -259,6 +259,7 @@
     <Compile Include="Extensions\ContentBaseExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />
     <Compile Include="Extensions\EnterspeedConfigurationExtensions.cs" />
+    <Compile Include="Extensions\MediaExtensions.cs" />
     <Compile Include="Extensions\UrlStringExtensions.cs" />
     <Compile Include="Factories\EnterspeedJobFactory.cs" />
     <Compile Include="Models\UmbFile.cs" />

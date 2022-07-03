@@ -2,9 +2,8 @@
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
+using Enterspeed.Source.UmbracoCms.V7.Extensions;
 using Enterspeed.Source.UmbracoCms.V7.Services;
-using Newtonsoft.Json;
-using Umbraco.Core;
 using Umbraco.Core.Models;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Models
@@ -19,22 +18,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Models
             _media = media;
             _entityIdentityService = EnterspeedContext.Current.Services.EntityIdentityService;
 
-            var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
-            if (umbracoFile.Contains("src"))
-            {
-                var umbFile = JsonConvert.DeserializeObject<UmbFile>(umbracoFile);
-                if (umbFile != null)
-                {
-                    Url = umbFile.Src;
-                }
-            }
-            else
-            {
-                // Should be a complex type, but is sometimes only a string. I don't know why.
-                // Might be some behaviour in Umbraco
-                Url = umbracoFile;
-            }
-
+            var configurationService = EnterspeedContext.Current.Services.ConfigurationService;
+            Url = media.GetMediaUrl(configurationService.GetConfiguration());
             Properties = EnterspeedContext.Current.Services.PropertyService.GetProperties(_media);
         }
 
