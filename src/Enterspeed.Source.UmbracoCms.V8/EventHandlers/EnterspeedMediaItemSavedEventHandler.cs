@@ -17,6 +17,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
     public class EnterspeedMediaItemSavedEventHandler : BaseEnterspeedEventHandler, IComponent
     {
+        private const int IndexPageSize = 9999;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IMediaService _mediaService;
 
@@ -61,7 +62,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             {
                 if (mediaItem.ContentType.Alias.Equals("Folder"))
                 {
-                    var mediaItems = _mediaService.GetPagedDescendants(mediaItem.Id, 0, 99999, out var totalRecords).ToList();
+                    var mediaItems = _mediaService.GetPagedDescendants(mediaItem.Id, 0, IndexPageSize, out var totalRecords).ToList();
                     if (totalRecords > 0)
                     {
                         foreach (var item in mediaItems)

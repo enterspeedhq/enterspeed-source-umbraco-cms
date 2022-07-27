@@ -7,12 +7,12 @@ using Umbraco.Core;
 using Umbraco.Core.Events;
 using Umbraco.Core.Models;
 using Umbraco.Core.Services;
-using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 {
     public class MediaEventHandler : ApplicationEventHandler
     {
+        private const int IndexPageSize = 9999;
         private static readonly EnterspeedJobFactory EnterspeedJobFactory = EnterspeedContext.Current.Services.JobFactory;
 
         protected override void ApplicationStarted(UmbracoApplicationBase umbracoApplication, ApplicationContext applicationContext)
@@ -51,37 +51,14 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                 return;
             }
 
-            var entities = e.MoveInfoCollection.ToList();
-            var jobs = new List<EnterspeedJob>();
-
-            foreach (var mediaItem in entities.Select(ei => ei.Entity))
-            {
-                if (mediaItem.ContentType.Alias.Equals("Folder"))
-                {
-                    var mediaItems = ApplicationContext.Current.Services.MediaService.GetPagedDescendants(mediaItem.Id, 0, 99999, out long totalRecords).ToList();
-                    if (totalRecords > 0)
-                    {
-                        foreach (var item in mediaItems)
-                        {
-                            if (!item.ContentType.Alias.Equals("Folder"))
-                            {
-                                jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
-                }
-            }
+            var entities = e.MoveInfoCollection?.Select(ei => ei.Entity).ToList();
+            var jobs = MapJobs(entities);
 
             EnqueueJobs(jobs);
         }
 
         private static void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
-            var jobs = new List<EnterspeedJob>();
             var isPublishConfigured = EnterspeedContext.Current.Services.ConfigurationService.IsPublishConfigured();
 
             if (!isPublishConfigured)
@@ -90,28 +67,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
             }
 
             var entities = e.SavedEntities.ToList();
-
-            foreach (var mediaItem in entities)
-            {
-                if (mediaItem.ContentType.Alias.Equals("Folder"))
-                {
-                    var mediaItems = ApplicationContext.Current.Services.MediaService.GetPagedDescendants(mediaItem.Id, 0, 99999, out long totalRecords).ToList();
-                    if (totalRecords > 0)
-                    {
-                        foreach (var item in mediaItems)
-                        {
-                            if (!item.ContentType.Alias.Equals("Folder"))
-                            {
-                                jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
-                }
-            }
+            var jobs = MapJobs(entities);
 
             EnqueueJobs(jobs);
         }
@@ -125,6 +81,35 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 
             EnterspeedContext.Current.Repositories.JobRepository.Save(jobs);
             EnterspeedContext.Current.Handlers.JobHandler.HandleJobs(jobs);
+        }
+
+        private static List<EnterspeedJob> MapJobs(List<IMedia> entities)
+        {
+            var jobs = new List<EnterspeedJob>();
+
+            foreach (var mediaItem in entities)
+            {
+                if (mediaItem.ContentType.Alias.Equals("Folder"))
+                {
+                    var mediaItems = ApplicationContext.Current.Services.MediaService.GetPagedDescendants(mediaItem.Id, 0, IndexPageSize, out long totalRecords).ToList();
+                    if (totalRecords > 0)
+                    {
+                        foreach (var item in mediaItems)
+                        {
+                            if (!item.ContentType.Alias.Equals("Folder"))
+                            {
+                                jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                }
+            }
+
+            return jobs;
         }
     }
 }

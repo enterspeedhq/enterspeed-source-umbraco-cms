@@ -16,6 +16,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
     public class EnterspeedMediaMovedEventHandler : BaseEnterspeedEventHandler, IComponent
     {
+        private const int IndexPageSize = 9999;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IMediaService _mediaService;
 
@@ -25,7 +26,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
-            IEnterspeedJobFactory enterspeedJobFactory, IMediaService mediaService)
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IMediaService mediaService)
             : base(
                 umbracoContextFactory,
                 enterspeedJobRepository,
@@ -40,7 +42,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
         public void Initialize()
         {
             MediaService.Moved += MediaService_Moved;
-
         }
 
         private void MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e)
@@ -52,14 +53,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                 return;
             }
 
-            var entities = e.MoveInfoCollection.ToList();
+            var entities = e.MoveInfoCollection.Select(ei => ei.Entity).ToList();
             var jobs = new List<EnterspeedJob>();
 
-            foreach (var mediaItem in entities.Select(ei => ei.Entity))
+            foreach (var mediaItem in entities)
             {
                 if (mediaItem.ContentType.Alias.Equals("Folder"))
                 {
-                    var mediaItems = _mediaService.GetPagedDescendants(mediaItem.Id, 0, 99999, out var totalRecords).ToList();
+                    var mediaItems = _mediaService.GetPagedDescendants(mediaItem.Id, 0, IndexPageSize, out var totalRecords).ToList();
                     if (totalRecords > 0)
                     {
                         foreach (var item in mediaItems)
