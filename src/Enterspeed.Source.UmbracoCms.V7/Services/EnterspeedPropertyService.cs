@@ -141,7 +141,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             ids.Remove(-1);
 
             return ids
-                .Select(x => new StringEnterspeedProperty(null, _identityService.GetId(media)))
+                .Select(x => new StringEnterspeedProperty(null, _identityService.GetId(x)))
                 .ToArray();
         }
     }

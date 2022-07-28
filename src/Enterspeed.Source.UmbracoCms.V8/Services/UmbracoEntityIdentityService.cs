@@ -24,6 +24,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return GetId(content.Id, culture);
         }
 
+        public string GetId(int contentId)
+        {
+            return contentId.ToString();
+        }
+
         public string GetId(int contentId, string culture)
         {
             return GetId(contentId.ToString(), culture);
