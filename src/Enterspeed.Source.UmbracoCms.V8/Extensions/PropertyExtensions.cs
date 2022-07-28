@@ -9,7 +9,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Extensions
         {
             if (!property.PropertyType.VariesByCulture())
             {
-                culture = null;
+                return (T)property.GetValue();
             }
 
             return (T)property.GetValue(culture);
