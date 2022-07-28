@@ -13,6 +13,7 @@ using Enterspeed.Source.UmbracoCms.V8.Extensions;
 using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Guards;
 using Enterspeed.Source.UmbracoCms.V8.Handlers;
+using Enterspeed.Source.UmbracoCms.V8.Handlers.Media;
 using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent;
 using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
@@ -118,6 +119,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             // Dictionary items handling guards
             composition.EnterspeedDictionaryItemHandlingGuards();
 
+            // Media handling guards
+            composition.EnterspeedMediaHandlingGuards();
+
             // Job handlers
             composition.EnterspeedJobHandlers()
                  // Content
@@ -127,6 +131,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                  // Dictionaries
                  .Append<EnterspeedDictionaryItemPublishJobHandler>()
                  .Append<EnterspeedDictionaryItemDeleteJobHandler>()
+
+                 // Media 
+                 .Append<EnterspeedMediaPublishJobHandler>()
+                 .Append<EnterspeedMediaTrashedJobHandler>()
 
                  // Preview content
                  .Append<EnterspeedPreviewContentPublishJobHandler>()
@@ -148,6 +156,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             composition.Components().Append<EnterspeedDictionaryItemSavedEventHandler>();
             composition.Components().Append<EnterspeedDictionaryItemDeletingEventHandler>();
+
+            composition.Components().Append<EnterspeedMediaItemSavedEventHandler>();
+            composition.Components().Append<EnterspeedMediaTrashedEventHandler>();
+            composition.Components().Append<EnterspeedMediaMovedEventHandler>();
 
             composition.Components().Append<EnterspeedJobsComponent>();
             composition.Components().Append<EnterspeedBackgroundTasksComponent>();

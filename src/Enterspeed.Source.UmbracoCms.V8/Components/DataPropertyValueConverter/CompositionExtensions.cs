@@ -22,6 +22,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter
             this Composition composition)
             => composition.WithCollectionBuilder<EnterspeedDictionaryItemHandlingGuardCollectionBuilder>();
 
+        public static EnterspeedMediaHandlingGuardCollectionBuilder EnterspeedMediaHandlingGuards(
+            this Composition composition)
+            => composition.WithCollectionBuilder<EnterspeedMediaHandlingGuardCollectionBuilder>();
+
         public static EnterspeedJobHandlerCollectionBuilder EnterspeedJobHandlers(this Composition composition)
             => composition.WithCollectionBuilder<EnterspeedJobHandlerCollectionBuilder>();
     }

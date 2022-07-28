@@ -14,11 +14,11 @@ using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
-    public class EnterspeedDictionaryItemSavedEventHandler : BaseEnterspeedEventHandler, IComponent
+    public class EnterspeedMediaTrashedEventHandler : BaseEnterspeedEventHandler, IComponent
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
-        public EnterspeedDictionaryItemSavedEventHandler(
+        public EnterspeedMediaTrashedEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService jobsHandlingService,
@@ -37,35 +37,25 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         public void Initialize()
         {
-            LocalizationService.SavedDictionaryItem += LocalizationServiceOnSavedDictionaryItem;
+            MediaService.Trashed += MediaService_Trashed;
         }
 
-        public void LocalizationServiceOnSavedDictionaryItem(
-            ILocalizationService sender, SaveEventArgs<IDictionaryItem> e)
+        private void MediaService_Trashed(IMediaService sender, MoveEventArgs<IMedia> e)
         {
             var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
 
-            if (!isPublishConfigured && !isPreviewConfigured)
+            if (!isPublishConfigured)
             {
                 return;
             }
 
-            var entities = e.SavedEntities.ToList();
+            var entities = e.MoveInfoCollection.ToList();
             var jobs = new List<EnterspeedJob>();
-            foreach (var dictionaryItem in entities)
+            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
-                foreach (var translation in dictionaryItem.Translations)
+                foreach (var mediaItem in entities.Select(ei => ei.Entity))
                 {
-                    if (isPublishConfigured)
-                    {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
-                    }
-
-                    if (isPreviewConfigured)
-                    {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
-                    }
+                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
                 }
             }
 

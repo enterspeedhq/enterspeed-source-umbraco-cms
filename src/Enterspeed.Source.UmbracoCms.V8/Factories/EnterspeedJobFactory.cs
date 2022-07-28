@@ -71,6 +71,24 @@ namespace Enterspeed.Source.UmbracoCms.V8.Factories
             };
         }
 
+        public EnterspeedJob GetPublishJob(IMedia media, string culture, EnterspeedContentState state)
+        {
+            var now = DateTime.UtcNow;
+            return new EnterspeedJob
+            {
+                EntityId = media.Id.ToString(),
+                EntityType = EnterspeedJobEntityType.Media,
+                Culture = culture,
+                JobType = EnterspeedJobType.Publish,
+                State = EnterspeedJobState.Pending,
+                CreatedAt = now,
+                UpdatedAt = now,
+                ContentState = state,
+            };
+        }
+
+
+
         public EnterspeedJob GetDeleteJob(IDictionaryItem dictionaryItem, string culture, EnterspeedContentState state)
         {
             var now = DateTime.UtcNow;
@@ -78,6 +96,22 @@ namespace Enterspeed.Source.UmbracoCms.V8.Factories
             {
                 EntityId = dictionaryItem.Key.ToString(),
                 EntityType = EnterspeedJobEntityType.Dictionary,
+                Culture = culture,
+                JobType = EnterspeedJobType.Delete,
+                State = EnterspeedJobState.Pending,
+                CreatedAt = now,
+                UpdatedAt = now,
+                ContentState = state,
+            };
+        }
+
+        public EnterspeedJob GetDeleteJob(IMedia media, string culture, EnterspeedContentState state)
+        {
+            var now = DateTime.UtcNow;
+            return new EnterspeedJob
+            {
+                EntityId = media.Id.ToString(),
+                EntityType = EnterspeedJobEntityType.Media,
                 Culture = culture,
                 JobType = EnterspeedJobType.Delete,
                 State = EnterspeedJobState.Pending,

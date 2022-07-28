@@ -14,17 +14,20 @@ using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
-    public class EnterspeedDictionaryItemSavedEventHandler : BaseEnterspeedEventHandler, IComponent
+    public class EnterspeedMediaMovedEventHandler : BaseEnterspeedEventHandler, IComponent
     {
+        private const int IndexPageSize = 9999;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IMediaService _mediaService;
 
-        public EnterspeedDictionaryItemSavedEventHandler(
+        public EnterspeedMediaMovedEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
-            IEnterspeedJobFactory enterspeedJobFactory)
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IMediaService mediaService)
             : base(
                 umbracoContextFactory,
                 enterspeedJobRepository,
@@ -33,39 +36,45 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                 scopeProvider)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
+            _mediaService = mediaService;
         }
 
         public void Initialize()
         {
-            LocalizationService.SavedDictionaryItem += LocalizationServiceOnSavedDictionaryItem;
+            MediaService.Moved += MediaService_Moved;
         }
 
-        public void LocalizationServiceOnSavedDictionaryItem(
-            ILocalizationService sender, SaveEventArgs<IDictionaryItem> e)
+        private void MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e)
         {
             var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
 
-            if (!isPublishConfigured && !isPreviewConfigured)
+            if (!isPublishConfigured)
             {
                 return;
             }
 
-            var entities = e.SavedEntities.ToList();
+            var entities = e.MoveInfoCollection.Select(ei => ei.Entity).ToList();
             var jobs = new List<EnterspeedJob>();
-            foreach (var dictionaryItem in entities)
-            {
-                foreach (var translation in dictionaryItem.Translations)
-                {
-                    if (isPublishConfigured)
-                    {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
-                    }
 
-                    if (isPreviewConfigured)
+            foreach (var mediaItem in entities)
+            {
+                if (mediaItem.ContentType.Alias.Equals("Folder"))
+                {
+                    var mediaItems = _mediaService.GetPagedDescendants(mediaItem.Id, 0, IndexPageSize, out var totalRecords).ToList();
+                    if (totalRecords > 0)
                     {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                        foreach (var item in mediaItems)
+                        {
+                            if (!item.ContentType.Alias.Equals("Folder"))
+                            {
+                                jobs.Add(_enterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            }
+                        }
                     }
+                }
+                else
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
                 }
             }
 
