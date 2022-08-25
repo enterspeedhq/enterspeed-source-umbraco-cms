@@ -1,0 +1,49 @@
+﻿<div ng-controller="FailedJobsController as vm" class="failedjobs-dashboard">
+
+	<umb-load-indicator ng-if="vm.loadingFailedJobs">
+	</umb-load-indicator>
+
+	<div class="failedjobs-dashboard-content" ng-if="!vm.failedjobs-loading">
+		<ul class="dashboard-list">
+			<li class="dashboard-list-header">
+				<div class="dashboard-list-item-property" style="width:3%"></div>
+				<div class="dashboard-list-item-property" style="width:12%">ID</div>
+				<div class="dashboard-list-item-property" style="width:10%">Entity ID</div>
+				<div class="dashboard-list-item-property" style="width:10%">Type</div>
+                <div class="dashboard-list-item-property" style="width:10%">Culture</div>
+				<div class="dashboard-list-item-property" style="width:15%">Job type</div>
+				<div class="dashboard-list-item-property" style="width:20%">Created at</div>
+				<div class="dashboard-list-item-property" style="width:20%">Updated at</div>
+			</li>
+			<li ng-repeat="job in vm.failedJobs | filter:q | startFrom:vm.pagination.pageIndex*vm.pagination.pageSize | limitTo:vm.pagination.pageSize">
+				<div class="dashboard-list-item" ng-click="vm.toggleException($index)">
+					<div class="dashboard-list-item-property" style="width: 3%">
+						<span ng-class="{'icon-navigation-right': $index !== vm.activeException, 'icon-navigation-down': $index === vm.activeException}"></span>
+					</div>
+					<div class="dashboard-list-item-property" style="width:12%">{{job.id}}</div>
+					<div class="dashboard-list-item-property" style="width:10%">{{job.entityId}}</div>
+					<div class="dashboard-list-item-property" style="width:10%">{{job.entityType}}</div>
+                    <div class="dashboard-list-item-property" style="width:10%">{{job.culture}}</div>
+					<div class="dashboard-list-item-property" style="width:15%">{{job.jobType}}</div>
+					<div class="dashboard-list-item-property" style="width:20%">{{job.createdAt | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+					<div class="dashboard-list-item-property" style="width:20%">{{job.updatedAt | date:'yyyy-MM-dd HH:mm:ss'}}</div>
+				</div>
+				<div class="dashboard-list-item">
+					<div class="dashboard-list-item-exception" style="width: 100%" ng-show="$index === vm.activeException">
+						<h4>Exception</h4>
+						{{job.exception === undefined || job.exception === null ? 'No exception' : job.exception}}
+					</div>
+				</div>
+			</li>
+		</ul>
+
+		<div ng-if="vm.pagination.totalPages > 1 && !vm.dashboard.loading" class="flex justify-center ">
+			<umb-pagination page-number="vm.pagination.pageNumber"
+							total-pages="vm.pagination.totalPages"
+							on-next="vm.nextPage"
+							on-prev="vm.prevPage"
+							on-go-to-page="vm.goToPage">
+			</umb-pagination>
+		</div>
+	</div>
+</div>

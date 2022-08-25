@@ -3,10 +3,87 @@
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\dashboard.controller.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\dashboard.html" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\configuration.controller.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\failedjobs.controller.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\seed.controller.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\lang\en-US.xml" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\package.manifest" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\styles.css" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\dashboard.controller.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\dashboard.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\configuration.controller.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\failedjobs.controller.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\seed.controller.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\lang\en-US.xml">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\package.manifest">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\settings-dashboard.html">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	  <Content Include="App_Plugins\Enterspeed.Dashboard\styles.css">
+	    <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+	    <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Enterspeed.Source.Sdk" Version="0.8.0" />
 		<PackageReference Include="Umbraco.Cms.Core" Version="10.1.0" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.1.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Common" Version="10.1.0" />
