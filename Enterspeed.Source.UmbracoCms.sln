@@ -20,7 +20,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V9.Tests", "tests\Enterspeed.Source.UmbracoCms.V9.Tests\Enterspeed.Source.UmbracoCms.V9.Tests.csproj", "{3754E671-FA66-4DC4-A857-15A69962C210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.V10", "Enterspeed.Source.UmbracoCms.V10\Enterspeed.Source.UmbracoCms.V10.csproj", "{897914A5-A582-4CED-9208-D509BF935790}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V10", "src\Enterspeed.Source.UmbracoCms.V10\Enterspeed.Source.UmbracoCms.V10.csproj", "{D5DFDF5D-0B11-4DCB-9234-E37D26813D97}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V10.Tests", "tests\Enterspeed.Source.UmbracoCms.V10.Tests\Enterspeed.Source.UmbracoCms.V10.Tests.csproj", "{7AE895D2-7F6F-4497-BD68-6245E750022E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,10 +38,14 @@ Global
 		{3754E671-FA66-4DC4-A857-15A69962C210}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3754E671-FA66-4DC4-A857-15A69962C210}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3754E671-FA66-4DC4-A857-15A69962C210}.Release|Any CPU.Build.0 = Release|Any CPU
-		{897914A5-A582-4CED-9208-D509BF935790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{897914A5-A582-4CED-9208-D509BF935790}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{897914A5-A582-4CED-9208-D509BF935790}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{897914A5-A582-4CED-9208-D509BF935790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5DFDF5D-0B11-4DCB-9234-E37D26813D97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5DFDF5D-0B11-4DCB-9234-E37D26813D97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5DFDF5D-0B11-4DCB-9234-E37D26813D97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5DFDF5D-0B11-4DCB-9234-E37D26813D97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,7 +53,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{D19581D3-4998-44B5-B63A-968C6C4FB3F9} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
 		{3754E671-FA66-4DC4-A857-15A69962C210} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
-		{897914A5-A582-4CED-9208-D509BF935790} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
+		{D5DFDF5D-0B11-4DCB-9234-E37D26813D97} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
+		{7AE895D2-7F6F-4497-BD68-6245E750022E} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E57FEE32-F9D9-4173-8300-40CF8BC054E1}
