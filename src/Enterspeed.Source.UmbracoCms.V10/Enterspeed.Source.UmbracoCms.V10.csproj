@@ -4,6 +4,16 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
+		<Authors>Enterspeed</Authors>
+
+		<ContentTargetFolders>.</ContentTargetFolders>
+		<Description>Enterspeed integration for Umbraco version 10</Description>
+		<PackageTags>Enterspeed, Umbraco 10</PackageTags>
+
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
+		<PackageProjectUrl>https://www.enterspeed.com/</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
