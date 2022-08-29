@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Configuration;
-using Enterspeed.Source.UmbracoCms.V9.Extensions;
-using Enterspeed.Source.UmbracoCms.V9.Models.Configuration;
-using Enterspeed.Source.UmbracoCms.V9.Providers;
+using Enterspeed.Source.UmbracoCms.V10.Extensions;
+using Enterspeed.Source.UmbracoCms.V10.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.V10.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Services;
 
-namespace Enterspeed.Source.UmbracoCms.V9.Services
+namespace Enterspeed.Source.UmbracoCms.V10.Services
 {
     public class EnterspeedConfigurationService : IEnterspeedConfigurationService
     {
@@ -24,8 +24,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
         private readonly string _configurationMediaDomainDatabaseKey = "Enterspeed+Configuration+MediaDomain";
         private readonly string _configurationApiKeyDatabaseKey = "Enterspeed+Configuration+ApiKey";
         private readonly string _configurationPreviewApiKeyDatabaseKey = "Enterspeed+Configuration+PreviewApiKey";
+
         private readonly string _configurationConnectionTimeoutDatabaseKey =
             "Enterspeed+Configuration+ConnectionTimeout";
+
         private readonly string _configurationBaseUrlDatabaseKey = "Enterspeed+Configuration+BaseUrl";
 
         public EnterspeedConfigurationService(
@@ -64,7 +66,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
         public bool IsPublishConfigured()
         {
             var configuration = GetConfiguration();
-            return configuration is { IsConfigured: true };
+            return configuration != null && configuration.IsConfigured;
         }
 
         public bool IsPreviewConfigured()
@@ -93,7 +95,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             configuration.IsConfigured = true;
             _keyValueService.SetValue(_configurationApiKeyDatabaseKey, configuration.ApiKey);
             _keyValueService.SetValue(_configurationBaseUrlDatabaseKey, configuration.BaseUrl);
-            _keyValueService.SetValue(_configurationConnectionTimeoutDatabaseKey, configuration.ConnectionTimeout.ToString());
+            _keyValueService.SetValue(_configurationConnectionTimeoutDatabaseKey,
+                configuration.ConnectionTimeout.ToString());
             _keyValueService.SetValue(_configurationMediaDomainDatabaseKey, configuration.MediaDomain);
             _keyValueService.SetValue(_configurationPreviewApiKeyDatabaseKey, configuration.PreviewApiKey);
 
@@ -127,7 +130,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             var webConfigEndpoint = _configuration["Enterspeed:Endpoint"];
             var webConfigMediaDomain = _configuration["Enterspeed:MediaDomain"];
             var webConfigApikey = _configuration["Enterspeed:Apikey"];
-            var webConfigPreviewApikey = ConfigurationManager.AppSettings["Enterspeed.PreviewApikey"];
+            var webConfigPreviewApikey =
+                System.Configuration.ConfigurationManager.AppSettings["Enterspeed.PreviewApikey"];
 
             if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
             {
@@ -136,8 +140,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
 
             _enterspeedUmbracoConfiguration = new EnterspeedUmbracoConfiguration
             {
-                BaseUrl = webConfigEndpoint.Trim(),
-                ApiKey = webConfigApikey.Trim(),
+                BaseUrl = webConfigEndpoint?.Trim(),
+                ApiKey = webConfigApikey?.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true,
                 PreviewApiKey = webConfigPreviewApikey

@@ -20,9 +20,9 @@
 	<ItemGroup>
 		<PackageReference Include="Enterspeed.Source.Sdk" Version="[0.7.1,1.0)" />
 		<PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[9.0,10.0)" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[9.0,10.0)" />
-		<PackageReference Include="Umbraco.Cms.Core" Version="[9.0,10.0)" />
+		<PackageReference Include="Umbraco.Cms.Web.Common" Version="[9.0,9.9.9)" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[9.0,9.9.9)" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="[9.0,9.9.9)" />
 	</ItemGroup>
 
 	<ItemGroup>
