@@ -64,7 +64,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
         public bool IsPublishConfigured()
         {
             var configuration = GetConfiguration();
-            return configuration != null && configuration.IsConfigured;
+            return configuration is { IsConfigured: true };
         }
 
         public bool IsPreviewConfigured()
@@ -136,8 +136,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
 
             _enterspeedUmbracoConfiguration = new EnterspeedUmbracoConfiguration
             {
-                BaseUrl = webConfigEndpoint?.Trim(),
-                ApiKey = webConfigApikey?.Trim(),
+                BaseUrl = webConfigEndpoint.Trim(),
+                ApiKey = webConfigApikey.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true,
                 PreviewApiKey = webConfigPreviewApikey
