@@ -117,6 +117,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             // Dictionary items handling guards
             builder.EnterspeedDictionaryItemHandlingGuards();
 
+            // Media handling guards
+            builder.EnterspeedMediaHandlingGuards();
+
             // Job handlers
             builder.EnterspeedJobHandlers()
                 // Content
@@ -134,7 +137,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
                 // Preview dictionaries
                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
                 .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
-               
+
 
             // Mapping definitions
             builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()

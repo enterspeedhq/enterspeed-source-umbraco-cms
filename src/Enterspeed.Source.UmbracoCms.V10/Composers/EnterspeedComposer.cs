@@ -15,6 +15,7 @@ using Enterspeed.Source.UmbracoCms.V10.Guards;
 using Enterspeed.Source.UmbracoCms.V10.Handlers;
 using Enterspeed.Source.UmbracoCms.V10.Handlers.Content;
 using Enterspeed.Source.UmbracoCms.V10.Handlers.Dictionaries;
+using Enterspeed.Source.UmbracoCms.V10.Handlers.Media;
 using Enterspeed.Source.UmbracoCms.V10.Handlers.PreviewContent;
 using Enterspeed.Source.UmbracoCms.V10.Handlers.PreviewDictionaries;
 using Enterspeed.Source.UmbracoCms.V10.HostedServices;
@@ -117,6 +118,9 @@ namespace Enterspeed.Source.UmbracoCms.V10.Composers
             // Dictionary items handling guards
             builder.EnterspeedDictionaryItemHandlingGuards();
 
+            // Media handling guards
+            builder.EnterspeedMediaHandlingGuards();
+
             // Job handlers
             builder.EnterspeedJobHandlers()
                 // Content
@@ -133,7 +137,11 @@ namespace Enterspeed.Source.UmbracoCms.V10.Composers
 
                 // Preview dictionaries
                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
-                .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
+                .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>()
+
+                // Media 
+                .Append<EnterspeedMediaPublishJobHandler>()
+                .Append<EnterspeedMediaTrashedJobHandler>();
 
 
             // Mapping definitions
