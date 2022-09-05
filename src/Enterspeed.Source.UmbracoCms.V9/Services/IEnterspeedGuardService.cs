@@ -7,5 +7,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
     {
         bool CanIngest(IPublishedContent content, string culture);
         bool CanIngest(IDictionaryItem dictionaryItem, string culture);
+        bool CanIngest(IMedia media, string culture);
     }
 }

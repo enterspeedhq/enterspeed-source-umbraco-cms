@@ -12,5 +12,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Factories
         EnterspeedJob GetPublishJob(IDictionaryItem dictionaryItem, string culture, EnterspeedContentState state);
         EnterspeedJob GetDeleteJob(IDictionaryItem dictionaryItem, string culture, EnterspeedContentState state);
         EnterspeedJob GetFailedJob(EnterspeedJob job, string exception);
+        EnterspeedJob GetPublishJob(IMedia media, string culture, EnterspeedContentState state);
+        EnterspeedJob GetDeleteJob(IMedia media, string culture, EnterspeedContentState state);
     }
 }
