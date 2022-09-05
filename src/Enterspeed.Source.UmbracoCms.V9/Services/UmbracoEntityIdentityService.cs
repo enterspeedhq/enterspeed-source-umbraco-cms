@@ -41,7 +41,12 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
 
         public string GetId(string contentId, string culture)
         {
-            return $"{contentId}-{culture}";
+            if (!string.IsNullOrEmpty(culture))
+            {
+                return $"{contentId}-{culture}";
+            }
+
+            return contentId;
         }
 
         public string GetId(IDictionaryItem dictionaryItem, string culture)

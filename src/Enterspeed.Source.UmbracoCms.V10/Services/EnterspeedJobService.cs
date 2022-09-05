@@ -198,7 +198,10 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
 
             foreach (var media in allMediaItems)
             {
-                jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Publish));
+                if (!media.ContentType.Alias.Equals("Folder"))
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Publish));
+                }
             }
 
             mediaCount = totalRecords;

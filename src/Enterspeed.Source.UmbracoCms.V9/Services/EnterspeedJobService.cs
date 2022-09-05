@@ -7,7 +7,6 @@ using Enterspeed.Source.UmbracoCms.V9.Models.Api;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Cms.Core.Services.Implement;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
@@ -76,7 +75,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             // Add all descendants
             foreach (var content in rootContent)
             {
-                var descendants = _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out var total).ToList();
+                var descendants = _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out var total)
+                    .ToList();
                 allContent.AddRange(descendants);
             }
 
@@ -103,7 +103,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             return jobs;
         }
 
-        private List<EnterspeedJob> GetJobsForContent(IContent content, UmbracoContextReference context, bool publish, bool preview)
+        private List<EnterspeedJob> GetJobsForContent(
+            IContent content, UmbracoContextReference context, bool publish,
+            bool preview)
         {
             var jobs = new List<EnterspeedJob>();
 
@@ -170,12 +172,14 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 {
                     if (publish)
                     {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode,
+                            EnterspeedContentState.Publish));
                     }
 
                     if (preview)
                     {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode,
+                            EnterspeedContentState.Preview));
                     }
                 }
             }
@@ -193,13 +197,16 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
         public IEnumerable<EnterspeedJob> GetMediaJobs(out long mediaCount)
         {
             mediaCount = 0;
-            var jobs = new List<EnterspeedJob>();
 
+            var jobs = new List<EnterspeedJob>();
             var allMediaItems = _mediaService.GetPagedDescendants(-1, 0, int.MaxValue, out long totalRecords).ToList();
 
             foreach (var media in allMediaItems)
             {
-                jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Publish));
+                if (!media.ContentType.Alias.Equals("Folder"))
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Publish));
+                }
             }
 
             mediaCount = totalRecords;

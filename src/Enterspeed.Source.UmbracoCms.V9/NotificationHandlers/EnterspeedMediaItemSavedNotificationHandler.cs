@@ -27,13 +27,13 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
             IMediaService mediaService)
-                : base(
-            configurationService,
-            enterspeedJobRepository,
-            enterspeedJobsHandlingService,
-            umbracoContextFactory,
-            scopeProvider,
-            auditService)
+            : base(
+                configurationService,
+                enterspeedJobRepository,
+                enterspeedJobsHandlingService,
+                umbracoContextFactory,
+                scopeProvider,
+                auditService)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
             _mediaService = mediaService;

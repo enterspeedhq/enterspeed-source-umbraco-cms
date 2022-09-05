@@ -5,7 +5,6 @@ using Enterspeed.Source.UmbracoCms.V10.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V10.Factories;
 using Enterspeed.Source.UmbracoCms.V10.Services;
 using Umbraco.Cms.Core.Events;
-using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
@@ -13,7 +12,7 @@ using Umbraco.Cms.Infrastructure.Scoping;
 
 namespace Enterspeed.Source.UmbracoCms.V10.NotificationHandlers
 {
-    public class EnterspeedMediaTrashedNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<MediaDeletedNotification>
+    public class EnterspeedMediaTrashedNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<MediaMovedToRecycleBinNotification>
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
 
@@ -34,9 +33,9 @@ namespace Enterspeed.Source.UmbracoCms.V10.NotificationHandlers
         {
         }
 
-        public void Handle(MediaDeletedNotification notification) => MediaService_Trashed(notification);
+        public void Handle(MediaMovedToRecycleBinNotification notification) => MediaServiceTrashed(notification);
 
-        private void MediaService_Trashed(MediaDeletedNotification notification)
+        private void MediaServiceTrashed(MediaMovedToRecycleBinNotification notification)
         {
             var isPublishConfigured = _configurationService.IsPublishConfigured();
             if (!isPublishConfigured)
@@ -44,7 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.NotificationHandlers
                 return;
             }
 
-            var entities = notification.DeletedEntities.ToList();
+            var entities = notification.MoveInfoCollection.Select(c => c.Entity).ToList();
             var jobs = new List<EnterspeedJob>();
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {

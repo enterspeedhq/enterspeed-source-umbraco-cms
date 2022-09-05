@@ -157,7 +157,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Composers
             builder.AddNotificationHandler<DictionaryItemDeletingNotification, EnterspeedDictionaryItemDeletingNotificationHandler>();
             builder.AddNotificationHandler<MediaSavedNotification, EnterspeedMediaItemSavedEventHandler>();
             builder.AddNotificationHandler<MediaMovedNotification, EnterspeedMediaMovedEventHandler>();
-            builder.AddNotificationHandler<MediaDeletedNotification, EnterspeedMediaTrashedNotificationHandler>();
+            builder.AddNotificationHandler<MediaMovedToRecycleBinNotification, EnterspeedMediaTrashedNotificationHandler>();
 
             // Components
             builder.Components().Append<EnterspeedJobsComponent>();
