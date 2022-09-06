@@ -22,15 +22,17 @@ namespace Enterspeed.Source.UmbracoCms.V10.NotificationHandlers
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider,
-            IAuditService auditService)
-                : base(
-                    configurationService,
-                    enterspeedJobRepository,
-                    enterspeedJobsHandlingService,
-                    umbracoContextFactory,
-                    scopeProvider,
-                    auditService)
+            IAuditService auditService, 
+            IEnterspeedJobFactory enterspeedJobFactory)
+            : base(
+                configurationService,
+                enterspeedJobRepository,
+                enterspeedJobsHandlingService,
+                umbracoContextFactory,
+                scopeProvider,
+                auditService)
         {
+            _enterspeedJobFactory = enterspeedJobFactory;
         }
 
         public void Handle(MediaMovedToRecycleBinNotification notification) => MediaServiceTrashed(notification);
@@ -43,7 +45,9 @@ namespace Enterspeed.Source.UmbracoCms.V10.NotificationHandlers
                 return;
             }
 
-            var entities = notification.MoveInfoCollection.Select(c => c.Entity).ToList();
+            var entities = notification.MoveInfoCollection.Select(c => c.Entity)
+                .Where(e => !e.ContentType.Alias.Equals("Folder")).ToList();
+
             var jobs = new List<EnterspeedJob>();
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {

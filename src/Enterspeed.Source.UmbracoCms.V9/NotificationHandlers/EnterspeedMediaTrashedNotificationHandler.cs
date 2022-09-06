@@ -45,7 +45,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                 return;
             }
 
-            var entities = notification.MoveInfoCollection.Select(c => c.Entity).ToList();
+            var entities = notification.MoveInfoCollection.Select(c => c.Entity)
+                   .Where(e => !e.ContentType.Alias.Equals("Folder")).ToList();
+
             var jobs = new List<EnterspeedJob>();
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
