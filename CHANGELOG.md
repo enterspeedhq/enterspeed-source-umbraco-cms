@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.15.0- 2022-09-07]
+- Support for media types ingestion in Umbraco 9 & 10
+
 ## [0.14.2- 2022-09-01]
 - Fix issue with nested content
 

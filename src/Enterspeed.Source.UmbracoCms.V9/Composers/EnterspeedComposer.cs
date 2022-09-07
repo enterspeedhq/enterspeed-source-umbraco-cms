@@ -15,6 +15,7 @@ using Enterspeed.Source.UmbracoCms.V9.Guards;
 using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Handlers.Content;
 using Enterspeed.Source.UmbracoCms.V9.Handlers.Dictionaries;
+using Enterspeed.Source.UmbracoCms.V9.Handlers.Media;
 using Enterspeed.Source.UmbracoCms.V9.Handlers.PreviewContent;
 using Enterspeed.Source.UmbracoCms.V9.Handlers.PreviewDictionaries;
 using Enterspeed.Source.UmbracoCms.V9.HostedServices;
@@ -117,6 +118,9 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
             // Dictionary items handling guards
             builder.EnterspeedDictionaryItemHandlingGuards();
 
+            // Media handling guards
+            builder.EnterspeedMediaHandlingGuards();
+
             // Job handlers
             builder.EnterspeedJobHandlers()
                 // Content
@@ -133,34 +137,26 @@ namespace Enterspeed.Source.UmbracoCms.V9.Composers
 
                 // Preview dictionaries
                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
-                .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
-               
+                .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>()
+
+                // Media 
+                .Append<EnterspeedMediaPublishJobHandler>()
+                .Append<EnterspeedMediaTrashedJobHandler>();
+
 
             // Mapping definitions
-            builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
-                .Add<EnterspeedJobMappingDefinition>();
+            builder.WithCollectionBuilder<MapDefinitionCollectionBuilder>().Add<EnterspeedJobMappingDefinition>();
 
             // Notification handlers
-            builder
-                .AddNotificationHandler<ContentPublishingNotification,
-                    EnterspeedContentPublishingNotificationHandler>();
-            builder
-                .AddNotificationHandler<ContentCacheRefresherNotification,
-                    EnterspeedContentCacheRefresherNotificationHandler>();
-            builder
-                .AddNotificationHandler<ContentMovedToRecycleBinNotification,
-                    EnterspeedContentUnpublishingNotificationHandler>();
-            builder
-                .AddNotificationHandler<ContentUnpublishingNotification,
-                    EnterspeedContentUnpublishingNotificationHandler>();
-
-            builder
-                .AddNotificationHandler<DictionaryItemSavedNotification,
-                    EnterspeedDictionaryItemSavedNotificationHandler>();
-
-            builder
-                .AddNotificationHandler<DictionaryItemDeletingNotification,
-                    EnterspeedDictionaryItemDeletingNotificationHandler>();
+            builder.AddNotificationHandler<ContentPublishingNotification, EnterspeedContentPublishingNotificationHandler>();
+            builder.AddNotificationHandler<ContentCacheRefresherNotification, EnterspeedContentCacheRefresherNotificationHandler>();
+            builder.AddNotificationHandler<ContentMovedToRecycleBinNotification, EnterspeedContentUnpublishingNotificationHandler>();
+            builder.AddNotificationHandler<ContentUnpublishingNotification, EnterspeedContentUnpublishingNotificationHandler>();
+            builder.AddNotificationHandler<DictionaryItemSavedNotification, EnterspeedDictionaryItemSavedNotificationHandler>();
+            builder.AddNotificationHandler<DictionaryItemDeletingNotification, EnterspeedDictionaryItemDeletingNotificationHandler>();
+            builder.AddNotificationHandler<MediaSavedNotification, EnterspeedMediaItemSavedEventHandler>();
+            builder.AddNotificationHandler<MediaMovedNotification, EnterspeedMediaMovedEventHandler>();
+            builder.AddNotificationHandler<MediaMovedToRecycleBinNotification, EnterspeedMediaTrashedNotificationHandler>();
 
             // Components
             builder.Components().Append<EnterspeedJobsComponent>();
