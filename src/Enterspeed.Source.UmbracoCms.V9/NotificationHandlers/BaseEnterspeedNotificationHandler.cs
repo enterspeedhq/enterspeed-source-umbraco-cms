@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.V9.Handlers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Scoping;

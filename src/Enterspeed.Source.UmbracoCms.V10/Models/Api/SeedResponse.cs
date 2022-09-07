@@ -5,5 +5,6 @@
         public int JobsAdded { get; set; }
         public int ContentCount { get; set; }
         public int DictionaryCount { get; set; }
+        public long MediaCount { get; set; }
     }
 }
