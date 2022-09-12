@@ -11,15 +11,18 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
         private readonly ILogger<EnterspeedGuardService> _logger;
         private readonly EnterspeedContentHandlingGuardCollection _contentGuards;
         private readonly EnterspeedDictionaryItemHandlingGuardCollection _dictionaryItemGuards;
+        private readonly EnterspeedMediaHandlingGuardCollection _mediaHandlingGuards;
 
         public EnterspeedGuardService(
             EnterspeedContentHandlingGuardCollection contentGuards,
-            EnterspeedDictionaryItemHandlingGuardCollection dictionaryItemGuards, 
-            ILogger<EnterspeedGuardService> logger)
+            EnterspeedDictionaryItemHandlingGuardCollection dictionaryItemGuards,
+            ILogger<EnterspeedGuardService> logger,
+            EnterspeedMediaHandlingGuardCollection mediaHandlingGuards)
         {
             _contentGuards = contentGuards;
             _dictionaryItemGuards = dictionaryItemGuards;
             _logger = logger;
+            _mediaHandlingGuards = mediaHandlingGuards;
         }
 
         public bool CanIngest(IPublishedContent content, string culture)
@@ -29,7 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
             {
                 return true;
             }
-            
+
             _logger.LogInformation("Content {contentId} with {culture} culture, ingest avoided by '{guard}'.", content.Id, culture, blockingGuard.GetType().Name);
             return false;
         }
@@ -41,8 +44,24 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
             {
                 return true;
             }
-            
+
             _logger.LogInformation("Dictionary item {dictionaryItemId} with {culture} culture, ingest avoided by '{guard}'.", dictionaryItem.Id, culture, blockingGuard.GetType().Name);
+            return false;
+        }
+
+        public bool CanIngest(IMedia media, string culture)
+        {
+            var blockingGuard = _mediaHandlingGuards.FirstOrDefault(guard => !guard.CanIngest(media, culture));
+            if (blockingGuard == null)
+            {
+                return true;
+            }
+
+            _logger.LogDebug(
+                "Media {mediaId} with {culture} culture, ingest avoided by '{guard}'.",
+                media.Id,
+                culture,
+                blockingGuard.GetType().Name);
             return false;
         }
     }

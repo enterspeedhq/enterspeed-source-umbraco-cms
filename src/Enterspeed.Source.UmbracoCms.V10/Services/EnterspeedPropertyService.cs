@@ -77,6 +77,23 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
             return output;
         }
 
+        public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media)
+        {
+            var enterspeedProperties = new Dictionary<string, IEnterspeedProperty>
+            {
+                { "name", new StringEnterspeedProperty("name", media.Name) },
+                { "size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")) },
+                { "type", new StringEnterspeedProperty("type", media.GetValue<string>("umbracoExtension")) },
+                { "path", new StringEnterspeedProperty("path", media.Path) },
+                { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
+                { "updateDate", new StringEnterspeedProperty("updateDate", media.UpdateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
+                { "level", new NumberEnterspeedProperty("level", media.Level) },
+                { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
+            };
+
+            return enterspeedProperties;
+        }
+
         private IEnterspeedProperty CreateMetaData(IPublishedContent content, string culture)
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
@@ -104,6 +121,20 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
 
             return ids
                 .Select(x => new StringEnterspeedProperty(null, _identityService.GetId(x, culture)))
+                .ToArray();
+        }
+
+        private IEnterspeedProperty[] GetNodePath(IMedia media)
+        {
+            var ids = media.Path
+                .Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(int.Parse)
+                .ToList();
+
+            ids.Remove(-1);
+
+            return ids
+                .Select(x => new StringEnterspeedProperty(null, _identityService.GetId(x)))
                 .ToArray();
         }
     }

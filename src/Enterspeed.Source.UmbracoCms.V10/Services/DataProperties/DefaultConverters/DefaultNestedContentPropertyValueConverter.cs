@@ -24,10 +24,21 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
 
         public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
-            var elementItems = property.GetValue<IEnumerable<IPublishedElement>>(culture);
+            var elementItems = new List<IPublishedElement>();
+
+            // Nested content be both single element and Enumerable
+            if (property.GetValue() is IPublishedElement)
+            {
+                elementItems.Add(property.GetValue<IPublishedElement>(culture));
+            }
+            else
+            {
+                elementItems.AddRange(property.GetValue<IEnumerable<IPublishedElement>>(culture));
+            }
+
             var arrayItems = new List<IEnterspeedProperty>();
 
-            if (elementItems != null)
+            if (elementItems.Any())
             {
                 // NOTE: This needs to be resolved manually, since it would cause a circular dependency if injected through constructor
                 var dataPropertyService = _serviceProvider.GetRequiredService<IEnterspeedPropertyService>();
