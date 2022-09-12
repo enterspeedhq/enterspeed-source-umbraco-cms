@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.15.1- 2022-09-12]
+- Convert properties made virtual for extendability on property value converters (Umbraco 10)
+
 ## [0.15.0- 2022-09-07]
 - Support for media types ingestion in Umbraco 9 & 10
 
