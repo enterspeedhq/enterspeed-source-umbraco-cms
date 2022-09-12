@@ -31,7 +31,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             return propertyType.EditorAlias.Equals("Umbraco.MultiUrlPicker");
         }
 
-        public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
             var isMultiple = property.PropertyType.DataType.ConfigurationAs<MultiUrlPickerConfiguration>().MaxNumber != 1;
             var arrayItems = new List<IEnterspeedProperty>();

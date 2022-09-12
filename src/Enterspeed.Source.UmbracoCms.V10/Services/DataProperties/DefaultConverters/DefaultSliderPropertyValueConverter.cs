@@ -15,7 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             return propertyType.EditorAlias.Equals("Umbraco.Slider");
         }
 
-        public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
             var configuration = property.PropertyType.DataType.ConfigurationAs<SliderConfiguration>();
             if (configuration.EnableRange)
