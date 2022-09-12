@@ -27,7 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             return propertyType.EditorAlias.Equals("Umbraco.MultiNodeTreePicker");
         }
 
-        public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
             var configuration = property.PropertyType.DataType.ConfigurationAs<MultiNodePickerConfiguration>();
             var isMultiple = configuration.MaxNumber != 1;
