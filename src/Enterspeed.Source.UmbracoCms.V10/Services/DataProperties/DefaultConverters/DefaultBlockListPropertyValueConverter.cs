@@ -23,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             return propertyType.EditorAlias.Equals("Umbraco.BlockList");
         }
 
-        public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
             var value = property.GetValue<BlockListModel>(culture);
             var arrayItems = new List<IEnterspeedProperty>();
@@ -61,6 +61,19 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             }
 
             return new ArrayEnterspeedProperty(property.Alias, arrayItems.ToArray());
+        }
+    }
+
+
+    public class NewDefaultBlockListPropertyValueConverter : DefaultBlockListPropertyValueConverter
+    {
+        public NewDefaultBlockListPropertyValueConverter(IServiceProvider serviceProvider) : base(serviceProvider)
+        {
+        }
+
+        public override IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        {
+            return base.Convert(property, culture);
         }
     }
 }

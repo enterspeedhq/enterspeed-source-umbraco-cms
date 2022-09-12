@@ -23,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             return propertyType.EditorAlias.Equals("Umbraco.MemberGroupPicker");
         }
 
-        public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
             var value = property.GetValue<string>(culture);
             var arrayItems = new List<IEnterspeedProperty>();

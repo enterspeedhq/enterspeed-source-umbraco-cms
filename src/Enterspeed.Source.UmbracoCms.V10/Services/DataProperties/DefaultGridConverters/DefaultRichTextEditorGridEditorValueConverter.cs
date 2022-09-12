@@ -11,7 +11,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultGridCo
             return alias.InvariantEquals("rte");
         }
 
-        public IEnterspeedProperty Convert(GridControl editor, string culture)
+        public virtual IEnterspeedProperty Convert(GridControl editor, string culture)
         {
             return new StringEnterspeedProperty(editor.Value.ToString());
         }

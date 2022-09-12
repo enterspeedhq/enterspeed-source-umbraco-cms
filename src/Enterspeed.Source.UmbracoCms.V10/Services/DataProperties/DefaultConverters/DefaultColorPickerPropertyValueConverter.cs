@@ -15,7 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             return propertyType.EditorAlias.Equals("Umbraco.ColorPicker");
         }
 
-        public IEnterspeedProperty Convert(IPublishedProperty property, string culture)
+        public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
             var colorValue = string.Empty;
             var colorLabel = string.Empty;
