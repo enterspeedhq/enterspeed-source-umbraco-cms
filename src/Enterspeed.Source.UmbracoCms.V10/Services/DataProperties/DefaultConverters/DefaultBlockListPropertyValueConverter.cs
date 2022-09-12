@@ -63,17 +63,4 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             return new ArrayEnterspeedProperty(property.Alias, arrayItems.ToArray());
         }
     }
-
-
-    public class NewDefaultBlockListPropertyValueConverter : DefaultBlockListPropertyValueConverter
-    {
-        public NewDefaultBlockListPropertyValueConverter(IServiceProvider serviceProvider) : base(serviceProvider)
-        {
-        }
-
-        public override IEnterspeedProperty Convert(IPublishedProperty property, string culture)
-        {
-            return base.Convert(property, culture);
-        }
-    }
 }
