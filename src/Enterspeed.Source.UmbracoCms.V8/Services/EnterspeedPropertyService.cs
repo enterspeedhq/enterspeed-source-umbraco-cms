@@ -105,7 +105,17 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, culture))
             };
 
+            MapAdditionalMetaData(metaData);
+
             return new ObjectEnterspeedProperty("metaData", metaData);
+        }
+
+        /// <summary>
+        /// Override to add extra meta data
+        /// </summary>
+        /// <param name="metaData"></param>
+        protected virtual void MapAdditionalMetaData(Dictionary<string, IEnterspeedProperty> metaData)
+        {
         }
 
         private IEnterspeedProperty[] GetNodePath(string contentPath, string culture)
