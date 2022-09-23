@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.15.3- 2022-09-23]
+- Added virtual method to extend metadata properies (Umbraco 8, 9 & 10)
+
 ## [0.15.2- 2022-09-21]
 - Added missing properies on media items (Umbraco 7 & 8)
 
