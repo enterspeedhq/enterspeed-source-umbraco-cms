@@ -34,9 +34,27 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             var properties = content.Properties;
             var enterspeedProperties = ConvertProperties(properties, culture);
 
-            enterspeedProperties.Add(MetaData, CreateMetaData(content, culture));
+            enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
 
             return enterspeedProperties;
+        }
+        
+        private IEnterspeedProperty CreateNodeMetaData(IPublishedContent content, string culture)
+        {
+            var metaData = new Dictionary<string, IEnterspeedProperty>
+            {
+                ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
+                ["culture"] = new StringEnterspeedProperty("culture", culture),
+                ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
+                ["level"] = new NumberEnterspeedProperty("level", content.Level),
+                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")),
+                ["updateDate"] = new StringEnterspeedProperty("updateDate", content.CultureDate(culture).ToString("yyyy-MM-ddTHH:mm:ss")),
+                ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, culture))
+            };
+
+            MapAdditionalMetaData(metaData, content, culture);
+
+            return new ObjectEnterspeedProperty("metaData", metaData);
         }
 
         public IDictionary<string, IEnterspeedProperty> ConvertProperties(IEnumerable<IPublishedProperty> properties, string culture = null)
@@ -115,24 +133,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
-        }
-
-        private IEnterspeedProperty CreateMetaData(IPublishedContent content, string culture)
-        {
-            var metaData = new Dictionary<string, IEnterspeedProperty>
-            {
-                ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
-                ["culture"] = new StringEnterspeedProperty("culture", culture),
-                ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
-                ["level"] = new NumberEnterspeedProperty("level", content.Level),
-                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")),
-                ["updateDate"] = new StringEnterspeedProperty("updateDate", content.CultureDate(culture).ToString("yyyy-MM-ddTHH:mm:ss")),
-                ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, culture))
-            };
-
-            MapAdditionalMetaData(metaData, content, culture);
-
-            return new ObjectEnterspeedProperty("metaData", metaData);
         }
 
         /// <summary>
