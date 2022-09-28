@@ -5,6 +5,7 @@ using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Web;
@@ -17,13 +18,16 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly EnterspeedPropertyValueConverterCollection _converterCollection;
         private readonly IEntityIdentityService _identityService;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
+        private readonly ILogger _logger;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
-            IUmbracoContextFactory umbracoContextFactory)
+            IUmbracoContextFactory umbracoContextFactory,
+            ILogger logger)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
+            _logger = logger;
             _identityService = Current.Factory.GetInstance<IEntityIdentityService>();
         }
 
@@ -100,14 +104,20 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         {
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
+                IDictionary<string, IEnterspeedProperty> enterspeedProperties;
+
                 var publishedMedia = context.UmbracoContext.Media?.GetById(media.Id);
-                if (publishedMedia == null)
+                if (publishedMedia != null)
                 {
-                    return null;
+                    var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
+                    enterspeedProperties = ConvertProperties(properties);
+                }
+                else
+                {
+                    _logger.Warn<EnterspeedPropertyService>($"Could not get media as published content, for media with id of {media.Id}");
+                    enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
                 }
 
-                var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
-                var enterspeedProperties = ConvertProperties(properties);
                 enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
 
                 return enterspeedProperties;

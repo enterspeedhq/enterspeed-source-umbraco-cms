@@ -6,6 +6,7 @@ using Enterspeed.Source.UmbracoCms.V7.Contexts;
 using Enterspeed.Source.UmbracoCms.V7.Models;
 using Enterspeed.Source.UmbracoCms.V7.Services.DataProperties;
 using Umbraco.Core;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Web;
 
@@ -88,21 +89,26 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
         public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media)
         {
             var context = UmbracoContextHelper.GetUmbracoContext();
+            IDictionary<string, IEnterspeedProperty> enterspeedProperties;
 
-            var publishedMedia = context.MediaCache.GetById(media.Id);
-            if (publishedMedia == null)
+            var publishedMedia = context.MediaCache?.GetById(media.Id);
+            if (publishedMedia != null)
             {
-                return null;
+                var properties = publishedMedia.Properties.Where(p => !p.PropertyTypeAlias.Equals(Constants.Conventions.Media.File));
+                enterspeedProperties = ConvertProperties(publishedMedia, properties);
+            }
+            else
+            {
+                LogHelper.Warn<EnterspeedPropertyService>($"Could not get media as published content, for media with id of {media.Id}");
+                enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
             }
 
-            var filteredProperties = publishedMedia.Properties.Where(p => !p.PropertyTypeAlias.Equals(Constants.Conventions.Media.File));
-            var enterspeedProperties = ConvertProperties(publishedMedia, filteredProperties);
-            enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
+            enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media));
 
             return enterspeedProperties;
         }
 
-        private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media, IPublishedContent publishedMedia)
+        private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media)
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
