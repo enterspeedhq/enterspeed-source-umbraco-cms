@@ -5,8 +5,10 @@ using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
@@ -15,10 +17,17 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private const string MetaData = "metaData";
         private readonly EnterspeedPropertyValueConverterCollection _converterCollection;
         private readonly IEntityIdentityService _identityService;
+        private readonly IUmbracoContextFactory _umbracoContextFactory;
+        private readonly ILogger _logger;
 
-        public EnterspeedPropertyService(EnterspeedPropertyValueConverterCollection converterCollection)
+        public EnterspeedPropertyService(
+            EnterspeedPropertyValueConverterCollection converterCollection,
+            IUmbracoContextFactory umbracoContextFactory,
+            ILogger logger)
         {
             _converterCollection = converterCollection;
+            _umbracoContextFactory = umbracoContextFactory;
+            _logger = logger;
             _identityService = Current.Factory.GetInstance<IEntityIdentityService>();
         }
 
@@ -27,9 +36,27 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             var properties = content.Properties;
             var enterspeedProperties = ConvertProperties(properties, culture);
 
-            enterspeedProperties.Add(MetaData, CreateMetaData(content, culture));
+            enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
 
             return enterspeedProperties;
+        }
+
+        private IEnterspeedProperty CreateNodeMetaData(IPublishedContent content, string culture)
+        {
+            var metaData = new Dictionary<string, IEnterspeedProperty>
+            {
+                ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
+                ["culture"] = new StringEnterspeedProperty("culture", culture),
+                ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
+                ["level"] = new NumberEnterspeedProperty("level", content.Level),
+                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")),
+                ["updateDate"] = new StringEnterspeedProperty("updateDate", content.CultureDate(culture).ToString("yyyy-MM-ddTHH:mm:ss")),
+                ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, culture))
+            };
+
+            MapAdditionalMetaData(metaData, content, culture);
+
+            return new ObjectEnterspeedProperty("metaData", metaData);
         }
 
         public IDictionary<string, IEnterspeedProperty> ConvertProperties(IEnumerable<IPublishedProperty> properties, string culture = null)
@@ -75,7 +102,31 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 
         public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media)
         {
-            var enterspeedProperties = new Dictionary<string, IEnterspeedProperty>
+            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            {
+                IDictionary<string, IEnterspeedProperty> enterspeedProperties;
+
+                var publishedMedia = context.UmbracoContext.Media?.GetById(media.Id);
+                if (publishedMedia != null)
+                {
+                    var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
+                    enterspeedProperties = ConvertProperties(properties);
+                }
+                else
+                {
+                    _logger.Warn<EnterspeedPropertyService>($"Could not get media as published content, for media with id of {media.Id}");
+                    enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
+                }
+
+                enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
+
+                return enterspeedProperties;
+            }
+        }
+
+        private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media, IPublishedContent publishedMedia)
+        {
+            var metaData = new Dictionary<string, IEnterspeedProperty>
             {
                 { "name", new StringEnterspeedProperty("name", media.Name) },
                 { "size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")) },
@@ -89,25 +140,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
             };
 
-            return enterspeedProperties;
-        }
+            MapAdditionalMetaData(metaData, publishedMedia, string.Empty);
 
-        private IEnterspeedProperty CreateMetaData(IPublishedContent content, string culture)
-        {
-            var metaData = new Dictionary<string, IEnterspeedProperty>
-            {
-                ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
-                ["culture"] = new StringEnterspeedProperty("culture", culture),
-                ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
-                ["level"] = new NumberEnterspeedProperty("level", content.Level),
-                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")),
-                ["updateDate"] = new StringEnterspeedProperty("updateDate", content.CultureDate(culture).ToString("yyyy-MM-ddTHH:mm:ss")),
-                ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, culture))
-            };
-
-            MapAdditionalMetaData(metaData, content, culture);
-
-            return new ObjectEnterspeedProperty("metaData", metaData);
+            var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
+            return metaProperties;
         }
 
         /// <summary>
