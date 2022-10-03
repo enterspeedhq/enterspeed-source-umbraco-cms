@@ -96,17 +96,12 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                     {
                         foreach (var item in mediaItems)
                         {
-                            if (!item.ContentType.Alias.Equals("Folder"))
-                            {
-                                jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
-                            }
+                            jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
                         }
                     }
                 }
-                else
-                {
-                    jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
-                }
+
+                jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
             }
 
             return jobs;

@@ -21,12 +21,23 @@ namespace Enterspeed.Source.UmbracoCms.V8.Models
             _media = media;
             _entityIdentityService = entityIdentityService;
 
+            var contentType = _media.ContentType.Name;
+            switch (contentType)
+            {
+                case "Image":
+                    Type = "umbMedia";
+                    break;
+                case "Folder":
+                    Type = "umbMediaFolder";
+                    break;
+            }
+
             Url = _media.GetMediaUrl(enterspeedConfigurationService.GetConfiguration());
-            Properties = propertyService.GetProperties(_media);
+            Properties = propertyService.GetProperties(_media, contentType);
         }
 
         public string Id => _entityIdentityService.GetId(_media);
-        public string Type => "umbMedia";
+        public string Type { get; set; }
         public string Url { get; set; }
         public string[] Redirects => null;
         public string ParentId => _entityIdentityService.GetId(_media.ParentId.ToString());

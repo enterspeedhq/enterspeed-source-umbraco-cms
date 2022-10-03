@@ -86,7 +86,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             return output;
         }
 
-        public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media)
+        public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media, string contentType)
         {
             var context = UmbracoContextHelper.GetUmbracoContext();
             IDictionary<string, IEnterspeedProperty> enterspeedProperties;
@@ -103,26 +103,30 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
             }
 
-            enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media));
+            enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, contentType));
 
             return enterspeedProperties;
         }
 
-        private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media)
+        private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media, string contentType)
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
                 { "name", new StringEnterspeedProperty("name", media.Name) },
-                { "size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")) },
-                { "type", new StringEnterspeedProperty("type", media.GetValue<string>("umbracoExtension")) },
-                { "width", new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()) },
-                { "height", new StringEnterspeedProperty("height", media.GetValue<int>("umbracoHeight").ToString()) },
                 { "path", new StringEnterspeedProperty("path", media.Path) },
                 { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
                 { "updateDate", new StringEnterspeedProperty("updateDate", media.UpdateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
                 { "level", new NumberEnterspeedProperty("level", media.Level) },
                 { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
             };
+
+            if (contentType.Equals("Image"))
+            {
+                metaData.Add("size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")));
+                metaData.Add("width", new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()));
+                metaData.Add("height", new StringEnterspeedProperty("height", media.GetValue<int>("umbracoHeight").ToString()));
+                metaData.Add("contentType", new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
+            }
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
