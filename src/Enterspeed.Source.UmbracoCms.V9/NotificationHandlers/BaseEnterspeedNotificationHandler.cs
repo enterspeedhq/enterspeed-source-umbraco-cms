@@ -58,7 +58,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                 return;
             }
 
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (_scopeProvider.CreateScope(autoComplete: true))
             {
                 _enterspeedJobRepository.Save(jobs);
             }
