@@ -102,7 +102,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             return output;
         }
 
-        public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media, string contentType)
+        public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media)
         {
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
@@ -120,13 +120,13 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                     enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
                 }
 
-                enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia, contentType));
+                enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
 
                 return enterspeedProperties;
             }
         }
 
-        private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media, IPublishedContent publishedMedia, string contentType)
+        private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media, IPublishedContent publishedMedia)
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
@@ -138,7 +138,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
             };
 
-            if (contentType.Equals("Image"))
+            if (media.ContentType.Name == "Image")
             {
                 metaData.Add("size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")));
                 metaData.Add("width", new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()));
