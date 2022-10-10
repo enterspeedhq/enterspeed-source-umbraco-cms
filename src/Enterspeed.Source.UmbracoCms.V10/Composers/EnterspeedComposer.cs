@@ -63,6 +63,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Composers
             builder.Services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>();
             builder.Services.AddSingleton<IJsonSerializer, SystemTextJsonSerializer>();
             builder.Services.AddSingleton<IEnterspeedConnection, EnterspeedConnection>();
+            builder.Services.AddSingleton<IUmbracoRichTextParser, UmbracoRichTextParser>();
 
             builder.Services.AddSingleton<IEnterspeedConnectionProvider>(
                 c =>

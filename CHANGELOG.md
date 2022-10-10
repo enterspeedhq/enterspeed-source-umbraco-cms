@@ -4,14 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
+## [0.16.0 - 2022-10-10]
+### Fixed
+- Fixed missing parsing of internal links and media references from rich text editor in Grid layout (Umbraco 8, 9 & 10)
+- Media folders are now also pushed to Enterspeed as data sources (Umbraco 7, 8, 9 & 10)
+
 ## [0.15.4 - 2022-09-30]
 - Changed structure on media metadata properties
 
 ## [0.15.3 - 2022-09-23]
-- Added virtual method to extend metadata properies (Umbraco 8, 9 & 10)
+- Added virtual method to extend metadata properties (Umbraco 8, 9 & 10)
 
 ## [0.15.2 - 2022-09-21]
-- Added missing properies on media items (Umbraco 7 & 8)
+- Added missing properties on media items (Umbraco 7 & 8)
 
 ## [0.15.1 - 2022-09-12]
 - Convert properties made virtual for extendability on property value converters (Umbraco 10)
