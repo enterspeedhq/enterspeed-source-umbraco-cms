@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
 
-## [Unreleased]
+## [0.16.0 - 2022-10-10]
 ### Fixed
 - Fixed missing parsing of internal links and media references from rich text editor in Grid layout (Umbraco 8, 9 & 10)
 - Media folders are now also pushed to Enterspeed as data sources (Umbraco 7, 8, 9 & 10)
