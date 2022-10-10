@@ -51,7 +51,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
             var entities = e.MoveInfoCollection.ToList();
             var jobs = new List<EnterspeedJob>();
-            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            using (_umbracoContextFactory.EnsureUmbracoContext())
             {
                 foreach (var mediaItem in entities.Select(ei => ei.Entity))
                 {
