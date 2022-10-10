@@ -58,7 +58,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
                 return;
             }
 
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (_scopeProvider.CreateScope(autoComplete: true))
             {
                 _enterspeedJobRepository.Save(jobs);
             }
@@ -79,7 +79,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.NotificationHandlers
             // Do not continue if the scope did not complete - the transaction may have been canceled and rolled back
             if (scopeCompleted)
             {
-                using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+                using (_scopeProvider.CreateScope(autoComplete: true))
                 {
                     _enterspeedJobsHandlingService.HandleJobs(jobs);
                 }

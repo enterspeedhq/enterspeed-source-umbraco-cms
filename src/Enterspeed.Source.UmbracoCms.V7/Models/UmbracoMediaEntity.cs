@@ -17,14 +17,14 @@ namespace Enterspeed.Source.UmbracoCms.V7.Models
         {
             _media = media;
             _entityIdentityService = EnterspeedContext.Current.Services.EntityIdentityService;
-
             var configurationService = EnterspeedContext.Current.Services.ConfigurationService;
+
             Url = media.GetMediaUrl(configurationService.GetConfiguration());
             Properties = EnterspeedContext.Current.Services.PropertyService.GetProperties(_media);
         }
 
         public string Id => _entityIdentityService.GetId(_media);
-        public string Type => "umbMedia";
+        public string Type => _media.ContentType.Name == "Folder" ? "umbMediaFolder" : "umbMedia";
         public string Url { get; set; }
         public string[] Redirects => null;
         public string ParentId => _entityIdentityService.GetId(_media.ParentId.ToString());

@@ -6,6 +6,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultGridCon
 {
     public class DefaultRichTextEditorGridEditorValueConverter : IEnterspeedGridEditorValueConverter
     {
+        private readonly IUmbracoRichTextParser _umbracoRichTextParser;
+        private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
+
+        public DefaultRichTextEditorGridEditorValueConverter(IUmbracoRichTextParser umbracoRichTextParser, IEnterspeedConfigurationService enterspeedConfigurationService)
+        {
+            _umbracoRichTextParser = umbracoRichTextParser;
+            _enterspeedConfigurationService = enterspeedConfigurationService;
+        }
+
         public bool IsConverter(string alias)
         {
             return alias.InvariantEquals("rte");
@@ -13,7 +22,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultGridCon
 
         public IEnterspeedProperty Convert(GridControl editor, string culture)
         {
-            return new StringEnterspeedProperty(editor.Value.ToString());
+            var parsedHtmlString = _umbracoRichTextParser.ParseInternalLink(editor.Value.ToString());
+            parsedHtmlString = _umbracoRichTextParser.PrefixRelativeImagesWithDomain(parsedHtmlString, _enterspeedConfigurationService.GetConfiguration().MediaDomain);
+
+            return new StringEnterspeedProperty(parsedHtmlString);
         }
     }
 }

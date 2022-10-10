@@ -113,16 +113,20 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
                 { "name", new StringEnterspeedProperty("name", media.Name) },
-                { "size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")) },
-                { "type", new StringEnterspeedProperty("type", media.GetValue<string>("umbracoExtension")) },
-                { "width", new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()) },
-                { "height", new StringEnterspeedProperty("height", media.GetValue<int>("umbracoHeight").ToString()) },
                 { "path", new StringEnterspeedProperty("path", media.Path) },
                 { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
                 { "updateDate", new StringEnterspeedProperty("updateDate", media.UpdateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
                 { "level", new NumberEnterspeedProperty("level", media.Level) },
                 { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
             };
+
+            if (media.ContentType.Name == "Image")
+            {
+                metaData.Add("size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")));
+                metaData.Add("width", new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()));
+                metaData.Add("height", new StringEnterspeedProperty("height", media.GetValue<int>("umbracoHeight").ToString()));
+                metaData.Add("contentType", new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
+            }
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
