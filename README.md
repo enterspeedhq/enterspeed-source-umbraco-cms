@@ -20,6 +20,10 @@ To get started with Enterspeed for Umbraco 8, please see:
 To get started with Enterspeed for Umbraco 7, please see:  
 [Umbraco v7 documentation - Getting started](https://docs.enterspeed.com/integrations/umbraco/umbraco-v7/getting-started/)
 
+## Changelog
+
+See new features, fixes and breaking changes in the [changelog](./CHANGELOG.md).
+
 ## Contributing
 
 Pull requests are very welcome.  
