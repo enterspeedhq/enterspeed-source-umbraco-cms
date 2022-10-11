@@ -258,6 +258,7 @@
     <Compile Include="EventHandlers\DictionaryEventHandler.cs" />
     <Compile Include="Extensions\ContentBaseExtensions.cs" />
     <Compile Include="Extensions\ContentExtensions.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\EnterspeedConfigurationExtensions.cs" />
     <Compile Include="Extensions\MediaExtensions.cs" />
     <Compile Include="Extensions\UrlStringExtensions.cs" />
