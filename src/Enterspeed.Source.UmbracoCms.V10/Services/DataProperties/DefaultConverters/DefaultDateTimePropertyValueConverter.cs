@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V10.Extensions;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -16,7 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
         public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
             var date = property.GetValue<DateTime>(culture);
-            return new StringEnterspeedProperty(property.Alias, date.ToString(CultureInfo.InvariantCulture));
+            return new StringEnterspeedProperty(property.Alias, date.ToEnterspeedFormatString());
         }
     }
 }
