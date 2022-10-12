@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V10.DataPropertyValueConverters;
+using Enterspeed.Source.UmbracoCms.V10.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
@@ -51,8 +52,8 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
                 ["culture"] = new StringEnterspeedProperty("culture", culture),
                 ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
                 ["level"] = new NumberEnterspeedProperty("level", content.Level),
-                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")),
-                ["updateDate"] = new StringEnterspeedProperty("updateDate", content.CultureDate(culture).ToString("yyyy-MM-ddTHH:mm:ss")),
+                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToEnterspeedFormatString()),
+                ["updateDate"] = new StringEnterspeedProperty("updateDate", content.CultureDate(culture).ToEnterspeedFormatString()),
                 ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, culture))
             };
 
@@ -132,8 +133,8 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
             {
                 { "name", new StringEnterspeedProperty("name", media.Name) },
                 { "path", new StringEnterspeedProperty("path", media.Path) },
-                { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
-                { "updateDate", new StringEnterspeedProperty("updateDate", media.UpdateDate.ToString("yyyy-MM-ddTHH:mm:ss")) },
+                { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToEnterspeedFormatString()) },
+                { "updateDate", new StringEnterspeedProperty("updateDate", media.UpdateDate.ToEnterspeedFormatString()) },
                 { "level", new NumberEnterspeedProperty("level", media.Level) },
                 { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
             };

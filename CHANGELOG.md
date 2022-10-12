@@ -2,7 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-The format is based on Keep a Changelog, and this project adheres to Semantic Versioning.
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0 - 2022-10-12]
+### Breaking changes
+- Changed output of `DefaultDateTimePropertyValueConverter` from `date.ToString(CultureInfo.InvariantCulture))` to `date.ToString("yyyy-MM-ddTHH:mm:ss"))` (Umbraco 10)
+  
+  This is done to make the default version sortable and to match the format of other date fields like `createDate` and `updateDate`
+  
+  If you are using `DefaultDateTimePropertyValueConverter` and this change will break you project, simply override it with your own implementation.
 
 ## [0.16.0 - 2022-10-10]
 ### Fixed
