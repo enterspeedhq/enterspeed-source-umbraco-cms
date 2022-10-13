@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Fixed
-- Issue with loading PreviewApikey from appsettings - contribution by [Adrian Ochmann](https://github.com/aochmann)
+- Issue with loading PreviewApikey from appsettings (contribution by [Adrian Ochmann](https://github.com/aochmann))
+- Color Picker Value reference null exception (contribution by [Adrian Ochmann](https://github.com/aochmann))
 
 
 ## [1.0.0 - 2022-10-12]
