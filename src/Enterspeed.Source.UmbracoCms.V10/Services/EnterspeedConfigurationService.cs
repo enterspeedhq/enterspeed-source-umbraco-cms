@@ -130,8 +130,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
             var webConfigEndpoint = _configuration["Enterspeed:Endpoint"];
             var webConfigMediaDomain = _configuration["Enterspeed:MediaDomain"];
             var webConfigApikey = _configuration["Enterspeed:Apikey"];
-            var webConfigPreviewApikey =
-                System.Configuration.ConfigurationManager.AppSettings["Enterspeed.PreviewApikey"];
+            var webConfigPreviewApikey = _configuration["Enterspeed:PreviewApikey"];
 
             if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
             {
@@ -144,7 +143,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
                 ApiKey = webConfigApikey?.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true,
-                PreviewApiKey = webConfigPreviewApikey
+                PreviewApiKey = webConfigPreviewApikey?.Trim()
             };
 
             return _enterspeedUmbracoConfiguration;
