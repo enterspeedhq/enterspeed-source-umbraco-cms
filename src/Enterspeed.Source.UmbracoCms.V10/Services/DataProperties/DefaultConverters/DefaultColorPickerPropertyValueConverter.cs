@@ -23,8 +23,11 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
             if (UseLabel(property.PropertyType))
             {
                 var colorPickerValue = property.GetValue<ColorPickerValueConverter.PickedColor>(culture);
-                colorValue = colorPickerValue.Color;
-                colorLabel = colorPickerValue.Label;
+                if (colorPickerValue is not null)
+                {
+                    colorValue = colorPickerValue.Color;
+                    colorLabel = colorPickerValue.Label;
+                }
             }
             else
             {
