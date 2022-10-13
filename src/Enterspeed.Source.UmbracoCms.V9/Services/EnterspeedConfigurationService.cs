@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Configuration;
 using Enterspeed.Source.UmbracoCms.V9.Extensions;
 using Enterspeed.Source.UmbracoCms.V9.Models.Configuration;
@@ -127,7 +127,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             var webConfigEndpoint = _configuration["Enterspeed:Endpoint"];
             var webConfigMediaDomain = _configuration["Enterspeed:MediaDomain"];
             var webConfigApikey = _configuration["Enterspeed:Apikey"];
-            var webConfigPreviewApikey = ConfigurationManager.AppSettings["Enterspeed.PreviewApikey"];
+            var webConfigPreviewApikey = _configuration["Enterspeed:PreviewApikey"];
 
             if (string.IsNullOrWhiteSpace(webConfigEndpoint) || string.IsNullOrWhiteSpace(webConfigApikey))
             {
