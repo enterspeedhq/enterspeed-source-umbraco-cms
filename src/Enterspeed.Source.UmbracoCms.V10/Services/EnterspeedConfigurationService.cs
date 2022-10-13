@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Configuration;
 using Enterspeed.Source.UmbracoCms.V10.Extensions;
 using Enterspeed.Source.UmbracoCms.V10.Models.Configuration;
@@ -143,7 +143,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
                 ApiKey = webConfigApikey?.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true,
-                PreviewApiKey = webConfigPreviewApikey
+                PreviewApiKey = webConfigPreviewApikey?.Trim()
             };
 
             return _enterspeedUmbracoConfiguration;
