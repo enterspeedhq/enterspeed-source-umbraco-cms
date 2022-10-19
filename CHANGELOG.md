@@ -5,10 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Added Nested Content support (Umbraco 7)
+- Added support for Umbraco.MediaPicker2 (Umbraco 7)
+
 ### Fixed
 - Issue with loading PreviewApikey from appsettings (contribution by [Adrian Ochmann](https://github.com/aochmann))
 - Color Picker Value reference null exception (contribution by [Adrian Ochmann](https://github.com/aochmann))
-
+  
 
 ## [1.0.0 - 2022-10-12]
 ### Breaking changes
