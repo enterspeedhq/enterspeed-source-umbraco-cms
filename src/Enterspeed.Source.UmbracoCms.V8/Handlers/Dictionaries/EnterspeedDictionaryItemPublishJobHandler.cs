@@ -52,6 +52,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             {
                 return;
             }
+
             var umbracoData = CreateUmbracoDictionaryEntity(dictionaryItem, job);
             Ingest(umbracoData, job);
         }
