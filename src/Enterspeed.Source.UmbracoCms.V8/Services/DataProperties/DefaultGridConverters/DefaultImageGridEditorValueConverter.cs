@@ -41,10 +41,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultGridCon
 
                 if (media != null)
                 {
-                    var imageUrl = _umbracoMediaUrlProvider.GetUrl(media);
-                    if (!string.IsNullOrWhiteSpace(imageUrl))
+                    var mediaUrl = _umbracoMediaUrlProvider.GetUrl(media);
+                    if (!string.IsNullOrWhiteSpace(mediaUrl))
                     {
-                        properties.Add("image", new StringEnterspeedProperty(imageUrl));
+                        properties.Add("image", new StringEnterspeedProperty(mediaUrl));
                     }
                 }
 
