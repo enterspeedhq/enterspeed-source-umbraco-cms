@@ -1,19 +1,23 @@
-﻿using System.Collections.Generic;
-using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.V8.Models.Grid;
-using Enterspeed.Source.UmbracoCms.V8.Providers;
+﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
+using Enterspeed.Source.UmbracoCms.V9.Models.Grid;
+using Enterspeed.Source.UmbracoCms.V9.Providers;
 using Newtonsoft.Json.Linq;
-using Umbraco.Core;
+using System.Collections.Generic;
+using Umbraco.Cms.Web.Common;
+using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultGridConverters
+namespace Enterspeed.Source.UmbracoCms.V9.Services.DataProperties.DefaultGridConverters
 {
     public class DefaultImageGridEditorValueConverter : IEnterspeedGridEditorValueConverter
     {
         private readonly IUmbracoMediaUrlProvider _umbracoMediaUrlProvider;
+        private readonly IUmbracoHelperAccessor _umbracoHelperAccessor;
 
-        public DefaultImageGridEditorValueConverter(IUmbracoMediaUrlProvider umbracoMediaUrlProvider)
+        public DefaultImageGridEditorValueConverter(IUmbracoMediaUrlProvider umbracoMediaUrlProvider,
+            IUmbracoHelperAccessor umbracoHelperAccessor)
         {
             _umbracoMediaUrlProvider = umbracoMediaUrlProvider;
+            _umbracoHelperAccessor = umbracoHelperAccessor;
         }
 
         public bool IsConverter(string alias)
@@ -36,15 +40,18 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultGridCon
                 }
 
                 // ImageUrl
-                var mediaUdi = editor.Value.Value<string>("udi");
-                var media = Umbraco.Web.Composing.Current.UmbracoHelper?.Media(Udi.Parse(mediaUdi));
+                var mediaId = editor.Value.Value<int>("id");
 
-                if (media != null)
+                if (_umbracoHelperAccessor.TryGetUmbracoHelper(out UmbracoHelper umbracoHelper))
                 {
-                    var imageUrl = _umbracoMediaUrlProvider.GetUrl(media);
-                    if (!string.IsNullOrWhiteSpace(imageUrl))
+                    var media = umbracoHelper.Media(mediaId);
+                    if (media != null)
                     {
-                        properties.Add("image", new StringEnterspeedProperty(imageUrl));
+                        var imageUrl = _umbracoMediaUrlProvider.GetUrl(media);
+                        if (!string.IsNullOrWhiteSpace(imageUrl))
+                        {
+                            properties.Add("image", new StringEnterspeedProperty(imageUrl));
+                        }
                     }
                 }
 
