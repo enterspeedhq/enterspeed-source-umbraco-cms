@@ -298,10 +298,12 @@
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultImageCropperPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultLegacyMediaPickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMarkdownEditorPropertyValueConverter.cs" />
+    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMediaPicker2PropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMediaPickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMemberGroupPickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMemberPickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMultiNodeTreePickerPropertyValueConverter.cs" />
+    <Compile Include="Services\DataProperties\DefaultConverters\DefaultNestedContentPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultNumericPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultRelatedLinksPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultRadioButtonListPropertyValueConverter.cs" />
