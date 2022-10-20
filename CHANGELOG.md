@@ -12,10 +12,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - Issue with loading PreviewApikey from appsettings (contribution by [Adrian Ochmann](https://github.com/aochmann))
 - Color Picker Value reference null exception (contribution by [Adrian Ochmann](https://github.com/aochmann))
+
+### Breaking changes
+- Added missing default grid editor value converters for the out of the box grid editors in Umbraco (embed, headline, image and quote) (Umbraco 8, 9 & 10)
   
 
 ## [1.0.0 - 2022-10-12]
-### Breaking changes
 - Changed output of `DefaultDateTimePropertyValueConverter` from `date.ToString(CultureInfo.InvariantCulture))` to `date.ToString("yyyy-MM-ddTHH:mm:ss"))` (Umbraco 10)
   
   This is done to make the default version sortable and to match the format of other date fields like `createDate` and `updateDate`
