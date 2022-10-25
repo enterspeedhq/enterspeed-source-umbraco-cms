@@ -20,7 +20,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
         private readonly EnterspeedPropertyValueConverterCollection _converterCollection;
         private readonly IEntityIdentityService _identityService;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
-        private ILogger<EnterspeedPropertyService> _logger;
+        private readonly ILogger<EnterspeedPropertyService> _logger;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,

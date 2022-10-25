@@ -111,7 +111,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             // Default grid editor value converters
             composition.EnterspeedGridEditorValueConverters()
-                .Append<DefaultRichTextEditorGridEditorValueConverter>();
+                .Append<DefaultRichTextEditorGridEditorValueConverter>()
+                .Append<DefaultQuoteGridEditorValueConverter>()
+                .Append<DefaultImageGridEditorValueConverter>()
+                .Append<DefaultHeadlineGridEditorValueConverter>()
+                .Append<DefaultEmbedGridEditorValueConverter>();
 
             // Content handling guards
             composition.EnterspeedContentHandlingGuards()

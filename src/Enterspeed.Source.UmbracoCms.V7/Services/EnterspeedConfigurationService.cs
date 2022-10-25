@@ -39,7 +39,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 ApiKey = webConfigApikey.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true,
-                PreviewApiKey = webConfigPreviewApikey
+                PreviewApiKey = webConfigPreviewApikey?.Trim()
             };
             return _configuration;
         }

@@ -375,6 +375,10 @@
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultRichTextEditorPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultTextboxPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultTextAreaPropertyValueConverter.cs" />
+    <Compile Include="Services\DataProperties\DefaultGridConverters\DefaultEmbedGridEditorValueConverter.cs" />
+    <Compile Include="Services\DataProperties\DefaultGridConverters\DefaultHeadlineGridEditorValueConverter.cs" />
+    <Compile Include="Services\DataProperties\DefaultGridConverters\DefaultImageGridEditorValueConverter.cs" />
+    <Compile Include="Services\DataProperties\DefaultGridConverters\DefaultQuoteGridEditorValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultGridConverters\DefaultRichTextEditorGridEditorValueConverter.cs" />
     <Compile Include="Services\DataProperties\IEnterspeedGridEditorValueConverter.cs" />
     <Compile Include="Services\EnterspeedGuardService.cs" />
