@@ -3,7 +3,6 @@ using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Services;
-using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Enterspeed.Source.UmbracoCms.V9.Models
