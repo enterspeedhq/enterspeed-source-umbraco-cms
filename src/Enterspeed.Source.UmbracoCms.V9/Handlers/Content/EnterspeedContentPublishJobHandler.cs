@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
@@ -7,7 +8,6 @@ using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Models;
 using Enterspeed.Source.UmbracoCms.V9.Providers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
-using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
@@ -18,7 +18,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers.Content
     {
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedPropertyService _enterspeedPropertyService;
-        private readonly ILogger<EnterspeedContentPublishJobHandler> _logger;
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoRedirectsService _redirectsService;
@@ -29,7 +28,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers.Content
         public EnterspeedContentPublishJobHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedPropertyService enterspeedPropertyService,
-            ILogger<EnterspeedContentPublishJobHandler> logger,
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IUmbracoRedirectsService redirectsService,
@@ -39,7 +37,6 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers.Content
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
-            _logger = logger;
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _redirectsService = redirectsService;
@@ -111,8 +108,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers.Content
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Exception != null
-                    ? ingestResponse.Exception.Message
+                var message = ingestResponse.Errors != null
+                    ? JsonSerializer.Serialize(ingestResponse.Errors)
                     : ingestResponse.Message;
                 throw new JobHandlingException(
                     $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
