@@ -135,10 +135,12 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
 
         private IEnterspeedProperty CreateMetaData(IPublishedContent content)
         {
+            var culture = content.GetCulture().IetfLanguageTag.ToLowerInvariant();
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
                 ["name"] = new StringEnterspeedProperty("name", content.Name),
-                ["culture"] = new StringEnterspeedProperty("culture", content.GetCulture().IetfLanguageTag.ToLowerInvariant()),
+                ["culture"] = new StringEnterspeedProperty("culture", culture),
+                ["domain"] = new StringEnterspeedProperty("domain", GetDomain(content, culture)?.DomainName),
                 ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
                 ["level"] = new NumberEnterspeedProperty("level", content.Level),
                 ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToEnterspeedFormatString()),
@@ -147,6 +149,13 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             };
 
             return new ObjectEnterspeedProperty("metaData", metaData);
+        }
+
+        private IDomain GetDomain(IPublishedContent content, string culture)
+        {
+            var domain = ApplicationContext.Current.Services.DomainService.GetAssignedDomains(content.Id, false)
+                ?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
+            return domain;
         }
 
         private IEnterspeedProperty[] GetNodePath(string contentPath)

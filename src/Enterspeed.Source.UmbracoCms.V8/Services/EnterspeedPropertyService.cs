@@ -9,6 +9,7 @@ using Umbraco.Core.Composing;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Core.Services;
 using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
@@ -20,15 +21,18 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly IEntityIdentityService _identityService;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly ILogger _logger;
+        private readonly IDomainService _domainService;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
             IUmbracoContextFactory umbracoContextFactory,
-            ILogger logger)
+            ILogger logger,
+            IDomainService domainService)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
             _logger = logger;
+            _domainService = domainService;
             _identityService = Current.Factory.GetInstance<IEntityIdentityService>();
         }
 
@@ -48,6 +52,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             {
                 ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
                 ["culture"] = new StringEnterspeedProperty("culture", culture),
+                ["domain"] = new StringEnterspeedProperty("domain", GetDomain(content, culture)?.DomainName),
                 ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
                 ["level"] = new NumberEnterspeedProperty("level", content.Level),
                 ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToEnterspeedFormatString()),
@@ -58,6 +63,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             MapAdditionalMetaData(metaData, content, culture);
 
             return new ObjectEnterspeedProperty("metaData", metaData);
+        }
+
+        private IDomain GetDomain(IPublishedContent content, string culture)
+        {
+            var domain = _domainService.GetAssignedDomains(content.Id, false)
+                ?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
+            return domain;
         }
 
         public IDictionary<string, IEnterspeedProperty> ConvertProperties(IEnumerable<IPublishedProperty> properties, string culture = null)
@@ -112,8 +124,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 {
                     var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
                     enterspeedProperties = ConvertProperties(properties);
-                }
-                else
+                } else
                 {
                     _logger.Warn<EnterspeedPropertyService>($"Could not get media as published content, for media with id of {media.Id}");
                     enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
