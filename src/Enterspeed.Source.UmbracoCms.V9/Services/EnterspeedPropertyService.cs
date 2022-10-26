@@ -158,17 +158,29 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 metaData.Add("contentType", new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
             }
 
-            MapAdditionalMetaData(metaData, publishedMedia, string.Empty);
+            MapAdditionalMediaMetaData(metaData, publishedMedia, string.Empty);
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
         }
 
         /// <summary>
-        /// Override to add extra meta data
+        /// Override to add extra meta data on content
         /// </summary>
         /// <param name="metaData"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
         protected virtual void MapAdditionalMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
+        {
+        }
+
+        /// <summary>
+        /// Override to add extra meta data on media
+        /// </summary>
+        /// <param name="metaData"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalMediaMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
         {
         }
 

@@ -4,13 +4,11 @@ using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V10.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.V10.Extensions;
-using Enterspeed.Source.UmbracoCms.V10.Factories;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.Persistence.Repositories;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
@@ -160,17 +158,29 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
                 metaData.Add("contentType", new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
             }
 
-            MapAdditionalMetaData(metaData, publishedMedia, string.Empty);
+            MapAdditionalMediaMetaData(metaData, publishedMedia, string.Empty);
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
         }
 
         /// <summary>
-        /// Override to add extra meta data
+        /// Override to add extra meta data on content
         /// </summary>
         /// <param name="metaData"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
         protected virtual void MapAdditionalMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
+        {
+        }
+
+        /// <summary>
+        /// Override to add extra meta data on media
+        /// </summary>
+        /// <param name="metaData"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalMediaMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
         {
         }
 
