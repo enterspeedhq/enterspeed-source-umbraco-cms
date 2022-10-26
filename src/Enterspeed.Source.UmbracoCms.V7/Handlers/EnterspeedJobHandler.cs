@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Web.Helpers;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
@@ -202,8 +203,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                         if (!ingestResponse.Success)
                         {
                             // Create a new failed job
-                            var message = ingestResponse.Exception != null
-                                ? ingestResponse.Exception.Message
+                            var message = ingestResponse.Errors != null
+                                ? Json.Encode(ingestResponse.Errors)
                                 : ingestResponse.Message;
 
                             var exception =
@@ -305,8 +306,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                         if (!ingestResponse.Success)
                         {
                             // Create a new failed job
-                            var message = ingestResponse.Exception != null
-                                ? ingestResponse.Exception.Message
+                            var message = ingestResponse.Errors != null
+                                ? Json.Encode(ingestResponse.Errors)
                                 : ingestResponse.Message;
 
                             var exception =

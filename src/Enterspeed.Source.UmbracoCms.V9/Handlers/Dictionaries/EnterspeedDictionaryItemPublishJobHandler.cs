@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.V9.Data.Models;
@@ -94,8 +95,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers.Dictionaries
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Exception != null
-                    ? ingestResponse.Exception.Message
+                var message = ingestResponse.Errors != null
+                    ? JsonSerializer.Serialize(ingestResponse.Errors)
                     : ingestResponse.Message;
                 throw new JobHandlingException(
                     $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");

@@ -7,10 +7,10 @@ using Enterspeed.Source.UmbracoCms.V10.Factories;
 using Enterspeed.Source.UmbracoCms.V10.Models;
 using Enterspeed.Source.UmbracoCms.V10.Providers;
 using Enterspeed.Source.UmbracoCms.V10.Services;
-using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
+using System.Text.Json;
 
 namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
 {
@@ -18,7 +18,6 @@ namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
     {
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedPropertyService _enterspeedPropertyService;
-        private readonly ILogger<EnterspeedContentPublishJobHandler> _logger;
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoRedirectsService _redirectsService;
@@ -29,7 +28,6 @@ namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
         public EnterspeedContentPublishJobHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedPropertyService enterspeedPropertyService,
-            ILogger<EnterspeedContentPublishJobHandler> logger,
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IUmbracoRedirectsService redirectsService,
@@ -39,7 +37,6 @@ namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
-            _logger = logger;
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _redirectsService = redirectsService;
@@ -50,10 +47,10 @@ namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
 
         public virtual bool CanHandle(EnterspeedJob job)
         {
-            return 
+            return
                    _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
-                   && job.EntityType == EnterspeedJobEntityType.Content 
-                   && job.JobType == EnterspeedJobType.Publish 
+                   && job.EntityType == EnterspeedJobEntityType.Content
+                   && job.JobType == EnterspeedJobType.Publish
                    && job.ContentState == EnterspeedContentState.Publish;
         }
 
@@ -105,18 +102,18 @@ namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
                     $"Failed creating entity ({job.EntityId}/{job.Culture}). Message: {e.Message}. StackTrace: {e.StackTrace}");
             }
         }
-        
+
         protected virtual void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
         {
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Exception != null
-                    ? ingestResponse.Exception.Message
+                var message = ingestResponse.Errors != null
+                    ? JsonSerializer.Serialize(ingestResponse.Errors)
                     : ingestResponse.Message;
                 throw new JobHandlingException(
                     $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
-            }
+            }  
         }
     }
 }
