@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.0.0 - 2022-10-31]
 ### Breaking changes
   - Added option to differentiate between extending meta-data on media and/or content. This was handled in one method before which extended both types of source-entites. 
 
