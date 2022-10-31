@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
@@ -21,16 +22,19 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
         private readonly IEntityIdentityService _identityService;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly ILogger<EnterspeedPropertyService> _logger;
+        private readonly IDomainService _domainService;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
             IServiceProvider serviceProvider,
             IUmbracoContextFactory umbracoContextFactory,
-            ILogger<EnterspeedPropertyService> logger)
+            ILogger<EnterspeedPropertyService> logger,
+            IDomainService domainService)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
             _logger = logger;
+            _domainService = domainService;
             _identityService = serviceProvider.GetRequiredService<IEntityIdentityService>();
         }
 
@@ -50,6 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             {
                 ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
                 ["culture"] = new StringEnterspeedProperty("culture", culture),
+                ["domain"] = new StringEnterspeedProperty("domain", GetDomain(content, culture)?.DomainName),
                 ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
                 ["level"] = new NumberEnterspeedProperty("level", content.Level),
                 ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToEnterspeedFormatString()),
@@ -60,6 +65,13 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             MapAdditionalMetaData(metaData, content, culture);
 
             return new ObjectEnterspeedProperty("metaData", metaData);
+        }
+
+        private IDomain GetDomain(IPublishedContent content, string culture)
+        {
+            var domain = _domainService.GetAssignedDomains(content.Id, false)
+                ?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
+            return domain;
         }
 
         public IDictionary<string, IEnterspeedProperty> ConvertProperties(IEnumerable<IPublishedProperty> properties, string culture = null)
@@ -114,8 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 {
                     var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
                     enterspeedProperties = ConvertProperties(properties);
-                }
-                else
+                } else
                 {
                     _logger.LogWarning($"Could not get media as published content, for media with id of {media.Id}");
                     enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
@@ -147,17 +158,29 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                 metaData.Add("contentType", new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
             }
 
-            MapAdditionalMetaData(metaData, publishedMedia, string.Empty);
+            MapAdditionalMediaMetaData(metaData, publishedMedia, string.Empty);
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
         }
 
         /// <summary>
-        /// Override to add extra meta data
+        /// Override to add extra meta data on content
         /// </summary>
         /// <param name="metaData"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
         protected virtual void MapAdditionalMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
+        {
+        }
+
+        /// <summary>
+        /// Override to add extra meta data on media
+        /// </summary>
+        /// <param name="metaData"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalMediaMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
         {
         }
 
