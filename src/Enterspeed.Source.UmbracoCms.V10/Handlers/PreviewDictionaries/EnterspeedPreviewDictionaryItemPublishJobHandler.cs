@@ -95,9 +95,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Handlers.PreviewDictionaries
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Errors != null
-                    ? JsonSerializer.Serialize(ingestResponse.Errors)
-                    : ingestResponse.Message;
+                var message = JsonSerializer.Serialize(ingestResponse);
                 throw new JobHandlingException(
                     $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
             }
