@@ -11,6 +11,7 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using System.Text.Json;
+using Enterspeed.Source.UmbracoCms.V10.Models.Api;
 
 namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
 {
@@ -108,11 +109,8 @@ namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Content
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Errors != null
-                    ? JsonSerializer.Serialize(ingestResponse.Errors)
-                    : ingestResponse.Message;
-                throw new JobHandlingException(
-                    $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
+                var message = JsonSerializer.Serialize(new ErrorResponse(ingestResponse));
+                throw new JobHandlingException($"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
             }  
         }
     }
