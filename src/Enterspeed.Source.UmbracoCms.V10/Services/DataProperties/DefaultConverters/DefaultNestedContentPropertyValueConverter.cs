@@ -26,12 +26,12 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services.DataProperties.DefaultConver
         {
             var elementItems = new List<IPublishedElement>();
 
-            // Nested content be both single element and Enumerable
+            // Nested content be both single element, Enumerable or null
             if (property.GetValue() is IPublishedElement)
             {
                 elementItems.Add(property.GetValue<IPublishedElement>(culture));
             }
-            else
+            else if (property.GetValue() is IEnumerable<IPublishedElement>)
             {
                 elementItems.AddRange(property.GetValue<IEnumerable<IPublishedElement>>(culture));
             }
