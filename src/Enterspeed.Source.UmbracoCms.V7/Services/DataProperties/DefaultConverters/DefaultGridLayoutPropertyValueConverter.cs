@@ -51,17 +51,38 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services.DataProperties.DefaultConvert
             var type = value.Type;
             if (type == JTokenType.String)
             {
-                return new StringEnterspeedProperty(name, value.Value<string>());
+                var stringValue = value.Value<string>();
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    return new StringEnterspeedProperty(stringValue);
+                }
+
+                return new StringEnterspeedProperty(name, stringValue);
             }
 
             if (type == JTokenType.Boolean)
             {
-                return new BooleanEnterspeedProperty(name, value.Value<bool>());
+                var boolValue = value.Value<bool>();
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    return new BooleanEnterspeedProperty(boolValue);
+                }
+
+                return new BooleanEnterspeedProperty(name, boolValue);
             }
 
             if (type == JTokenType.Integer)
             {
-                return new NumberEnterspeedProperty(name, value.Value<int>());
+                var numberValue = value.Value<int>();
+
+                if (string.IsNullOrEmpty(name))
+                {
+                    return new NumberEnterspeedProperty(numberValue);
+                }
+
+                return new NumberEnterspeedProperty(name, numberValue);
             }
 
             if (type == JTokenType.Array)
@@ -95,6 +116,15 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services.DataProperties.DefaultConvert
                         if (properties.Any())
                         {
                             arrayItems.Add(new ObjectEnterspeedProperty(properties));
+                        }
+                    }
+
+                    if (jToken is JValue itemValue)
+                    {
+                        var property = GetProperty(null, itemValue);
+                        if (property != null)
+                        {
+                            arrayItems.Add(property);
                         }
                     }
                 }

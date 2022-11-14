@@ -49,17 +49,29 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
             var type = value.Type;
             if (type == JTokenType.String)
             {
-                return new StringEnterspeedProperty(name, value.Value<string>());
+                var stringValue = value.Value<string>();
+
+                return !string.IsNullOrEmpty(name)
+                    ? new StringEnterspeedProperty(name, stringValue)
+                    : new StringEnterspeedProperty(stringValue);
             }
 
             if (type == JTokenType.Boolean)
             {
-                return new BooleanEnterspeedProperty(name, value.Value<bool>());
+                var boolValue = value.Value<bool>();
+
+                return !string.IsNullOrEmpty(name)
+                    ? new BooleanEnterspeedProperty(name, boolValue)
+                    : new BooleanEnterspeedProperty(boolValue);
             }
 
             if (type == JTokenType.Integer)
             {
-                return new NumberEnterspeedProperty(name, value.Value<int>());
+                var numberValue = value.Value<int>();
+
+                return !string.IsNullOrEmpty(name)
+                    ? new NumberEnterspeedProperty(name, numberValue)
+                    : new NumberEnterspeedProperty(numberValue);
             }
 
             if (type == JTokenType.Array)
@@ -93,6 +105,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
                         if (properties.Any())
                         {
                             arrayItems.Add(new ObjectEnterspeedProperty(properties));
+                        }
+                    }
+
+                    if (jToken is JValue itemValue)
+                    {
+                        var property = GetProperty(null, itemValue, culture);
+                        if (property != null)
+                        {
+                            arrayItems.Add(property);
                         }
                     }
                 }
