@@ -88,9 +88,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConvert
             var properties = new Dictionary<string, IEnterspeedProperty>
             {
                 { "id", new StringEnterspeedProperty(id) },
-                { "name", new StringEnterspeedProperty(node.Name) },
-                { "url", new StringEnterspeedProperty(node.Url(culture, UrlMode.Absolute)) }
+                { "name", new StringEnterspeedProperty(node.Name) }
             };
+
+            if (node.ContentType.ItemType == PublishedItemType.Content || node.ContentType.ItemType == PublishedItemType.Media)
+            {
+                properties.Add("url", new StringEnterspeedProperty(node.Url(culture, UrlMode.Absolute)));
+            }
 
             return new ObjectEnterspeedProperty(properties);
         }
