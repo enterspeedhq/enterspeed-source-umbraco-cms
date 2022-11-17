@@ -6,7 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Added
+  - Added support for simple types (string, number and boolean) in grid editor array (Umbraco 7, 8, 9 & 10) (contribution by [Adrian Ochmann](https://github.com/aochmann))
   - Extended logging information when ingest throws an error (Umbraco 7, 8 & 9)
+
+### Fixed
+  - Handle Single element, list or null value for nested content (Umbraco 7, 8, 9 & 10)
+  - DefaultMultiNodeTreePickerPropertyValueConverter throws exception for members as they have no url (Umbraco 8, 9 & 10)
+
 
 ## [3.0.1 - 2022-11-07]
 ### Added
