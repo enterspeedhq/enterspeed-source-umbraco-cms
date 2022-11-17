@@ -6,6 +6,7 @@ using Enterspeed.Source.UmbracoCms.V9.Data.Models;
 using Enterspeed.Source.UmbracoCms.V9.Exceptions;
 using Enterspeed.Source.UmbracoCms.V9.Factories;
 using Enterspeed.Source.UmbracoCms.V9.Models;
+using Enterspeed.Source.UmbracoCms.V9.Models.Api;
 using Enterspeed.Source.UmbracoCms.V9.Providers;
 using Enterspeed.Source.UmbracoCms.V9.Services;
 using Umbraco.Cms.Core;
@@ -108,11 +109,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Handlers.PreviewContent
                 umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Errors != null
-                    ? JsonSerializer.Serialize(ingestResponse.Errors)
-                    : ingestResponse.Message;
-                throw new JobHandlingException(
-                    $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
+                var message = JsonSerializer.Serialize(new ErrorResponse(ingestResponse));
+                throw new JobHandlingException($"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
             }
         }
     }
