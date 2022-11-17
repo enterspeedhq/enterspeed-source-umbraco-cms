@@ -11,6 +11,7 @@ using Enterspeed.Source.UmbracoCms.V7.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V7.Extensions;
 using Enterspeed.Source.UmbracoCms.V7.Factories;
 using Enterspeed.Source.UmbracoCms.V7.Models;
+using Enterspeed.Source.UmbracoCms.V7.Models.Api;
 using Enterspeed.Source.UmbracoCms.V7.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
@@ -203,12 +204,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                         if (!ingestResponse.Success)
                         {
                             // Create a new failed job
-                            var message = ingestResponse.Errors != null
-                                ? Json.Encode(ingestResponse.Errors)
-                                : ingestResponse.Message;
+                            var message = Json.Encode(new ErrorResponse(ingestResponse));
 
-                            var exception =
-                                $"Failed ingesting entity ({newestPublishJob.EntityId}/{newestPublishJob.Culture}). Message: {message}";
+                            var exception = $"Failed ingesting entity ({newestPublishJob.EntityId}/{newestPublishJob.Culture}). Message: {message}";
                             failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestPublishJob, exception));
                             LogHelper.Warn<EnterspeedJobHandler>(exception);
                         }
@@ -306,12 +304,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                         if (!ingestResponse.Success)
                         {
                             // Create a new failed job
-                            var message = ingestResponse.Errors != null
-                                ? Json.Encode(ingestResponse.Errors)
-                                : ingestResponse.Message;
+                            var message = Json.Encode(new ErrorResponse(ingestResponse));
 
-                            var exception =
-                                $"Failed ingesting entity ({newestPreviewJob.EntityId}/{newestPreviewJob.Culture}). Message: {message}";
+                            var exception = $"Failed ingesting entity ({newestPreviewJob.EntityId}/{newestPreviewJob.Culture}). Message: {message}";
                             failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestPreviewJob, exception));
                             LogHelper.Warn<EnterspeedJobHandler>(exception);
                         }
