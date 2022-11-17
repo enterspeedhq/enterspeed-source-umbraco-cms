@@ -351,6 +351,7 @@
     <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="_nuget\icon.png" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.controller.js" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.html" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js" />

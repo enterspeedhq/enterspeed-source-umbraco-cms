@@ -443,6 +443,7 @@
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\styles.css" />
+    <Content Include="_nuget\icon.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
