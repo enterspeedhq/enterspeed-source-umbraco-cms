@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
   - Handle Single element, list or null value for nested content (Umbraco 7, 8, 9 & 10)
+  - DefaultMultiNodeTreePickerPropertyValueConverter throws exception for members as they have no url (Umbraco 8, 9 & 10)
 
 ## [3.0.1 - 2022-11-07]
 ### Added
