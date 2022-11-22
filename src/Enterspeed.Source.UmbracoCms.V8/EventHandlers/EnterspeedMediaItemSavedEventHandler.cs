@@ -46,7 +46,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         private void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
 
             if (!isPublishConfigured)
             {

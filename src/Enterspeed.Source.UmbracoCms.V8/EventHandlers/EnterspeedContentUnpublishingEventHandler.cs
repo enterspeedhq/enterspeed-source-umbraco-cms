@@ -38,7 +38,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         public void ContentServiceUnpublishing(IContentService sender, PublishEventArgs<IContent> e)
         {
-            if (!_configurationService.IsPublishConfigured() && !_configurationService.IsPreviewConfigured())
+            if (!ConfigurationService.IsPublishConfigured() && !ConfigurationService.IsPreviewConfigured())
             {
                 return;
             }
@@ -49,11 +49,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                 return;
             }
 
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = ConfigurationService.IsPreviewConfigured();
 
             var jobs = new List<EnterspeedJob>();
-            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            using (var context = UmbracoContextFactory.EnsureUmbracoContext())
             {
                 foreach (var content in entities)
                 {

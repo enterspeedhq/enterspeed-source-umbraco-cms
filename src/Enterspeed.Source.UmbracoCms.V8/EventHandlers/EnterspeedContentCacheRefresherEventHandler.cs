@@ -40,8 +40,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         public void ContentCacheUpdated(ContentCacheRefresher sender, CacheRefresherEventArgs e)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = ConfigurationService.IsPreviewConfigured();
 
             if (!isPublishConfigured && !isPreviewConfigured)
             {
@@ -57,7 +57,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
             var jobs = new List<EnterspeedJob>();
 
-            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            using (var context = UmbracoContextFactory.EnsureUmbracoContext())
             {
                 var umb = context.UmbracoContext;
                 foreach (var payload in jsonPayloads)
