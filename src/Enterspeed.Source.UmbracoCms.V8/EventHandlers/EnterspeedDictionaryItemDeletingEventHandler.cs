@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
@@ -97,7 +96,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
             EnqueueJobs(jobs);
         }
-
 
         public void Terminate()
         {

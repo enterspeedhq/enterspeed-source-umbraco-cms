@@ -13,7 +13,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly EnterspeedDictionaryItemHandlingGuardCollection _dictionaryItemGuards;
         private readonly EnterspeedMediaHandlingGuardCollection _mediaHandlingGuards;
 
-
         public EnterspeedGuardService(
             EnterspeedContentHandlingGuardCollection contentGuards,
             EnterspeedDictionaryItemHandlingGuardCollection dictionaryItemGuards,

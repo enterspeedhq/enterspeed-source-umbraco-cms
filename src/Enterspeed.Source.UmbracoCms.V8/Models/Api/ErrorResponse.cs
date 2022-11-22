@@ -24,15 +24,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Models.Api
             Content = response.Content;
             Exception = new Dictionary<string, string>
             {
-                {"Type", response.Exception?.GetType().ToString()},
-                {"Message", response.Exception?.Message},
-                {"StackTrace", response.Exception?.StackTrace}
+                { "Type", response.Exception?.GetType().ToString() },
+                { "Message", response.Exception?.Message },
+                { "StackTrace", response.Exception?.StackTrace }
             };
             InnerException = new Dictionary<string, string>
             {
-                {"Type", response.Exception?.InnerException?.GetType().ToString()},
-                {"Message", response.Exception?.InnerException?.Message},
-                {"StackTrace", response.Exception?.InnerException?.StackTrace}
+                { "Type", response.Exception?.InnerException?.GetType().ToString() },
+                { "Message", response.Exception?.InnerException?.Message },
+                { "StackTrace", response.Exception?.InnerException?.StackTrace }
             };
         }
     }

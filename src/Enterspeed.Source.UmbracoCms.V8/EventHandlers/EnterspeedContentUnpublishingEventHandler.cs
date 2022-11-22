@@ -26,9 +26,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory)
-            : base(
-                umbracoContextFactory, enterspeedJobRepository, jobsHandlingService, configurationService,
-                scopeProvider)
+            : base(umbracoContextFactory, enterspeedJobRepository, jobsHandlingService, configurationService, scopeProvider)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
         }

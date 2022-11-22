@@ -15,8 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
         private readonly IMediaService _mediaService;
 
-        public EnterspeedMediaTrashedJobHandler
-        (
+        public EnterspeedMediaTrashedJobHandler(
             IEnterspeedIngestService enterspeedIngestService,
             IEnterspeedConnectionProvider enterspeedConnectionProvider,
             IMediaService mediaService)

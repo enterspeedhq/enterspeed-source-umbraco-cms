@@ -74,7 +74,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return GetId(id.ToString(), culture);
         }
 
-
         public string GetId(string id)
         {
             if (string.IsNullOrEmpty(id))

@@ -11,7 +11,6 @@ using Umbraco.Core.Scoping;
 using Umbraco.Core.Services;
 using Umbraco.Core.Services.Implement;
 using Umbraco.Web;
-using Umbraco.Web.Security;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
@@ -28,8 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
-            IMediaService mediaService
-        )
+            IMediaService mediaService)
             : base(
                 umbracoContextFactory,
                 enterspeedJobRepository,
