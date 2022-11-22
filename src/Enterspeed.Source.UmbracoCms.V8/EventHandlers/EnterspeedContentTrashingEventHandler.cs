@@ -36,7 +36,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
         {
             ContentService.Trashing += ContentServiceTrashing;
         }
-        
+
         public void ContentServiceTrashing(IContentService sender, MoveEventArgs<IContent> e)
         {
             if (!_configurationService.IsPublishConfigured() && !_configurationService.IsPreviewConfigured())
