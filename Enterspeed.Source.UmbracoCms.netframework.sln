@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30523.141
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enterspeed.Source.UmbracoCms", "Enterspeed.Source.UmbracoCms", "{E824C1D6-7128-450F-9D7E-381D3891FCD7}"
 EndProject
@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		CHANGELOG.md = CHANGELOG.md
 		NuGet.Config = NuGet.Config
 		README.md = README.md
+		umbraco-marketplace-enterspeed.source.umbracocms.v7.json = umbraco-marketplace-enterspeed.source.umbracocms.v7.json
+		umbraco-marketplace-enterspeed.source.umbracocms.v8.json = umbraco-marketplace-enterspeed.source.umbracocms.v8.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7971E102-218B-4A98-962E-BF881CBA2B2C}"
