@@ -21,7 +21,7 @@ namespace Enterspeed.Source.UmbracoCms.Shared.EnterspeedPropertyValidation
         {
             var isValid = Valid(property);
 
-            var validationMessage = isValid ? "valid" : $"It is not allowed to a assign null value to {property.GetType()}. Please make sur that {property.Name} has a value";
+            var validationMessage = isValid ? "valid" : $"It is not allowed to a assign null value to {property.GetType()}. Please make sure that {property.Name} has a value";
             return new PropertyValidationResponse(validationMessage, isValid);
         }
 
