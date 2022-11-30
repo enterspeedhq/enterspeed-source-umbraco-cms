@@ -5,6 +5,7 @@ using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
+using Enterspeed.Source.UmbracoCms.Shared.EnterspeedPropertyValidation;
 using Enterspeed.Source.UmbracoCms.V10.Components;
 using Enterspeed.Source.UmbracoCms.V10.Data.MappingDefinitions;
 using Enterspeed.Source.UmbracoCms.V10.Data.Repositories;
@@ -57,6 +58,7 @@ namespace Enterspeed.Source.UmbracoCms.V10.Composers
             builder.Services.AddTransient<IUrlFactory, UrlFactory>();
             builder.Services.AddTransient<IEnterspeedJobFactory, EnterspeedJobFactory>();
             builder.Services.AddTransient<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>();
+            builder.Services.AddTransient<IEnterspeedPropertyValueValidator, EnterspeedPropertyValueValidator>();
 
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();

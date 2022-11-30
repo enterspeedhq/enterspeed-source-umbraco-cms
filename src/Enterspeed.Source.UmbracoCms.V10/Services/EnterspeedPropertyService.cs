@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
+using Enterspeed.Source.UmbracoCms.Shared;
+using Enterspeed.Source.UmbracoCms.Shared.EnterspeedPropertyValidation;
 using Enterspeed.Source.UmbracoCms.V10.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.V10.Extensions;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,18 +25,21 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly ILogger<EnterspeedPropertyService> _logger;
         private readonly IDomainService _domainService;
+        private readonly IEnterspeedPropertyValueValidator _enterspeedPropertyValueValidator;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
             IServiceProvider serviceProvider,
             IUmbracoContextFactory umbracoContextFactory,
             ILogger<EnterspeedPropertyService> logger,
-            IDomainService domainService)
+            IDomainService domainService,
+            IEnterspeedPropertyValueValidator enterspeedPropertyValueValidator)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
             _logger = logger;
             _domainService = domainService;
+            _enterspeedPropertyValueValidator = enterspeedPropertyValueValidator;
             _identityService = serviceProvider.GetRequiredService<IEntityIdentityService>();
         }
 
@@ -42,6 +47,15 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
         {
             var properties = content.Properties;
             var enterspeedProperties = ConvertProperties(properties, culture);
+
+            var validationResponses = _enterspeedPropertyValueValidator.Validate(enterspeedProperties.Values);
+            if (validationResponses.Any(v => !v.Valid))
+            {
+                foreach (var validationResponse in validationResponses)
+                {
+                    _logger.LogError(validationResponse.ValidationMessage);
+                }
+            }
 
             enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
 

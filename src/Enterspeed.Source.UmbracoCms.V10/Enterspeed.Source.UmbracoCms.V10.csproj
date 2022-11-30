@@ -36,4 +36,8 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Shared.NetCore\Enterspeed.Source.UmbracoCms.Shared\Enterspeed.Source.UmbracoCms.Shared.csproj" />
+	</ItemGroup>
+
 </Project>
