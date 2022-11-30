@@ -5,12 +5,13 @@
     <version>0.0.0</version>
     <authors>Enterspeed</authors>
     <owners>Enterspeed</owners>
-    <projectUrl>https://www.enterspeed.com/</projectUrl>
+    <projectUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</projectUrl>
     <repository type="git" url="https://github.com/enterspeedhq/enterspeed-source-umbraco-cms"></repository>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <description>Enterspeed integration for Umbraco version 8</description>
-    <tags>Enterspeed, Umbraco 8</tags>
+    <tags>Enterspeed, Umbraco 8, umbraco-marketplace</tags>
+	<icon>images\icon.png</icon>
     <dependencies>
       <dependency id="Enterspeed.Source.Sdk" version="[0.7,1.0)" />
       <dependency id="UmbracoCms.Core" version="[8.7,9.0)" />
@@ -20,6 +21,7 @@
   <files>
     <file src="..\bin\Release\Enterspeed.Source.UmbracoCms.V8.dll" target="lib\net45" />
     <file src="..\bin\Release\Enterspeed.Source.UmbracoCms.V8.pdb" target="lib\net45" />
+    <file src="..\_nuget\icon.png" target="images\" />
     <file src="..\_content\**\*" target="content" />
   </files>
 </package>

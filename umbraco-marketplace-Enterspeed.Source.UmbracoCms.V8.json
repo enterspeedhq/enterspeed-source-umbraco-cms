@@ -1,0 +1,62 @@
+﻿{
+  "AlternatePackageNames": [ "Enterspeed Source Umbraco CMS" ],
+  "AuthorDetails": {
+    "Description": "Enterspeed is a Speed Layer transforming, consolidating, and storing content from multiple data sources. Unique to Enterspeed is the blazing fast Microsoft Azure cloud storage: Data is prepared for delivery to frontends at publish time, meaning that load on underlying systems is minimised.",
+    "Url": "https://www.enterspeed.com/",
+    "ImageUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/tree/develop/umbracoMarketplace/enterspeed-logo.png"
+  },
+  "Category": "Headless",
+  "LicenseType": "Free",
+  "IssueTrackerUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/issues",
+  "PackageType": "Package",
+  "PackagesByAuthor": [ "Enterspeed.Source.UmbracoCms.V7", "Enterspeed.Source.UmbracoCms.V8", "Enterspeed.Source.UmbracoCms.V9", "Enterspeed.Source.UmbracoCms.V10", "Enterspeed.Demos.UmbracoCms.V9.FairyTales", "Enterspeed.Demos.UmbracoCms.V10.FairyTales", "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers", "Enterspeed.Demos.UmbracoCms.V10.MultisiteBeers" ],
+  "RelatedPackages": [
+    {
+      "PackageId": "Enterspeed.Source.UmbracoCms.V10",
+      "Description": "Enterspeed integration for Umbraco version 10"
+    },
+    {
+      "PackageId": "Enterspeed.Source.UmbracoCms.V9",
+      "Description": "Enterspeed integration for Umbraco version 9"
+    },
+    {
+      "PackageId": "Enterspeed.Source.UmbracoCms.V7",
+      "Description": "Enterspeed integration for Umbraco version 7"
+    }
+  ],
+  "Screenshots": [
+    {
+      "ImageUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/tree/develop/umbracoMarketplace/v8/enterspeed-configuration.png",
+      "Caption": "The Enterspeed configuration can be entered in the Umbraco backoffice and stored in the database or it can be configured in the appsettings.json."
+    },
+    {
+      "ImageUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/tree/develop/umbracoMarketplace/v8/enterspeed-seed.png",
+      "Caption": "Content, media and dictionary items are automatically send to Enterspeed on save and/or publish. Using the seed functionality you can resend all items to Enterspeed in one go."
+    }
+  ],
+  "Tags": [
+    "enterspeed",
+    "headless",
+    "speed layer",
+    "source"
+  ],
+  "VersionSpecificPackageIds": [
+    {
+      "UmbracoMajorVersion": 7,
+      "PackageId": "Enterspeed.Source.UmbracoCms.V7"
+    },
+    {
+      "UmbracoMajorVersion": 8,
+      "PackageId": "Enterspeed.Source.UmbracoCms.V8"
+    },
+    {
+      "UmbracoMajorVersion": 9,
+      "PackageId": "Enterspeed.Source.UmbracoCms.V9"
+    },
+    {
+      "UmbracoMajorVersion": 10,
+      "PackageId": "Enterspeed.Source.UmbracoCms.V10"
+    }
+  ],
+  "VideoUrl": "https://www.youtube.com/watch?v=t2nBTM5cIrs"
+}

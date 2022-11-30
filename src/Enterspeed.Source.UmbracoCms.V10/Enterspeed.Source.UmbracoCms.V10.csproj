@@ -10,12 +10,13 @@
 
 		<ContentTargetFolders>.</ContentTargetFolders>
 		<Description>Enterspeed integration for Umbraco version 10</Description>
-		<PackageTags>Enterspeed, Umbraco 10</PackageTags>
+		<PackageTags>Enterspeed, Umbraco 10, umbraco-marketplace</PackageTags>
 
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
-		<PackageProjectUrl>https://www.enterspeed.com/</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
+		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -35,9 +36,18 @@
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
 	</ItemGroup>
-
+	
 	<ItemGroup>
-	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Shared.NetCore\Enterspeed.Source.UmbracoCms.Shared\Enterspeed.Source.UmbracoCms.Shared.csproj" />
+		<ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Shared.NetCore\Enterspeed.Source.UmbracoCms.Shared\Enterspeed.Source.UmbracoCms.Shared.csproj" />
 	</ItemGroup>
+	
+	<ItemGroup>
+	  <None Include="icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+
 
 </Project>
