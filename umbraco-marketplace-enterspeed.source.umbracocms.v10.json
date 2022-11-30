@@ -11,7 +11,7 @@
   "IssueTrackerUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/issues",
   "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/umbraco-v10/getting-started",
   "PackageType": "Integration",
-  "PackagesByAuthor": [ "Enterspeed.Source.UmbracoCms.V7", "Enterspeed.Source.UmbracoCms.V8", "Enterspeed.Source.UmbracoCms.V9", "Enterspeed.Source.UmbracoCms.V10", "Enterspeed.Demos.UmbracoCms.V9.FairyTales", "Enterspeed.Demos.UmbracoCms.V10.FairyTales", "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers", "Enterspeed.Demos.UmbracoCms.V10.MultisiteBeers" ],
+  "PackagesByAuthor": [ "Enterspeed.Source.UmbracoCms.V8", "Enterspeed.Source.UmbracoCms.V9", "Enterspeed.Source.UmbracoCms.V10", "Enterspeed.Demos.UmbracoCms.V9.FairyTales", "Enterspeed.Demos.UmbracoCms.V10.FairyTales", "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers", "Enterspeed.Demos.UmbracoCms.V10.MultisiteBeers" ],
   "RelatedPackages": [
     {
       "PackageId": "Enterspeed.Source.UmbracoCms.V9",
@@ -20,10 +20,6 @@
     {
       "PackageId": "Enterspeed.Source.UmbracoCms.V8",
       "Description": "Enterspeed integration for Umbraco version 8"
-    },
-    {
-      "PackageId": "Enterspeed.Source.UmbracoCms.V7",
-      "Description": "Enterspeed integration for Umbraco version 7"
     }
   ],
   "Screenshots": [
@@ -41,24 +37,6 @@
     "headless",
     "speed layer",
     "source"
-  ],
-  "VersionSpecificPackageIds": [
-    {
-      "UmbracoMajorVersion": 7,
-      "PackageId": "Enterspeed.Source.UmbracoCms.V7"
-    },
-    {
-      "UmbracoMajorVersion": 8,
-      "PackageId": "Enterspeed.Source.UmbracoCms.V8"
-    },
-    {
-      "UmbracoMajorVersion": 9,
-      "PackageId": "Enterspeed.Source.UmbracoCms.V9"
-    },
-    {
-      "UmbracoMajorVersion": 10,
-      "PackageId": "Enterspeed.Source.UmbracoCms.V10"
-    }
   ],
   "VideoUrl": "https://www.youtube.com/watch?v=t2nBTM5cIrs"
 }
