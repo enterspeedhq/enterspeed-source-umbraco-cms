@@ -124,7 +124,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 {
                     var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
                     enterspeedProperties = ConvertProperties(properties);
-                } else
+                }
+                else
                 {
                     _logger.Warn<EnterspeedPropertyService>($"Could not get media as published content, for media with id of {media.Id}");
                     enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();

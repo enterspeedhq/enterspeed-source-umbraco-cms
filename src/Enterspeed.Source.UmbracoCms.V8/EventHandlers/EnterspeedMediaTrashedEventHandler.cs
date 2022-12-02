@@ -42,7 +42,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         private void MediaService_Trashed(IMediaService sender, MoveEventArgs<IMedia> e)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
 
             if (!isPublishConfigured)
             {
@@ -51,7 +51,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
             var entities = e.MoveInfoCollection.ToList();
             var jobs = new List<EnterspeedJob>();
-            using (_umbracoContextFactory.EnsureUmbracoContext())
+            using (UmbracoContextFactory.EnsureUmbracoContext())
             {
                 foreach (var mediaItem in entities.Select(ei => ei.Entity))
                 {

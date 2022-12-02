@@ -54,6 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries
             {
                 return;
             }
+
             var umbracoData = CreateUmbracoDictionaryEntity(dictionaryItem, job);
             Ingest(umbracoData, job);
         }
@@ -68,6 +69,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries
             {
                 throw new JobHandlingException($"Dictionary with id {job.EntityId} not in database");
             }
+
             return dictionaryItem;
         }
 

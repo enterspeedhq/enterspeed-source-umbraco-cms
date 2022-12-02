@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
@@ -44,8 +43,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
         public void LocalizationServiceOnDeletedDictionaryItem(
             ILocalizationService sender, DeleteEventArgs<IDictionaryItem> e)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = ConfigurationService.IsPreviewConfigured();
 
             if (!isPublishConfigured && !isPreviewConfigured)
             {
@@ -54,7 +53,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
             var entities = e.DeletedEntities.ToList();
             var jobs = new List<EnterspeedJob>();
-            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            using (var context = UmbracoContextFactory.EnsureUmbracoContext())
             {
                 foreach (var dictionaryItem in entities)
                 {
@@ -97,7 +96,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
             EnqueueJobs(jobs);
         }
-
 
         public void Terminate()
         {

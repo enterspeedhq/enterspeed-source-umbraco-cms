@@ -87,8 +87,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Factories
             };
         }
 
-
-
         public EnterspeedJob GetDeleteJob(IDictionaryItem dictionaryItem, string culture, EnterspeedContentState state)
         {
             var now = DateTime.UtcNow;

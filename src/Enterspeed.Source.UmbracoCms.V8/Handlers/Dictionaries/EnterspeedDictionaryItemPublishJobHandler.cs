@@ -69,6 +69,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             {
                 throw new JobHandlingException($"Dictionary with id {job.EntityId} not in database");
             }
+
             return dictionaryItem;
         }
 
