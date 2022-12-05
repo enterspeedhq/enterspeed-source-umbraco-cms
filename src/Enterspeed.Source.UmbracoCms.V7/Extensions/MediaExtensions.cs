@@ -10,16 +10,25 @@ namespace Enterspeed.Source.UmbracoCms.V7.Extensions
     {
         public static string GetMediaUrl(this IMedia media, EnterspeedUmbracoConfiguration configuration)
         {
-            var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
-            if (umbracoFile != null && umbracoFile.Contains("src"))
+            var src = configuration.MediaDomain;
+
+            switch (media.ContentType.Alias)
             {
-                var umbFile = JsonConvert.DeserializeObject<UmbFile>(umbracoFile);
-                return umbFile != null ? configuration.MediaDomain + umbFile.Src : string.Empty;
+                case Constants.Conventions.MediaTypes.File:
+                    src += media.GetValue<string>(Constants.Conventions.Media.File);
+                    break;
+                case Constants.Conventions.MediaTypes.Image:
+                    var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
+                    if (umbracoFile != null && umbracoFile.Contains("src"))
+                    {
+                        var umbFile = JsonConvert.DeserializeObject<UmbFile>(umbracoFile);
+                        src += umbFile != null ? umbFile.Src : string.Empty;
+                    }
+
+                    break;
             }
 
-            // Should be a complex type, but is sometimes only a string. I don't know why.
-            // Might be some behaviour in Umbraco
-            return umbracoFile;
+            return src;
         }
     }
 }

@@ -11,7 +11,6 @@ using Enterspeed.Source.UmbracoCms.V10.Services;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 
-
 namespace Enterspeed.Source.UmbracoCms.V10.Handlers.Media
 {
     public class EnterspeedMediaPublishJobHandler : IEnterspeedJobHandler
