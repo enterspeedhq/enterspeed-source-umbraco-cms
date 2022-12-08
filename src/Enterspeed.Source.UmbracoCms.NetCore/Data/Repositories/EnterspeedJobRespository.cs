@@ -5,11 +5,9 @@ using Enterspeed.Source.UmbracoCms.NetCore.Data.Models;
 using Enterspeed.Source.UmbracoCms.NetCore.Data.Schemas;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Infrastructure.Persistence;
-
-#if NET5_0
+#if U9
 using Umbraco.Cms.Core.Scoping;
-#endif
-#if NET6_0_OR_GREATER
+#else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 

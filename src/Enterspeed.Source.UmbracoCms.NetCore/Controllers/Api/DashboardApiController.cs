@@ -19,10 +19,9 @@ using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.BackOffice.Filters;
-#if NET5_0
+#if U9
 using Umbraco.Cms.Core.Scoping;
-#endif
-#if NET6_0_OR_GREATER
+#else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 

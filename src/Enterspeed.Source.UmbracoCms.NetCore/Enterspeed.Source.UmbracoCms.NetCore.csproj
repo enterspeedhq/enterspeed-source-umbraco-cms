@@ -17,7 +17,11 @@
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
-	
+
+	<ItemGroup>
+		<PackageReference Include="Enterspeed.Source.Sdk" Version="0.8.0" />
+	</ItemGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
 		<PackageReference Include="Umbraco.Cms.Core" Version="9.5.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="9.5.0" />
@@ -35,7 +39,7 @@
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="11.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="11.0.0" />
 	</ItemGroup>
-	
+
 	<ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U9')">
 		<PackageReference Include="Umbraco.Cms.Core" Version="9.5.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="9.5.0" />
@@ -53,8 +57,19 @@
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="11.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="11.0.0" />
 	</ItemGroup>
-	
-	
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
+		<DefineConstants>$(DefineConstants); U9</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
+		<DefineConstants>$(DefineConstants); U10</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(TargetFramework)' == 'net7.0'">
+		<DefineConstants>$(DefineConstants); U11</DefineConstants>
+	</PropertyGroup>
+
 	<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U9')">
 		<DefineConstants>$(DefineConstants); U9</DefineConstants>
 	</PropertyGroup>
@@ -62,11 +77,10 @@
 	<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U10')">
 		<DefineConstants>$(DefineConstants); U10</DefineConstants>
 	</PropertyGroup>
-	
+
 	<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U11')">
 		<DefineConstants>$(DefineConstants); U11</DefineConstants>
 	</PropertyGroup>
-
 
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
