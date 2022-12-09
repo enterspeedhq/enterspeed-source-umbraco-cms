@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<PackageId>Enterspeed.Source.UmbracoCms.V10</PackageId>
+		<PackageId>Enterspeed.Source.UmbracoCms.V9</PackageId>
 
 		<TargetFrameworks>net5.0;net6.0</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
@@ -9,8 +9,8 @@
 		<Authors>Enterspeed</Authors>
 
 		<ContentTargetFolders>.</ContentTargetFolders>
-		<Description>Enterspeed integration for Umbraco version 10</Description>
-		<PackageTags>Enterspeed, Umbraco 10, umbraco-marketplace</PackageTags>
+		<Description>Enterspeed integration for Umbraco version 9</Description>
+		<PackageTags>Enterspeed, Umbraco 9, umbraco-marketplace</PackageTags>
 
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -22,24 +22,16 @@
 	<ItemGroup>
 		<PackageReference Include="Enterspeed.Source.Sdk" Version="0.8.0" />
 	</ItemGroup>
-	
-	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
+
+	<ItemGroup>
 		<PackageReference Include="Umbraco.Cms.Core" Version="9.5.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="9.5.0" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.5.0" />
 	</ItemGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Umbraco.Cms.Core" Version="10.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0" />
-	</ItemGroup>
-
-	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Umbraco.Cms.Core" Version="11.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="11.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="11.0.0" />
-	</ItemGroup>
+	<PropertyGroup>
+		<DefineConstants>$(DefineConstants); U9</DefineConstants>
+	</PropertyGroup>
 
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
