@@ -43,6 +43,8 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
             var properties = content.Properties;
             var enterspeedProperties = ConvertProperties(properties, culture);
 
+            MapAdditionalData((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, content, culture);
+
             enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
 
             return enterspeedProperties;
@@ -132,8 +134,10 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
                     enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
                 }
 
-                enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
+                MapAdditionalMediaData((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
 
+                enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
+                
                 return enterspeedProperties;
             }
         }
@@ -162,6 +166,26 @@ namespace Enterspeed.Source.UmbracoCms.V9.Services
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
+        }
+
+        /// <summary>
+        /// Override to add extra data on content
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalData(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        {
+        }
+
+        /// <summary>
+        /// Override to add extra data on media
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalMediaData(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        {
         }
 
         /// <summary>

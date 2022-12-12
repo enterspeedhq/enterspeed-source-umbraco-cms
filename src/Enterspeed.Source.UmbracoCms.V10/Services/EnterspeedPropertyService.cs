@@ -43,6 +43,8 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
             var properties = content.Properties;
             var enterspeedProperties = ConvertProperties(properties, culture);
 
+            MapAdditionalData((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, content, culture);
+
             enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
 
             return enterspeedProperties;
@@ -117,25 +119,27 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
 
         public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media)
         {
-            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            using var context = _umbracoContextFactory.EnsureUmbracoContext();
+            
+            IDictionary<string, IEnterspeedProperty> enterspeedProperties;
+
+            var publishedMedia = context.UmbracoContext.Media?.GetById(media.Id);
+            if (publishedMedia != null)
             {
-                IDictionary<string, IEnterspeedProperty> enterspeedProperties;
-
-                var publishedMedia = context.UmbracoContext.Media?.GetById(media.Id);
-                if (publishedMedia != null)
-                {
-                    var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
-                    enterspeedProperties = ConvertProperties(properties);
-                } else
-                {
-                    _logger.LogWarning($"Could not get media as published content, for media with id of {media.Id}");
-                    enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
-                }
-
-                enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
-
-                return enterspeedProperties;
+                var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
+                enterspeedProperties = ConvertProperties(properties);
+            } 
+            else
+            {
+                _logger.LogWarning($"Could not get media as published content, for media with id of {media.Id}");
+                enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
             }
+
+            MapAdditionalMediaData((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
+
+            enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
+
+            return enterspeedProperties;
         }
 
         private ObjectEnterspeedProperty CreateMediaMetaProperties(IMedia media, IPublishedContent publishedMedia)
@@ -162,6 +166,26 @@ namespace Enterspeed.Source.UmbracoCms.V10.Services
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
+        }
+
+        /// <summary>
+        /// Override to add extra data on content
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalData(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        {
+        }
+
+        /// <summary>
+        /// Override to add extra data on media
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalMediaData(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        {
         }
 
         /// <summary>
