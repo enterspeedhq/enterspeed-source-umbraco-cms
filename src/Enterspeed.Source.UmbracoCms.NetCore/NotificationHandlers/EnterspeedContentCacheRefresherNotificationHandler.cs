@@ -14,7 +14,9 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Services.Changes;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
-#if U9
+#if NET5_0
+using Umbraco.Cms.Core.Scoping;
+#elif U9
 using Umbraco.Cms.Core.Scoping;
 #else
 using Umbraco.Cms.Infrastructure.Scoping;

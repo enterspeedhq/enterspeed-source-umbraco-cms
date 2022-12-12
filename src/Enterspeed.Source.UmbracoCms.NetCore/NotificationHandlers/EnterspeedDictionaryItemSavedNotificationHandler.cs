@@ -8,7 +8,9 @@ using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
-#if U9
+#if NET5_0
+using Umbraco.Cms.Core.Scoping;
+#elif U9
 using Umbraco.Cms.Core.Scoping;
 #else
 using Umbraco.Cms.Infrastructure.Scoping;

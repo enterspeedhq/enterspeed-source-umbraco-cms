@@ -7,7 +7,9 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.HostedServices;
-#if U9
+#if NET5_0
+using Umbraco.Cms.Core.Scoping;
+#elif U9
 using Umbraco.Cms.Core.Scoping;
 #else
 using Umbraco.Cms.Infrastructure.Scoping;

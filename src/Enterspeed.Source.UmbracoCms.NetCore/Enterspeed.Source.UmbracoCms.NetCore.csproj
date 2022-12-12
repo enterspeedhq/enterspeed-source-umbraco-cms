@@ -2,13 +2,13 @@
 	<PropertyGroup>
 		<PackageId>Enterspeed.Source.UmbracoCms.V10</PackageId>
 
-		<TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+		<TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<Authors>Enterspeed</Authors>
 
 		<ContentTargetFolders>.</ContentTargetFolders>
-		<Description>Enterspeed integration for Umbraco version 10</Description>
+		<Description>Enterspeed integration for Umbraco</Description>
 		<PackageTags>Enterspeed, Umbraco 10, umbraco-marketplace</PackageTags>
 
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
@@ -22,67 +22,28 @@
 		<PackageReference Include="Enterspeed.Source.Sdk" Version="0.8.0" />
 	</ItemGroup>
 
-	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
-			<PackageReference Include="Umbraco.Cms.Core" Version="9.5.0" />
-			<PackageReference Include="Umbraco.Cms.Web.Website" Version="9.5.0" />
-			<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.5.0" />
-	</ItemGroup>-->
-
-	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<PackageReference Include="Umbraco.Cms.Core" Version="10.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0" />
-	</ItemGroup>-->
-
-	<!--<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<PackageReference Include="Umbraco.Cms.Core" Version="11.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="11.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="11.0.0" />
-	</ItemGroup>-->
-
-	<!--<ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
 		<PackageReference Include="Umbraco.Cms.Core" Version="9.5.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="9.5.0" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="9.5.0" />
-	</ItemGroup>-->
+	</ItemGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
 		<PackageReference Include="Umbraco.Cms.Core" Version="10.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0" />
 	</ItemGroup>
-	
-	<!--
-	<ItemGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U11')">
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net7.0'">
 		<PackageReference Include="Umbraco.Cms.Core" Version="11.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="11.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="11.0.0" />
-	</ItemGroup>-->
+	</ItemGroup>
 
-	<!--<PropertyGroup Condition="'$(TargetFramework)' == 'net5.0'">
-		<DefineConstants>$(DefineConstants); U9</DefineConstants>
-	</PropertyGroup>-->
-
-	<!--<PropertyGroup Condition="'$(TargetFramework)' == 'net6.0'">
-		<DefineConstants>$(DefineConstants); U10</DefineConstants>
-	</PropertyGroup>
-
-	<PropertyGroup Condition="'$(TargetFramework)' == 'net7.0'">
-		<DefineConstants>$(DefineConstants); U11</DefineConstants>
-	</PropertyGroup>-->
-
-	<!--<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U9')">
-		<DefineConstants>$(DefineConstants); U9</DefineConstants>
-	</PropertyGroup>-->
-
-	<PropertyGroup>
-		<DefineConstants>$(DefineConstants); U10</DefineConstants>
-	</PropertyGroup>
-	<!--
 	<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U11')">
-		<DefineConstants>$(DefineConstants); U11</DefineConstants>
-	</PropertyGroup>-->
-
+		<DefineConstants>$(DefineConstants); U9</DefineConstants>
+	</PropertyGroup>
+	
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
@@ -98,10 +59,6 @@
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Remove="App_Plugins\Enterspeed.Dashboard\.U9" />
 	</ItemGroup>
 
 	<ItemGroup>
