@@ -41,6 +41,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             var properties = content.Properties;
             var enterspeedProperties = ConvertProperties(properties, culture);
 
+            MapAdditionalProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, content, culture);
+
             enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
 
             return enterspeedProperties;
@@ -124,11 +126,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 {
                     var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
                     enterspeedProperties = ConvertProperties(properties);
-                } else
+                }
+                else
                 {
                     _logger.Warn<EnterspeedPropertyService>($"Could not get media as published content, for media with id of {media.Id}");
                     enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
                 }
+
+                MapAdditionalMediaProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
 
                 enterspeedProperties.Add(MetaData, CreateMediaProperties(media, publishedMedia));
 
@@ -160,6 +165,26 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
+        }
+
+        /// <summary>
+        /// Override to add extra properties on content
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalProperties(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        {
+        }
+
+        /// <summary>
+        /// Override to add extra properties on media
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="content"></param>
+        /// <param name="culture"></param>
+        protected virtual void MapAdditionalMediaProperties(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        {
         }
 
         /// <summary>

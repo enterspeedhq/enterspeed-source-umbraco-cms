@@ -43,8 +43,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
         public void LocalizationServiceOnSavedDictionaryItem(
             ILocalizationService sender, SaveEventArgs<IDictionaryItem> e)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = ConfigurationService.IsPreviewConfigured();
 
             if (!isPublishConfigured && !isPreviewConfigured)
             {

@@ -39,7 +39,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 {
                     _logger.Error<EnterspeedJobsHandlingService>(e, "Error has happened");
                 }
-            } while (jobCount > 0);
+            }
+            while (jobCount > 0);
         }
 
         public virtual void HandleJobs(IList<EnterspeedJob> jobs)

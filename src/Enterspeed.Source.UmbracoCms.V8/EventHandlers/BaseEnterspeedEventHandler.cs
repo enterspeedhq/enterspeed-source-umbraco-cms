@@ -11,11 +11,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
     public abstract class BaseEnterspeedEventHandler
     {
-        internal readonly IUmbracoContextFactory _umbracoContextFactory;
-        internal readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        internal readonly IEnterspeedJobsHandlingService _jobsHandlingService;
-        internal readonly IEnterspeedConfigurationService _configurationService;
-        internal readonly IScopeProvider _scopeProvider;
+        protected IUmbracoContextFactory UmbracoContextFactory { get; }
+        protected IEnterspeedJobRepository EnterspeedJobRepository { get; }
+        protected IEnterspeedJobsHandlingService JobsHandlingService { get; }
+        protected IEnterspeedConfigurationService ConfigurationService { get; }
+        protected IScopeProvider ScopeProvider { get; set; }
 
         protected BaseEnterspeedEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
@@ -24,11 +24,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider)
         {
-            _umbracoContextFactory = umbracoContextFactory;
-            _enterspeedJobRepository = enterspeedJobRepository;
-            _jobsHandlingService = jobsHandlingService;
-            _configurationService = configurationService;
-            _scopeProvider = scopeProvider;
+            UmbracoContextFactory = umbracoContextFactory;
+            EnterspeedJobRepository = enterspeedJobRepository;
+            JobsHandlingService = jobsHandlingService;
+            ConfigurationService = configurationService;
+            ScopeProvider = scopeProvider;
         }
 
         protected string GetDefaultCulture(UmbracoContextReference context)
@@ -43,15 +43,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                 return;
             }
 
-            _enterspeedJobRepository.Save(jobs);
+            EnterspeedJobRepository.Save(jobs);
 
-            using (_umbracoContextFactory.EnsureUmbracoContext())
+            using (UmbracoContextFactory.EnsureUmbracoContext())
             {
-                if (_scopeProvider.Context != null)
+                if (ScopeProvider.Context != null)
                 {
                     var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
                     // Add a callback to the current Scope which will execute when it's completed
-                    _scopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
+                    ScopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
                 }
             }
         }
@@ -61,18 +61,18 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             // Do not continue if the scope did not complete - the transaction may have been canceled and rolled back
             if (scopeCompleted)
             {
-                _jobsHandlingService.HandleJobs(jobs);
+                JobsHandlingService.HandleJobs(jobs);
             }
         }
 
         protected bool IsPublishConfigured()
         {
-            return _configurationService.IsPublishConfigured();
+            return ConfigurationService.IsPublishConfigured();
         }
 
         protected bool IsPreviewConfigured()
         {
-            return _configurationService.IsPreviewConfigured();
+            return ConfigurationService.IsPreviewConfigured();
         }
     }
 }
