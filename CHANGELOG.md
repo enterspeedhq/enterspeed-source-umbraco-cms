@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Added
+  - Added virtual method to extend property data (Umbraco 8, 9, 10)
   - Added media domain to other media types, not just images (Umbraco 7, 8, 9 & 10)
 
 ## [3.1.0 - 2022-11-22]
