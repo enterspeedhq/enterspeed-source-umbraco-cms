@@ -1,11 +1,10 @@
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
-    releaseOnNuget: variables.releaseOnNuget
-    # Versioning: 1.0.0
-    semVersion: $[format('{0}', variables.version)]
-    buildName: $[format('{0}', variables.semVersion)]
+  version: $[format('{0}.{1}.{2}', $(majorVersion), $(minorVersion),  $(patchVersion))]
+  releaseOnNuget: variables.releaseOnNuget
+  # Versioning: 1.0.0
+  semVersion: $[format('{0}', variables.version)]
+  buildName: $[format('{0}', variables.semVersion)]
 
 name: $(BuildID) - $(buildName)
 
