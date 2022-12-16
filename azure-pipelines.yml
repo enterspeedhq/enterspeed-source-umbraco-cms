@@ -10,12 +10,8 @@ parameters:
   type: string
 
 variables:
-  majorVersion : ${{ parameters.majorVersion }} 
-  minorVersion : ${{ parameters.minorVersion }}
-  patchVersion : ${{ parameters.patchVersion }}
-
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
+  version: $[format('{0}.{1}.{2}', ${{ parameters.majorVersion }} , ${{ parameters.minorVersion }}, ${{ parameters.patchVersion }})]
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     releaseOnNuget: true
     # Versioning: 1.0.0
