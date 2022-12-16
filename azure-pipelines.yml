@@ -1,4 +1,7 @@
 variables:
+  majorVersion: 0
+  minorVersion: 0
+  patchVersion: 0
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   version: $[format('{0}.{1}.{2}', $(majorVersion), $(minorVersion),  $(patchVersion))]
   releaseOnNuget: variables.releaseOnNuget
