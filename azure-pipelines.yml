@@ -97,38 +97,3 @@ stages:
             inputs:
               targetPath: "$(Build.ArtifactStagingDirectory)/NuGet"
               artifact: nupkg
-
-  # - stage: Release
-  #   displayName: Release
-  #   condition: and(succeeded(), eq(variables.releaseOnNuget, 'true'))
-  #   jobs:
-  #     - deployment: ReleaseNuGet
-  #       displayName: Release on NuGet.org
-  #       environment: NuGetOrg
-  #       pool:
-  #         vmImage: ubuntu-latest
-  #       strategy:
-  #         runOnce:
-  #           deploy:
-  #             steps:
-  #               - checkout: self
-  #                 persistCredentials: true
-  #                 clean: true
-  #                 fetchDepth: 1
-
-  #               # Tag release in git
-  #               - task: Bash@3
-  #                 displayName: Tag version in git
-  #                 inputs:
-  #                   targetType: inline
-  #                   script: |
-  #                     git tag $(semVersion)
-  #                     git push --tags
-
-  #               - task: NuGetCommand@2
-  #                 displayName: Release on NuGet.org
-  #                 inputs:
-  #                   command: push
-  #                   packagesToPush: "$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg"
-  #                   nuGetFeedType: external
-  #                   publishFeedCredentials: NuGet.org
