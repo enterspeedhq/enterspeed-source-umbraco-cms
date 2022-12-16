@@ -1,49 +1,11 @@
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
-  majorVersion: 3
-  minorVersion: 1
-  patchVersion: 0
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     releaseOnNuget: true
     # Versioning: 1.0.0
     semVersion: $[format('{0}', variables.version)]
     buildName: $[format('{0}', variables.semVersion)]
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
-    # Versioning: 1.0.0-develop.123
-    releaseOnNuget: false
-    semVersionBase: $[format('{0}-develop', variables.version)]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Develop - {0}', variables.semVersion)]
-  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
-    # Versioning: 1.0.0-alpha.branch.123
-    releaseOnNuget: false
-    semVersionBase: $[format('{0}-alpha.{1}', variables.version, variables['Build.SourceBranchName'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Release - {0}', variables.semVersion)]
-  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/') }}:
-    # Versioning: 1.0.0-feature.branch.123
-    releaseOnNuget: false
-    semVersionBase: $[format('{0}-feature.{1}', variables.version, variables['Build.SourceBranchName'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Feature - {0}', variables.semVersion)]
-  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}: # Pull requests
-    # Versioning: 1.0.0-pr.1.123
-    releaseOnNuget: false
-    semVersionBase: $[format('{0}-pr.{1}', variables.version, variables['System.PullRequest.PullRequestId'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Pull Request - {0}', variables.semVersion)]
-  ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/bugfix/') }}:
-    # Versioning: 1.0.0-bugfix.branch.123
-    releaseOnNuget: false
-    semVersionBase: $[format('{0}-bugfix.{1}', variables.version, variables['Build.SourceBranchName'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Bugfix - {0}', variables.semVersion)]
 
 name: $(BuildID) - $(buildName)
 
@@ -75,57 +37,6 @@ pr:
       - documentation/*
 
 stages:
-  - stage: BuildNetFramework
-    displayName: Build .NET framework projects
-    jobs:
-      - job: Build
-        displayName: Build
-        pool:
-          vmImage: windows-latest
-          demands:
-            - msbuild
-            - visualstudio
-        steps:
-          # NuGet
-          - task: NuGetToolInstaller@1
-            displayName: NuGet install
-            inputs:
-              versionSpec: 5.3.1
-
-          - task: NuGetCommand@2
-            displayName: NuGet restore
-            inputs:
-              command: "restore"
-              restoreSolution: "./Enterspeed.Source.UmbracoCms.netframework.sln"
-              feedsToUse: config
-              nugetConfigPath: ./NuGet.Config
-
-          # Build solution
-          - task: VSBuild@1
-            displayName: Build solution
-            inputs:
-              solution: ./Enterspeed.Source.UmbracoCms.netframework.sln
-              logFileVerbosity: minimal
-              platform: Any CPU
-              configuration: Release
-              maximumCpuCount: true
-
-          # Pack NuGet
-          - task: NuGetCommand@2
-            inputs:
-              command: "pack"
-              packagesToPack: "**/*.nuspec"
-              versioningScheme: byEnvVar
-              versionEnvVar: semVersion
-              includeSymbols: false
-
-          # Publish artifacts
-          - task: PublishPipelineArtifact@1
-            displayName: Publish artifact - nupkg
-            inputs:
-              targetPath: "$(Build.ArtifactStagingDirectory)"
-              artifact: nupkg_net_framework
-
   - stage: Build
     displayName: Build
     jobs:
@@ -157,7 +68,7 @@ stages:
             inputs:
               command: pack
               outputDir: "$(Build.ArtifactStagingDirectory)/NuGet"
-              packagesToPack: "src/Enterspeed.Source.UmbracoCms.V9/*.csproj;src/Enterspeed.Source.UmbracoCms.V10/*.csproj"
+              packagesToPack: "src/Enterspeed.Source.UmbracoCms.NetCore/Enterspeed.Source.UmbracoCms.NetCore.csproj"
               versioningScheme: byEnvVar
               versionEnvVar: semVersion
 
@@ -168,37 +79,37 @@ stages:
               targetPath: "$(Build.ArtifactStagingDirectory)/NuGet"
               artifact: nupkg
 
-  - stage: Release
-    displayName: Release
-    condition: and(succeeded(), eq(variables.releaseOnNuget, 'true'))
-    jobs:
-      - deployment: ReleaseNuGet
-        displayName: Release on NuGet.org
-        environment: NuGetOrg
-        pool:
-          vmImage: ubuntu-latest
-        strategy:
-          runOnce:
-            deploy:
-              steps:
-                - checkout: self
-                  persistCredentials: true
-                  clean: true
-                  fetchDepth: 1
+  # - stage: Release
+  #   displayName: Release
+  #   condition: and(succeeded(), eq(variables.releaseOnNuget, 'true'))
+  #   jobs:
+  #     - deployment: ReleaseNuGet
+  #       displayName: Release on NuGet.org
+  #       environment: NuGetOrg
+  #       pool:
+  #         vmImage: ubuntu-latest
+  #       strategy:
+  #         runOnce:
+  #           deploy:
+  #             steps:
+  #               - checkout: self
+  #                 persistCredentials: true
+  #                 clean: true
+  #                 fetchDepth: 1
 
-                # Tag release in git
-                - task: Bash@3
-                  displayName: Tag version in git
-                  inputs:
-                    targetType: inline
-                    script: |
-                      git tag $(semVersion)
-                      git push --tags
+  #               # Tag release in git
+  #               - task: Bash@3
+  #                 displayName: Tag version in git
+  #                 inputs:
+  #                   targetType: inline
+  #                   script: |
+  #                     git tag $(semVersion)
+  #                     git push --tags
 
-                - task: NuGetCommand@2
-                  displayName: Release on NuGet.org
-                  inputs:
-                    command: push
-                    packagesToPush: "$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg"
-                    nuGetFeedType: external
-                    publishFeedCredentials: NuGet.org
+  #               - task: NuGetCommand@2
+  #                 displayName: Release on NuGet.org
+  #                 inputs:
+  #                   command: push
+  #                   packagesToPush: "$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg"
+  #                   nuGetFeedType: external
+  #                   publishFeedCredentials: NuGet.org
