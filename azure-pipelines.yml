@@ -10,9 +10,9 @@ parameters:
   type: string
 
 variables:
-  majorVersion : parameters.majorVersion
-  minorVersion : parameters.minorVersion
-  patchVersion : parameters.patchVersion
+  majorVersion : $[format('{0}', parameters.majorVersion)] 
+  minorVersion : $[format('{0}', parameters.minorVersion)] 
+  patchVersion : $[format('{0}', parameters.patchVersion)] 
 
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
