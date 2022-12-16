@@ -55,6 +55,8 @@ trigger:
       - README.md
       - CHANGELOG.md
       - documentation/*
+      - src/Enterspeed.Source.UmbracoCms.NetCore/*
+      - Enterspeed.Source.UmbracoCms.sln
 
 pr:
   branches:
