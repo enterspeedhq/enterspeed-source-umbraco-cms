@@ -10,15 +10,29 @@ namespace Enterspeed.Source.UmbracoCms.V8.Extensions
     {
         public static string GetMediaUrl(this IMedia media, EnterspeedUmbracoConfiguration configuration)
         {
-            var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
-            var url = string.Empty;
+            var src = configuration.MediaDomain;
 
-            if (umbracoFile != null)
+            switch (media.ContentType.Alias)
             {
-                url = configuration.MediaDomain + JsonConvert.DeserializeObject<ImageCropperValue>(umbracoFile).Src;
+                case Constants.Conventions.MediaTypes.File:
+                case "umbracoMediaVectorGraphics":
+                case "umbracoMediaArticle":
+                case "umbracoMediaAudio":
+                case "umbracoMediaVideo":
+                    src += media.GetValue<string>(Constants.Conventions.Media.File);
+                    break;
+                case Constants.Conventions.MediaTypes.Image:
+                    var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
+                    if (umbracoFile != null && umbracoFile.Contains("src"))
+                    {
+                        var umbFile = JsonConvert.DeserializeObject<ImageCropperValue>(umbracoFile);
+                        src += umbFile != null ? umbFile.Src : string.Empty;
+                    }
+
+                    break;
             }
 
-            return url;
+            return src;
         }
     }
 }

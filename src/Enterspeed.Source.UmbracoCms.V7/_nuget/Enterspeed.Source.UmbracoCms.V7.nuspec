@@ -10,7 +10,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>http://opensource.org/licenses/MIT</licenseUrl>
     <description>Enterspeed integration for Umbraco version 7</description>
-    <tags>Enterspeed, Umbraco 7, umbraco-marketplace</tags>
+    <tags>Enterspeed, Umbraco 7</tags>
 	<icon>images\icon.png</icon>
     <dependencies>
       <dependency id="Enterspeed.Source.Sdk" version="[0.7,1.0)" />

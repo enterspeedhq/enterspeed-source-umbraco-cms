@@ -86,9 +86,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Factories
             return url.EnsureTrailingSlash();
         }
 
-        private string GetUrlSegment(
-            string culture, IEnumerable<Domain> domains, IPublishedContent ancestor, string path,
-            out bool isAssignedDomain)
+        private string GetUrlSegment(string culture, IEnumerable<Domain> domains, IPublishedContent ancestor, string path, out bool isAssignedDomain)
         {
             var assignedDomain = domains.FirstOrDefault(x => x.ContentId == ancestor.Id && x.Culture.IetfLanguageTag.Equals(culture, StringComparison.OrdinalIgnoreCase));
             if (assignedDomain != null)

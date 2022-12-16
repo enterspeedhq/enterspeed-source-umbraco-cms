@@ -40,8 +40,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         public void ContentServicePublishing(IContentService sender, ContentPublishingEventArgs e)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
-            var isPreviewConfigured = _configurationService.IsPreviewConfigured();
+            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = ConfigurationService.IsPreviewConfigured();
 
             if (!isPublishConfigured && !isPreviewConfigured)
             {
@@ -51,7 +51,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             // This only handles variants that has been unpublished. Publishing is handled in the ContentCacheUpdated method
             var entities = e.PublishedEntities.ToList();
             var jobs = new List<EnterspeedJob>();
-            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            using (var context = UmbracoContextFactory.EnsureUmbracoContext())
             {
                 foreach (var content in entities)
                 {

@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		CHANGELOG.md = CHANGELOG.md
 		NuGet.Config = NuGet.Config
 		README.md = README.md
+		umbraco-marketplace-enterspeed.source.umbracocms.v10.json = umbraco-marketplace-enterspeed.source.umbracocms.v10.json
+		umbraco-marketplace-enterspeed.source.umbracocms.v9.json = umbraco-marketplace-enterspeed.source.umbracocms.v9.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7971E102-218B-4A98-962E-BF881CBA2B2C}"
