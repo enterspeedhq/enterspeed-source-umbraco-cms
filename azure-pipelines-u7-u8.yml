@@ -72,44 +72,54 @@ pr:
       - documentation/*
 
 stages:
+ 
   - stage: Build
-    displayName: Build
+    displayName: Build .NET framework projects
     jobs:
       - job: Build
         displayName: Build
         pool:
-          vmImage: ubuntu-latest
+          vmImage: windows-latest
+          demands:
+            - msbuild
+            - visualstudio
         steps:
-          # Restore packages
-          - task: DotNetCoreCLI@2
-            displayName: Dotnet restore
+          # NuGet
+          - task: NuGetToolInstaller@1
+            displayName: NuGet install
             inputs:
-              command: restore
-              projects: "./Enterspeed.Source.UmbracoCms.sln"
+              versionSpec: 5.3.1
+
+          - task: NuGetCommand@2
+            displayName: NuGet restore
+            inputs:
+              command: "restore"
+              restoreSolution: "./Enterspeed.Source.UmbracoCms.netframework.sln"
               feedsToUse: config
-              nugetConfigPath: "$(System.DefaultWorkingDirectory)/NuGet.Config"
+              nugetConfigPath: ./NuGet.Config
 
           # Build solution
-          - task: DotNetCoreCLI@2
-            displayName: Dotnet build
+          - task: VSBuild@1
+            displayName: Build solution
             inputs:
-              command: build
-              projects: "Enterspeed.Source.UmbracoCms.sln"
-              arguments: "--no-restore --configuration Release /p:Version=$(semVersion)"
+              solution: ./Enterspeed.Source.UmbracoCms.netframework.sln
+              logFileVerbosity: minimal
+              platform: Any CPU
+              configuration: Release
+              maximumCpuCount: true
 
           # Pack NuGet
-          - task: DotNetCoreCLI@2
-            displayName: Dotnet pack
+          - task: NuGetCommand@2
             inputs:
-              command: pack
-              outputDir: "$(Build.ArtifactStagingDirectory)/NuGet"
-              packagesToPack: "src/Enterspeed.Source.UmbracoCms.NetCore/*.csproj"
+              command: "pack"
+              packagesToPack: "**/*.nuspec"
               versioningScheme: byEnvVar
               versionEnvVar: semVersion
+              includeSymbols: false
 
           # Publish artifacts
           - task: PublishPipelineArtifact@1
             displayName: Publish artifact - nupkg
             inputs:
-              targetPath: "$(Build.ArtifactStagingDirectory)/NuGet"
-              artifact: nupkg
+              targetPath: "$(Build.ArtifactStagingDirectory)"
+              artifact: nupkg_net_framework
