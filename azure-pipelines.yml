@@ -10,7 +10,7 @@ variables:
   buildName: $(semVersion)
 
 name: $(BuildID) - $(buildName)
-
+trigger: none
 stages:
   - stage: Build
     displayName: Build
