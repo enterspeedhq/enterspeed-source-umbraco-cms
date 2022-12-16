@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<PackageId>Enterspeed.Source.UmbracoCms.V10</PackageId>
+		<PackageId>Enterspeed.Source.UmbracoCms</PackageId>
 
 		<TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
@@ -9,7 +9,7 @@
 
 		<ContentTargetFolders>.</ContentTargetFolders>
 		<Description>Enterspeed integration for Umbraco</Description>
-		<PackageTags>Enterspeed, Umbraco 10, umbraco-marketplace</PackageTags>
+		<PackageTags>Enterspeed, Umbraco 9+, umbraco-marketplace</PackageTags>
 
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
@@ -40,10 +40,6 @@
 		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="11.0.0" />
 	</ItemGroup>
 
-	<PropertyGroup Condition="Exists('$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\.U11')">
-		<DefineConstants>$(DefineConstants); U9</DefineConstants>
-	</PropertyGroup>
-	
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
 			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />

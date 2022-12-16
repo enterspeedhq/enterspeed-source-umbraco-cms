@@ -2,41 +2,14 @@ variables:
   majorVersion: $(MAJOR_VERSION)
   minorVersion: $(MINOR_VERSION)
   patchVersion: $(PATCH_VERSION)
+  releaseOnNuget: false
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
-  releaseOnNuget: variables.releaseOnNuget
   # Versioning: 1.0.0
   semVersion: $[format('{0}', variables.version)]
-  buildName: $[format('{0}', variables.semVersion)]
+  buildName: $(semVersion)
 
 name: $(BuildID) - $(buildName)
-
-trigger:
-  branches:
-    include:
-      - master
-      - develop
-      - release/*
-      - feature/*
-      - bugfix/*
-      - hotfix/*
-  paths:
-    exclude:
-      - README.md
-      - CHANGELOG.md
-      - documentation/*
-
-pr:
-  branches:
-    include:
-      - master
-      - develop
-      - release/*
-  paths:
-    exclude:
-      - README.md
-      - CHANGELOG.md
-      - documentation/*
 
 stages:
   - stage: Build
