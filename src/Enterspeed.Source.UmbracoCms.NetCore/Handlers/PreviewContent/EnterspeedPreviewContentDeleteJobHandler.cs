@@ -7,7 +7,7 @@ using Enterspeed.Source.UmbracoCms.NetCore.Providers;
 using Enterspeed.Source.UmbracoCms.NetCore.Services;
 
 namespace Enterspeed.Source.UmbracoCms.NetCore.Handlers.PreviewContent
-{
+{ 
     public class EnterspeedPreviewContentDeleteJobHandler : IEnterspeedJobHandler
     {
         private readonly IEnterspeedIngestService _enterspeedIngestService;
