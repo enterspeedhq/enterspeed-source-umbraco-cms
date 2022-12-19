@@ -55,9 +55,9 @@ trigger:
       - README.md
       - CHANGELOG.md
       - documentation/*
-      - src/Enterspeed.Source.UmbracoCms.NetCore/
       - Enterspeed.Source.UmbracoCms.sln
       - azure-pipelines-u9+.yml
+      - src/Enterspeed.Source.UmbracoCms.NetCore
 
 pr:
   branches:
@@ -70,6 +70,7 @@ pr:
       - README.md
       - CHANGELOG.md
       - documentation/*
+      - src/Enterspeed.Source.UmbracoCms.NetCore
 
 stages:
  
