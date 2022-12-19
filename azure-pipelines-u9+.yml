@@ -67,8 +67,8 @@ pr:
       - README.md
       - CHANGELOG.md
       - documentation/*
-      - src/Enterspeed.Source.UmbracoCms.V7/*
-      - src/Enterspeed.Source.UmbracoCms.V8/*
+      - src/Enterspeed.Source.UmbracoCms.V7/
+      - src/Enterspeed.Source.UmbracoCms.V8/
       - Enterspeed.Source.UmbracoCms.netframework.sln
       - azure-pipelines-u7-u8.yml
 
