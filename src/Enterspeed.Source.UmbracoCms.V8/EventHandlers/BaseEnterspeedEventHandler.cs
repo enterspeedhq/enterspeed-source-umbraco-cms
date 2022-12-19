@@ -8,7 +8,7 @@ using Umbraco.Core.Scoping;
 using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
-{
+{ 
     public abstract class BaseEnterspeedEventHandler
     { 
         protected IUmbracoContextFactory UmbracoContextFactory { get; }
