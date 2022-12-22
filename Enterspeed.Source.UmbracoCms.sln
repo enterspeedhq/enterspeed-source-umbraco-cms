@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V10.Tests", "tests\Enterspeed.Source.UmbracoCms.V10.Tests\Enterspeed.Source.UmbracoCms.V10.Tests.csproj", "{7AE895D2-7F6F-4497-BD68-6245E750022E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms.NetCore\Enterspeed.Source.UmbracoCms.csproj", "{025E5EBA-AB11-4938-BB91-6450AA2E389C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj", "{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,10 +38,10 @@ Global
 		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{025E5EBA-AB11-4938-BB91-6450AA2E389C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{025E5EBA-AB11-4938-BB91-6450AA2E389C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{025E5EBA-AB11-4938-BB91-6450AA2E389C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{025E5EBA-AB11-4938-BB91-6450AA2E389C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,7 +49,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3754E671-FA66-4DC4-A857-15A69962C210} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
 		{7AE895D2-7F6F-4497-BD68-6245E750022E} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
-		{025E5EBA-AB11-4938-BB91-6450AA2E389C} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
+		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E57FEE32-F9D9-4173-8300-40CF8BC054E1}
