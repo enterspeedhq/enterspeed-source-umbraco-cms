@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Extensions;
-using Enterspeed.Source.UmbracoCms.NetCore.Models.Grid;
+using Enterspeed.Source.UmbracoCms.Models.Grid;
 using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Linq;

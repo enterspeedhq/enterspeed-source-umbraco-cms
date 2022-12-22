@@ -7,7 +7,7 @@ using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
-using Enterspeed.Source.UmbracoCms.NetCore.Providers;
+using Enterspeed.Source.UmbracoCms.Providers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;

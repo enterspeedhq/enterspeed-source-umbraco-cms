@@ -2,7 +2,7 @@
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Models;
-using Enterspeed.Source.UmbracoCms.NetCore.Exceptions;
+using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
 
