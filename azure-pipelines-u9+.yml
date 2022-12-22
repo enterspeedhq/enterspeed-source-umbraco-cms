@@ -106,7 +106,7 @@ stages:
             inputs:
               command: pack
               outputDir: "$(Build.ArtifactStagingDirectory)/NuGet"
-              packagesToPack: "src/Enterspeed.Source.UmbracoCms.NetCore/*.csproj"
+              packagesToPack: "src/Enterspeed.Source.UmbracoCms/*.csproj"
               versioningScheme: byEnvVar
               versionEnvVar: semVersion
 
