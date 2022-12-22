@@ -1,7 +1,7 @@
 ﻿using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Configuration;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Providers
+namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public class InMemoryEnterspeedUmbracoConfigurationProvider : IEnterspeedConfigurationProvider
     {

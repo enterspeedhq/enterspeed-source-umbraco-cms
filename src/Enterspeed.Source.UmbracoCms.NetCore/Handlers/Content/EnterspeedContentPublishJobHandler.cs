@@ -5,15 +5,15 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using System.Text.Json;
-using Enterspeed.Source.UmbracoCms.NetCore.Services;
-using Enterspeed.Source.UmbracoCms.NetCore.Data.Models;
-using Enterspeed.Source.UmbracoCms.NetCore.Models;
-using Enterspeed.Source.UmbracoCms.NetCore.Factories;
-using Enterspeed.Source.UmbracoCms.NetCore.Providers;
 using Enterspeed.Source.UmbracoCms.NetCore.Exceptions;
 using Enterspeed.Source.UmbracoCms.NetCore.Models.Api;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Factories;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Handlers.Content
+namespace Enterspeed.Source.UmbracoCms.Handlers.Content
 {
     public class EnterspeedContentPublishJobHandler : IEnterspeedJobHandler
     {

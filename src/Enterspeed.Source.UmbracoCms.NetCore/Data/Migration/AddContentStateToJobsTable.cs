@@ -1,8 +1,8 @@
-﻿using Enterspeed.Source.UmbracoCms.NetCore.Data.Models;
-using Enterspeed.Source.UmbracoCms.NetCore.Data.Schemas;
+﻿using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Schemas;
 using Umbraco.Cms.Infrastructure.Migrations;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Data.Migration
+namespace Enterspeed.Source.UmbracoCms.Data.Migration
 {
     public class AddContentStateToJobsTable : MigrationBase
     {

@@ -2,7 +2,7 @@
 using NPoco;
 using Umbraco.Cms.Infrastructure.Persistence.DatabaseAnnotations;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Data.Schemas
+namespace Enterspeed.Source.UmbracoCms.Data.Schemas
 {
     [TableName("EnterspeedJobs")]
     [PrimaryKey("Id", AutoIncrement = true)]

@@ -1,4 +1,4 @@
-﻿namespace Enterspeed.Source.UmbracoCms.NetCore.Models
+﻿namespace Enterspeed.Source.UmbracoCms.Models
 {
     public enum ConnectionType
     {

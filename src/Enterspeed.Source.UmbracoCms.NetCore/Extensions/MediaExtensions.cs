@@ -2,9 +2,9 @@
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
-using Enterspeed.Source.UmbracoCms.NetCore.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.Models.Configuration;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Extensions
+namespace Enterspeed.Source.UmbracoCms.Extensions
 {
     public static class MediaExtensions
     {

@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Providers
+namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public interface IUmbracoMediaUrlProvider
     {

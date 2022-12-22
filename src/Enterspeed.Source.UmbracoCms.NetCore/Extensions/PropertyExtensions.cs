@@ -1,7 +1,7 @@
 ﻿using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Extensions
+namespace Enterspeed.Source.UmbracoCms.Extensions
 {
     public static class PropertyExtensions
     {

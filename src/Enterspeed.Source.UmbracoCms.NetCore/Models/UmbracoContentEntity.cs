@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.NetCore.Factories;
-using Enterspeed.Source.UmbracoCms.NetCore.Services;
+using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Models
+namespace Enterspeed.Source.UmbracoCms.Models
 {
     public class UmbracoContentEntity : IEnterspeedEntity
     {

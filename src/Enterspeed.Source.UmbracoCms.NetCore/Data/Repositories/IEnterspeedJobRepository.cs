@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Enterspeed.Source.UmbracoCms.NetCore.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Models;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Data.Repositories
+namespace Enterspeed.Source.UmbracoCms.Data.Repositories
 {
     public interface IEnterspeedJobRepository
     {

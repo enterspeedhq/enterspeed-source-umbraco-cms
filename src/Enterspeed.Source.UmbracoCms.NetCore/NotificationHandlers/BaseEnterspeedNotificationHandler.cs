@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.NetCore.Data.Models;
-using Enterspeed.Source.UmbracoCms.NetCore.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.NetCore.Services;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
@@ -13,7 +13,7 @@ using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.NotificationHandlers
+namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 {
     public abstract class BaseEnterspeedNotificationHandler
     {

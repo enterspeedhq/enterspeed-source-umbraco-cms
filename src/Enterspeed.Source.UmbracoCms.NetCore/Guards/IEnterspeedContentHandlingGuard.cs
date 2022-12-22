@@ -1,6 +1,6 @@
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Guards
+namespace Enterspeed.Source.UmbracoCms.Guards
 {
     public interface IEnterspeedContentHandlingGuard
     {

@@ -1,9 +1,10 @@
 ﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.NetCore.Extensions;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Microsoft.AspNetCore.Html;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services.DataProperties.DefaultConverters
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 {
     public class DefaultMarkdownEditorPropertyValueConverter : IEnterspeedPropertyValueConverter
     {

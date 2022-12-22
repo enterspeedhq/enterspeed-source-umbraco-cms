@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.NetCore.DataPropertyValueConverters;
-using Enterspeed.Source.UmbracoCms.NetCore.Extensions;
+using Enterspeed.Source.UmbracoCms.DataPropertyValueConverters;
+using Enterspeed.Source.UmbracoCms.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
@@ -13,7 +13,7 @@ using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class EnterspeedPropertyService : IEnterspeedPropertyService
     {
@@ -120,7 +120,7 @@ namespace Enterspeed.Source.UmbracoCms.NetCore.Services
         public IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media)
         {
             using var context = _umbracoContextFactory.EnsureUmbracoContext();
-            
+
             IDictionary<string, IEnterspeedProperty> enterspeedProperties;
 
             var publishedMedia = context.UmbracoContext.Media?.GetById(media.Id);
@@ -128,7 +128,7 @@ namespace Enterspeed.Source.UmbracoCms.NetCore.Services
             {
                 var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
                 enterspeedProperties = ConvertProperties(properties);
-            } 
+            }
             else
             {
                 _logger.LogWarning($"Could not get media as published content, for media with id of {media.Id}");

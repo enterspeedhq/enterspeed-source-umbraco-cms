@@ -2,7 +2,7 @@
 using System.Linq;
 using Umbraco.Cms.Core.Services;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class UmbracoRedirectsService : IUmbracoRedirectsService
     {

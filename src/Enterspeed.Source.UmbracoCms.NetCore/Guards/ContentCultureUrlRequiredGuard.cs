@@ -1,8 +1,8 @@
-using Enterspeed.Source.UmbracoCms.NetCore.Factories;
+using Enterspeed.Source.UmbracoCms.Factories;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Guards
+namespace Enterspeed.Source.UmbracoCms.Guards
 {
     public class ContentCultureUrlRequiredGuard : IEnterspeedContentHandlingGuard
     {

@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Core.Composing;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Handlers
+namespace Enterspeed.Source.UmbracoCms.Handlers
 {
     public class EnterspeedJobHandlerCollectionBuilder : OrderedCollectionBuilderBase<EnterspeedJobHandlerCollectionBuilder, EnterspeedJobHandlerCollection,
             IEnterspeedJobHandler>

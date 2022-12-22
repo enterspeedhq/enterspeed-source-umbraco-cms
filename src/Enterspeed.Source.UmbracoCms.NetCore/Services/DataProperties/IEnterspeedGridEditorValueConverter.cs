@@ -1,7 +1,7 @@
 ﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.NetCore.Models.Grid;
+using Enterspeed.Source.UmbracoCms.Models.Grid;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services.DataProperties
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
 {
     public interface IEnterspeedGridEditorValueConverter
     {

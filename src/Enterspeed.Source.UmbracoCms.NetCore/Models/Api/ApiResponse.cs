@@ -1,4 +1,4 @@
-﻿namespace Enterspeed.Source.UmbracoCms.NetCore.Models.Api
+﻿namespace Enterspeed.Source.UmbracoCms.Models.Api
 {
     public class ApiResponse<T>
     {

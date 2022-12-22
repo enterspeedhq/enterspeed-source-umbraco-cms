@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V10.Tests", "tests\Enterspeed.Source.UmbracoCms.V10.Tests\Enterspeed.Source.UmbracoCms.V10.Tests.csproj", "{7AE895D2-7F6F-4497-BD68-6245E750022E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.NetCore", "src\Enterspeed.Source.UmbracoCms.NetCore\Enterspeed.Source.UmbracoCms.NetCore.csproj", "{025E5EBA-AB11-4938-BB91-6450AA2E389C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms.NetCore\Enterspeed.Source.UmbracoCms.csproj", "{025E5EBA-AB11-4938-BB91-6450AA2E389C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

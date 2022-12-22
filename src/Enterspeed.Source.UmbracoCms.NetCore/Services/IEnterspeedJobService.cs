@@ -1,6 +1,6 @@
-﻿using Enterspeed.Source.UmbracoCms.NetCore.Models.Api;
+﻿using Enterspeed.Source.UmbracoCms.Models.Api;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public interface IEnterspeedJobService
     {

@@ -1,14 +1,14 @@
 ﻿using System;
 using Enterspeed.Source.Sdk.Configuration;
-using Enterspeed.Source.UmbracoCms.NetCore.Extensions;
-using Enterspeed.Source.UmbracoCms.NetCore.Models.Configuration;
-using Enterspeed.Source.UmbracoCms.NetCore.Providers;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Umbraco.Cms.Core.Services;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class EnterspeedConfigurationService : IEnterspeedConfigurationService
     {

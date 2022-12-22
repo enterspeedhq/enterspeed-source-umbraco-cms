@@ -1,6 +1,6 @@
 ﻿using Enterspeed.Source.Sdk.Configuration;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Models.Configuration
+namespace Enterspeed.Source.UmbracoCms.Models.Configuration
 {
     public class EnterspeedUmbracoConfiguration : EnterspeedConfiguration
     {

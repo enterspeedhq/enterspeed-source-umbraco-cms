@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.NetCore.Services;
+using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.Extensions.Options;
 using StackExchange.Profiling.Internal;
 using Umbraco.Cms.Core.Configuration.Models;
@@ -9,7 +9,7 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Factories
+namespace Enterspeed.Source.UmbracoCms.Factories
 {
     public class UrlFactory : IUrlFactory
     {

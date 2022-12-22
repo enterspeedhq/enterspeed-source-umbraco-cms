@@ -1,7 +1,7 @@
 ﻿using Enterspeed.Source.Sdk.Api.Connection;
-using Enterspeed.Source.UmbracoCms.NetCore.Models;
+using Enterspeed.Source.UmbracoCms.Models;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Providers
+namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public interface IEnterspeedConnectionProvider
     {

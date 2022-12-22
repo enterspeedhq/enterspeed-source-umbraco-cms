@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Models.Grid
+namespace Enterspeed.Source.UmbracoCms.Models.Grid
 {
     public class GridControl
     {

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.NetCore.Extensions;
-using Enterspeed.Source.UmbracoCms.NetCore.Providers;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 using Umbraco.Cms.Core.Web;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services.DataProperties.DefaultConverters
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 {
     public class DefaultMultiUrlPickerPropertyValueConverter : IEnterspeedPropertyValueConverter
     {

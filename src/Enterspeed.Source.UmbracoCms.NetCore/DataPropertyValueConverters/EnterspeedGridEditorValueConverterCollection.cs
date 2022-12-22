@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Enterspeed.Source.UmbracoCms.NetCore.Services.DataProperties;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core.Composing;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.DataPropertyValueConverters
+namespace Enterspeed.Source.UmbracoCms.DataPropertyValueConverters
 {
     public class
         EnterspeedGridEditorValueConverterCollection : BuilderCollectionBase<IEnterspeedGridEditorValueConverter>

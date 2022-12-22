@@ -2,12 +2,12 @@
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Domain.Connection;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.NetCore.Connections;
-using Enterspeed.Source.UmbracoCms.NetCore.Extensions;
-using Enterspeed.Source.UmbracoCms.NetCore.Models;
-using Enterspeed.Source.UmbracoCms.NetCore.Services;
+using Enterspeed.Source.UmbracoCms.Services;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Providers
+namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public class EnterspeedConnectionProvider : IEnterspeedConnectionProvider
     {

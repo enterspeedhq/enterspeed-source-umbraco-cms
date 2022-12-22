@@ -1,8 +1,8 @@
 ﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.NetCore.Extensions;
+using Enterspeed.Source.UmbracoCms.Extensions;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services.DataProperties.DefaultConverters
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 {
     public class DefaultCheckboxPropertyValueConverter : IEnterspeedPropertyValueConverter
     {

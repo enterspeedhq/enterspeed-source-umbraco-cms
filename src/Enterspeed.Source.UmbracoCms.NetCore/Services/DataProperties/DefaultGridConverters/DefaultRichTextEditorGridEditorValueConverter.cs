@@ -1,8 +1,9 @@
 ﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.NetCore.Models.Grid;
+using Enterspeed.Source.UmbracoCms.Models.Grid;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.NetCore.Services.DataProperties.DefaultGridConverters
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultGridConverters
 {
     public class DefaultRichTextEditorGridEditorValueConverter : IEnterspeedGridEditorValueConverter
     {
