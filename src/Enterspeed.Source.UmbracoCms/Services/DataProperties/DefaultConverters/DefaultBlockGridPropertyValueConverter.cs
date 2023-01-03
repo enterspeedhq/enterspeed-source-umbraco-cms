@@ -84,7 +84,7 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 
             return new ArrayEnterspeedProperty("areas", areasArrayItem.ToArray());
         }
-        
+
         private static void MapProperties(IEnterspeedPropertyService dataPropertyService, BlockGridItem item, IDictionary<string, IEnterspeedProperty> properties, string culture)
         {
             if (item.Content?.Properties != null)
@@ -103,8 +103,20 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
             {
                 properties.Add("contentType", new StringEnterspeedProperty(item.Content.ContentType.Alias));
             }
+
+            if (item.AreaGridColumns.HasValue)
+            {
+                properties.Add("areaGridColumns", new NumberEnterspeedProperty(item.AreaGridColumns.Value));
+            }
+
+            if (item.GridColumns.HasValue)
+            {
+                properties.Add("gridColumns", new NumberEnterspeedProperty(item.GridColumns.Value));
+            }
+
+            properties.Add("columnSpan", new NumberEnterspeedProperty(item.ColumnSpan));
+            properties.Add("rowSpan", new NumberEnterspeedProperty(item.RowSpan));
         }
     }
 }
-
 #endif
