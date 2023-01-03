@@ -4,39 +4,47 @@ variables:
   minorVersion: 0
   patchVersion: 0
   version: $[format('{0}.{1}.{2}-{3}', variables.majorVersion, variables.minorVersion, variables.patchVersion, 'alpha-2')]
+  # Remove below 3 variables and uncomment commented conditions before merging to master
   semVersion: $[format('{0}', variables.version)]
   buildName: $[format('{0}', variables.semVersion)]
+  releaseOnNuget: true
 
   # ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+  #   releaseOnNuget: true
   #   # Versioning: 1.0.0
   #   semVersion: $[format('{0}', variables.version)]
   #   buildName: $[format('{0}', variables.semVersion)]
   # ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
   #   # Versioning: 1.0.0-develop.123
+  #   releaseOnNuget: false
   #   semVersionBase: $[format('{0}-develop', variables.version)]
   #   semVersionRev: $[counter(variables.semVersionBase, 0)]
   #   semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
   #   buildName: $[format('Develop - {0}', variables.semVersion)]
   # ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
   #   # Versioning: 1.0.0-alpha.branch.123
+  #   releaseOnNuget: false
   #   semVersionBase: $[format('{0}-alpha.{1}', variables.version, variables['Build.SourceBranchName'])]
   #   semVersionRev: $[counter(variables.semVersionBase, 0)]
   #   semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
   #   buildName: $[format('Release - {0}', variables.semVersion)]
   # ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/') }}:
   #   # Versioning: 1.0.0-feature.branch.123
+  #   releaseOnNuget: false
   #   semVersionBase: $[format('{0}-feature.{1}', variables.version, variables['Build.SourceBranchName'])]
   #   semVersionRev: $[counter(variables.semVersionBase, 0)]
   #   semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
   #   buildName: $[format('Feature - {0}', variables.semVersion)]
   # ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}: # Pull requests
   #   # Versioning: 1.0.0-pr.1.123
+  #   releaseOnNuget: false
   #   semVersionBase: $[format('{0}-pr.{1}', variables.version, variables['System.PullRequest.PullRequestId'])]
   #   semVersionRev: $[counter(variables.semVersionBase, 0)]
   #   semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
   #   buildName: $[format('Pull Request - {0}', variables.semVersion)]
   # ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/bugfix/') }}:
   #   # Versioning: 1.0.0-bugfix.branch.123
+  #   releaseOnNuget: false
   #   semVersionBase: $[format('{0}-bugfix.{1}', variables.version, variables['Build.SourceBranchName'])]
   #   semVersionRev: $[counter(variables.semVersionBase, 0)]
   #   semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
@@ -119,3 +127,38 @@ stages:
             inputs:
               targetPath: "$(Build.ArtifactStagingDirectory)/NuGet"
               artifact: nupkg
+              
+  - stage: Release
+    displayName: Release
+    condition: and(succeeded(), eq(variables.releaseOnNuget, 'true'))
+    jobs:
+      - deployment: ReleaseNuGet
+        displayName: Release on NuGet.org
+        environment: NuGetOrg
+        pool:
+          vmImage: ubuntu-latest
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - checkout: self
+                  persistCredentials: true
+                  clean: true
+                  fetchDepth: 1
+
+                # Tag release in git
+                - task: Bash@3
+                  displayName: Tag version in git
+                  inputs:
+                    targetType: inline
+                    script: |
+                      git tag $(semVersion)
+                      git push --tags
+
+                - task: NuGetCommand@2
+                  displayName: Release on NuGet.org
+                  inputs:
+                    command: push
+                    packagesToPush: "$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg"
+                    nuGetFeedType: external
+                    publishFeedCredentials: NuGet.org
