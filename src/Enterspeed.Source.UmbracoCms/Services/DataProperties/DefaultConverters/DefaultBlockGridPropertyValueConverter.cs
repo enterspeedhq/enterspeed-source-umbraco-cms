@@ -40,27 +40,12 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 
                     if (item.Areas.Any())
                     {
-                        var areas = AddAreas(item, dataPropertyService);
+                        var areas = AddAreas(item, dataPropertyService, culture);
                         properties.Add("areas", areas);
                     }
                     else
                     {
-                        if (item.Content?.Properties != null)
-                        {
-                            var contentProperties = dataPropertyService.ConvertProperties(item.Content.Properties, culture);
-                            properties.Add("content", new ObjectEnterspeedProperty(contentProperties));
-                        }
-
-                        if (item.Settings?.Properties != null)
-                        {
-                            var settingsProperties = dataPropertyService.ConvertProperties(item.Settings.Properties, culture);
-                            properties.Add("settings", new ObjectEnterspeedProperty(settingsProperties));
-                        }
-
-                        if (item.Content?.ContentType != null)
-                        {
-                            properties.Add("contentType", new StringEnterspeedProperty(item.Content.ContentType.Alias));
-                        }
+                        MapProperties(dataPropertyService, item, properties, culture);
                     }
 
                     if (properties.Any())
@@ -73,7 +58,7 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
             return new ArrayEnterspeedProperty(property.Alias, arrayItems.ToArray());
         }
 
-        private ArrayEnterspeedProperty AddAreas(BlockGridItem item, IEnterspeedPropertyService dataPropertyService)
+        private static ArrayEnterspeedProperty AddAreas(BlockGridItem item, IEnterspeedPropertyService dataPropertyService, string culture)
         {
             var areasArrayItem = new List<IEnterspeedProperty>();
 
@@ -85,17 +70,11 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
                     {
                         var properties = new Dictionary<string, IEnterspeedProperty>();
 
-                        var areaProperties = dataPropertyService.ConvertProperties(blockGridItem.Content.Properties);
-
-                        if (areaProperties != null && areaProperties.Any())
-                        {
-                            properties.Add("content", new ObjectEnterspeedProperty(areaProperties));
-                            properties.Add("contentType", new StringEnterspeedProperty(blockGridItem.Content.ContentType.Alias));
-                        }
+                        MapProperties(dataPropertyService, blockGridItem, properties, culture);
 
                         if (blockGridItem.Areas.Any())
                         {
-                            properties.Add("areas", AddAreas(blockGridItem, dataPropertyService));
+                            properties.Add("areas", AddAreas(blockGridItem, dataPropertyService, culture));
                         }
 
                         areasArrayItem.Add(new ObjectEnterspeedProperty(properties));
@@ -104,6 +83,26 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
             }
 
             return new ArrayEnterspeedProperty("areas", areasArrayItem.ToArray());
+        }
+        
+        private static void MapProperties(IEnterspeedPropertyService dataPropertyService, BlockGridItem item, IDictionary<string, IEnterspeedProperty> properties, string culture)
+        {
+            if (item.Content?.Properties != null)
+            {
+                var contentProperties = dataPropertyService.ConvertProperties(item.Content.Properties, culture);
+                properties.Add("content", new ObjectEnterspeedProperty(contentProperties));
+            }
+
+            if (item.Settings?.Properties != null)
+            {
+                var settingsProperties = dataPropertyService.ConvertProperties(item.Settings.Properties, culture);
+                properties.Add("settings", new ObjectEnterspeedProperty(settingsProperties));
+            }
+
+            if (item.Content?.ContentType != null)
+            {
+                properties.Add("contentType", new StringEnterspeedProperty(item.Content.ContentType.Alias));
+            }
         }
     }
 }
