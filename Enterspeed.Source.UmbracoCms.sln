@@ -8,21 +8,18 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{0215A9EA-3011-4D81-B588-FC322C54D8A6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		azure-pipelines.yml = azure-pipelines.yml
 		CHANGELOG.md = CHANGELOG.md
 		NuGet.Config = NuGet.Config
 		README.md = README.md
-		umbraco-marketplace-enterspeed.source.umbracocms.v10.json = umbraco-marketplace-enterspeed.source.umbracocms.v10.json
-		umbraco-marketplace-enterspeed.source.umbracocms.v9.json = umbraco-marketplace-enterspeed.source.umbracocms.v9.json
+		umbraco-marketplace-enterspeed.source.umbracocms.json = umbraco-marketplace-enterspeed.source.umbracocms.json
+		azure-pipelines-u9+.yml = azure-pipelines-u9+.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7971E102-218B-4A98-962E-BF881CBA2B2C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V9.Tests", "tests\Enterspeed.Source.UmbracoCms.V9.Tests\Enterspeed.Source.UmbracoCms.V9.Tests.csproj", "{3754E671-FA66-4DC4-A857-15A69962C210}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj", "{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V10.Tests", "tests\Enterspeed.Source.UmbracoCms.V10.Tests\Enterspeed.Source.UmbracoCms.V10.Tests.csproj", "{7AE895D2-7F6F-4497-BD68-6245E750022E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj", "{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.Tests", "tests\Enterspeed.Source.UmbracoCms.Tests\Enterspeed.Source.UmbracoCms.Tests.csproj", "{DFEC5371-B474-4183-9C31-8A09E277AB5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,26 +27,21 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3754E671-FA66-4DC4-A857-15A69962C210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3754E671-FA66-4DC4-A857-15A69962C210}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3754E671-FA66-4DC4-A857-15A69962C210}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3754E671-FA66-4DC4-A857-15A69962C210}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AE895D2-7F6F-4497-BD68-6245E750022E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{3754E671-FA66-4DC4-A857-15A69962C210} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
-		{7AE895D2-7F6F-4497-BD68-6245E750022E} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
 		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
+		{DFEC5371-B474-4183-9C31-8A09E277AB5A} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E57FEE32-F9D9-4173-8300-40CF8BC054E1}
