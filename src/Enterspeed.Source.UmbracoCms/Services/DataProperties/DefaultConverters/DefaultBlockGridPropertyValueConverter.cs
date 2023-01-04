@@ -34,7 +34,7 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
             {
                 // NOTE: This needs to be resolved manually, since it would cause a circular dependency if injected through constructor
                 var dataPropertyService = _serviceProvider.GetRequiredService<IEnterspeedPropertyService>();
-                
+
                 if (value.GridColumns != null)
                 {
                     blockGridProperties.Add("gridColumns", new NumberEnterspeedProperty("gridColumns", value.GridColumns.Value));
@@ -62,32 +62,39 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 
         private static ObjectEnterspeedProperty AddAreas(BlockGridItem item, IEnterspeedPropertyService dataPropertyService, string culture)
         {
-            var blockGridAreaProperties = new Dictionary<string, IEnterspeedProperty>();
-            var areasArrayItems = new List<IEnterspeedProperty>();
+            var gridAreaProperties = new Dictionary<string, IEnterspeedProperty>();
 
             if (item.Areas.Any())
             {
-                blockGridAreaProperties = MapProperties(dataPropertyService, item, culture);
+                var arrayOfAreas = new List<IEnterspeedProperty>();
+                gridAreaProperties = MapProperties(dataPropertyService, item, culture);
 
                 foreach (var area in item.Areas)
                 {
+                    var arrayOfBlockGridItems = new List<IEnterspeedProperty>();
+
                     foreach (var blockGridItem in area)
                     {
-                        var properties = MapProperties(dataPropertyService, blockGridItem, culture);
-
+                        var blockGridProperties = MapProperties(dataPropertyService, blockGridItem, culture);
                         if (blockGridItem.Areas.Any())
                         {
-                            properties.Add("areas", AddAreas(blockGridItem, dataPropertyService, culture));
+                            blockGridProperties.Add("areas", AddAreas(blockGridItem, dataPropertyService, culture));
                         }
 
-                        areasArrayItems.Add(new ObjectEnterspeedProperty(properties));
+                        arrayOfBlockGridItems.Add(new ObjectEnterspeedProperty(blockGridProperties));
                     }
+
+                    var areaProperties = new Dictionary<string, IEnterspeedProperty>();
+                    areaProperties.Add("alias", new StringEnterspeedProperty(area.Alias));
+                    areaProperties.Add("items", new ArrayEnterspeedProperty("items", arrayOfBlockGridItems.ToArray()));
+
+                    arrayOfAreas.Add(new ObjectEnterspeedProperty(areaProperties));
                 }
-                
-                blockGridAreaProperties.Add("areas", new ArrayEnterspeedProperty("areas", areasArrayItems.ToArray()));
+
+                gridAreaProperties.Add("areas", new ArrayEnterspeedProperty("areas", arrayOfAreas.ToArray()));
             }
 
-            return new ObjectEnterspeedProperty(blockGridAreaProperties);
+            return new ObjectEnterspeedProperty(gridAreaProperties);
         }
 
         private static Dictionary<string, IEnterspeedProperty> MapProperties(IEnterspeedPropertyService dataPropertyService, BlockGridItem item, string culture)
