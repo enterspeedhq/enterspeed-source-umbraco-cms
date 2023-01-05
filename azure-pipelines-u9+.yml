@@ -3,7 +3,7 @@ variables:
   majorVersion: 1
   minorVersion: 0
   patchVersion: 0
-  version: $[format('{0}.{1}.{2}-{3}', variables.majorVersion, variables.minorVersion, variables.patchVersion, 'alpha-2')]
+  version: $[format('{0}.{1}.{2}-{3}', variables.majorVersion, variables.minorVersion, variables.patchVersion, 'alpha-3')]
   # Remove below 3 variables and uncomment commented conditions before merging to master
   semVersion: $[format('{0}', variables.version)]
   buildName: $[format('{0}', variables.semVersion)]
