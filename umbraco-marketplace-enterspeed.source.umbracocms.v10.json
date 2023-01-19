@@ -12,6 +12,7 @@
   "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/umbraco-v10/getting-started",
   "PackageType": "Integration",
   "PackagesByAuthor": [ "Enterspeed.Source.UmbracoCms.V8", "Enterspeed.Source.UmbracoCms.V9", "Enterspeed.Source.UmbracoCms.V10", "Enterspeed.Demos.UmbracoCms.V9.FairyTales", "Enterspeed.Demos.UmbracoCms.V10.FairyTales", "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers", "Enterspeed.Demos.UmbracoCms.V10.MultisiteBeers" ],
+  "Description": "This package is deprecated. Use this package instead https://www.nuget.org/packages/Enterspeed.Source.UmbracoCms/",
   "RelatedPackages": [
     {
       "PackageId": "Enterspeed.Source.UmbracoCms.V9",
