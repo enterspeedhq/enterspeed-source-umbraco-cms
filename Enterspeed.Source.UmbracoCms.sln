@@ -8,11 +8,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{0215A9EA-3011-4D81-B588-FC322C54D8A6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		CHANGELOG.md = CHANGELOG.md
 		NuGet.Config = NuGet.Config
 		README.md = README.md
 		umbraco-marketplace-enterspeed.source.umbracocms.json = umbraco-marketplace-enterspeed.source.umbracocms.json
 		azure-pipelines-u9+.yml = azure-pipelines-u9+.yml
+		CHANGELOG-Enterspeed.Source.UmbracoCms.md = CHANGELOG-Enterspeed.Source.UmbracoCms.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7971E102-218B-4A98-962E-BF881CBA2B2C}"

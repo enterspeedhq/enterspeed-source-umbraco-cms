@@ -1,7 +1,5 @@
 ﻿{
-  "AlternatePackageNames": [
-    "Enterspeed Source Umbraco CMS"
-  ],
+  "AlternatePackageNames": [ "Enterspeed Source Umbraco CMS" ],
   "AuthorDetails": {
     "Name": "Enterspeed",
     "Description": "Enterspeed is a Speed Layer transforming, consolidating, and storing content from multiple data sources. Unique to Enterspeed is the blazing fast Microsoft Azure cloud storage: Data is prepared for delivery to frontends at publish time, meaning that load on underlying systems is minimised.",
@@ -11,21 +9,15 @@
   "Category": "Headless",
   "LicenseType": "Free",
   "IssueTrackerUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/issues",
-<<<<<<<< HEAD:umbraco-marketplace-enterspeed.source.umbracocms.json
-  "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/getting-started",
-========
-  "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/umbraco-v9/getting-started",
-  "Description": "This package is deprecated. Use this package instead https://www.nuget.org/packages/Enterspeed.Source.UmbracoCms/",
->>>>>>>> master:umbraco-marketplace-enterspeed.source.umbracocms.v9.json
+  "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/umbraco-v10/getting-started",
   "PackageType": "Integration",
-  "PackagesByAuthor": [
-    "Enterspeed.Source.UmbracoCms.V8",
-    "Enterspeed.Demos.UmbracoCms.V9.FairyTales",
-    "Enterspeed.Demos.UmbracoCms.v11.FairyTales",
-    "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers",
-    "Enterspeed.Demos.UmbracoCms.v11.MultisiteBeers"
-  ],
+  "PackagesByAuthor": [ "Enterspeed.Source.UmbracoCms.V8", "Enterspeed.Source.UmbracoCms.V9", "Enterspeed.Source.UmbracoCms.V10", "Enterspeed.Demos.UmbracoCms.V9.FairyTales", "Enterspeed.Demos.UmbracoCms.V10.FairyTales", "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers", "Enterspeed.Demos.UmbracoCms.V10.MultisiteBeers" ],
+  "Description": "This package is deprecated. Use this package instead https://www.nuget.org/packages/Enterspeed.Source.UmbracoCms/",
   "RelatedPackages": [
+    {
+      "PackageId": "Enterspeed.Source.UmbracoCms.V9",
+      "Description": "Enterspeed integration for Umbraco version 9"
+    },
     {
       "PackageId": "Enterspeed.Source.UmbracoCms.V8",
       "Description": "Enterspeed integration for Umbraco version 8"
@@ -33,11 +25,11 @@
   ],
   "Screenshots": [
     {
-      "ImageUrl": "https://raw.githubusercontent.com/enterspeedhq/enterspeed-source-umbraco-cms/develop/umbracoMarketplace/Enterspeed/enterspeed-configuration.png",
+      "ImageUrl": "https://raw.githubusercontent.com/enterspeedhq/enterspeed-source-umbraco-cms/develop/umbracoMarketplace/v10/enterspeed-configuration.png",
       "Caption": "The Enterspeed configuration can be entered in the Umbraco backoffice and stored in the database or it can be configured in the appsettings.json."
     },
     {
-      "ImageUrl": "https://raw.githubusercontent.com/enterspeedhq/enterspeed-source-umbraco-cms/develop/umbracoMarketplace/Enterspeed/enterspeed-seed.png",
+      "ImageUrl": "https://raw.githubusercontent.com/enterspeedhq/enterspeed-source-umbraco-cms/develop/umbracoMarketplace/v10/enterspeed-seed.png",
       "Caption": "Content, media and dictionary items are automatically send to Enterspeed on save and/or publish. Using the seed functionality you can resend all items to Enterspeed in one go."
     }
   ],
