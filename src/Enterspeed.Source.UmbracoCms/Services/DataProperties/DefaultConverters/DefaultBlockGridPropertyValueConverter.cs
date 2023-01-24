@@ -1,10 +1,10 @@
-#if NET7_0_OR_GREATER
-using System;
-using System.Collections.Generic;
-using System.Linq;
+#if NET6_0_OR_GREATER
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using Umbraco.Cms.Core.Models.Blocks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
@@ -84,9 +84,11 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
                         arrayOfBlockGridItems.Add(new ObjectEnterspeedProperty(blockGridProperties));
                     }
 
-                    var areaProperties = new Dictionary<string, IEnterspeedProperty>();
-                    areaProperties.Add("alias", new StringEnterspeedProperty(area.Alias));
-                    areaProperties.Add("items", new ArrayEnterspeedProperty("items", arrayOfBlockGridItems.ToArray()));
+                    var areaProperties = new Dictionary<string, IEnterspeedProperty>
+                    {
+                        { "alias", new StringEnterspeedProperty(area.Alias) },
+                        { "items", new ArrayEnterspeedProperty("items", arrayOfBlockGridItems.ToArray()) }
+                    };
 
                     arrayOfAreas.Add(new ObjectEnterspeedProperty(areaProperties));
                 }
