@@ -22,18 +22,21 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly ILogger _logger;
         private readonly IDomainService _domainService;
+        private readonly IEnterspeedValidationService _enterspeedValidationService;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
             IUmbracoContextFactory umbracoContextFactory,
             ILogger logger,
-            IDomainService domainService)
+            IDomainService domainService,
+            IEnterspeedValidationService enterspeedValidationService)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
             _logger = logger;
             _domainService = domainService;
             _identityService = Current.Factory.GetInstance<IEntityIdentityService>();
+            _enterspeedValidationService = enterspeedValidationService;
         }
 
         public IDictionary<string, IEnterspeedProperty> GetProperties(IPublishedContent content, string culture = null)
@@ -44,6 +47,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             MapAdditionalProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, content, culture);
 
             enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
+
+            _enterspeedValidationService.LogValidationErrors(enterspeedProperties);
 
             return enterspeedProperties;
         }
@@ -136,6 +141,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 MapAdditionalMediaProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
 
                 enterspeedProperties.Add(MetaData, CreateMediaProperties(media, publishedMedia));
+
+                _enterspeedValidationService.LogValidationErrors(enterspeedProperties);
 
                 return enterspeedProperties;
             }

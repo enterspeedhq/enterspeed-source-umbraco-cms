@@ -23,19 +23,22 @@ namespace Enterspeed.Source.UmbracoCms.Services
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly ILogger<EnterspeedPropertyService> _logger;
         private readonly IDomainService _domainService;
+        private readonly IEnterspeedValidationService _enterspeedValidationService;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
             IServiceProvider serviceProvider,
             IUmbracoContextFactory umbracoContextFactory,
             ILogger<EnterspeedPropertyService> logger,
-            IDomainService domainService)
+            IDomainService domainService,
+            IEnterspeedValidationService enterspeedValidationService)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
             _logger = logger;
             _domainService = domainService;
             _identityService = serviceProvider.GetRequiredService<IEntityIdentityService>();
+            _enterspeedValidationService = enterspeedValidationService;
         }
 
         public IDictionary<string, IEnterspeedProperty> GetProperties(IPublishedContent content, string culture = null)
@@ -46,6 +49,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
             MapAdditionalProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, content, culture);
 
             enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
+
+            _enterspeedValidationService.LogValidationErrors(enterspeedProperties);
 
             return enterspeedProperties;
         }
@@ -138,6 +143,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
             MapAdditionalMediaProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
 
             enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
+
+            _enterspeedValidationService.LogValidationErrors(enterspeedProperties);
 
             return enterspeedProperties;
         }

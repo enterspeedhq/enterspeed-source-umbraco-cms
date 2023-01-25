@@ -57,6 +57,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
             builder.Services.AddTransient<IUrlFactory, UrlFactory>();
             builder.Services.AddTransient<IEnterspeedJobFactory, EnterspeedJobFactory>();
             builder.Services.AddTransient<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>();
+            builder.Services.AddSingleton<IEnterspeedValidationService, EnterspeedValidationService>();
 
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();

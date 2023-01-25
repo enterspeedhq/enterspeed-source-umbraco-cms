@@ -397,12 +397,14 @@
     <Compile Include="Services\EnterspeedConfigurationService.cs" />
     <Compile Include="Services\EnterspeedJobService.cs" />
     <Compile Include="Services\EnterspeedGridEditorService.cs" />
+    <Compile Include="Services\EnterspeedValidationService.cs" />
     <Compile Include="Services\IEnterspeedConfigurationService.cs" />
     <Compile Include="Services\IEnterspeedGridEditorService.cs" />
     <Compile Include="Services\IEnterspeedGuardService.cs" />
     <Compile Include="Services\IEnterspeedJobsHandlingService.cs" />
     <Compile Include="Services\IEnterspeedPropertyService.cs" />
     <Compile Include="Services\IEnterspeedJobService.cs" />
+    <Compile Include="Services\IEnterspeedValidationService.cs" />
     <Compile Include="Services\IEntityIdentityService.cs" />
     <Compile Include="Services\IUmbracoRedirectsService.cs" />
     <Compile Include="Services\IUmbracoContextProvider.cs" />
