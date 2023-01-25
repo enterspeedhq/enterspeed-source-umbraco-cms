@@ -18,6 +18,7 @@ using Enterspeed.Source.UmbracoCms.Handlers.Dictionaries;
 using Enterspeed.Source.UmbracoCms.Handlers.Media;
 using Enterspeed.Source.UmbracoCms.Handlers.PreviewContent;
 using Enterspeed.Source.UmbracoCms.Handlers.PreviewDictionaries;
+using Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia;
 using Enterspeed.Source.UmbracoCms.HostedServices;
 using Enterspeed.Source.UmbracoCms.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.Providers;
@@ -150,7 +151,11 @@ namespace Enterspeed.Source.UmbracoCms.Composers
 
                 // Media 
                 .Append<EnterspeedMediaPublishJobHandler>()
-                .Append<EnterspeedMediaTrashedJobHandler>();
+                .Append<EnterspeedMediaTrashedJobHandler>()
+
+                // Preview medis 
+                .Append<EnterspeedPreviewMediaPublishJobHandler>()
+                .Append<EnterspeedPreviewMediaTrashedJobHandler>();
 
 
             // Mapping definitions
