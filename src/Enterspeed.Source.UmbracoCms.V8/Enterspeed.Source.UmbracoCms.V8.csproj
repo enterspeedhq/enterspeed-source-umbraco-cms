@@ -325,6 +325,8 @@
     <Compile Include="Guards\IEnterspeedMediaHandlingGuard.cs" />
     <Compile Include="Guards\IEnterspeedDictionaryItemHandlingGuard.cs" />
     <Compile Include="Handlers\Content\EnterspeedContentDeleteJobHandler.cs" />
+    <Compile Include="Handlers\PreviewMedia\EnterspeedPreviewMediaPublishJobHandler.cs" />
+    <Compile Include="Handlers\PreviewMedia\EnterspeedPreviewMediaTrashedJobHandler.cs" />
     <Compile Include="Handlers\Media\EnterspeedMediaTrashedJobHandler.cs" />
     <Compile Include="Handlers\Media\EnterspeedMediaPublishJobHandler.cs" />
     <Compile Include="Handlers\Dictionaries\EnterspeedDictionaryItemDeleteJobHandler.cs" />

@@ -46,9 +46,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
         private void MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e)
         {
-            var isPublishConfigured = ConfigurationService.IsPublishConfigured();
+            var isPublishConfigured = IsPublishConfigured();
+            var isPreviewConfigured = IsPreviewConfigured();
 
-            if (!isPublishConfigured)
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -65,12 +66,28 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                     {
                         foreach (var item in mediaItems)
                         {
-                            jobs.Add(_enterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            if (isPublishConfigured)
+                            {
+                                jobs.Add(_enterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            }
+
+                            if (isPreviewConfigured)
+                            {
+                                jobs.Add(_enterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Preview));
+                            }
                         }
                     }
                 }
 
-                jobs.Add(_enterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                if (isPublishConfigured)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                }
+
+                if (isPreviewConfigured)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Preview));
+                }
             }
 
             EnqueueJobs(jobs);
