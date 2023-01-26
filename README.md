@@ -7,7 +7,10 @@ To get started with Enterspeed for Umbraco, please see:
 
 ## Changelog
 
-See new features, fixes and breaking changes in the [changelog](./CHANGELOG.md).
+See new features, fixes and breaking changes in the changelog.
+
+[Changelog for Umbraco 7 and 8 integration](./CHANGELOG-Enterspeed.Source.UmbracoCms.netframework.md)  
+[Changelog for Umbraco 9+ integration](./CHANGELOG-Enterspeed.Source.UmbracoCms.md)
 
 ## Contributing
 

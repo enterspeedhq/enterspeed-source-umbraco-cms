@@ -13,13 +13,7 @@
   "IssueTrackerUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/issues",
   "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/getting-started",
   "PackageType": "Integration",
-  "PackagesByAuthor": [
-    "Enterspeed.Source.UmbracoCms.V8",
-    "Enterspeed.Demos.UmbracoCms.V9.FairyTales",
-    "Enterspeed.Demos.UmbracoCms.v11.FairyTales",
-    "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers",
-    "Enterspeed.Demos.UmbracoCms.v11.MultisiteBeers"
-  ],
+  "Description": "Enterspeed integration for Umbraco 9+",
   "RelatedPackages": [
     {
       "PackageId": "Enterspeed.Source.UmbracoCms.V8",
