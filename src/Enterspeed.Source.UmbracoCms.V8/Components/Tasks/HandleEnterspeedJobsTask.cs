@@ -46,7 +46,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.Tasks
             }
             else
             {
-                _logger.Debug<HandleEnterspeedJobsTask>("Does not run on servers with {role} role.", _runtime.ToString());
+                _logger.Info<HandleEnterspeedJobsTask>("Does not run on servers with {role} role.", _runtime.ToString());
             }
 
             return true;
