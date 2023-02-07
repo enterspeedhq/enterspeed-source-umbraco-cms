@@ -153,7 +153,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
                 .Append<EnterspeedMediaPublishJobHandler>()
                 .Append<EnterspeedMediaTrashedJobHandler>()
 
-                // Preview medis 
+                // Preview media
                 .Append<EnterspeedPreviewMediaPublishJobHandler>()
                 .Append<EnterspeedPreviewMediaTrashedJobHandler>();
 

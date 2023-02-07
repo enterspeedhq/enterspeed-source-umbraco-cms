@@ -4,7 +4,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Providers;
-using Umbraco.Cms.Core.Services;
+using Microsoft.Extensions.Logging;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
 {
@@ -12,17 +12,17 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
     {
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
-        private readonly IMediaService _mediaService;
+        private readonly ILogger<EnterspeedPreviewMediaTrashedJobHandler> _logger;
 
         public EnterspeedPreviewMediaTrashedJobHandler
         (
             IEnterspeedIngestService enterspeedIngestService,
             IEnterspeedConnectionProvider enterspeedConnectionProvider,
-            IMediaService mediaService)
+            ILogger<EnterspeedPreviewMediaTrashedJobHandler> logger)
         {
             _enterspeedIngestService = enterspeedIngestService;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
-            _mediaService = mediaService;
+            _logger = logger;
         }
 
         public bool CanHandle(EnterspeedJob job)
@@ -37,12 +37,18 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
         public void Handle(EnterspeedJob job)
         {
             var parsed = int.TryParse(job.EntityId, out var parsedId);
-            var media = parsed ? _mediaService.GetById(parsedId) : null;
 
-            var deleteResponse = _enterspeedIngestService.Delete(media?.Id.ToString(), _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
-            if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)
+            if (parsed)
             {
-                throw new JobHandlingException($"Failed deleting entity ({job.EntityId}/{job.Culture}). Message: {deleteResponse.Message}");
+                var deleteResponse = _enterspeedIngestService.Delete(parsedId.ToString(), _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
+                if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)
+                {
+                    throw new JobHandlingException($"Failed deleting entity ({job.EntityId}/{job.Culture}). Message: {deleteResponse.Message}");
+                }
+            }
+            else
+            {
+                _logger.LogWarning("Job.EntityId is not a valid ID");
             }
         }
     }
