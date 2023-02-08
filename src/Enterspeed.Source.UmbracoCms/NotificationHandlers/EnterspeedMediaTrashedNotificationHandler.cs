@@ -43,8 +43,10 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
         private void MediaServiceTrashed(MediaMovedToRecycleBinNotification notification)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
-            if (!isPublishConfigured)
+            var isPublishConfigured = IsPublishConfigured();
+            var isPreviewConfigured = IsPreviewConfigured();
+
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -56,7 +58,15 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             {
                 foreach (var mediaItem in entities)
                 {
-                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                    if (isPreviewConfigured)
+                    {
+                        jobs.Add(_enterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Preview));
+                    }
+
+                    if (isPublishConfigured)
+                    {
+                        jobs.Add(_enterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                    }
                 }
             }
 
