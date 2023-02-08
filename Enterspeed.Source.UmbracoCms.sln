@@ -8,18 +8,19 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{0215A9EA-3011-4D81-B588-FC322C54D8A6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		NuGet.Config = NuGet.Config
-		README.md = README.md
-		umbraco-marketplace-enterspeed.source.umbracocms.json = umbraco-marketplace-enterspeed.source.umbracocms.json
 		azure-pipelines-u9+.yml = azure-pipelines-u9+.yml
 		CHANGELOG-Enterspeed.Source.UmbracoCms.md = CHANGELOG-Enterspeed.Source.UmbracoCms.md
+		NuGet.Config = NuGet.Config
+		README-NUGET.md = README-NUGET.md
+		README.md = README.md
+		umbraco-marketplace-enterspeed.source.umbracocms.json = umbraco-marketplace-enterspeed.source.umbracocms.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7971E102-218B-4A98-962E-BF881CBA2B2C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj", "{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj", "{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.Tests", "tests\Enterspeed.Source.UmbracoCms.Tests\Enterspeed.Source.UmbracoCms.Tests.csproj", "{DFEC5371-B474-4183-9C31-8A09E277AB5A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.Tests", "tests\Enterspeed.Source.UmbracoCms.Tests\Enterspeed.Source.UmbracoCms.Tests.csproj", "{DFEC5371-B474-4183-9C31-8A09E277AB5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

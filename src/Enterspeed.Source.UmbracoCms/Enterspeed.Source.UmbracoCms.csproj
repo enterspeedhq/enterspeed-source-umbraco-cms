@@ -16,6 +16,7 @@
 		<PackageProjectUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -58,6 +59,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Include="..\..\README-NUGET.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
 		<None Include="icon.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
