@@ -19,6 +19,7 @@ using Enterspeed.Source.UmbracoCms.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Extensions;
+using Umbraco.Cms.Core.Sync;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -31,6 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
     public class DashboardApiController : UmbracoAuthorizedApiController
     {
         private readonly IScopeProvider _scopeProvider;
+        private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
@@ -43,7 +45,8 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
             IHttpContextAccessor httpContextAccessor,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IServerRoleAccessor serverRoleAccessor)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;
@@ -51,6 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
             _enterspeedConnection = enterspeedConnection;
             _httpContextAccessor = httpContextAccessor;
             _scopeProvider = scopeProvider;
+            _serverRoleAccessor = serverRoleAccessor;
         }
 
         [HttpGet]
@@ -97,12 +101,12 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
         }
 
         [HttpGet]
-        public ApiResponse<EnterspeedUmbracoConfiguration> GetEnterspeedConfiguration()
+        public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();
-            return new ApiResponse<EnterspeedUmbracoConfiguration>
+            return new ApiResponse<EnterspeedUmbracoConfigurationResponse>
             {
-                Data = config,
+                Data = new EnterspeedUmbracoConfigurationResponse(config, _serverRoleAccessor.CurrentServerRole),
                 IsSuccess = true
             };
         }

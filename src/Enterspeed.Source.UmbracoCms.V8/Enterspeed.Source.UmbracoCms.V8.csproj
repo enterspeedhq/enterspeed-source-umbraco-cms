@@ -342,6 +342,7 @@
     <Compile Include="Handlers\PreviewDictionaries\EnterspeedPreviewDictionaryItemDeleteJobHandler.cs" />
     <Compile Include="Handlers\PreviewDictionaries\EnterspeedPreviewDictionaryItemPublishJobHandler.cs" />
     <Compile Include="Models\Api\ApiResponse.cs" />
+    <Compile Include="Models\Api\EnterspeedUmbracoConfigurationResponse.cs" />
     <Compile Include="Models\Api\ErrorResponse.cs" />
     <Compile Include="Models\Api\SeedResponse.cs" />
     <Compile Include="Models\Configuration\EnterspeedUmbracoConfiguration.cs" />

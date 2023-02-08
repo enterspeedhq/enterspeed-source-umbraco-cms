@@ -43,13 +43,26 @@
 	padding: 10px 5px;
 }
 
-	.configuration-dashboard-property label {
-		font-weight: 700;
-	}
+.configuration-dashboard-property label {
+	font-weight: 700;
+}
 
-	.configuration-dashboard-property input {
-		width: 750px;
-	}
+.configuration-dashboard-property input {
+	width: 750px;
+}
+
+.info-box {
+    border-radius: 3px;
+    background-color: #2152a3;
+    display: table;
+    font-size: 15px;
+    line-height: 20px;
+    margin-bottom: 0;
+    padding: 6px 14px;
+    vertical-align: middle;
+    color: white;
+    margin-bottom: 10px;
+}
 
 .seed-dashboard-text {
 	padding: 0 0 20px 5px;

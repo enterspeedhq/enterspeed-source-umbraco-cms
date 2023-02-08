@@ -18,6 +18,7 @@ using Enterspeed.Source.UmbracoCms.V8.Models.Api;
 using Enterspeed.Source.UmbracoCms.V8.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
+using Umbraco.Core;
 using Umbraco.Web.WebApi;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
@@ -29,17 +30,20 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         private readonly IEnterspeedJobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
         private readonly IEnterspeedConnection _enterspeedConnection;
+        private readonly IRuntimeState _runtimeState;
 
         public DashboardApiController(
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
-            IEnterspeedConnection enterspeedConnection)
+            IEnterspeedConnection enterspeedConnection,
+            IRuntimeState runtimeState)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;
             _enterspeedConfigurationService = enterspeedConfigurationService;
             _enterspeedConnection = enterspeedConnection;
+            _runtimeState = runtimeState;
         }
 
         [HttpGet]
@@ -79,12 +83,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         }
 
         [HttpGet]
-        public ApiResponse<EnterspeedUmbracoConfiguration> GetEnterspeedConfiguration()
+        public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();
-            return new ApiResponse<EnterspeedUmbracoConfiguration>
+            return new ApiResponse<EnterspeedUmbracoConfigurationResponse>
             {
-                Data = config,
+                Data = new EnterspeedUmbracoConfigurationResponse(config, _runtimeState.ServerRole),
                 IsSuccess = true
             };
         }

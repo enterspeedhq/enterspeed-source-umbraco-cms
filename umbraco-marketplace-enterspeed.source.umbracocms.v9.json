@@ -9,14 +9,13 @@
   "Category": "Headless",
   "LicenseType": "Free",
   "IssueTrackerUrl": "https://github.com/enterspeedhq/enterspeed-source-umbraco-cms/issues",
-  "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/umbraco-v9/getting-started",
-  "Description": "This package is deprecated. Use this package instead https://www.nuget.org/packages/Enterspeed.Source.UmbracoCms/",
+  "DocumentationUrl": "https://docs.enterspeed.com/integrations/umbraco/getting-started",
   "PackageType": "Integration",
-  "PackagesByAuthor": [ "Enterspeed.Source.UmbracoCms.V8", "Enterspeed.Source.UmbracoCms.V9", "Enterspeed.Source.UmbracoCms.V10", "Enterspeed.Demos.UmbracoCms.V9.FairyTales", "Enterspeed.Demos.UmbracoCms.V10.FairyTales", "Enterspeed.Demos.UmbracoCms.V9.MultisiteBeers", "Enterspeed.Demos.UmbracoCms.V10.MultisiteBeers" ],
+  "Description": "This package is deprecated. Use this package instead https://marketplace.umbraco.com/package/enterspeed.source.umbracocms",
   "RelatedPackages": [
     {
-      "PackageId": "Enterspeed.Source.UmbracoCms.V10",
-      "Description": "Enterspeed integration for Umbraco version 10"
+      "PackageId": "Enterspeed.Source.UmbracoCms",
+      "Description": "Enterspeed integration for Umbraco version 9+"
     },
     {
       "PackageId": "Enterspeed.Source.UmbracoCms.V8",

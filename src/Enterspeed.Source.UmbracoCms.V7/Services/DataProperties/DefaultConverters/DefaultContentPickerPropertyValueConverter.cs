@@ -18,7 +18,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services.DataProperties.DefaultConvert
 
         public bool IsConverter(PublishedPropertyType propertyType)
         {
-            return propertyType.PropertyEditorAlias.Equals(Constants.PropertyEditors.ContentPickerAlias);
+            return propertyType.PropertyEditorAlias.Equals(Constants.PropertyEditors.ContentPickerAlias)
+                   || propertyType.PropertyEditorAlias.Equals("Umbraco.ContentPicker2");
         }
 
         public IEnterspeedProperty Convert(IPublishedProperty property)

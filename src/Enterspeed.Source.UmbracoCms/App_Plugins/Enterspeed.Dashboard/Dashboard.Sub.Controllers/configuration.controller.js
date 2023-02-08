@@ -14,10 +14,11 @@
         dashboardResources.getEnterspeedConfiguration()
             .then(function(result) {
                 if (result.data.isSuccess) {
-                    vm.configuration.baseUrl = result.data.data.baseUrl;
-                    vm.configuration.apiKey = result.data.data.apiKey;
-                    vm.configuration.mediaDomain = result.data.data.mediaDomain;
-                    vm.configuration.previewApiKey = result.data.data.previewApiKey;
+                    vm.configuration.baseUrl = result.data.data.configuration.baseUrl;
+                    vm.configuration.apiKey = result.data.data.configuration.apiKey;
+                    vm.configuration.mediaDomain = result.data.data.configuration.mediaDomain;
+                    vm.configuration.previewApiKey = result.data.data.configuration.previewApiKey;
+                    vm.serverRole = result.data.data.serverRole;
                     vm.loadingConfiguration = false;
                     vm.buttonState = null;
                 }
