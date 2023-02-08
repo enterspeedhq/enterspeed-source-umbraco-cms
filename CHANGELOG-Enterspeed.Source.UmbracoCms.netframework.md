@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Added
 - Added information note on the Enterspeed settings page, if the Umbraco server is running with `ServerRole.Replica` as the Enterspeed jobs is only configured to run on servers configured as `ServerRole.Master` and `ServerRole.Single`. Also upgraded the logging about this from debug to information.
+- Added support for Umbraco.ContentPicker2 (Umbraco 7)
 
 ## [3.3.0 - 2023-01-25]
 ### Added
