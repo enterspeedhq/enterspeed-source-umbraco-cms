@@ -58,7 +58,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
                 }
                 else
                 {
-                    logger.LogDebug("Does not run on servers with {role} role.", serverRoleAccessor.CurrentServerRole.ToString());
+                    logger.LogInformation("Does not run on servers with {role} role.", serverRoleAccessor.CurrentServerRole.ToString());
                 }
 
                 return Task.CompletedTask;

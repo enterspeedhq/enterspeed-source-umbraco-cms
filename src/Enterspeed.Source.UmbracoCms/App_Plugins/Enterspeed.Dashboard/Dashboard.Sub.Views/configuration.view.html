@@ -4,8 +4,13 @@
 	</umb-load-indicator>
 
 	<div class="configuration-dashboard-content" ng-if="!vm.loadingConfiguration">
+		
+        <div ng-if="vm.serverRole === 'Subscriber'" class="info-box">
+            <strong>Enterspeed jobs will not run on this current server.</strong><br/>
+            Enterspeed jobs will only run on servers with Umbraco role of <i>SchedulingPublisher</i> or <i>Single</i>. Current Umbraco server role is <i>{{vm.serverRole}}</i>.
+        </div>
 
-		<div class="configuration-dashboard-property">
+        <div class="configuration-dashboard-property">
 			<label for="api-key">Enterspeed endpoint</label><br />
 			<input type="text" id="api-key" class="input-field" ng-model="vm.configuration.baseUrl" placeholder="Enterspeed base url" ng-disabled="vm.buttonState === 'busy'" />
 		</div>
