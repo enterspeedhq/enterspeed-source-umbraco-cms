@@ -25,8 +25,9 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
         private static void MediaService_Trashed(IMediaService sender, MoveEventArgs<IMedia> e)
         {
             var isPublishConfigured = EnterspeedContext.Current.Services.ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = EnterspeedContext.Current.Services.ConfigurationService.IsPreviewConfigured();
 
-            if (!isPublishConfigured)
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -36,7 +37,15 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
 
             foreach (var mediaItem in entities.Select(ei => ei.Entity))
             {
-                jobs.Add(EnterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                if (isPublishConfigured)
+                {
+                    jobs.Add(EnterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                }
+
+                if (isPreviewConfigured)
+                {
+                    jobs.Add(EnterspeedJobFactory.GetDeleteJob(mediaItem, string.Empty, EnterspeedContentState.Preview));
+                }
             }
 
             EnqueueJobs(jobs);
@@ -45,14 +54,15 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
         private static void MediaService_Moved(IMediaService sender, MoveEventArgs<IMedia> e)
         {
             var isPublishConfigured = EnterspeedContext.Current.Services.ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = EnterspeedContext.Current.Services.ConfigurationService.IsPreviewConfigured();
 
-            if (!isPublishConfigured)
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
 
             var entities = e.MoveInfoCollection?.Select(ei => ei.Entity).ToList();
-            var jobs = MapJobs(entities);
+            var jobs = MapJobs(entities, isPublishConfigured, isPreviewConfigured);
 
             EnqueueJobs(jobs);
         }
@@ -60,14 +70,15 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
         private static void MediaService_Saved(IMediaService sender, SaveEventArgs<IMedia> e)
         {
             var isPublishConfigured = EnterspeedContext.Current.Services.ConfigurationService.IsPublishConfigured();
+            var isPreviewConfigured = EnterspeedContext.Current.Services.ConfigurationService.IsPreviewConfigured();
 
-            if (!isPublishConfigured)
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
 
             var entities = e.SavedEntities.ToList();
-            var jobs = MapJobs(entities);
+            var jobs = MapJobs(entities, isPublishConfigured, isPreviewConfigured);
 
             EnqueueJobs(jobs);
         }
@@ -83,7 +94,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
             EnterspeedContext.Current.Handlers.JobHandler.HandleJobs(jobs);
         }
 
-        private static List<EnterspeedJob> MapJobs(List<IMedia> entities)
+        private static List<EnterspeedJob> MapJobs(List<IMedia> entities, bool isPublishConfigured, bool isPreviewConfigured)
         {
             var jobs = new List<EnterspeedJob>();
 
@@ -91,17 +102,33 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
             {
                 if (mediaItem.ContentType.Alias.Equals("Folder"))
                 {
-                    var mediaItems = ApplicationContext.Current.Services.MediaService.GetPagedDescendants(mediaItem.Id, 0, IndexPageSize, out long totalRecords).ToList();
+                    var mediaItems = ApplicationContext.Current.Services.MediaService.GetPagedDescendants(mediaItem.Id, 0, IndexPageSize, out long totalRecords)?.ToList();
                     if (totalRecords > 0)
                     {
                         foreach (var item in mediaItems)
                         {
-                            jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            if (isPublishConfigured)
+                            {
+                                jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            }
+
+                            if (isPreviewConfigured)
+                            {
+                                jobs.Add(EnterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Preview));
+                            }
                         }
                     }
                 }
 
-                jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                if (isPublishConfigured)
+                {
+                    jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                }
+
+                if (isPreviewConfigured)
+                {
+                    jobs.Add(EnterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Preview));
+                }
             }
 
             return jobs;

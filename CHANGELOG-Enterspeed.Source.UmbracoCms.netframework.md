@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Added information note on the Enterspeed settings page, if the Umbraco server is running with `ServerRole.Replica` as the Enterspeed jobs is only configured to run on servers configured as `ServerRole.Master` and `ServerRole.Single`. Also upgraded the logging about this from debug to information.
 - Added focal point data for images
 - Added support for Umbraco.ContentPicker2 (Umbraco 7)
+- Ingesting medias to Enterspeed for preview (Umbraco 7 & 8)
 
 ## [3.3.0 - 2023-01-25]
 ### Added

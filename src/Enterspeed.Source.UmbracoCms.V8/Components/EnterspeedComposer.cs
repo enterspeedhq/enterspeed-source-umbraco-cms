@@ -16,6 +16,7 @@ using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Enterspeed.Source.UmbracoCms.V8.Handlers.Media;
 using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent;
 using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries;
+using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewMedia;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Enterspeed.Source.UmbracoCms.V8.Services.DataProperties.DefaultConverters;
@@ -141,6 +142,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                  // Media
                  .Append<EnterspeedMediaPublishJobHandler>()
                  .Append<EnterspeedMediaTrashedJobHandler>()
+
+                 // Preview media
+                 .Append<EnterspeedPreviewMediaPublishJobHandler>()
+                 .Append<EnterspeedPreviewMediaTrashedJobHandler>()
 
                  // Preview content
                  .Append<EnterspeedPreviewContentPublishJobHandler>()

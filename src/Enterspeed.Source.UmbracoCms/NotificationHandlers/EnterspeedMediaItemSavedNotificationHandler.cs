@@ -31,13 +31,13 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
             IMediaService mediaService)
-                : base(
-            configurationService,
-            enterspeedJobRepository,
-            enterspeedJobsHandlingService,
-            umbracoContextFactory,
-            scopeProvider,
-            auditService)
+            : base(
+                configurationService,
+                enterspeedJobRepository,
+                enterspeedJobsHandlingService,
+                umbracoContextFactory,
+                scopeProvider,
+                auditService)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
             _mediaService = mediaService;
@@ -50,9 +50,10 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
         private void MediaSaved(MediaSavedNotification notification)
         {
-            var isPublishConfigured = _configurationService.IsPublishConfigured();
+            var isPublishConfigured = IsPublishConfigured();
+            var isPreviewConfigured = IsPreviewConfigured();
 
-            if (!isPublishConfigured)
+            if (!isPublishConfigured && !isPreviewConfigured)
             {
                 return;
             }
@@ -68,12 +69,28 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                     {
                         foreach (var item in mediaItems)
                         {
-                            jobs.Add(_enterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            if (isPublishConfigured)
+                            {
+                                jobs.Add(_enterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Publish));
+                            }
+
+                            if (isPreviewConfigured)
+                            {
+                                jobs.Add(_enterspeedJobFactory.GetPublishJob(item, string.Empty, EnterspeedContentState.Preview));
+                            }
                         }
                     }
                 }
 
-                jobs.Add(_enterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                if (isPublishConfigured)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Publish));
+                }
+
+                if (isPreviewConfigured)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(mediaItem, string.Empty, EnterspeedContentState.Preview));
+                }
             }
 
             EnqueueJobs(jobs);

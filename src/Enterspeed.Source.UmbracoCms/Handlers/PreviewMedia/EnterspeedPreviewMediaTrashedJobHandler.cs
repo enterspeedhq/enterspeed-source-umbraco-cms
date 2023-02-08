@@ -1,23 +1,24 @@
 ﻿using System.Net;
 using Enterspeed.Source.Sdk.Api.Services;
-using Enterspeed.Source.UmbracoCms.V8.Data.Models;
-using Enterspeed.Source.UmbracoCms.V8.Exceptions;
-using Enterspeed.Source.UmbracoCms.V8.Models;
-using Enterspeed.Source.UmbracoCms.V8.Providers;
-using Umbraco.Core.Logging;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Exceptions;
+using Enterspeed.Source.UmbracoCms.Providers;
+using Microsoft.Extensions.Logging;
 
-namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
+namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
 {
-    public class EnterspeedMediaTrashedJobHandler : IEnterspeedJobHandler
+    public class EnterspeedPreviewMediaTrashedJobHandler : IEnterspeedJobHandler
     {
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
-        private readonly IProfilingLogger _logger;
+        private readonly ILogger<EnterspeedPreviewMediaTrashedJobHandler> _logger;
 
-        public EnterspeedMediaTrashedJobHandler(
+        public EnterspeedPreviewMediaTrashedJobHandler
+        (
             IEnterspeedIngestService enterspeedIngestService,
             IEnterspeedConnectionProvider enterspeedConnectionProvider,
-            IProfilingLogger logger)
+            ILogger<EnterspeedPreviewMediaTrashedJobHandler> logger)
         {
             _enterspeedIngestService = enterspeedIngestService;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
@@ -27,10 +28,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
         public bool CanHandle(EnterspeedJob job)
         {
             return
-               _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
-               && job.EntityType == EnterspeedJobEntityType.Media
-               && job.JobType == EnterspeedJobType.Delete
-               && job.ContentState == EnterspeedContentState.Publish;
+                _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview) != null
+                && job.EntityType == EnterspeedJobEntityType.Media
+                && job.JobType == EnterspeedJobType.Delete
+                && job.ContentState == EnterspeedContentState.Preview;
         }
 
         public void Handle(EnterspeedJob job)
@@ -39,7 +40,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
 
             if (parsed)
             {
-                var deleteResponse = _enterspeedIngestService.Delete(parsedId.ToString(), _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
+                var deleteResponse = _enterspeedIngestService.Delete(parsedId.ToString(), _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
                 if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)
                 {
                     throw new JobHandlingException($"Failed deleting entity ({job.EntityId}/{job.Culture}). Message: {deleteResponse.Message}");
@@ -47,7 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
             }
             else
             {
-                _logger.Warn<EnterspeedMediaTrashedJobHandler>("Job.EntityId is not a valid ID");
+                _logger.LogWarning("Job.EntityId is not a valid ID");
             }
         }
     }

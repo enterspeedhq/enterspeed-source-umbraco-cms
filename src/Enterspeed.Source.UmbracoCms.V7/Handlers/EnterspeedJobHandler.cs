@@ -299,6 +299,31 @@ namespace Enterspeed.Source.UmbracoCms.V7.Handlers
                                 continue;
                             }
                         }
+                        else if (newestPreviewJob.EntityType == EnterspeedJobEntityType.Media)
+                        {
+                            var parsed = int.TryParse(newestPreviewJob.EntityId, out var parsedId);
+                            var media = parsed ? context.Application.Services.MediaService.GetById(parsedId) : null;
+
+                            if (media == null)
+                            {
+                                var exception = $"Media with id {newestPreviewJob.EntityId} not in database";
+                                failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestPreviewJob, exception));
+                                LogHelper.Warn<EnterspeedJobHandler>(exception);
+                            }
+
+                            try
+                            {
+                                umbracoData = new UmbracoMediaEntity(media);
+                            }
+                            catch (Exception e)
+                            {
+                                // Create a new failed job
+                                var exception = $"Failed creating entity ({newestPublishJob.EntityId}). Message: {e.Message}. StackTrace: {e.StackTrace}";
+                                failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestPublishJob, exception));
+                                LogHelper.Warn<EnterspeedJobHandler>(exception);
+                                continue;
+                            }
+                        }
 
                         var ingestResponse = _enterspeedPreviewIngestService.Save(umbracoData);
                         if (!ingestResponse.Success)
