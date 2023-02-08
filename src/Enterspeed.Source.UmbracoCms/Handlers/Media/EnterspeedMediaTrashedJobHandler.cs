@@ -40,7 +40,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.Media
 
             if (parsed)
             {
-                var deleteResponse = _enterspeedIngestService.Delete(media?.Id.ToString(), _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
+                var deleteResponse = _enterspeedIngestService.Delete(parsedId.ToString(), _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
                 if (!deleteResponse.Success && deleteResponse.Status != HttpStatusCode.NotFound)
                 {
                     throw new JobHandlingException($"Failed deleting entity ({job.EntityId}/{job.Culture}). Message: {deleteResponse.Message}");
