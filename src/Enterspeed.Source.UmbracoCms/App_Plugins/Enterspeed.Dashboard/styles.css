@@ -52,9 +52,9 @@
 }
 
 .info-box {
+    width: 750px;
     border-radius: 3px;
     background-color: #2152a3;
-    display: table;
     font-size: 15px;
     line-height: 20px;
     margin-bottom: 0;

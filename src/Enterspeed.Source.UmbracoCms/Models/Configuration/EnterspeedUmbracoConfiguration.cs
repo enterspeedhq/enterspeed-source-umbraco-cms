@@ -6,6 +6,7 @@ namespace Enterspeed.Source.UmbracoCms.Models.Configuration
     {
         public string MediaDomain { get; set; }
         public bool IsConfigured { get; set; }
+        public bool ConfiguredFromSettingsFile { get; set; }
         public string PreviewApiKey { get; set; }
     }
 }

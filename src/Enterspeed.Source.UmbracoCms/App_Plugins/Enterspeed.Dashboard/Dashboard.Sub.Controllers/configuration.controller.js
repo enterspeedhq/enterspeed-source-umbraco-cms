@@ -18,6 +18,7 @@
                     vm.configuration.apiKey = result.data.data.configuration.apiKey;
                     vm.configuration.mediaDomain = result.data.data.configuration.mediaDomain;
                     vm.configuration.previewApiKey = result.data.data.configuration.previewApiKey;
+                    vm.configuration.configuredFromSettingsFile = result.data.data.configuration.configuredFromSettingsFile;
                     vm.serverRole = result.data.data.serverRole;
                     vm.loadingConfiguration = false;
                     vm.buttonState = null;
