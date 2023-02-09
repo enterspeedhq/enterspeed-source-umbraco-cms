@@ -6,9 +6,11 @@ using Enterspeed.Source.UmbracoCms.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
+using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
@@ -167,6 +169,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 metaData.Add("width", new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()));
                 metaData.Add("height", new StringEnterspeedProperty("height", media.GetValue<int>("umbracoHeight").ToString()));
                 metaData.Add("contentType", new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
+                metaData.Add("focalPoint", GetFocalPoint(media));
             }
 
             MapAdditionalMediaMetaData(metaData, publishedMedia, string.Empty);
@@ -239,6 +242,25 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return ids
                 .Select(x => new StringEnterspeedProperty(null, _identityService.GetId(x)))
                 .ToArray();
+        }
+
+        private static IEnterspeedProperty GetFocalPoint(IMedia media)
+        {
+            var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
+            if (umbracoFile != null)
+            {
+                var imageCropperValue = JsonConvert.DeserializeObject<ImageCropperValue>(umbracoFile);
+                if (imageCropperValue != null && imageCropperValue.HasFocalPoint())
+                {
+                    return new ObjectEnterspeedProperty("focalPoint", new Dictionary<string, IEnterspeedProperty>
+                    {
+                        { "top", new NumberEnterspeedProperty("top", imageCropperValue.FocalPoint.Top.ToDouble()) },
+                        { "left", new NumberEnterspeedProperty("left", imageCropperValue.FocalPoint.Left.ToDouble()) }
+                    });
+                }
+            }
+
+            return new StringEnterspeedProperty("focalPoint", null);
         }
     }
 }

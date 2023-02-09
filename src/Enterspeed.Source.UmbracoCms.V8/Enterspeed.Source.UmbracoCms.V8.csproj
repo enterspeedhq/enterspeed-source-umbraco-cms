@@ -305,6 +305,7 @@
     <Compile Include="EventHandlers\EnterspeedDictionaryItemSavedEventHandler.cs" />
     <Compile Include="Exceptions\JobHandlingException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Extensions\DecimalExtensions.cs" />
     <Compile Include="Extensions\EnterspeedConfigurationExtensions.cs" />
     <Compile Include="Extensions\MediaExtensions.cs" />
     <Compile Include="Extensions\PropertyExtensions.cs" />

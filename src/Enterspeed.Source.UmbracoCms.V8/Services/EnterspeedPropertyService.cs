@@ -4,11 +4,13 @@ using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
+using Newtonsoft.Json;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Core.PropertyEditors.ValueConverters;
 using Umbraco.Core.Services;
 using Umbraco.Web;
 
@@ -240,6 +242,25 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return ids
                 .Select(x => new StringEnterspeedProperty(null, _identityService.GetId(x)))
                 .ToArray();
+        }
+
+        private static IEnterspeedProperty GetFocalPoint(IMedia media)
+        {
+            var umbracoFile = media.GetValue<string>(Constants.Conventions.Media.File);
+            if (umbracoFile != null)
+            {
+                var imageCropperValue = JsonConvert.DeserializeObject<ImageCropperValue>(umbracoFile);
+                if (imageCropperValue != null && imageCropperValue.HasFocalPoint())
+                {
+                    return new ObjectEnterspeedProperty("focalPoint", new Dictionary<string, IEnterspeedProperty>
+                    {
+                        { "top", new NumberEnterspeedProperty("top", imageCropperValue.FocalPoint.Top.ToDouble()) },
+                        { "left", new NumberEnterspeedProperty("left", imageCropperValue.FocalPoint.Left.ToDouble()) }
+                    });
+                }
+            }
+
+            return new StringEnterspeedProperty("focalPoint", null);
         }
     }
 }
