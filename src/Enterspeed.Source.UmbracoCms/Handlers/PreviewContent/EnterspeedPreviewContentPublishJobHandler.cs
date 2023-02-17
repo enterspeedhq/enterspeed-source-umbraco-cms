@@ -4,7 +4,6 @@ using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Factories;
-using Enterspeed.Source.UmbracoCms.Handlers;
 using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Models.Api;
@@ -47,7 +46,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
         }
 
-        public bool CanHandle(EnterspeedJob job)
+        public virtual bool CanHandle(EnterspeedJob job)
         {
             return _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview) != null
                    && job.EntityType == EnterspeedJobEntityType.Content

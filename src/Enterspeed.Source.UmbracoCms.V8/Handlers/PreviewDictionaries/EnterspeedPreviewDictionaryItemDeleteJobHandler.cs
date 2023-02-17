@@ -24,7 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
         }
 
-        public bool CanHandle(EnterspeedJob job)
+        public virtual bool CanHandle(EnterspeedJob job)
         {
             return
                 _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview) != null
@@ -33,7 +33,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries
                 && job.ContentState == EnterspeedContentState.Preview;
         }
 
-        public void Handle(EnterspeedJob job)
+        public virtual void Handle(EnterspeedJob job)
         {
             var id = _entityIdentityService.GetId(job.EntityId, job.Culture);
             var deleteResponse = _enterspeedIngestService.Delete(id, _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));

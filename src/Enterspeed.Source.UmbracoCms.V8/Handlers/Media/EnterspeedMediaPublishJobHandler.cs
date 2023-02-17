@@ -41,7 +41,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
             _enterspeedConfigurationService = enterspeedConfigurationService;
         }
 
-        public bool CanHandle(EnterspeedJob job)
+        public virtual bool CanHandle(EnterspeedJob job)
         {
             return
                 _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
@@ -50,7 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.Media
                 && job.JobType == EnterspeedJobType.Publish;
         }
 
-        public void Handle(EnterspeedJob job)
+        public virtual void Handle(EnterspeedJob job)
         {
             var media = GetMedia(job);
             if (!CanIngest(media, job))
