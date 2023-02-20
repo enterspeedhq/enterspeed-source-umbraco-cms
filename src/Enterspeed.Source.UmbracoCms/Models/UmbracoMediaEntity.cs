@@ -16,12 +16,13 @@ namespace Enterspeed.Source.UmbracoCms.Models
             IMedia media,
             IEnterspeedPropertyService propertyService,
             IEntityIdentityService entityIdentityService,
-            IEnterspeedConfigurationService enterspeedConfigurationService)
+            IEnterspeedConfigurationService enterspeedConfigurationService,
+            string customUrl = null)
         {
             _media = media;
             _entityIdentityService = entityIdentityService;
-
-            Url = _media.GetMediaUrl(enterspeedConfigurationService.GetConfiguration());
+            
+            Url = !string.IsNullOrWhiteSpace(customUrl) ? customUrl : _media.GetMediaUrl(enterspeedConfigurationService.GetConfiguration());
             Properties = propertyService.GetProperties(_media);
         }
 

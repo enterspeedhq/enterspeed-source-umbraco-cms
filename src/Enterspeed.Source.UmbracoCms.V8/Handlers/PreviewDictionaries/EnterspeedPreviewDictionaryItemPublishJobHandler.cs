@@ -38,7 +38,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
         }
 
-        public bool CanHandle(EnterspeedJob job)
+        public virtual bool CanHandle(EnterspeedJob job)
         {
             return
                 _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview) != null
@@ -47,7 +47,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewDictionaries
                 && job.JobType == EnterspeedJobType.Publish;
         }
 
-        public void Handle(EnterspeedJob job)
+        public virtual void Handle(EnterspeedJob job)
         {
             var dictionaryItem = GetDictionaryItem(job);
             if (!CanIngest(dictionaryItem, job))

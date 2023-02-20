@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [unrelease]
+### Changed
+- Made `CanHandle` and `Handle` on all types of `IEnterspeedJobHandler` virtual to allow overriding these methods if you want to customize the logic for specific handlers.
+
 ## [2.0.0 - 2023-02-15]
 ### Breaking changes
 - Fixed configuration stored in database even if you are using settings file. If you are using the settings file, the settings file  will now take priority over potential configuration in the database.

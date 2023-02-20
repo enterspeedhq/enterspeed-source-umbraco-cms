@@ -50,7 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent
             _publishedRouter = publishedRouter;
         }
 
-        public bool CanHandle(EnterspeedJob job)
+        public virtual bool CanHandle(EnterspeedJob job)
         {
             return _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview) != null
                    && job.EntityType == EnterspeedJobEntityType.Content

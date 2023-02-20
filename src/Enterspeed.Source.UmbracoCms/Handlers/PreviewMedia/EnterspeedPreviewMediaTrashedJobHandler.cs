@@ -25,7 +25,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
             _logger = logger;
         }
 
-        public bool CanHandle(EnterspeedJob job)
+        public virtual bool CanHandle(EnterspeedJob job)
         {
             return
                 _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview) != null
@@ -34,7 +34,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
                 && job.ContentState == EnterspeedContentState.Preview;
         }
 
-        public void Handle(EnterspeedJob job)
+        public virtual void Handle(EnterspeedJob job)
         {
             var parsed = int.TryParse(job.EntityId, out var parsedId);
 
