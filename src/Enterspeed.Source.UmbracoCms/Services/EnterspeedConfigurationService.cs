@@ -48,7 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
             _enterspeedUmbracoConfiguration = GetConfigurationFromDatabase();
 
-            return _enterspeedUmbracoConfiguration;
+            return _enterspeedUmbracoConfiguration ?? new EnterspeedUmbracoConfiguration();
         }
 
         public bool IsPublishConfigured()
