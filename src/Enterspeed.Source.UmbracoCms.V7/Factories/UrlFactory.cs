@@ -11,7 +11,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Factories
 {
     public class UrlFactory
     {
-        public string GetUrl(IContent content)
+        public virtual string GetUrl(IContent content)
         {
             var output = string.Empty;
 
@@ -82,7 +82,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Factories
             return output;
         }
 
-        private string GetUrlSegment(IUrlSegmentProvider provider, IEnumerable<IDomain> domains, IContent ancestor, string path, out bool isAssignedDomain)
+        protected virtual string GetUrlSegment(IUrlSegmentProvider provider, IEnumerable<IDomain> domains, IContent ancestor, string path, out bool isAssignedDomain)
         {
             var assignedDomain = domains.FirstOrDefault(x => x.RootContentId == ancestor.Id);
 
