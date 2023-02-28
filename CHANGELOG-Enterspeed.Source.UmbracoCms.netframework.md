@@ -6,10 +6,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Addded
-- Preview medias are now also ingested when doing a seed (Umbraco 7 & 8)
+- Ingesting preview media when doing a seed (Umbraco 7 & 8)
 
 ### Changed
 - Made `GetUrl` on `UrlFactory` virtual to allow overriding. (Umbraco 7 & 8)
+
+### Fixed
+- Don't ingest trashed media items on seed (Umbraco 7 & 8)
 
 ## [3.5.0 - 2023-02-20]
 ### Changed
