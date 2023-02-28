@@ -41,7 +41,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         {
             var contentJobs = GetContentJobs(publish, preview, out var contentCount);
             var dictionaryJobs = GetDictionaryJobs(publish, preview, out var dictionaryCount);
-            var mediaJobs = GetMediaJobs(out var mediaCount);
+            var mediaJobs = GetMediaJobs(publish, preview, out var mediaCount);
 
             var jobs = contentJobs.Union(dictionaryJobs).Union(mediaJobs).ToList();
 
@@ -189,22 +189,31 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
         }
 
-        public IEnumerable<EnterspeedJob> GetMediaJobs(out long mediaCount)
+        public IEnumerable<EnterspeedJob> GetMediaJobs(bool publish, bool preview, out long mediaCount)
         {
             mediaCount = 0;
             var jobs = new List<EnterspeedJob>();
 
-            var allMediaItems = _mediaService.GetPagedDescendants(-1, 0, int.MaxValue, out long totalRecords).ToList();
+            var allMediaItems = _mediaService
+                .GetPagedDescendants(-1, 0, int.MaxValue, out _)
+                .Where(x => !x.ContentType.Alias.Equals("Folder"))
+                .Where(x => !x.Trashed)
+                .ToList();
 
             foreach (var media in allMediaItems)
             {
-                if (!media.ContentType.Alias.Equals("Folder"))
+                if (publish)
                 {
                     jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Publish));
                 }
+
+                if (preview)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Preview));
+                }
             }
 
-            mediaCount = totalRecords;
+            mediaCount = allMediaItems.Count;
 
             return jobs;
         }
