@@ -62,8 +62,7 @@ namespace Enterspeed.Source.UmbracoCms.Connections
             _httpClientConnection.DefaultRequestHeaders.Add("Accept", "application/json");
 
 #if NETSTANDARD2_0_OR_GREATER || NET || NETCOREAPP2_0_OR_GREATER
-            _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System",
-                $"sdk-dotnet/{Assembly.GetExecutingAssembly()?.GetName().Version?.ToString()}");
+            _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $"sdk-dotnet/{Assembly.GetExecutingAssembly().GetName().Version}");
 #endif
 
             _connectionEstablishedDate = DateTime.Now;

@@ -24,7 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.Factories
             _globalSettings = globalSettings.Value;
         }
 
-        public string GetUrl(IPublishedContent content, bool preview, string culture)
+        public virtual string GetUrl(IPublishedContent content, bool preview, string culture)
         {
             var output = "#";
             var umb = _umbracoContextProvider.GetContext();
