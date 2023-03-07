@@ -10,6 +10,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Providers;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -25,6 +26,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
     {
         private readonly IContentService _contentService;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IUmbracoCultureProvider _umbracoCultureProvider;
 
         public EnterspeedContentUnpublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -34,6 +36,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IContentService contentService,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
+            IUmbracoCultureProvider umbracoCultureProvider,
             IAuditService auditService)
             : base(
                   configurationService,
@@ -45,6 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         {
             _contentService = contentService;
             _enterspeedJobFactory = enterspeedJobFactory;
+            _umbracoCultureProvider = umbracoCultureProvider;
         }
 
         public void Handle(ContentUnpublishingNotification notification)
@@ -79,9 +83,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             {
                 foreach (var content in entities)
                 {
-                    var cultures = content.ContentType.VariesByCulture()
-                        ? content.AvailableCultures
-                        : new List<string> { GetDefaultCulture(context) };
+                    var cultures = _umbracoCultureProvider.GetCultures(content);
 
                     List<IContent> descendants = null;
                     foreach (var culture in cultures)
@@ -104,9 +106,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
                         foreach (var descendant in descendants)
                         {
-                            var descendantCultures = descendant.ContentType.VariesByCulture()
-                                ? descendant.AvailableCultures
-                                : new List<string> { GetDefaultCulture(context) };
+                            var descendantCultures = _umbracoCultureProvider.GetCultures(descendant);
                             foreach (var descendantCulture in descendantCultures)
                             {
                                 if (isPublishConfigured)
