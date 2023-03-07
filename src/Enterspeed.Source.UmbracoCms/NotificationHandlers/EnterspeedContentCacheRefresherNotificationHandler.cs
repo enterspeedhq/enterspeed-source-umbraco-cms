@@ -84,9 +84,14 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                             continue;
                         }
 
-                        if (audit.AuditType.Equals(AuditType.PublishVariant)
+                        if (audit.AuditType.Equals(AuditType.PublishVariant) 
                                 || audit.AuditType.Equals(AuditType.Publish)
-                                || audit.AuditType.Equals(AuditType.Move))
+                                || audit.AuditType.Equals(AuditType.Move)
+                                // SaveVariant and Save are added to support sortOrder updates
+                                || audit.AuditType.Equals(AuditType.SaveVariant) 
+                                || audit.AuditType.Equals(AuditType.Save) 
+                                // SortOrder changes does not currently have AuditType.Sort but added here to support potential future changes.
+                                || audit.AuditType.Equals(AuditType.Sort))
                         {
                             var cultures = node.ContentType.VariesByCulture()
                                 ? node.Cultures.Keys
