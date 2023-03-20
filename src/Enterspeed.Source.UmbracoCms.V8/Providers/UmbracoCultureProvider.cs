@@ -1,12 +1,12 @@
-using System;
+﻿using Enterspeed.Source.UmbracoCms.V8.Services;
 using System.Collections.Generic;
-using Enterspeed.Source.UmbracoCms.Services;
-using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Models.PublishedContent;
-using Umbraco.Cms.Core.Web;
-using Umbraco.Extensions;
+using System;
+using Umbraco.Core;
+using Umbraco.Core.Models.PublishedContent;
+using Umbraco.Core.Models;
+using Umbraco.Web;
 
-namespace Enterspeed.Source.UmbracoCms.Providers
+namespace Enterspeed.Source.UmbracoCms.V8.Providers
 {
     public class UmbracoCultureProvider : IUmbracoCultureProvider
     {
@@ -23,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.Providers
             {
                 throw new Exception($"Node with id '{content.Id}' does not vary by culture.");
             }
-            
+
             return content.AvailableCultures;
         }
 
@@ -59,7 +59,7 @@ namespace Enterspeed.Source.UmbracoCms.Providers
             return GetDefaultCulture(umbracoContext);
         }
 
-        private string GetDefaultCulture(IUmbracoContext umbracoContext)
+        private string GetDefaultCulture(UmbracoContext umbracoContext)
         {
             return umbracoContext.Domains.DefaultCulture.ToLowerInvariant();
         }

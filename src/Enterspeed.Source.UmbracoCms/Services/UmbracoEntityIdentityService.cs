@@ -1,4 +1,5 @@
 ﻿using System;
+using Enterspeed.Source.UmbracoCms.Providers;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
@@ -7,11 +8,11 @@ namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class UmbracoEntityIdentityService : IEntityIdentityService
     {
-        private readonly IUmbracoContextProvider _umbracoContextProvider;
+        private readonly IUmbracoCultureProvider _umbracoCultureProvider;
 
-        public UmbracoEntityIdentityService(IUmbracoContextProvider umbracoContextProvider)
+        public UmbracoEntityIdentityService(IUmbracoCultureProvider umbracoCultureProvider)
         {
-            _umbracoContextProvider = umbracoContextProvider;
+            _umbracoCultureProvider = umbracoCultureProvider;
         }
 
         public string GetId(IPublishedContent content, string culture)
@@ -23,7 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
             if (string.IsNullOrWhiteSpace(culture) || !content.ContentType.VariesByCulture())
             {
-                culture = GetDefaultCulture();
+                culture = _umbracoCultureProvider.GetCultureForNonCultureVariant(content);
             }
 
             return GetId(content.Id, culture);
@@ -87,11 +88,6 @@ namespace Enterspeed.Source.UmbracoCms.Services
             }
 
             return GetId(id, string.Empty);
-        }
-
-        private string GetDefaultCulture()
-        {
-            return _umbracoContextProvider.GetContext().Domains.DefaultCulture.ToLowerInvariant();
         }
     }
 }

@@ -11,6 +11,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Providers;
+using static Umbraco.Cms.Core.Collections.TopoGraph;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -83,7 +84,9 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             {
                 foreach (var content in entities)
                 {
-                    var cultures = _umbracoCultureProvider.GetCultures(content);
+                    var cultures = content.ContentType.VariesByCulture()
+                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(content)
+                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(content) };
 
                     List<IContent> descendants = null;
                     foreach (var culture in cultures)
@@ -106,7 +109,9 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
                         foreach (var descendant in descendants)
                         {
-                            var descendantCultures = _umbracoCultureProvider.GetCultures(descendant);
+                            var descendantCultures = descendant.ContentType.VariesByCulture()
+                                ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                                : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
                             foreach (var descendantCulture in descendantCultures)
                             {
                                 if (isPublishConfigured)

@@ -92,7 +92,9 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                                 || audit.AuditType.Equals(AuditType.Publish)
                                 || audit.AuditType.Equals(AuditType.Move))
                         {
-                            var cultures = _umbracoCultureProvider.GetCultures(node);
+                            var cultures = node.ContentType.VariesByCulture()
+                                ? _umbracoCultureProvider.GetCulturesForCultureVariant(node)
+                                : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(node) };
 
                             List<IPublishedContent> descendants = null;
 
@@ -119,7 +121,9 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
                                     foreach (var descendant in descendants)
                                     {
-                                        var descendantCultures = _umbracoCultureProvider.GetCultures(descendant);;
+                                        var descendantCultures = descendant.ContentType.VariesByCulture()
+                                            ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                                            : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
 
                                         foreach (var descendantCulture in descendantCultures)
                                         {
@@ -133,7 +137,9 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
                     if (savedNode != null && isPreviewConfigured)
                     {
-                        var cultures = _umbracoCultureProvider.GetCultures(savedNode);
+                        var cultures = savedNode.ContentType.VariesByCulture()
+                            ? _umbracoCultureProvider.GetCulturesForCultureVariant(savedNode)
+                            : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(savedNode) };
 
                         List<IPublishedContent> descendants = null;
 
@@ -152,7 +158,9 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
                                 foreach (var descendant in descendants)
                                 {
-                                    var descendantCultures = _umbracoCultureProvider.GetCultures(descendant);
+                                    var descendantCultures = descendant.ContentType.VariesByCulture()
+                                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
 
                                     foreach (var descendantCulture in descendantCultures)
                                     {

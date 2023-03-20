@@ -4,6 +4,7 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Factories;
+using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
@@ -19,6 +20,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
     public class EnterspeedContentPublishingEventHandler : BaseEnterspeedEventHandler, IComponent
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IUmbracoCultureProvider _umbracoCultureProvider;
 
         public EnterspeedContentPublishingEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
@@ -26,11 +28,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
-            IEnterspeedJobFactory enterspeedJobFactory)
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IUmbracoCultureProvider umbracoCultureProvider)
             : base(
                 umbracoContextFactory, enterspeedJobRepository, jobsHandlingService, configurationService, scopeProvider)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
+            _umbracoCultureProvider = umbracoCultureProvider;
         }
 
         public void Initialize()
@@ -62,7 +66,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
                     List<IContent> descendants = null;
 
-                    foreach (var culture in content.AvailableCultures)
+                    foreach (var culture in _umbracoCultureProvider.GetCulturesForCultureVariant(content))
                     {
                         var isCultureUnpublished = e.IsUnpublishingCulture(content, culture);
 
@@ -88,7 +92,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                             {
                                 if (descendant.ContentType.VariesByCulture())
                                 {
-                                    var descendantCultures = descendant.AvailableCultures;
+                                    var descendantCultures = _umbracoCultureProvider.GetCulturesForCultureVariant(descendant);
                                     if (descendantCultures.Contains(culture))
                                     {
                                         if (isPublishConfigured)

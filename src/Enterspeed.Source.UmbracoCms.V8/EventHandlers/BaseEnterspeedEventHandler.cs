@@ -31,11 +31,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             ScopeProvider = scopeProvider;
         }
 
-        protected string GetDefaultCulture(UmbracoContextReference context)
-        {
-            return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
-        }
-
         protected void EnqueueJobs(IList<EnterspeedJob> jobs)
         {
             if (!jobs.Any())

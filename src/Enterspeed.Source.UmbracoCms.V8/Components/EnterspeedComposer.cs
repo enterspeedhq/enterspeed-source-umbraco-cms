@@ -62,6 +62,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
             composition.Register<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>(Lifetime.Transient);
             composition.Register<IUmbracoRichTextParser, UmbracoRichTextParser>(Lifetime.Singleton);
             composition.Register<IEnterspeedValidationService, EnterspeedValidationService>(Lifetime.Singleton);
+            composition.Register<IUmbracoCultureProvider, UmbracoCultureProvider>(Lifetime.Transient);
 
             composition.Register<IEnterspeedConnection>(
                 c =>
