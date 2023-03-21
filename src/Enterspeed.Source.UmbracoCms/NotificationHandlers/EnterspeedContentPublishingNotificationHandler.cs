@@ -10,6 +10,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Providers;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -22,6 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
     {
         private readonly IContentService _contentService;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IUmbracoCultureProvider _umbracoCultureProvider;
 
         public EnterspeedContentPublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -31,7 +33,8 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IContentService contentService,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
-            IAuditService auditService)
+            IAuditService auditService,
+            IUmbracoCultureProvider umbracoCultureProvider)
             : base(
                   configurationService,
                   enterspeedJobRepository,
@@ -42,6 +45,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         {
             _contentService = contentService;
             _enterspeedJobFactory = enterspeedJobFactory;
+            _umbracoCultureProvider = umbracoCultureProvider;
         }
 
         public void Handle(ContentPublishingNotification notification)
@@ -72,7 +76,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
                     List<IContent> descendants = null;
 
-                    foreach (var culture in content.AvailableCultures)
+                    foreach (var culture in _umbracoCultureProvider.GetCulturesForCultureVariant(content))
                     {
                         var isCultureUnpublished = content.IsPropertyDirty(ContentBase.ChangeTrackingPrefix.UnpublishedCulture + culture);
                         if (isCultureUnpublished)
@@ -97,7 +101,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                             {
                                 if (descendant.ContentType.VariesByCulture())
                                 {
-                                    var descendantCultures = descendant.AvailableCultures;
+                                    var descendantCultures = _umbracoCultureProvider.GetCulturesForCultureVariant(descendant);
                                     if (descendantCultures.Contains(culture))
                                     {
                                         if (isPublishConfigured)

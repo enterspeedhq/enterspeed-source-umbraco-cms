@@ -4,6 +4,7 @@ using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Factories;
 using Enterspeed.Source.UmbracoCms.V8.Models.Api;
+using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Umbraco.Core;
 using Umbraco.Core.Models;
 using Umbraco.Core.Packaging;
@@ -17,6 +18,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly IContentService _contentService;
         private readonly ILocalizationService _localizationService;
         private readonly IMediaService _mediaService;
+        private readonly IUmbracoCultureProvider _umbracoCultureProvider;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
@@ -27,7 +29,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             IUmbracoContextFactory umbracoContextFactory,
             ILocalizationService localizationService,
             IEnterspeedJobFactory enterspeedJobFactory,
-            IMediaService mediaService)
+            IMediaService mediaService,
+            IUmbracoCultureProvider umbracoCultureProvider)
         {
             _contentService = contentService;
             _enterspeedJobRepository = enterspeedJobRepository;
@@ -35,6 +38,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _localizationService = localizationService;
             _enterspeedJobFactory = enterspeedJobFactory;
             _mediaService = mediaService;
+            _umbracoCultureProvider = umbracoCultureProvider;
         }
 
         public SeedResponse Seed(bool publish, bool preview)
@@ -122,15 +126,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
             else
             {
-                var defaultCulture = GetDefaultCulture(context);
+                var culture = _umbracoCultureProvider.GetCultureForNonCultureVariant(content);
                 if (publish && content.Published)
                 {
-                    culturesToPublish.Add(defaultCulture);
+                    culturesToPublish.Add(culture);
                 }
 
                 if (preview)
                 {
-                    culturesToPreview.Add(defaultCulture);
+                    culturesToPreview.Add(culture);
                 }
             }
 
@@ -206,11 +210,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             mediaCount = allMediaItems.Count;
 
             return jobs;
-        }
-
-        private string GetDefaultCulture(UmbracoContextReference context)
-        {
-            return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
         }
     }
 }

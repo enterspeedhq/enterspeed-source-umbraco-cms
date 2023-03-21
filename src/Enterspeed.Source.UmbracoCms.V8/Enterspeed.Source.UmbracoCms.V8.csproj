@@ -358,7 +358,9 @@
     <Compile Include="Providers\EnterspeedUmbracoConfigurationProvider.cs" />
     <Compile Include="Providers\IEnterspeedConnectionProvider.cs" />
     <Compile Include="Providers\InMemoryEnterspeedUmbracoConfigurationProvider.cs" />
+    <Compile Include="Providers\IUmbracoCultureProvider.cs" />
     <Compile Include="Providers\IUmbracoMediaUrlProvider.cs" />
+    <Compile Include="Providers\UmbracoCultureProvider.cs" />
     <Compile Include="Providers\UmbracoMediaUrlProvider.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultUserPickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultTagsPropertyValueConverter.cs" />

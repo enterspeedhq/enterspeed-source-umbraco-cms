@@ -4,6 +4,7 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Factories;
+using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
@@ -20,6 +21,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
     public class EnterspeedContentCacheRefresherEventHandler : BaseEnterspeedEventHandler, IComponent
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IUmbracoCultureProvider _umbracoCultureProvider;
 
         public EnterspeedContentCacheRefresherEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
@@ -27,10 +29,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
-            IEnterspeedJobFactory enterspeedJobFactory)
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IUmbracoCultureProvider umbracoCultureProvider)
             : base(umbracoContextFactory, enterspeedJobRepository, jobsHandlingService, configurationService, scopeProvider)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
+            _umbracoCultureProvider = umbracoCultureProvider;
         }
 
         public void Initialize()
@@ -84,8 +88,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                             || audit.AuditType.Equals(AuditType.Move))
                         {
                             var cultures = node.ContentType.VariesByCulture()
-                                ? node.Cultures.Keys
-                                : new List<string> { GetDefaultCulture(context) };
+                                ? _umbracoCultureProvider.GetCulturesForCultureVariant(node)
+                                : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(node) };
 
                             List<IPublishedContent> descendants = null;
 
@@ -112,8 +116,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                                     foreach (var descendant in descendants)
                                     {
                                         var descendantCultures = descendant.ContentType.VariesByCulture()
-                                            ? descendant.Cultures.Keys
-                                            : new List<string> { GetDefaultCulture(context) };
+                                            ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                                            : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
 
                                         foreach (var descendantCulture in descendantCultures)
                                         {
@@ -128,8 +132,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                     if (savedNode != null && isPreviewConfigured)
                     {
                         var cultures = savedNode.ContentType.VariesByCulture()
-                        ? savedNode.Cultures.Keys
-                        : new List<string> { GetDefaultCulture(context) };
+                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(savedNode)
+                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(savedNode) };
 
                         List<IPublishedContent> descendants = null;
 
@@ -149,8 +153,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
                                 foreach (var descendant in descendants)
                                 {
                                     var descendantCultures = descendant.ContentType.VariesByCulture()
-                                        ? descendant.Cultures.Keys
-                                        : new List<string> { GetDefaultCulture(context) };
+                                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
 
                                     foreach (var descendantCulture in descendantCultures)
                                     {

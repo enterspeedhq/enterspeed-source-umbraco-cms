@@ -50,11 +50,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             return _configurationService.IsPreviewConfigured();
         }
 
-        protected string GetDefaultCulture(UmbracoContextReference context)
-        {
-            return context.UmbracoContext.Domains.DefaultCulture.ToLowerInvariant();
-        }
-
         protected void EnqueueJobs(List<EnterspeedJob> jobs)
         {
             if (!jobs.Any())
