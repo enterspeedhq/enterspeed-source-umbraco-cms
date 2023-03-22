@@ -8,6 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Addded
 - Added option to customize culture logic (contribution by [Mikkel Keller](https://github.com/K3llr))
 
+### Changed
+- Made methods on `UmbracoRedirectsService` virtual to allow overring logic
+
 ## [3.6.0 - 2023.03.02]
 ### Addded
 - Ingesting preview media when doing a seed (Umbraco 7 & 8)

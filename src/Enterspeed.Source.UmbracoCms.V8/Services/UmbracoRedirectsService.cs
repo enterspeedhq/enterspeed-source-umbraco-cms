@@ -15,7 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _umbracoUrlService = umbracoUrlService;
         }
 
-        public string[] GetRedirects(Guid contentKey, string culture)
+        public virtual string[] GetRedirects(Guid contentKey, string culture)
         {
             var redirects = _redirectUrlService.GetContentRedirectUrls(contentKey)
                 ?.Where(redirect => string.IsNullOrWhiteSpace(redirect.Culture) ||
