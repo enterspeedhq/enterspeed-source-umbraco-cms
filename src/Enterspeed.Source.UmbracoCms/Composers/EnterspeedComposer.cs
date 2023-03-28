@@ -166,6 +166,9 @@ namespace Enterspeed.Source.UmbracoCms.Composers
             // Notification handlers
             builder.AddNotificationHandler<ContentPublishingNotification, EnterspeedContentPublishingNotificationHandler>();
             builder.AddNotificationHandler<ContentCacheRefresherNotification, EnterspeedContentCacheRefresherNotificationHandler>();
+#if NET5_0
+            builder.AddNotificationHandler<ContentSortedNotification, EnterspeedContentSortedNotificationHandler>();
+#endif
             builder.AddNotificationHandler<ContentMovedToRecycleBinNotification, EnterspeedContentUnpublishingNotificationHandler>();
             builder.AddNotificationHandler<ContentUnpublishingNotification, EnterspeedContentUnpublishingNotificationHandler>();
             builder.AddNotificationHandler<DictionaryItemSavedNotification, EnterspeedDictionaryItemSavedNotificationHandler>();

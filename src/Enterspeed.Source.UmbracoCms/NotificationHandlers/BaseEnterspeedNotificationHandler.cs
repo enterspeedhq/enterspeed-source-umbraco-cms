@@ -17,12 +17,12 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 {
     public abstract class BaseEnterspeedNotificationHandler
     {
-        internal readonly IEnterspeedConfigurationService _configurationService;
-        internal readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        internal readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
-        internal readonly IUmbracoContextFactory _umbracoContextFactory;
-        internal readonly IScopeProvider _scopeProvider;
-        internal readonly IAuditService _auditService;
+        protected readonly IEnterspeedConfigurationService _configurationService;
+        protected readonly IEnterspeedJobRepository _enterspeedJobRepository;
+        protected readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
+        protected readonly IUmbracoContextFactory _umbracoContextFactory;
+        protected readonly IScopeProvider _scopeProvider;
+        protected readonly IAuditService _auditService;
 
         protected BaseEnterspeedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -40,12 +40,12 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             _auditService = auditService;
         }
 
-        internal bool IsPublishConfigured()
+        protected bool IsPublishConfigured()
         {
             return _configurationService.IsPublishConfigured();
         }
 
-        internal bool IsPreviewConfigured()
+        protected bool IsPreviewConfigured()
         {
             return _configurationService.IsPreviewConfigured();
         }
