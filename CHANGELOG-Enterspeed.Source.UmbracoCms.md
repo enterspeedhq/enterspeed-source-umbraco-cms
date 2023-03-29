@@ -7,7 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Addded
 - Added option to customize culture logic (contribution by [Mikkel Keller](https://github.com/K3llr))
-- Added sort event to ingest logic (contribution by [Mikkel Keller](https://github.com/K3llr))
+- Added option to create custom notification handlers
+
+### Fixed
+- Fixed missing sorting event for ingest (contribution by [Mikkel Keller](https://github.com/K3llr))
 
 ### Changed
 - Made methods on `UmbracoRedirectsService` virtual to allow overring logic

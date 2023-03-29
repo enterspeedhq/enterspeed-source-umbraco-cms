@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Events;
@@ -72,14 +71,14 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                 var umb = context.UmbracoContext;
                 foreach (var payload in jsonPayloads)
                 {
-                    var node = umb.Content.GetById(payload.Id);
+                    var publishedNode = umb.Content.GetById(payload.Id);
                     var savedNode = umb.Content.GetById(true, payload.Id);
-                    if (node == null && savedNode == null)
+                    if (publishedNode == null && savedNode == null)
                     {
                         continue;
                     }
 
-                    if (node != null && isPublishConfigured)
+                    if (publishedNode != null && isPublishConfigured)
                     {
                         var audit = _auditService.GetPagedItemsByEntity(payload.Id, 0, 2, out var totalLogs).FirstOrDefault();
 
@@ -93,15 +92,15 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                                 || audit.AuditType.Equals(AuditType.Move)
                                 || audit.AuditType.Equals(AuditType.Sort))
                         {
-                            var cultures = node.ContentType.VariesByCulture()
-                                ? _umbracoCultureProvider.GetCulturesForCultureVariant(node)
-                                : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(node) };
+                            var cultures = publishedNode.ContentType.VariesByCulture()
+                                ? _umbracoCultureProvider.GetCulturesForCultureVariant(publishedNode)
+                                : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(publishedNode) };
 
                             List<IPublishedContent> descendants = null;
 
                             foreach (var culture in cultures)
                             {
-                                var publishedUpdateDate = node.CultureDate(culture);
+                                var publishedUpdateDate = publishedNode.CultureDate(culture);
                                 var savedUpdateDate = savedNode.CultureDate(culture);
 
                                 if (savedUpdateDate > publishedUpdateDate)
@@ -109,15 +108,14 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                                     // This means that the nodes was only saved, so we skip creating any jobs for this node and culture
                                     continue;
                                 }
-
-                                var now = DateTime.UtcNow;
-                                jobs.Add(_enterspeedJobFactory.GetPublishJob(node, culture, EnterspeedContentState.Publish));
+                                
+                                jobs.Add(_enterspeedJobFactory.GetPublishJob(publishedNode, culture, EnterspeedContentState.Publish));
 
                                 if (payload.ChangeTypes == TreeChangeTypes.RefreshBranch)
                                 {
                                     if (descendants == null)
                                     {
-                                        descendants = node.Descendants("*").ToList();
+                                        descendants = publishedNode.Descendants("*").ToList();
                                     }
 
                                     foreach (var descendant in descendants)
@@ -146,8 +144,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
                         foreach (var culture in cultures)
                         {
-                            var now = DateTime.UtcNow;
-
                             jobs.Add(_enterspeedJobFactory.GetPublishJob(savedNode, culture, EnterspeedContentState.Preview));
 
                             if (payload.ChangeTypes == TreeChangeTypes.RefreshBranch)
