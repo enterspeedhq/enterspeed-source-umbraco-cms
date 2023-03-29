@@ -6,7 +6,7 @@
         <div class="configuration-dashboard-content" ng-if="!vm.loadingConfiguration">
 
             <div class="configuration-dashboard-property">
-                <label for="api-key">Enterspeed endpoint</label><br />
+                <label for="api-key">Enterspeed endpoint *</label><br />
                 <input type="text" id="api-key" class="input-field" ng-model="vm.configuration.baseUrl" placeholder="Enterspeed base url" ng-disabled="vm.buttonState === 'busy'" />
             </div>
             <div class="configuration-dashboard-property">
@@ -14,7 +14,7 @@
                 <input type="text" id="media-domain" class="input-field" ng-model="vm.configuration.mediaDomain" placeholder="Media domain" ng-disabled="vm.buttonState === 'busy'" />
             </div>
             <div class="configuration-dashboard-property">
-                <label for="api-key">Api key</label><br />
+                <label for="api-key">Api key *</label><br />
                 <input type="text" id="api-key" class="input-field" ng-model="vm.configuration.apiKey" placeholder="Enterspeed API Key" ng-disabled="vm.buttonState === 'busy'" />
             </div>
             <div class="configuration-dashboard-property">
