@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.7.0 - 2023-29-03]
 ### Addded
 - Added option to customize culture logic (contribution by [Mikkel Keller](https://github.com/K3llr))
 - Added sort event to ingest logic (contribution by [Mikkel Keller](https://github.com/K3llr))
