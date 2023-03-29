@@ -11,7 +11,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Fixed missing sorting event for ingest (contribution by [Mikkel Keller](https://github.com/K3llr))
-- Fixed issue with sorting in Umbraco 9
 
 ### Changed
 - Made methods on `UmbracoRedirectsService` virtual to allow overring logic
