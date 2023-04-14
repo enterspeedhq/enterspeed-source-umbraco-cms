@@ -5,6 +5,7 @@ using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.UmbracoCms.Extensions;
 using Enterspeed.Source.UmbracoCms.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.Services;
+using Umbraco.Cms.Core.Configuration;
 
 namespace Enterspeed.Source.UmbracoCms.Connections
 {
@@ -13,10 +14,14 @@ namespace Enterspeed.Source.UmbracoCms.Connections
         private readonly EnterspeedUmbracoConfiguration _configuration;
         private HttpClient _httpClientConnection;
         private DateTime? _connectionEstablishedDate;
+        private readonly IUmbracoVersion _umbracoVersion;
 
-        public PreviewEnterspeedConnection(IEnterspeedConfigurationService configurationService)
+        public PreviewEnterspeedConnection(
+            IEnterspeedConfigurationService configurationService,
+            IUmbracoVersion umbracoVersion)
         {
             _configuration = configurationService.GetConfiguration().GetPreviewConfiguration();
+            _umbracoVersion = umbracoVersion;
         }
 
         private string ApiKey => _configuration.ApiKey;
@@ -64,6 +69,11 @@ namespace Enterspeed.Source.UmbracoCms.Connections
 #if NETSTANDARD2_0_OR_GREATER || NET || NETCOREAPP2_0_OR_GREATER
             _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $"sdk-dotnet/{Assembly.GetExecutingAssembly().GetName().Version}");
 #endif
+
+            if (string.IsNullOrEmpty(_configuration.UmbracoVersion))
+            {
+                _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-Source-System", $"umbraco/{_umbracoVersion.Version}");
+            }
 
             _connectionEstablishedDate = DateTime.Now;
         }
