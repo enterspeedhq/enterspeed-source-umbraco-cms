@@ -6,6 +6,7 @@ using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Newtonsoft.Json;
 using Umbraco.Core;
 using Umbraco.Core.Composing;
+using Umbraco.Core.Configuration;
 using Umbraco.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
@@ -66,6 +67,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true,
                 PreviewApiKey = webConfigPreviewApikey?.Trim(),
+                SystemInformation = GetUmbracoVersion()
             };
 
             return _configuration;
@@ -129,7 +131,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return null;
             }
 
-            return JsonConvert.DeserializeObject<EnterspeedUmbracoConfiguration>(savedConfigurationValue);
+            var configuration = JsonConvert.DeserializeObject<EnterspeedUmbracoConfiguration>(savedConfigurationValue);
+
+            if (configuration != null)
+            {
+                configuration.SystemInformation = GetUmbracoVersion();
+            }
+
+            return configuration;
         }
 
         private EnterspeedUmbracoConfiguration GetCombinedConfigurationFromDatabase()
@@ -146,13 +155,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             var connectionTimeoutAsString = _keyValueService.GetValue(_configurationConnectionTimeoutDatabaseKey);
             var previewApiKey = _keyValueService.GetValue(_configurationPreviewApiKeyDatabaseKey);
 
-            var configuration = new EnterspeedUmbracoConfiguration()
+            var configuration = new EnterspeedUmbracoConfiguration
             {
                 IsConfigured = true,
                 ApiKey = apiKey,
                 BaseUrl = baseUrl,
                 MediaDomain = mediaDomain,
-                PreviewApiKey = previewApiKey
+                PreviewApiKey = previewApiKey,
+                SystemInformation = GetUmbracoVersion()
             };
 
             if (int.TryParse(connectionTimeoutAsString, out var connectionTimeout))
@@ -161,6 +171,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
 
             return configuration;
+        }
+
+        private static string GetUmbracoVersion()
+        {
+            return $"Umbraco-{UmbracoVersion.Current.Major}.{UmbracoVersion.Current.Minor}.{UmbracoVersion.Current.Build}";
         }
     }
 }

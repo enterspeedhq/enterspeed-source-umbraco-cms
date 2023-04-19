@@ -22,6 +22,7 @@ namespace Enterspeed.Source.UmbracoCms.Connections
         private string ApiKey => _configuration.ApiKey;
         private int ConnectionTimeout => _configuration.ConnectionTimeout;
         private string BaseUrl => _configuration.BaseUrl;
+        private string SystemInformation => _configuration.SystemInformation;
 
         public void Flush()
         {
@@ -64,6 +65,11 @@ namespace Enterspeed.Source.UmbracoCms.Connections
 #if NETSTANDARD2_0_OR_GREATER || NET || NETCOREAPP2_0_OR_GREATER
             _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $"sdk-dotnet/{Assembly.GetExecutingAssembly().GetName().Version}");
 #endif
+
+            if (!string.IsNullOrEmpty(SystemInformation))
+            {
+                _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System-Information", SystemInformation);
+            }
 
             _connectionEstablishedDate = DateTime.Now;
         }

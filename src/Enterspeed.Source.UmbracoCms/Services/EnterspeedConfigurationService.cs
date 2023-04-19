@@ -5,6 +5,7 @@ using Enterspeed.Source.UmbracoCms.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Umbraco.Cms.Core.Configuration;
 using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Services
@@ -14,6 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         private readonly IKeyValueService _keyValueService;
         private readonly IConfiguration _configuration;
         private readonly IServiceProvider _serviceProvider;
+        private readonly IUmbracoVersion _umbracoVersion;
 
         private EnterspeedUmbracoConfiguration _enterspeedUmbracoConfiguration;
 
@@ -26,11 +28,13 @@ namespace Enterspeed.Source.UmbracoCms.Services
         public EnterspeedConfigurationService(
             IKeyValueService keyValueService,
             IConfiguration configuration,
-            IServiceProvider serviceProvider)
+            IServiceProvider serviceProvider,
+            IUmbracoVersion umbracoVersion)
         {
             _keyValueService = keyValueService;
             _configuration = configuration;
             _serviceProvider = serviceProvider;
+            _umbracoVersion = umbracoVersion;
         }
 
         public EnterspeedUmbracoConfiguration GetConfiguration()
@@ -104,6 +108,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             configuration.BaseUrl = endpoint;
             configuration.IsConfigured = true;
             configuration.ConfiguredFromSettingsFile = true;
+            configuration.SystemInformation = GetUmbracoVersion();
 
             return configuration;
         }
@@ -126,6 +131,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 IsConfigured = true,
                 ConfiguredFromSettingsFile = false,
+                SystemInformation = GetUmbracoVersion(),
                 ApiKey = apiKey,
                 BaseUrl = baseUrl,
                 MediaDomain = mediaDomain,
@@ -138,6 +144,11 @@ namespace Enterspeed.Source.UmbracoCms.Services
             }
 
             return configuration;
+        }
+
+        private string GetUmbracoVersion()
+        {
+            return $"Umbraco-{_umbracoVersion.Version}";
         }
     }
 }
