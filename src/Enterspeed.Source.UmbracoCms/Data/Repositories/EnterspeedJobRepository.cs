@@ -13,12 +13,12 @@ using Umbraco.Cms.Infrastructure.Scoping;
 
 namespace Enterspeed.Source.UmbracoCms.Data.Repositories
 {
-    public class EnterspeedJobRespository : IEnterspeedJobRepository
+    public class EnterspeedJobRepository : IEnterspeedJobRepository
     {
         private readonly IScopeAccessor _scopeAccessor;
         private readonly IUmbracoMapper _mapper;
 
-        public EnterspeedJobRespository(
+        public EnterspeedJobRepository(
             IUmbracoMapper mapper,
             IScopeAccessor scopeAccessor)
         {

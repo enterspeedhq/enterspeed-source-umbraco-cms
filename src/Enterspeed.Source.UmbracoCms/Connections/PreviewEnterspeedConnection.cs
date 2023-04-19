@@ -61,10 +61,7 @@ namespace Enterspeed.Source.UmbracoCms.Connections
             _httpClientConnection.BaseAddress = new Uri(BaseUrl);
             _httpClientConnection.DefaultRequestHeaders.Add("X-Api-Key", ApiKey);
             _httpClientConnection.DefaultRequestHeaders.Add("Accept", "application/json");
-
-#if NETSTANDARD2_0_OR_GREATER || NET || NETCOREAPP2_0_OR_GREATER
             _httpClientConnection.DefaultRequestHeaders.Add("X-Enterspeed-System", $"sdk-dotnet/{Assembly.GetExecutingAssembly().GetName().Version}");
-#endif
 
             if (!string.IsNullOrEmpty(SystemInformation))
             {

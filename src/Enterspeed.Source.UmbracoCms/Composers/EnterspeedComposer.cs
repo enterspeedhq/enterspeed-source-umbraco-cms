@@ -49,7 +49,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
             builder.Services.AddTransient<IEntityIdentityService, UmbracoEntityIdentityService>();
             builder.Services.AddTransient<IUmbracoContextProvider, UmbracoContextProvider>();
             builder.Services.AddTransient<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>();
-            builder.Services.AddTransient<IEnterspeedJobRepository, EnterspeedJobRespository>();
+            builder.Services.AddTransient<IEnterspeedJobRepository, EnterspeedJobRepository>();
             builder.Services.AddTransient<IUmbracoUrlService, UmbracoUrlService>();
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
