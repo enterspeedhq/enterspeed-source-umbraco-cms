@@ -16,7 +16,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Extensions
                 ApiKey = me.ApiKey,
                 BaseUrl = me.BaseUrl,
                 ConnectionTimeout = me.ConnectionTimeout,
-                MediaDomain = me.MediaDomain
+                MediaDomain = me.MediaDomain,
+                SystemInformation = me.SystemInformation
             };
         }
 
@@ -32,7 +33,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Extensions
                 ApiKey = me.PreviewApiKey,
                 BaseUrl = me.BaseUrl,
                 ConnectionTimeout = me.ConnectionTimeout,
-                MediaDomain = me.MediaDomain
+                MediaDomain = me.MediaDomain,
+                SystemInformation = me.SystemInformation
             };
         }
     }

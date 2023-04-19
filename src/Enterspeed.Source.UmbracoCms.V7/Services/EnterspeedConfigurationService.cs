@@ -3,12 +3,18 @@ using Enterspeed.Source.UmbracoCms.V7.Data.Schemas;
 using Enterspeed.Source.UmbracoCms.V7.Extensions;
 using Enterspeed.Source.UmbracoCms.V7.Models.Configuration;
 using Umbraco.Core;
+using Umbraco.Core.Configuration;
 
 namespace Enterspeed.Source.UmbracoCms.V7.Services
 {
     public class EnterspeedConfigurationService
     {
         private EnterspeedUmbracoConfiguration _configuration;
+
+        private static string GetUmbracoVersion()
+        {
+            return $"Umbraco-{UmbracoVersion.Current.Major}.{UmbracoVersion.Current.Minor}.{UmbracoVersion.Current.Build}";
+        }
 
         public EnterspeedUmbracoConfiguration GetConfiguration()
         {
@@ -39,7 +45,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 ApiKey = webConfigApikey.Trim(),
                 MediaDomain = webConfigMediaDomain?.Trim(),
                 IsConfigured = true,
-                PreviewApiKey = webConfigPreviewApikey?.Trim()
+                PreviewApiKey = webConfigPreviewApikey?.Trim(),
+                SystemInformation = GetUmbracoVersion()
             };
             return _configuration;
         }
@@ -144,7 +151,8 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
                 MediaDomain = config.MediaDomain,
                 BaseUrl = config.BaseUrl,
                 IsConfigured = true,
-                PreviewApiKey = config.PreviewApiKey
+                PreviewApiKey = config.PreviewApiKey,
+                SystemInformation = GetUmbracoVersion()
             };
         }
     }
