@@ -4,14 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.7.1 - 2023-04-19]
 ### Addded
 - Added loggin of Umbraco version
 
 ### Updated
 - Update dpendency to Enterspeed.Source.Sdk v1.0.1
 
-## [3.7.0 - 2023-29-03]
+## [3.7.0 - 2023-03-29]
 ### Addded
 - Added option to customize culture logic (contribution by [Mikkel Keller](https://github.com/K3llr))
 - Added sort event to ingest logic (contribution by [Mikkel Keller](https://github.com/K3llr))
@@ -19,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - Made methods on `UmbracoRedirectsService` virtual to allow overring logic
 
-## [3.6.0 - 2023.03.02]
+## [3.6.0 - 2023-03-02]
 ### Addded
 - Ingesting preview media when doing a seed (Umbraco 7 & 8)
 
