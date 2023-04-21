@@ -25,5 +25,12 @@
                     label="Seed"
                     disabled="vm.seedState === 'busy'">
         </umb-button>
+        <umb-button action="vm.clearPendingJobs()"
+                    type="button"
+                    button-style="action"
+                    state="vm.clearPendingJobsState"
+                    label="Clear job queue ({{vm.numberOfPendingJobs}})"
+                    disabled="vm.clearPendingJobsState === 'busy' || vm.numberOfPendingJobs === 0">
+        </umb-button>
     </div>
 </div>

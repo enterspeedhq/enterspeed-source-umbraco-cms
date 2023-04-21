@@ -50,13 +50,15 @@ namespace Enterspeed.Source.UmbracoCms.Services
             var jobs = contentJobs.Union(dictionaryJobs).Union(mediaJobs).ToList();
 
             _enterspeedJobRepository.Save(jobs);
+            var numberOfPendingJobs = _enterspeedJobRepository.GetNumberOfPendingJobs();
 
             return new SeedResponse
             {
                 ContentCount = contentCount,
                 DictionaryCount = dictionaryCount,
                 MediaCount = mediaCount,
-                JobsAdded = jobs.Count
+                JobsAdded = jobs.Count,
+                NumberOfPendingJobs = numberOfPendingJobs
             };
         }
 

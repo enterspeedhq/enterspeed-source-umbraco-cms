@@ -11,5 +11,7 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
         IList<EnterspeedJob> GetOldProcessingTasks(int olderThanMinutes = 60);
         void Save(IList<EnterspeedJob> jobs);
         void Delete(IList<int> ids);
+        void ClearPendingJobs();
+        int GetNumberOfPendingJobs();
     }
 }
