@@ -30,7 +30,7 @@
             </umb-dropdown>
         </div>
     </div>
-    <div ng-if="vm.selectedSeedMode === 'Everything'">
+    <div ng-if="vm.selectedSeedMode === 'Everything'" class="seed-dashboard-text">
         <h4>Full seed</h4>
         <p>Seeding will queue jobs for all content, media and dictionary item for publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.</p>
         <div class="seed-dashboard-content">
@@ -43,66 +43,68 @@
             </umb-button>
         </div>
     </div>
-    <div ng-if="vm.selectedSeedMode === 'Custom'">
-        <div class="seed-dashboard-text">
+    <div ng-if="vm.selectedSeedMode === 'Custom'" class="seed-dashboard-text">
+        <div>
             <h4>Custom seed</h4>
             <p>With a custom seed you can select the nodes you want to seed for publish and preview (if configured). This action can take a while to finish.</p>
-            <umb-button action="vm.selectNode()"
-                        type="button"
-                        label="Select">
-            </umb-button>
         </div>
         <div class="custom-seed-content-type-container">
             <div class="custom-seed-content-type-box">
                 <h5>Content</h5>
-                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['Content'].length" ng-model="vm.selectedNodesToSeed['Content']">
-                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['Content']"
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['content'].length" ng-model="vm.selectedNodesToSeed['content']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['content']"
                                       icon="link.icon"
                                       name="link.name"
                                       published="link.published"
                                       description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
                                       sortable="true"
                                       allow-remove="true"
-                                      on-remove="vm.removeSelectNode('Content', $index)">
+                                      on-remove="vm.removeSelectNode('content', $index)">
                     </umb-node-preview>
                 </div>
-                <i ng-if="!vm.selectedNodesToSeed['Content'].length">
-                    No content nodes selected
-                </i>
+                <button type="button"
+                        class="umb-node-preview-add"
+                        ng-click="vm.openSelectNode('content')">
+                    <localize key="general_add">Add</localize>
+                </button>
             </div>
             <div class="custom-seed-content-type-box">
                 <h5>Media</h5>
-                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['Media'].length" ng-model="vm.selectedNodesToSeed['Media']">
-                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['Media']"
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['media'].length" ng-model="vm.selectedNodesToSeed['media']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['media']"
                                       icon="link.icon"
                                       name="link.name"
                                       published="link.published"
                                       description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
                                       sortable="true"
                                       allow-remove="true"
-                                      on-remove="vm.removeSelectNode('Media', $index)">
+                                      on-remove="vm.removeSelectNode('media', $index)">
                     </umb-node-preview>
                 </div>
-                <i ng-if="!vm.selectedNodesToSeed['Media'].length">
-                    No media nodes selected
-                </i>
+                <button type="button"
+                        class="umb-node-preview-add"
+                        ng-click="vm.openSelectNode('media')">
+                    <localize key="general_add">Add</localize>
+                </button>
             </div>
             <div class="custom-seed-content-type-box">
                 <h5>Dictionary</h5>
-                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['Dictionary'].length" ng-model="vm.selectedNodesToSeed['Dictionary']">
-                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['Dictionary']"
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['dictionary'].length" ng-model="vm.selectedNodesToSeed['dictionary']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['dictionary']"
                                       icon="link.icon"
                                       name="link.name"
                                       published="link.published"
                                       description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
                                       sortable="true"
                                       allow-remove="true"
-                                      on-remove="vm.removeSelectNode('Dictionary', $index)">
+                                      on-remove="vm.removeSelectNode('dictionary', $index)">
                     </umb-node-preview>
                 </div>
-                <i ng-if="!vm.selectedNodesToSeed['Dictionary'].length">
-                    No dictionary nodes selected
-                </i>
+                <button type="button"
+                        class="umb-node-preview-add"
+                        ng-click="vm.openSelectNode('dictionary')">
+                    <localize key="general_add">Add</localize>
+                </button>
             </div>
         </div>
         <div>

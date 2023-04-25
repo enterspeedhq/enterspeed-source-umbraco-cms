@@ -9,9 +9,9 @@
     vm.mediaTree = [];
     vm.dictionaryTree = [];
     vm.selectedNodesToSeed = [];
-    vm.selectedNodesToSeed['Content'] = [];
-    vm.selectedNodesToSeed['Media'] = [];
-    vm.selectedNodesToSeed['Dictionary'] = [];
+    vm.selectedNodesToSeed['content'] = [];
+    vm.selectedNodesToSeed['media'] = [];
+    vm.selectedNodesToSeed['dictionary'] = [];
 
     vm.seed = function () {
         vm.seedState = "busy";
@@ -28,22 +28,23 @@
         });
     };
 
-    vm.selectNode = function() {
+    vm.openSelectNode = function(section) {
         editorService.open({
-            title: "Select node",
+            title: "Select " + section + " node",
             subtitle: "Select a node to include in the seed",
             view: "/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Views/selectNode.html",
+            contentType: section,
             size: "small",
             submit: function(value) {
                 if (!value.target || !value.target.id) {
                     return;
                 }
 
-                var existingNodeIndex = vm.selectedNodesToSeed[value.target.contentType].findIndex(element => element.id === value.target.id);
+                var existingNodeIndex = vm.selectedNodesToSeed[section].findIndex(element => element.id === value.target.id);
                 if (existingNodeIndex >= 0) {
-                    vm.selectedNodesToSeed[value.target.contentType][existingNodeIndex] = value.target;
+                    vm.selectedNodesToSeed[section][existingNodeIndex] = value.target;
                 } else {
-                    vm.selectedNodesToSeed[value.target.contentType].push(value.target);
+                    vm.selectedNodesToSeed[section].push(value.target);
                 }
             },
             close: function() {

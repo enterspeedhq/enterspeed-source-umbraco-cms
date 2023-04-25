@@ -1,6 +1,0 @@
-﻿<ul ng-class="{collapsed: !node.expanded}">
-    <li class="umb-animated umb-tree-item" ng-repeat="childNode in node.children">
-        <div ng-init="node = childNode" ng-include="'/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Views/treeItem.partial.html'" class="umb-tree-item__inner" style="padding-left: {{ childNode.level * 20 }}px;"></div>
-        <div ng-if="childNode.hasChildren" ng-init="node = childNode" ng-include="'/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Views/tree.partial.html'"></div>
-    </li>
-</ul>

@@ -13,23 +13,6 @@
             <umb-box>
                 <umb-box-content>
                     <div class="umb-control-group">
-                        <h5>Content type</h5>
-                        <div class="umb-control-group">
-                            <umb-button type="button"
-                                        label="Content type: {{vm.selectedContentType}}"
-                                        action="vm.toggleContentTypeSelect()">
-                            </umb-button>
-                            <umb-dropdown ng-if="vm.contentTypeSelectOpen" on-close="vm.contentTypeSelectOpen = false">
-                                <umb-dropdown-item ng-repeat="contentType in vm.contentTypes">
-                                    <button type="button" class="btn-reset" ng-click="vm.setContentType(contentType); vm.contentTypeSelectOpen = false;">
-                                        {{contentType}}
-                                    </button>
-                                </umb-dropdown-item>
-                            </umb-dropdown>
-                        </div>
-                    </div>
-
-                    <div class="umb-control-group">
                         <h5>Descendents</h5>
                         <umb-checkbox model="vm.includeDescendents"
                                       text="Include descendents"
@@ -39,7 +22,7 @@
 
                     <div class="umb-control-group">
                         <h5>Node</h5>
-                        <div ng-if="vm.selectedContentType == 'Content'">
+                        <div ng-if="vm.contentType == 'content'">
                             <umb-tree section="content"
                                       treealias="content"
                                       hideheader="true"
@@ -52,7 +35,7 @@
                                       id="treePickerContent">
                             </umb-tree>
                         </div>
-                        <div ng-if="vm.selectedContentType == 'Media'">
+                        <div ng-if="vm.contentType == 'media'">
                             <umb-tree section="media"
                                       treealias="media"
                                       hideheader="true"
@@ -65,7 +48,7 @@
                                       id="treePickerMedia">
                             </umb-tree>
                         </div>
-                        <div ng-if="vm.selectedContentType == 'Dictionary'">
+                        <div ng-if="vm.contentType == 'dictionary'">
                             <umb-tree section="translation"
                                       treealias="dictionary"
                                       hideheader="true"

@@ -1,11 +1,9 @@
 ﻿function selectNodeController($scope) {
     var vm = this;
-    vm.contentTypes = ['Content', 'Media', 'Dictionary'];
-    vm.contentTypeSelectOpen = false;
     vm.includeDescendents = false;
-    vm.selectedContentType = vm.contentTypes[0];
 
     function init() {
+        vm.contentType = $scope.model.contentType;
         resetNodeSelection();
     }
 
@@ -35,16 +33,6 @@
         $scope.model.target.udi = args.node.udi;
         $scope.model.target.name = args.node.name;
         $scope.model.target.icon = args.node.icon;
-        $scope.model.target.contentType = vm.selectedContentType;
-    }
-
-    vm.setContentType = function (contentType) {
-        vm.selectedContentType = contentType;
-        resetNodeSelection();
-    }
-
-    vm.toggleContentTypeSelect = function () {
-        vm.contentTypeSelectOpen = !vm.contentTypeSelectOpen;
     }
 
     vm.toggleIncludeDescendents = function () {
