@@ -14,16 +14,105 @@
             Media items: {{vm.seedResponse.mediaCount}}
         </div>
     </div>
-    <div class="seed-dashboard-text">
-        Seeding will queue jobs for all content, media and dictionary item for publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.
+    <div class="seed-dashboard-text block-form">
+        <h4>What to seed</h4>
+        <div class="umb-control-group">
+            <umb-button type="button"
+                        label="Seed mode: {{vm.selectedSeedMode}}"
+                        action="vm.toggleSeedModeSelect()">
+            </umb-button>
+            <umb-dropdown ng-if="vm.seedModeSelectOpen" on-close="vm.seedModeSelectOpen = false">
+                <umb-dropdown-item ng-repeat="seedMode in vm.seedModes">
+                    <button type="button" class="btn-reset" ng-click="vm.setSeedMode(seedMode); vm.seedModeSelectOpen = false;">
+                        {{seedMode}}
+                    </button>
+                </umb-dropdown-item>
+            </umb-dropdown>
+        </div>
     </div>
-    <div class="seed-dashboard-content">
-        <umb-button action="vm.seed()"
-                    type="button"
-                    button-style="action"
-                    state="vm.seedState"
-                    label="Seed"
-                    disabled="vm.seedState === 'busy'">
-        </umb-button>
+    <div ng-if="vm.selectedSeedMode === 'Everything'">
+        <h4>Full seed</h4>
+        <p>Seeding will queue jobs for all content, media and dictionary item for publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.</p>
+        <div class="seed-dashboard-content">
+            <umb-button action="vm.seed()"
+                        type="button"
+                        button-style="action"
+                        state="vm.seedState"
+                        label="Seed"
+                        disabled="vm.seedState === 'busy'">
+            </umb-button>
+        </div>
+    </div>
+    <div ng-if="vm.selectedSeedMode === 'Custom'">
+        <div class="seed-dashboard-text">
+            <h4>Custom seed</h4>
+            <p>With a custom seed you can select the nodes you want to seed for publish and preview (if configured). This action can take a while to finish.</p>
+            <umb-button action="vm.selectNode()"
+                        type="button"
+                        label="Select">
+            </umb-button>
+        </div>
+        <div class="custom-seed-content-type-container">
+            <div class="custom-seed-content-type-box">
+                <h5>Content</h5>
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['Content'].length" ng-model="vm.selectedNodesToSeed['Content']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['Content']"
+                                      icon="link.icon"
+                                      name="link.name"
+                                      published="link.published"
+                                      description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
+                                      sortable="true"
+                                      allow-remove="true"
+                                      on-remove="vm.removeSelectNode('Content', $index)">
+                    </umb-node-preview>
+                </div>
+                <i ng-if="!vm.selectedNodesToSeed['Content'].length">
+                    No content nodes selected
+                </i>
+            </div>
+            <div class="custom-seed-content-type-box">
+                <h5>Media</h5>
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['Media'].length" ng-model="vm.selectedNodesToSeed['Media']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['Media']"
+                                      icon="link.icon"
+                                      name="link.name"
+                                      published="link.published"
+                                      description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
+                                      sortable="true"
+                                      allow-remove="true"
+                                      on-remove="vm.removeSelectNode('Media', $index)">
+                    </umb-node-preview>
+                </div>
+                <i ng-if="!vm.selectedNodesToSeed['Media'].length">
+                    No media nodes selected
+                </i>
+            </div>
+            <div class="custom-seed-content-type-box">
+                <h5>Dictionary</h5>
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['Dictionary'].length" ng-model="vm.selectedNodesToSeed['Dictionary']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['Dictionary']"
+                                      icon="link.icon"
+                                      name="link.name"
+                                      published="link.published"
+                                      description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
+                                      sortable="true"
+                                      allow-remove="true"
+                                      on-remove="vm.removeSelectNode('Dictionary', $index)">
+                    </umb-node-preview>
+                </div>
+                <i ng-if="!vm.selectedNodesToSeed['Dictionary'].length">
+                    No dictionary nodes selected
+                </i>
+            </div>
+        </div>
+        <div>
+            <umb-button action=""
+                        type="button"
+                        button-style="action"
+                        state="vm.seedState"
+                        label="Seed"
+                        disabled="vm.seedState === 'busy'">
+            </umb-button>
+        </div>
     </div>
 </div>

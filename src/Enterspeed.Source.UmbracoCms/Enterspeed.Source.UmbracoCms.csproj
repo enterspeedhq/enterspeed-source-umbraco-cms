@@ -59,6 +59,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\selectNode.controller.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\selectNode.html" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\tree.partial.html" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\treeItem.partial.html" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="..\..\README-NUGET.md">
 		  <Pack>True</Pack>
 		  <PackagePath>\</PackagePath>
