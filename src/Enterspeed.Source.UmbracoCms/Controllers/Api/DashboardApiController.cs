@@ -168,7 +168,22 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
         {
             using (var scope = _scopeProvider.CreateScope(autoComplete: true))
             {
-                var numberOfPendingJobs = _enterspeedJobRepository.GetNumberOfPendingJobs();
+                int numberOfPendingJobs;
+                try
+                {
+                    numberOfPendingJobs = _enterspeedJobRepository.GetNumberOfPendingJobs();
+                }
+                catch (Exception exception)
+                {
+                    return BadRequest(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Success = false,
+                            Message = exception.Message,
+                            Exception = exception
+                        });
+                }
 
                 return Ok(
                     new ApiResponse<GetNumberOfPendingJobsResponse>
