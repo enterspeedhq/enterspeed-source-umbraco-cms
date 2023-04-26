@@ -1,19 +1,4 @@
 ﻿<div ng-controller="SeedController as vm" class="seed-dashboard">
-    <div class="seed-dashboard-response" ng-if="vm.seedResponse !== null">
-        <h4>Seed Response</h4>
-        <div>
-            Jobs added: {{vm.seedResponse.jobsAdded}}
-        </div>
-        <div>
-            Content items: {{vm.seedResponse.contentCount}}
-        </div>
-        <div>
-            Dictionary items: {{vm.seedResponse.dictionaryCount}}
-        </div>
-        <div>
-            Media items: {{vm.seedResponse.mediaCount}}
-        </div>
-    </div>
     <div class="seed-dashboard-text block-form">
         <h4>What to seed</h4>
         <div class="umb-control-group">
@@ -32,7 +17,7 @@
     </div>
     <div ng-if="vm.selectedSeedMode === 'Everything'" class="seed-dashboard-text">
         <h4>Full seed</h4>
-        <p>Seeding will queue jobs for all content, media and dictionary item for publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.</p>
+        <p>Seeding will queue jobs for all content, media and dictionary item for all cultures and publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.</p>
         <div class="seed-dashboard-content">
             <umb-button action="vm.seed()"
                         type="button"
@@ -46,7 +31,7 @@
     <div ng-if="vm.selectedSeedMode === 'Custom'" class="seed-dashboard-text">
         <div>
             <h4>Custom seed</h4>
-            <p>With a custom seed you can select the nodes you want to seed for publish and preview (if configured). This action can take a while to finish.</p>
+            <p>With a custom seed you can select the nodes you want to seed for all cultures and publish and preview (if configured). This action can take a while to finish.</p>
         </div>
         <div class="custom-seed-content-type-container">
             <div class="custom-seed-content-type-box">
@@ -64,7 +49,8 @@
                 </div>
                 <button type="button"
                         class="umb-node-preview-add"
-                        ng-click="vm.openSelectNode('content')">
+                        ng-click="vm.openSelectNode('content')"
+                        ng-disabled="!vm.allowAddingNodes('content')">
                     <localize key="general_add">Add</localize>
                 </button>
             </div>
@@ -83,7 +69,8 @@
                 </div>
                 <button type="button"
                         class="umb-node-preview-add"
-                        ng-click="vm.openSelectNode('media')">
+                        ng-click="vm.openSelectNode('media')"
+                        ng-disabled="!vm.allowAddingNodes('media')">
                     <localize key="general_add">Add</localize>
                 </button>
             </div>
@@ -102,19 +89,35 @@
                 </div>
                 <button type="button"
                         class="umb-node-preview-add"
-                        ng-click="vm.openSelectNode('dictionary')">
+                        ng-click="vm.openSelectNode('dictionary')"
+                        ng-disabled="!vm.allowAddingNodes('dictionary')">
                     <localize key="general_add">Add</localize>
                 </button>
             </div>
         </div>
         <div>
-            <umb-button action=""
+            <umb-button action="vm.customSeed()"
                         type="button"
                         button-style="action"
                         state="vm.seedState"
                         label="Seed"
-                        disabled="vm.seedState === 'busy'">
+                        disabled="vm.seedState === 'busy' || (!vm.selectedNodesToSeed['content'].length && !vm.selectedNodesToSeed['media'].length && !vm.selectedNodesToSeed['dictionary'].length)">
             </umb-button>
+        </div>
+    </div>
+    <div class="seed-dashboard-response" ng-if="vm.seedResponse !== null">
+        <h4>Seed Response</h4>
+        <div>
+            Jobs added: {{vm.seedResponse.jobsAdded}}
+        </div>
+        <div>
+            Content items: {{vm.seedResponse.contentCount}}
+        </div>
+        <div>
+            Dictionary items: {{vm.seedResponse.dictionaryCount}}
+        </div>
+        <div>
+            Media items: {{vm.seedResponse.mediaCount}}
         </div>
     </div>
 </div>

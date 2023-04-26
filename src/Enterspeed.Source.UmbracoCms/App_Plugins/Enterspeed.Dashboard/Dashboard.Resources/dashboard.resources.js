@@ -8,6 +8,9 @@
                 seed: function () {
                     return $http.get("/umbraco/backoffice/api/DashboardApi/Seed");
                 },
+                customSeed: function (customSeed) {
+                    return $http.post("/umbraco/backoffice/api/DashboardApi/CustomSeed", customSeed);
+                },
                 getEnterspeedConfiguration: function () {
                     return $http.get("/umbraco/backoffice/api/DashboardApi/GetEnterspeedConfiguration");
                 },

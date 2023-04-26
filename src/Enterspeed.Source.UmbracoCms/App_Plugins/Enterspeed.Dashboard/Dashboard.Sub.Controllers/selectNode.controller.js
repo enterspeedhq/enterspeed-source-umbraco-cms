@@ -1,6 +1,7 @@
 ﻿function selectNodeController($scope) {
     var vm = this;
     vm.includeDescendents = false;
+    vm.includeEverything = false;
 
     function init() {
         vm.contentType = $scope.model.contentType;
@@ -30,13 +31,8 @@
         $scope.currentNode = args.node;
         $scope.currentNode.selected = true;
         $scope.model.target.id = args.node.id;
-        $scope.model.target.udi = args.node.udi;
         $scope.model.target.name = args.node.name;
         $scope.model.target.icon = args.node.icon;
-    }
-
-    vm.toggleIncludeDescendents = function () {
-        vm.includeDescendents = !vm.includeDescendents;
     }
 
     vm.close = function () {
@@ -47,7 +43,16 @@
 
     vm.submit = function () {
         if ($scope.model && $scope.model.submit) {
-            $scope.model.target.includeDescendents = vm.includeDescendents;
+            if (vm.includeEverything) {
+                $scope.model.target.id = "-1";
+                $scope.model.target.name = "Everything";
+                $scope.model.target.icon = "icon-item-arrangement";
+                $scope.model.target.includeDescendents = true;
+
+            } else {
+                $scope.model.target.includeDescendents = vm.includeDescendents;
+            }
+
             $scope.model.submit($scope.model);
         }
 

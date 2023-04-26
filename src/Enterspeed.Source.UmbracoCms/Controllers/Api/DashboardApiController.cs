@@ -100,6 +100,35 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
             }
         }
 
+        [HttpPost]
+        public IActionResult CustomSeed(CustomSeed customSeed)
+        {
+            var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();
+            var previewConfigured = _enterspeedConfigurationService.IsPreviewConfigured();
+
+            if (!publishConfigured && !previewConfigured)
+            {
+                return BadRequest(
+                    new Response
+                    {
+                        Status = HttpStatusCode.BadRequest,
+                        Success = false,
+                        Message = "Enterspeed has not yet been configured"
+                    });
+            }
+
+            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            {
+                var response = _enterspeedJobService.CustomSeed(publishConfigured, previewConfigured, customSeed);
+                return Ok(
+                   new ApiResponse<SeedResponse>
+                   {
+                       Data = response,
+                       IsSuccess = true
+                   });
+            }
+        }
+
         [HttpGet]
         public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {

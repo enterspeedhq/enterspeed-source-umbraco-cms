@@ -28,6 +28,30 @@
         });
     };
 
+    vm.customSeed = function () {
+        vm.seedState = "busy";
+        var customSeed = {
+            contentNodes: vm.selectedNodesToSeed['content'],
+            mediaNodes: vm.selectedNodesToSeed['media'],
+            dictionaryNodes: vm.selectedNodesToSeed['dictionary']
+        };
+        dashboardResources.customSeed(customSeed).then(function (result) {
+            if (result.data.isSuccess) {
+                notificationsService.success("Seed", "Successfully started seeding Enterspeed");
+                vm.seedResponse = result.data.data;
+
+                vm.selectedNodesToSeed['content'] = [];
+                vm.selectedNodesToSeed['media'] = [];
+                vm.selectedNodesToSeed['dictionary'] = [];
+            } else {
+                vm.seedResponse = null;
+            }
+            vm.seedState = "success";
+        }, function (error) {
+            notificationsService.error("Seed", error.data.message);
+        });
+    };
+
     vm.openSelectNode = function(section) {
         editorService.open({
             title: "Select " + section + " node",
@@ -40,12 +64,18 @@
                     return;
                 }
 
-                var existingNodeIndex = vm.selectedNodesToSeed[section].findIndex(element => element.id === value.target.id);
-                if (existingNodeIndex >= 0) {
-                    vm.selectedNodesToSeed[section][existingNodeIndex] = value.target;
-                } else {
-                    vm.selectedNodesToSeed[section].push(value.target);
+                if (value.target.id === "-1") {
+                    vm.selectedNodesToSeed[section] = [value.target];
                 }
+                else {
+                    var existingNodeIndex = vm.selectedNodesToSeed[section].findIndex(element => element.id === value.target.id);
+                    if (existingNodeIndex >= 0) {
+                        vm.selectedNodesToSeed[section][existingNodeIndex] = value.target;
+                    } else {
+                        vm.selectedNodesToSeed[section].push(value.target);
+                    }
+                }
+
             },
             close: function() {
                 editorService.close();
@@ -55,6 +85,10 @@
 
     vm.removeSelectNode = function(section, index) {
         vm.selectedNodesToSeed[section].splice(index, 1);
+    }
+
+    vm.allowAddingNodes = function(section) {
+        return vm.selectedNodesToSeed[section].findIndex(element => element.id === "-1") < 0;
     }
 
     vm.setSeedMode = function (seedMode) {

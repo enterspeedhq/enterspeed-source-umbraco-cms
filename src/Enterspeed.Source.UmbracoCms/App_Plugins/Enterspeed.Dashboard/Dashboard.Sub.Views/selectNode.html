@@ -13,6 +13,13 @@
             <umb-box>
                 <umb-box-content>
                     <div class="umb-control-group">
+                        <h5>Include everything</h5>
+                        <umb-checkbox model="vm.includeEverything"
+                                      text="Include all {{vm.contentType}} nodes"
+                                      input-id="includeEverything">
+                        </umb-checkbox>
+                    </div>
+                    <div class="umb-control-group" ng-if="!vm.includeEverything">
                         <h5>Descendents</h5>
                         <umb-checkbox model="vm.includeDescendents"
                                       text="Include descendents"
@@ -20,7 +27,7 @@
                         </umb-checkbox>
                     </div>
 
-                    <div class="umb-control-group">
+                    <div class="umb-control-group" ng-if="!vm.includeEverything">
                         <h5>Node</h5>
                         <div ng-if="vm.contentType == 'content'">
                             <umb-tree section="content"
