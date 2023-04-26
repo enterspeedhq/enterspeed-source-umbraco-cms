@@ -18,6 +18,7 @@
     <div ng-if="vm.selectedSeedMode === 'Everything'" class="seed-dashboard-text">
         <h4>Full seed</h4>
         <p>Seeding will queue jobs for all content, media and dictionary item for all cultures and publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.</p>
+        <p><i>The job queue length is the queue length on Umbraco before the nodes are ingested into Enterspeed.</i></p>
         <div class="seed-dashboard-content">
             <umb-button action="vm.seed()"
                         type="button"
@@ -26,12 +27,20 @@
                         label="Seed"
                         disabled="vm.seedState === 'busy'">
             </umb-button>
+            <umb-button action="vm.clearPendingJobs()"
+                        type="button"
+                        button-style="action"
+                        state="vm.clearPendingJobsState"
+                        label="Clear job queue ({{vm.numberOfPendingJobs}})"
+                        disabled="vm.clearPendingJobsState === 'busy' || vm.numberOfPendingJobs === 0">
+            </umb-button>
         </div>
     </div>
     <div ng-if="vm.selectedSeedMode === 'Custom'" class="seed-dashboard-text">
         <div>
             <h4>Custom seed</h4>
             <p>With a custom seed you can select the nodes you want to seed for all cultures and publish and preview (if configured). This action can take a while to finish.</p>
+            <p><i>The job queue length is the queue length on Umbraco before the nodes are ingested into Enterspeed.</i></p>
         </div>
         <div class="custom-seed-content-type-container">
             <div class="custom-seed-content-type-box">
@@ -102,6 +111,13 @@
                         state="vm.seedState"
                         label="Seed"
                         disabled="vm.seedState === 'busy' || (!vm.selectedNodesToSeed['content'].length && !vm.selectedNodesToSeed['media'].length && !vm.selectedNodesToSeed['dictionary'].length)">
+            </umb-button>
+            <umb-button action="vm.clearPendingJobs()"
+                        type="button"
+                        button-style="action"
+                        state="vm.clearPendingJobsState"
+                        label="Clear job queue ({{vm.numberOfPendingJobs}})"
+                        disabled="vm.clearPendingJobsState === 'busy' || vm.numberOfPendingJobs === 0">
             </umb-button>
         </div>
     </div>

@@ -1,6 +1,8 @@
 ﻿function seedController(dashboardResources, notificationsService, editorService) {
     var vm = this;
     vm.seedState = "success";
+    vm.clearPendingJobsState = "success";
+    vm.numberOfPendingJobs = 0;
     vm.seedModes = ['Everything', 'Custom'];
     vm.selectedSeedMode = vm.seedModes[0];
     vm.seedModeSelectOpen = false;
@@ -13,12 +15,19 @@
     vm.selectedNodesToSeed['media'] = [];
     vm.selectedNodesToSeed['dictionary'] = [];
 
+    function init() {
+        getNumberOfPendingJobs();
+
+        setInterval(getNumberOfPendingJobs, 10 * 1000);
+    }
+
     vm.seed = function () {
         vm.seedState = "busy";
         dashboardResources.seed().then(function (result) {
             if (result.data.isSuccess) {
-                notificationsService.success("Seed", "Successfully started seeding Enterspeed");
+                notificationsService.success("Seed", "Successfully started seeding to Enterspeed");
                 vm.seedResponse = result.data.data;
+                vm.numberOfPendingJobs = result.data.data.numberOfPendingJobs;
             } else {
                 vm.seedResponse = null;
             }
@@ -39,6 +48,7 @@
             if (result.data.isSuccess) {
                 notificationsService.success("Seed", "Successfully started seeding Enterspeed");
                 vm.seedResponse = result.data.data;
+                vm.numberOfPendingJobs = result.data.data.numberOfPendingJobs;
 
                 vm.selectedNodesToSeed['content'] = [];
                 vm.selectedNodesToSeed['media'] = [];
@@ -49,6 +59,31 @@
             vm.seedState = "success";
         }, function (error) {
             notificationsService.error("Seed", error.data.message);
+        });
+    };
+
+    vm.clearPendingJobs = function () {
+        vm.clearPendingJobsState = "busy";
+        dashboardResources.clearPendingJobs().then(function (result) {
+            if (result.data.isSuccess) {
+                notificationsService.success("Clear job queue", "Successfully cleared the queue of pending jobs");
+                vm.numberOfPendingJobs = 0;
+            }
+            vm.clearPendingJobsState = "success";
+        }, function (error) {
+            notificationsService.error("Clear job queue", error.data.message);
+        });
+    };
+
+    function getNumberOfPendingJobs () {
+        dashboardResources.getNumberOfPendingJobs().then(function (result) {
+            if (result.data.isSuccess) {
+                vm.numberOfPendingJobs = result.data.data.numberOfPendingJobs;
+            } else {
+                vm.numberOfPendingJobs = 0;
+            }
+        }, function (error) {
+            notificationsService.error("Failed to check queue length", error.data.message);
         });
     };
 
@@ -98,6 +133,8 @@
     vm.toggleSeedModeSelect = function () {
         vm.seedModeSelectOpen = !vm.seedModeSelectOpen;
     }
+
+    init();
 }
 
 angular.module("umbraco").controller("SeedController", seedController);
