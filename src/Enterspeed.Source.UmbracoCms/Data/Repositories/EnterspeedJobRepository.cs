@@ -70,6 +70,15 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
             return result;
         }
 
+        public int GetNumberOfPendingJobs()
+        {
+            var numberOfPendingJobs = Database.Query<EnterspeedJobSchema>()
+                .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
+                .Count();
+            
+            return numberOfPendingJobs;
+        }
+
         public IList<EnterspeedJob> GetOldProcessingTasks(int olderThanMinutes = 60)
         {
             var result = new List<EnterspeedJob>();
@@ -100,6 +109,13 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
         {
             Database.DeleteMany<EnterspeedJobSchema>()
                 .Where(x => ids.Contains(x.Id))
+                .Execute();
+        }
+
+        public void ClearPendingJobs()
+        {
+            Database.DeleteMany<EnterspeedJobSchema>()
+                .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
                 .Execute();
         }
     }

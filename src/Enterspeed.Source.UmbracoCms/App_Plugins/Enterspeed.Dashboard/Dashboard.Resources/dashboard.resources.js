@@ -8,6 +8,12 @@
                 seed: function () {
                     return $http.get("/umbraco/backoffice/api/DashboardApi/Seed");
                 },
+                clearPendingJobs: function () {
+                    return $http.post("/umbraco/backoffice/api/DashboardApi/ClearPendingJobs");
+                },
+                getNumberOfPendingJobs: function () {
+                    return $http.get("/umbraco/backoffice/api/DashboardApi/GetNumberOfPendingJobs");
+                },
                 getEnterspeedConfiguration: function () {
                     return $http.get("/umbraco/backoffice/api/DashboardApi/GetEnterspeedConfiguration");
                 },

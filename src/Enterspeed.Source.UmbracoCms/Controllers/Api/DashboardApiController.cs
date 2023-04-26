@@ -163,6 +163,52 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
                 });
         }
 
+        [HttpGet]
+        public IActionResult GetNumberOfPendingJobs()
+        {
+            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            {
+                int numberOfPendingJobs;
+                try
+                {
+                    numberOfPendingJobs = _enterspeedJobRepository.GetNumberOfPendingJobs();
+                }
+                catch (Exception exception)
+                {
+                    return BadRequest(
+                        new Response
+                        {
+                            Status = HttpStatusCode.BadRequest,
+                            Success = false,
+                            Message = exception.Message,
+                            Exception = exception
+                        });
+                }
+
+                return Ok(
+                    new ApiResponse<GetNumberOfPendingJobsResponse>
+                    {
+                        Data = new GetNumberOfPendingJobsResponse { NumberOfPendingJobs = numberOfPendingJobs },
+                        IsSuccess = true
+                    });
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ClearPendingJobs()
+        {
+            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            {
+                _enterspeedJobRepository.ClearPendingJobs();
+
+                return Ok(
+                    new ApiResponse
+                    {
+                        IsSuccess = true
+                    });
+            }
+        }
+
         [HttpPost]
         public IActionResult TestConfigurationConnection(EnterspeedUmbracoConfiguration configuration)
         {
