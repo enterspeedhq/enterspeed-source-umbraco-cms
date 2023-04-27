@@ -11,6 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Updated
 - Update dpendency to Enterspeed.Source.Sdk v1.0.2
 
+### Fixed
+- Removed double slash after domain for redirects if domain ends with slash
+
 ## [2.3.1 - 2023-19-04]
 ### Addded
 - Added loggin of Umbraco version

@@ -120,6 +120,32 @@ namespace Enterspeed.Source.UmbracoCms.V8.Tests.Services
         }
 
         [Fact]
+        public void GetUrlFromIdUrl_Domains_Equal_No_Double_Slash_After_Domain()
+        {
+            var fixture = new UmbracoUrlServiceTestFixture();
+
+            using (var umbracoContextReference = fixture.EnsureUmbracoContext())
+            {
+                fixture.UmbracoContextProvider
+                    .GetContext()
+                    .Returns(umbracoContextReference.UmbracoContext);
+
+                umbracoContextReference.UmbracoContext.Domains
+                    .GetAssigned(1234, false)
+                    .Returns(new List<Domain>()
+                    {
+                        new Domain(5678, "https://enterspeed.com/", 1234, new CultureInfo("en-US"), false)
+                    });
+
+                var sut = fixture.Create<UmbracoUrlService>();
+
+                var result = sut.GetUrlFromIdUrl("1234/url/with-id", "en-US");
+
+                Assert.Equal("https://enterspeed.com/url/with-id", result);
+            }
+        }
+
+        [Fact]
         public void GetUrlFromIdUrl_NoDomainsForCulture_Equal()
         {
             var fixture = new UmbracoUrlServiceTestFixture();
