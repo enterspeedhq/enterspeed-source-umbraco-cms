@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Extensions;
 using Enterspeed.Source.UmbracoCms.Providers;
-using Enterspeed.Source.UmbracoCms.Services;
-using Enterspeed.Source.UmbracoCms.Services.DataProperties;
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
@@ -17,15 +16,18 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoMediaUrlProvider _mediaUrlProvider;
+        private readonly ILogger<DefaultMultiUrlPickerPropertyValueConverter> _logger;
 
         public DefaultMultiUrlPickerPropertyValueConverter(
             IUmbracoContextFactory umbracoContextFactory,
             IEntityIdentityService entityIdentityService,
-            IUmbracoMediaUrlProvider mediaUrlProvider)
+            IUmbracoMediaUrlProvider mediaUrlProvider,
+            ILogger<DefaultMultiUrlPickerPropertyValueConverter> logger)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _entityIdentityService = entityIdentityService;
             _mediaUrlProvider = mediaUrlProvider;
+            _logger = logger;
         }
 
         public bool IsConverter(IPublishedPropertyType propertyType)
@@ -91,6 +93,8 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
                 if (link.Udi.EntityType == "document")
                 {
                     var content = context.Content.GetById(link.Udi);
+                    // link.url always contains the url for the default culture (maybe a bug in Umbraco?), so we resolve the url for the correct culture our self
+                    url = content is not null ? content.GetUrl(_logger, culture, UrlMode.Absolute) : "#";
                     if (content != null)
                     {
                         idProperty = new StringEnterspeedProperty(_entityIdentityService.GetId(content, culture));
