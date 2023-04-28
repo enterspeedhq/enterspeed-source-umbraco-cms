@@ -5,6 +5,13 @@ variables:
   patchVersion: 1
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
   prerelease: ${{ false }}
+  ${{ if eq(variables.prerelease, true) }}:
+    # Versioning: 1.0.0-alpha.123
+    releaseOnNuget: true
+    semVersionBase: $[format('{0}-alphaTest', variables.version)]
+    semVersionRev: $[counter(variables.semVersionBase, 1)]
+    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
+    buildName: $[format('Prerelease - {0}', variables.semVersion)]
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     # Versioning: 1.0.0
     releaseOnNuget: true
@@ -45,13 +52,6 @@ variables:
     semVersionRev: $[counter(variables.semVersionBase, 0)]
     semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
     buildName: $[format('Bugfix - {0}', variables.semVersion)]
-  ${{ if eq(variables.prerelease, true) }}:
-    # Versioning: 1.0.0-alpha.123
-    releaseOnNuget: true
-    semVersionBase: $[format('{0}-alpha.{1}', variables.version, $(prereleaseVersionNumber))]
-    semVersionRev: $[counter(variables.semVersionBase, 1)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Prerelease - {0}', variables.semVersion)]
 
 name: $(BuildID) - $(buildName)
 
