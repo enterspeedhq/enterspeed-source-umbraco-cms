@@ -150,18 +150,18 @@ stages:
                   fetchDepth: 1
 
                 # Tag release in git
-                - task: Bash@3
-                  displayName: Tag version in git
-                  inputs:
-                    targetType: inline
-                    script: |
-                      git tag $(semVersion)
-                      git push --tags
+                #- task: Bash@3
+                #  displayName: Tag version in git
+                #  inputs:
+                #    targetType: inline
+                #    script: |
+                #      git tag $(semVersion)
+                #      git push --tags
 
-                - task: NuGetCommand@2
-                  displayName: Release on NuGet.org
-                  inputs:
-                    command: push
-                    packagesToPush: "$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg"
-                    nuGetFeedType: external
-                    publishFeedCredentials: NuGet.org
+                #- task: NuGetCommand@2
+                #  displayName: Release on NuGet.org
+                #  inputs:
+                #    command: push
+                #    packagesToPush: "$(Pipeline.Workspace)/**/*.nupkg;!$(Pipeline.Workspace)/**/*.symbols.nupkg"
+                #    nuGetFeedType: external
+                #    publishFeedCredentials: NuGet.org
