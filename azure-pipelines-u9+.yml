@@ -45,7 +45,7 @@ variables:
     semVersionRev: $[counter(variables.semVersionBase, 0)]
     semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
     buildName: $[format('Bugfix - {0}', variables.semVersion)]
-  ${{ if eq($(prerelease), ${{ true }}) }}:
+  ${{ if eq($(prerelease), true) }}:
     # Versioning: 1.0.0-alpha.123
     releaseOnNuget: true
     semVersionBase: $[format('{0}-alpha.{1}', variables.version, $(prereleaseVersionNumber))]
