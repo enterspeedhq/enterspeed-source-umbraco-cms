@@ -5,7 +5,7 @@ variables:
   patchVersion: 1
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
 
-  ${{ if eq($(prerelease), 'true') }}:
+  ${{ if eq(parameters.prerelease, 'true') }}:
     # Versioning: 1.0.0-alpha.123
     releaseOnNuget: true
     semVersionBase: $[format('{0}-alpha', variables.version)]
