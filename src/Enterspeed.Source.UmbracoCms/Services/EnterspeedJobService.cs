@@ -62,6 +62,45 @@ namespace Enterspeed.Source.UmbracoCms.Services
             };
         }
 
+        public SeedResponse CustomSeed(bool publish, bool preview, CustomSeed customSeed)
+        {
+            var includeAllContent = customSeed.ContentNodes.Any(x => x.Id == -1);
+            var includeAllMedia = customSeed.MediaNodes.Any(x => x.Id == -1);
+            var includeAllDictionary = customSeed.DictionaryNodes.Any(x => x.Id == -1);
+
+            var contentCount = 0;
+            var customSeedContentCount = 0;
+            var contentJobs = includeAllContent
+                ? GetContentJobs(publish, preview, out contentCount) 
+                : GetContentJobs(publish, preview, customSeed, out customSeedContentCount);
+
+            var mediaCount = 0;
+            var customSeedMediaCount = 0;
+            var mediaJobs = includeAllMedia 
+                ? GetMediaJobs(publish, preview, out mediaCount)
+                : GetMediaJobs(publish, preview, customSeed, out customSeedMediaCount);
+
+            var dictionaryCount = 0;
+            var customSeedDictionaryCount = 0;
+            var dictionaryJobs = includeAllDictionary
+                ? GetDictionaryJobs(publish, preview, out dictionaryCount)
+                : GetDictionaryJobs(publish, preview, customSeed, out customSeedDictionaryCount);
+
+            var jobs = contentJobs.Union(dictionaryJobs).Union(mediaJobs).ToList();
+
+            _enterspeedJobRepository.Save(jobs);
+            var numberOfPendingJobs = _enterspeedJobRepository.GetNumberOfPendingJobs();
+
+            return new SeedResponse
+            {
+                ContentCount = includeAllContent ? contentCount : customSeedContentCount,
+                MediaCount = includeAllMedia ? mediaCount : customSeedMediaCount,
+                DictionaryCount = includeAllMedia ? dictionaryCount : customSeedDictionaryCount,
+                JobsAdded = jobs.Count,
+                NumberOfPendingJobs = numberOfPendingJobs
+            };
+        }
+
         private List<EnterspeedJob> GetContentJobs(bool publish, bool preview, out int nodesCount)
         {
             var jobs = new List<EnterspeedJob>();
@@ -84,6 +123,56 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 var descendants = _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out var total).ToList();
                 allContent.AddRange(descendants);
             }
+
+            nodesCount = allContent.Count;
+            if (!allContent.Any())
+            {
+                return jobs;
+            }
+
+            using (var context = _umbracoContextFactory.EnsureUmbracoContext())
+            {
+                foreach (var content in allContent)
+                {
+                    var contentJobs = GetJobsForContent(content, context, publish, preview);
+                    if (contentJobs == null || !contentJobs.Any())
+                    {
+                        continue;
+                    }
+
+                    jobs.AddRange(contentJobs);
+                }
+            }
+
+            return jobs;
+        }
+
+        private List<EnterspeedJob> GetContentJobs(bool publish, bool preview, CustomSeed customSeed, out int nodesCount)
+        {
+            var jobs = new List<EnterspeedJob>();
+            nodesCount = 0;
+
+            if (!publish && !preview)
+            {
+                return jobs;
+            }
+
+            var allContent = new List<IContent>();
+            foreach (var contentSeedNode in customSeed.ContentNodes)
+            {
+                var contentNode = _contentService.GetById(contentSeedNode.Id);
+
+                allContent.Add(contentNode);
+
+                if (contentSeedNode.IncludeDescendents)
+                {
+                    var descendants = _contentService.GetPagedDescendants(contentSeedNode.Id, 0, int.MaxValue, out var total).ToList();
+
+                    allContent.AddRange(descendants);
+                }
+            }
+
+            allContent = allContent.DistinctBy(x => x.Id).ToList();
 
             nodesCount = allContent.Count;
             if (!allContent.Any())
@@ -190,16 +279,117 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return jobs;
         }
 
-        public IEnumerable<EnterspeedJob> GetMediaJobs(bool publish, bool preview, out long mediaCount)
+        private IEnumerable<EnterspeedJob> GetDictionaryJobs(bool publish, bool preview, CustomSeed customSeed, out int dictionaryCount)
+        {
+            dictionaryCount = 0;
+            var jobs = new List<EnterspeedJob>();
+
+            if (!publish && !preview)
+            {
+                return jobs;
+            }
+
+            var allDictionaryItems = new List<IDictionaryItem>();
+            foreach (var dictionarySeedNode in customSeed.DictionaryNodes)
+            {
+                var dictionaryItem = _localizationService.GetDictionaryItemById(dictionarySeedNode.Id);
+
+                allDictionaryItems.Add(dictionaryItem);
+
+                if (dictionarySeedNode.IncludeDescendents)
+                {
+                    var descendants = _localizationService.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
+
+                    allDictionaryItems.AddRange(descendants);
+                }
+            }
+
+            allDictionaryItems = allDictionaryItems.DistinctBy(x => x.Id).ToList();
+
+            foreach (var dictionaryItem in allDictionaryItems)
+            {
+                foreach (var translation in dictionaryItem.Translations)
+                {
+                    if (publish)
+                    {
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                    }
+
+                    if (preview)
+                    {
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                    }
+                }
+            }
+
+            dictionaryCount = allDictionaryItems.Count;
+
+            return jobs;
+        }
+
+        public IEnumerable<EnterspeedJob> GetMediaJobs(bool publish, bool preview, out int mediaCount)
         {
             mediaCount = 0;
             var jobs = new List<EnterspeedJob>();
+
+            if (!publish && !preview)
+            {
+                return jobs;
+            }
 
             var allMediaItems = _mediaService
                 .GetPagedDescendants(-1, 0, int.MaxValue, out _)
                 .Where(x => !x.ContentType.Alias.Equals("Folder"))
                 .Where(x => !x.Trashed)
                 .ToList();
+
+            foreach (var media in allMediaItems)
+            {
+                if (publish)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Publish));
+                }
+
+                if (preview)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(media, string.Empty, EnterspeedContentState.Preview));
+                }
+            }
+
+            mediaCount = allMediaItems.Count;
+
+            return jobs;
+        }
+
+        private IEnumerable<EnterspeedJob> GetMediaJobs(bool publish, bool preview, CustomSeed customSeed, out int mediaCount)
+        {
+            mediaCount = 0;
+            var jobs = new List<EnterspeedJob>();
+
+            if (!publish && !preview)
+            {
+                return jobs;
+            }
+
+            var allMediaItems = new List<IMedia>();
+            foreach (var mediaSeedNode in customSeed.MediaNodes)
+            {
+                var mediaNode = _mediaService.GetById(mediaSeedNode.Id);
+
+                allMediaItems.Add(mediaNode);
+
+                if (mediaSeedNode.IncludeDescendents)
+                {
+                    var descendants = _mediaService
+                        .GetPagedDescendants(mediaSeedNode.Id, 0, int.MaxValue, out _).ToList();
+                    
+                    allMediaItems.AddRange(descendants);
+                }
+            }
+
+            allMediaItems = allMediaItems.DistinctBy(x => x.Id)
+                .Where(x => !x.ContentType.Alias.Equals("Folder"))
+                .Where(x => !x.Trashed).ToList();
 
             foreach (var media in allMediaItems)
             {

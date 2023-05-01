@@ -6,6 +6,7 @@
 		"~/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/seed.controller.js",
 		"~/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/configuration.controller.js",
 		"~/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/failedjobs.controller.js",
+    "~/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/selectNode.controller.js",
 
 		// Resources
 		"~/App_Plugins/Enterspeed.Dashboard/Dashboard.Resources/dashboard.resources.js"

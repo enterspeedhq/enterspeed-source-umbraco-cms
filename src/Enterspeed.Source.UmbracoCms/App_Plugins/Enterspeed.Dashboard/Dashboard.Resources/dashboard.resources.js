@@ -14,6 +14,9 @@
                 getNumberOfPendingJobs: function () {
                     return $http.get("/umbraco/backoffice/api/DashboardApi/GetNumberOfPendingJobs");
                 },
+                customSeed: function (customSeed) {
+                    return $http.post("/umbraco/backoffice/api/DashboardApi/CustomSeed", customSeed);
+                },
                 getEnterspeedConfiguration: function () {
                     return $http.get("/umbraco/backoffice/api/DashboardApi/GetEnterspeedConfiguration");
                 },

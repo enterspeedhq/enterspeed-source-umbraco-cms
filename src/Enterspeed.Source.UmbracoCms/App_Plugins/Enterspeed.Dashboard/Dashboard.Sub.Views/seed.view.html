@@ -1,4 +1,126 @@
 ﻿<div ng-controller="SeedController as vm" class="seed-dashboard">
+    <div class="seed-dashboard-text block-form">
+        <h4>What to seed</h4>
+        <div class="umb-control-group">
+            <umb-button type="button"
+                        label="Seed mode: {{vm.selectedSeedMode}}"
+                        action="vm.toggleSeedModeSelect()">
+            </umb-button>
+            <umb-dropdown ng-if="vm.seedModeSelectOpen" on-close="vm.seedModeSelectOpen = false">
+                <umb-dropdown-item ng-repeat="seedMode in vm.seedModes">
+                    <button type="button" class="btn-reset" ng-click="vm.setSeedMode(seedMode); vm.seedModeSelectOpen = false;">
+                        {{seedMode}}
+                    </button>
+                </umb-dropdown-item>
+            </umb-dropdown>
+        </div>
+    </div>
+    <div ng-if="vm.selectedSeedMode === 'Everything'" class="seed-dashboard-text">
+        <h4>Full seed</h4>
+        <p>Seeding will queue jobs for all content, media and dictionary item for all cultures and publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.</p>
+        <p><i>The job queue length is the queue length on Umbraco before the nodes are ingested into Enterspeed.</i></p>
+        <div class="seed-dashboard-content">
+            <umb-button action="vm.seed()"
+                        type="button"
+                        button-style="action"
+                        state="vm.seedState"
+                        label="Seed"
+                        disabled="vm.seedState === 'busy'">
+            </umb-button>
+            <umb-button action="vm.clearPendingJobs()"
+                        type="button"
+                        button-style="action"
+                        state="vm.clearPendingJobsState"
+                        label="Clear job queue ({{vm.numberOfPendingJobs}})"
+                        disabled="vm.clearPendingJobsState === 'busy' || vm.numberOfPendingJobs === 0">
+            </umb-button>
+        </div>
+    </div>
+    <div ng-if="vm.selectedSeedMode === 'Custom'" class="seed-dashboard-text">
+        <div>
+            <h4>Custom seed</h4>
+            <p>With a custom seed you can select the nodes you want to seed for all cultures and publish and preview (if configured). This action can take a while to finish.</p>
+            <p><i>The job queue length is the queue length on Umbraco before the nodes are ingested into Enterspeed.</i></p>
+        </div>
+        <div class="custom-seed-content-type-container">
+            <div class="custom-seed-content-type-box">
+                <h5>Content</h5>
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['content'].length" ng-model="vm.selectedNodesToSeed['content']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['content']"
+                                      icon="link.icon"
+                                      name="link.name"
+                                      published="link.published"
+                                      description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
+                                      sortable="true"
+                                      allow-remove="true"
+                                      on-remove="vm.removeSelectNode('content', $index)">
+                    </umb-node-preview>
+                </div>
+                <button type="button"
+                        class="umb-node-preview-add"
+                        ng-click="vm.openSelectNode('content')"
+                        ng-disabled="!vm.allowAddingNodes('content')">
+                    <localize key="general_add">Add</localize>
+                </button>
+            </div>
+            <div class="custom-seed-content-type-box">
+                <h5>Media</h5>
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['media'].length" ng-model="vm.selectedNodesToSeed['media']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['media']"
+                                      icon="link.icon"
+                                      name="link.name"
+                                      published="link.published"
+                                      description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
+                                      sortable="true"
+                                      allow-remove="true"
+                                      on-remove="vm.removeSelectNode('media', $index)">
+                    </umb-node-preview>
+                </div>
+                <button type="button"
+                        class="umb-node-preview-add"
+                        ng-click="vm.openSelectNode('media')"
+                        ng-disabled="!vm.allowAddingNodes('media')">
+                    <localize key="general_add">Add</localize>
+                </button>
+            </div>
+            <div class="custom-seed-content-type-box">
+                <h5>Dictionary</h5>
+                <div ui-sortable="sortableOptions" ng-if="vm.selectedNodesToSeed['dictionary'].length" ng-model="vm.selectedNodesToSeed['dictionary']">
+                    <umb-node-preview ng-repeat="link in vm.selectedNodesToSeed['dictionary']"
+                                      icon="link.icon"
+                                      name="link.name"
+                                      published="link.published"
+                                      description="link.includeDescendents ? 'Including descendents' : 'Excluding descendents'"
+                                      sortable="true"
+                                      allow-remove="true"
+                                      on-remove="vm.removeSelectNode('dictionary', $index)">
+                    </umb-node-preview>
+                </div>
+                <button type="button"
+                        class="umb-node-preview-add"
+                        ng-click="vm.openSelectNode('dictionary')"
+                        ng-disabled="!vm.allowAddingNodes('dictionary')">
+                    <localize key="general_add">Add</localize>
+                </button>
+            </div>
+        </div>
+        <div>
+            <umb-button action="vm.customSeed()"
+                        type="button"
+                        button-style="action"
+                        state="vm.seedState"
+                        label="Seed"
+                        disabled="vm.seedState === 'busy' || (!vm.selectedNodesToSeed['content'].length && !vm.selectedNodesToSeed['media'].length && !vm.selectedNodesToSeed['dictionary'].length)">
+            </umb-button>
+            <umb-button action="vm.clearPendingJobs()"
+                        type="button"
+                        button-style="action"
+                        state="vm.clearPendingJobsState"
+                        label="Clear job queue ({{vm.numberOfPendingJobs}})"
+                        disabled="vm.clearPendingJobsState === 'busy' || vm.numberOfPendingJobs === 0">
+            </umb-button>
+        </div>
+    </div>
     <div class="seed-dashboard-response" ng-if="vm.seedResponse !== null">
         <h4>Seed Response</h4>
         <div>
@@ -13,25 +135,5 @@
         <div>
             Media items: {{vm.seedResponse.mediaCount}}
         </div>
-    </div>
-    <div class="seed-dashboard-text">
-        <p>Seeding will queue jobs for all content, media and dictionary item for publish and preview (if configured) within this Umbraco installation. This action can take a while to finish.</p>
-        <i>The job queue length is the queue length on Umbraco before the nodes are ingested into Enterspeed.</i>
-    </div>
-    <div class="seed-dashboard-content">
-        <umb-button action="vm.seed()"
-                    type="button"
-                    button-style="action"
-                    state="vm.seedState"
-                    label="Seed"
-                    disabled="vm.seedState === 'busy'">
-        </umb-button>
-        <umb-button action="vm.clearPendingJobs()"
-                    type="button"
-                    button-style="action"
-                    state="vm.clearPendingJobsState"
-                    label="Clear job queue ({{vm.numberOfPendingJobs}})"
-                    disabled="vm.clearPendingJobsState === 'busy' || vm.numberOfPendingJobs === 0">
-        </umb-button>
     </div>
 </div>
