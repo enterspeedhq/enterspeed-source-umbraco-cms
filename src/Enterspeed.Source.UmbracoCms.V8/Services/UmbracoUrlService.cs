@@ -43,7 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 return idUrl.Replace(id.ToString(), string.Empty);
             }
 
-            var domainUrl = idUrl.Replace(id.ToString(), domain.Name);
+            var domainUrl = idUrl.Replace(id.ToString(), domain.Name.TrimEnd('/'));
 
             output = PrepareUrl(domainUrl);
 
