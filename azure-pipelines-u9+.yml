@@ -149,7 +149,7 @@ stages:
                   clean: true
                   fetchDepth: 1
 
-                 #Tag release in git
+                # Tag release in git
                 - task: Bash@3
                   displayName: Tag version in git
                   inputs:
