@@ -13,7 +13,7 @@
     <tags>Enterspeed, Umbraco 8, umbraco-marketplace</tags>
 	<icon>images\icon.png</icon>
     <dependencies>
-      <dependency id="Enterspeed.Source.Sdk" version="[1.0,2.0)" />
+      <dependency id="Enterspeed.Source.Sdk" version="[1.0.2,2.0)" />
       <dependency id="UmbracoCms.Core" version="[8.7,9.0)" />
       <dependency id="UmbracoCms.Web" version="[8.7,9.0)" />
     </dependencies>
