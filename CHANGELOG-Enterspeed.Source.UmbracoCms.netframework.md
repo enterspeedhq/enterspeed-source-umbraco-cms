@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Fixed
 - Removed double slash after domain for redirects if domain ends with slash
+- Fixed mapping of Umbraco.Tag data type (Umbraco 7)
 
 ## [3.7.1 - 2023-04-19]
 ### Addded
