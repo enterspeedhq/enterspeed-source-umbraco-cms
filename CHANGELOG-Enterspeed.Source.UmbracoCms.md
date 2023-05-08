@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [2.4.0 - 2023-08-05]
 ### Addded
 - Option for users to manually select nodes and do a custom seed. This way users don't have to do full seeds, but can select only a sub-node and it's descendent or eg. only seed all media nodes.
 - Option for users to clear the seed job queue. If you misclicked the seed button or just changed your mind, you can now clear the job queue with a click of a button on the seed page
