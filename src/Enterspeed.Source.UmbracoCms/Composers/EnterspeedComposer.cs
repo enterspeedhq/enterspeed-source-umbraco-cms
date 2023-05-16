@@ -84,7 +84,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
                 .Append<DefaultBlockListPropertyValueConverter>()
 #if NET6_0_OR_GREATER
                             .Append<DefaultBlockGridPropertyValueConverter>()
-#endif  
+#endif
                 .Append<DefaultCheckboxPropertyValueConverter>()
                 .Append<DefaultCheckboxListPropertyValueConverter>()
                 .Append<DefaultColorPickerPropertyValueConverter>()
