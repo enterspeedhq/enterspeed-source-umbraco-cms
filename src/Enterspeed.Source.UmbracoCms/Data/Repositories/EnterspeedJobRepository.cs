@@ -75,7 +75,7 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
             var numberOfPendingJobs = Database.Query<EnterspeedJobSchema>()
                 .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
                 .Count();
-            
+
             return numberOfPendingJobs;
         }
 
@@ -103,6 +103,18 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
                 Database.Save(jobToSave);
                 job.Id = jobToSave.Id;
             }
+        }
+
+        public EnterspeedJob GetFailedJob(string entityId)
+        {
+            var schema = Database.FirstOrDefault<EnterspeedJobSchema>($"WHERE EntityId = {entityId} AND JobState = {EnterspeedJobState.Failed.GetHashCode()}");
+            return _mapper.Map<EnterspeedJob>(schema);
+        }
+
+        public void Update(EnterspeedJob job)
+        {
+            var schema = _mapper.Map<EnterspeedJobSchema>(job);
+            Database.Update(schema);
         }
 
         public void Delete(IList<int> ids)

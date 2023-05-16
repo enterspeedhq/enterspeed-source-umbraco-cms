@@ -5,6 +5,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Microsoft.Extensions.Logging;
+using NPoco;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
 {
@@ -76,8 +77,25 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 }
             }
 
+            var failedJobsToSave = new List<EnterspeedJob>();
+            foreach (var failedJob in failedJobs)
+            {
+                var existingJob = _enterspeedJobRepository.GetFailedJob(failedJob.EntityId);
+                if (existingJob != null)
+                {
+                    existingJob.Exception = failedJob.Exception;
+                    existingJob.CreatedAt = failedJob.CreatedAt;
+                    _enterspeedJobRepository.Update(existingJob);
+                }
+                else
+                {
+                    failedJobsToSave.Add(failedJob);
+                }
+            }
+
             // Save all jobs that failed
-            _enterspeedJobRepository.Save(failedJobs);
+            _enterspeedJobRepository.Save(failedJobsToSave);
+
 
             // Delete all jobs - Note, that it's safe to delete all jobs because failed jobs will be created as a new job
             _enterspeedJobRepository.Delete(
