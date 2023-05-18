@@ -4,11 +4,15 @@
     vm.failedJobs = [];
     vm.activeException = "";
 
+    vm.removeModes = ['Everything', 'Selected'];
+    vm.selectedRemoveMode = vm.removeModes[0];
+    vm.removeModeSelectOpen = false;
+
     function init() {
         vm.getFailedJobs();
     }
 
-    vm.toggleException = function(index) {
+    vm.toggleException = function (index) {
         if (index === vm.activeException) {
             vm.activeException = "";
         } else {
@@ -47,6 +51,25 @@
             }
 
             vm.loadingFailedJobs = false;
+        });
+    };
+
+    vm.setRemoveMode = function (removeMode) {
+        vm.selectedRemoveMode = removeMode;
+    }
+
+    vm.toggleRemoveModeSelect = function () {
+        vm.removeModeSelectOpen = !vm.removeModeSelectOpen;
+    }
+
+    vm.removeFailedJobs = function () {
+        dashboardResources.removeFailedJobs().then(function (result) {
+            vm.removingFailedJobs = true;
+            if (result.data.isSuccess) {
+                vm.getFailedJobs();
+            }
+
+            vm.removingFailedJobs = false;
         });
     };
 

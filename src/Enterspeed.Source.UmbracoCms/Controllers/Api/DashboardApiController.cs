@@ -60,7 +60,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
         [HttpGet]
         public ApiResponse<List<EnterspeedJob>> GetFailedJobs()
         {
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (_scopeProvider.CreateScope(autoComplete: true))
             {
                 var result = _enterspeedJobRepository.GetFailedJobs().ToList();
                 return new ApiResponse<List<EnterspeedJob>>
@@ -88,15 +88,15 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
                     });
             }
 
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (_scopeProvider.CreateScope(autoComplete: true))
             {
                 var response = _enterspeedJobService.Seed(publishConfigured, previewConfigured);
                 return Ok(
-                   new ApiResponse<SeedResponse>
-                   {
-                       Data = response,
-                       IsSuccess = true
-                   });
+                    new ApiResponse<SeedResponse>
+                    {
+                        Data = response,
+                        IsSuccess = true
+                    });
             }
         }
 
@@ -117,15 +117,15 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
                     });
             }
 
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (_scopeProvider.CreateScope(autoComplete: true))
             {
                 var response = _enterspeedJobService.CustomSeed(publishConfigured, previewConfigured, customSeed);
                 return Ok(
-                   new ApiResponse<SeedResponse>
-                   {
-                       Data = response,
-                       IsSuccess = true
-                   });
+                    new ApiResponse<SeedResponse>
+                    {
+                        Data = response,
+                        IsSuccess = true
+                    });
             }
         }
 
@@ -195,7 +195,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
         [HttpGet]
         public IActionResult GetNumberOfPendingJobs()
         {
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (_scopeProvider.CreateScope(autoComplete: true))
             {
                 int numberOfPendingJobs;
                 try
@@ -226,7 +226,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
         [HttpPost]
         public IActionResult ClearPendingJobs()
         {
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (_scopeProvider.CreateScope(autoComplete: true))
             {
                 _enterspeedJobRepository.ClearPendingJobs();
 
@@ -236,6 +236,24 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
                         IsSuccess = true
                     });
             }
+        }
+
+        [HttpPost]
+        public ActionResult RemoveFailedJobs()
+        {
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var failedJobs = _enterspeedJobRepository.GetFailedJobs();
+                if (failedJobs != null && failedJobs.Any())
+                {
+                    _enterspeedJobRepository.Delete(failedJobs.Select(fj => fj.Id).ToList());
+                }
+            }
+
+            return Ok(new ApiResponse()
+            {
+                IsSuccess = true
+            });
         }
 
         [HttpPost]
