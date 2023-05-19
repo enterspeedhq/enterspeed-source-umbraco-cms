@@ -73,7 +73,9 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                     failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, exception.Message));
                     
                     // Exceptions has a ToString() override which formats the full exception nicely.
-                    _logger.LogError(exception.ToString());
+                    var exceptionAsString = exception.ToString();
+                    failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, exceptionAsString));
+                    _logger.LogError(exceptionAsString);
                 }
             }
 
