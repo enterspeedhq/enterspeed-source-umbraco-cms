@@ -107,7 +107,10 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
 
         public EnterspeedJob GetFailedJob(string entityId)
         {
-            var schema = Database.FirstOrDefault<EnterspeedJobSchema>($"WHERE EntityId = {entityId} AND JobState = {EnterspeedJobState.Failed.GetHashCode()}");
+            var schema = Database.Query<EnterspeedJobSchema>()
+                .Where(x => x.EntityId.Contains(x.EntityId) && x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                .FirstOrDefault();
+
             return _mapper.Map<EnterspeedJob>(schema);
         }
 
