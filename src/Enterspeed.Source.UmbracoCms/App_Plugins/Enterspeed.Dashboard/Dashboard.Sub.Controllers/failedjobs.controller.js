@@ -67,15 +67,18 @@
         if (vm.selectedDeleteMode === "Selected") {
             let failedJobsToDelete = vm.failedJobs.filter(fj => fj.selected === true);
 
-            let jobIdsToDelete = {
-                Ids: failedJobsToDelete.map(fj => fj.id)
+            if (failedJobsToDelete.length) {
+                let jobIdsToDelete = {
+                    Ids: failedJobsToDelete.map(fj => fj.id)
+                }
+
+                dashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
+                    if (result.data.isSuccess) {
+                        vm.getFailedJobs();
+                    }
+                });
             }
 
-            dashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
-                if (result.data.isSuccess) {
-                    vm.getFailedJobs();
-                }
-            });
         } else {
             dashboardResources.deleteFailedJobs().then(function (result) {
                 if (result.data.isSuccess) {

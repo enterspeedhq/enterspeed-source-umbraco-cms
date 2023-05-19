@@ -30,7 +30,6 @@
                     return $http.post("/umbraco/backoffice/api/DashboardApi/DeleteFailedJobs")
                 },
                 deleteSelectedFailedJobs: function (ids) {
-                    console.log(ids);
                     return $http.post("/umbraco/backoffice/api/DashboardApi/DeleteJobs", ids)
                 }
             };
