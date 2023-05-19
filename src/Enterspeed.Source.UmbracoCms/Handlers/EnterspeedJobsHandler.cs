@@ -70,8 +70,6 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 }
                 catch (Exception exception)
                 {
-                    failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, exception.Message));
-                    
                     // Exceptions has a ToString() override which formats the full exception nicely.
                     var exceptionAsString = exception.ToString();
                     failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, exceptionAsString));
