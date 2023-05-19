@@ -26,8 +26,12 @@
                 testEnterspeedConfiguration: function (configuration) {
                     return $http.post("/umbraco/backoffice/api/DashboardApi/TestConfigurationConnection", configuration);
                 },
-                removeFailedJobs: function () {
-                    return $http.post("/umbraco/backoffice/api/DashboardApi/RemoveFailedJobs")
+                deleteFailedJobs: function () {
+                    return $http.post("/umbraco/backoffice/api/DashboardApi/DeleteFailedJobs")
+                },
+                deleteSelectedFailedJobs: function (ids) {
+                    console.log(ids);
+                    return $http.post("/umbraco/backoffice/api/DashboardApi/DeleteJobs", ids)
                 }
             };
         });

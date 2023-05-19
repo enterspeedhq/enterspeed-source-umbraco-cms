@@ -22,6 +22,7 @@ using Enterspeed.Source.UmbracoCms.Extensions;
 using Umbraco.Cms.Core.Sync;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
+
 #else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
@@ -157,7 +158,8 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
             if (string.IsNullOrWhiteSpace(configuration.MediaDomain))
             {
                 configuration.MediaDomain =
-                    new Uri(_httpContextAccessor.HttpContext!.Request.GetEncodedUrl()).GetLeftPart(UriPartial.Authority);
+                    new Uri(_httpContextAccessor.HttpContext!.Request.GetEncodedUrl())
+                        .GetLeftPart(UriPartial.Authority);
             }
 
             var response = TestConnection(configuration);
@@ -239,7 +241,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
         }
 
         [HttpPost]
-        public ActionResult RemoveFailedJobs()
+        public ActionResult DeleteFailedJobs()
         {
             using (_scopeProvider.CreateScope(autoComplete: true))
             {
@@ -247,6 +249,23 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
                 if (failedJobs != null && failedJobs.Any())
                 {
                     _enterspeedJobRepository.Delete(failedJobs.Select(fj => fj.Id).ToList());
+                }
+            }
+
+            return Ok(new ApiResponse()
+            {
+                IsSuccess = true
+            });
+        }
+
+        [HttpPost]
+        public ActionResult DeleteJobs(JobIdsToDelete jobIdsToDelete)
+        {
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                if (jobIdsToDelete != null && jobIdsToDelete.Ids.Any())
+                {
+                    _enterspeedJobRepository.Delete(jobIdsToDelete.Ids);
                 }
             }
 

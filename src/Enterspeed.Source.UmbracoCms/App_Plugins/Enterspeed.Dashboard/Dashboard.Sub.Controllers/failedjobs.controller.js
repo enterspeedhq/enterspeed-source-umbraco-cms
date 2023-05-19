@@ -3,10 +3,9 @@
     vm.loadingFailedJobs = false;
     vm.failedJobs = [];
     vm.activeException = "";
-
-    vm.removeModes = ['Everything', 'Selected'];
-    vm.selectedRemoveMode = vm.removeModes[0];
-    vm.removeModeSelectOpen = false;
+    vm.deleteModes = ['Everything', 'Selected'];
+    vm.selectedDeleteMode = vm.deleteModes[0];
+    vm.deleteModeSelectOpen = false;
 
     function init() {
         vm.getFailedJobs();
@@ -54,24 +53,39 @@
         });
     };
 
-    vm.setRemoveMode = function (removeMode) {
-        vm.selectedRemoveMode = removeMode;
+    vm.setDeleteMode = function (deleteMode) {
+        vm.selectedDeleteMode = deleteMode;
     }
 
-    vm.toggleRemoveModeSelect = function () {
-        vm.removeModeSelectOpen = !vm.removeModeSelectOpen;
+    vm.toggleDeleteModeSelect = function () {
+        vm.deleteModeSelectOpen = !vm.deleteModeSelectOpen;
     }
 
-    vm.removeFailedJobs = function () {
-        dashboardResources.removeFailedJobs().then(function (result) {
-            vm.removingFailedJobs = true;
-            if (result.data.isSuccess) {
-                vm.getFailedJobs();
+    vm.deleteFailedJobs = function () {
+        vm.deletingFailedJobs = true;
+
+        if (vm.selectedDeleteMode === "Selected") {
+            let failedJobsToDelete = vm.failedJobs.filter(fj => fj.selected === true);
+
+            let jobIdsToDelete = {
+                Ids: failedJobsToDelete.map(fj => fj.id)
             }
 
-            vm.removingFailedJobs = false;
-        });
-    };
+            dashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
+                if (result.data.isSuccess) {
+                    vm.getFailedJobs();
+                }
+            });
+        } else {
+            dashboardResources.deleteFailedJobs().then(function (result) {
+                if (result.data.isSuccess) {
+                    vm.getFailedJobs();
+                }
+            });
+        }
+
+        vm.deletingFailedJobs = false;
+    }
 
     $scope.getData = function () {
         return $filter('filter')(vm.failedJobs, $scope.q);

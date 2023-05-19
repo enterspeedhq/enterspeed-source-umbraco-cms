@@ -17,11 +17,11 @@
             </li>
             <li ng-repeat="job in vm.failedJobs | filter:q | startFrom:vm.pagination.pageIndex*vm.pagination.pageSize | limitTo:vm.pagination.pageSize">
                 <div class="dashboard-list-item" ng-click="vm.toggleException($index)">
-                    <div ng-if="vm.selectedRemoveMode == 'Everything'" class="dashboard-list-item-property"
+                    <div ng-if="vm.selectedDeleteMode == 'Everything'" class="dashboard-list-item-property"
                          style="width: 3%">
                         <span ng-class="{'icon-navigation-right': $index !== vm.activeException, 'icon-navigation-down': $index === vm.activeException}"></span>
                     </div>
-                    <div ng-if="vm.selectedRemoveMode == 'Selected'"
+                    <div ng-if="vm.selectedDeleteMode == 'Selected'"
                          style="width: 3%">
                         <umb-checkbox model="job.selected"></umb-checkbox>
                     </div>
@@ -58,28 +58,28 @@
         <div>
             <div class="seed-dashboard-text block-form">
                 <br>
-                <h4>Remove failed jobs</h4>
+                <h4>Delete failed jobs</h4>
                 <br>
 
                 <div class="umb-control-group">
                     <umb-button type="button"
-                                label="Mode: {{vm.selectedRemoveMode}}"
-                                action="vm.toggleRemoveModeSelect()">
+                                label="Mode: {{vm.selectedDeleteMode}}"
+                                action="vm.toggleDeleteModeSelect()">
                     </umb-button>
-                    <umb-dropdown ng-if="vm.removeModeSelectOpen" on-close="vm.removeModeSelectOpen = false">
-                        <umb-dropdown-item ng-repeat="removeMode in vm.removeModes">
+                    <umb-dropdown ng-if="vm.deleteModeSelectOpen" on-close="vm.deleteModeSelectOpen = false">
+                        <umb-dropdown-item ng-repeat="deleteMode in vm.deleteModes">
                             <button type="button" class="btn-reset"
-                                    ng-click="vm.setRemoveMode(removeMode); vm.removeModeSelectOpen = false;">
-                                {{removeMode}}
+                                    ng-click="vm.setDeleteMode(deleteMode); vm.deleteModeSelectOpen = false;">
+                                {{deleteMode}}
                             </button>
                         </umb-dropdown-item>
                     </umb-dropdown>
 
                     <umb-button type="button"
-                                action="vm.removeFailedJobs()"
+                                action="vm.deleteFailedJobs()"
                                 button-style="danger"
-                                label="Remove"
-                                disabled="vm.removingFailedJobs">
+                                label="Delete"
+                                disabled="vm.deletingFailedJobs">
                     </umb-button>
                 </div>
             </div>
