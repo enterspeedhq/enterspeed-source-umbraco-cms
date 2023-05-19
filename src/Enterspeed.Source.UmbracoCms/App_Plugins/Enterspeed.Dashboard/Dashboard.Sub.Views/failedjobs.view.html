@@ -21,7 +21,7 @@
                          style="width: 3%">
                         <span ng-class="{'icon-navigation-right': $index !== vm.activeException, 'icon-navigation-down': $index === vm.activeException}"></span>
                     </div>
-                    <div ng-if="vm.selectedDeleteMode == 'Selected'"
+                    <div ng-if="vm.selectedDeleteMode == 'Selected'" class="dashboard-list-item-property "
                          style="width: 3%">
                         <umb-checkbox model="job.selected"></umb-checkbox>
                     </div>
@@ -55,7 +55,7 @@
                             on-go-to-page="vm.goToPage">
             </umb-pagination>
         </div>
-        <div>
+        <div ng-if="vm.failedJobs.length">
             <div class="seed-dashboard-text block-form">
                 <br>
                 <h4>Delete failed jobs</h4>
