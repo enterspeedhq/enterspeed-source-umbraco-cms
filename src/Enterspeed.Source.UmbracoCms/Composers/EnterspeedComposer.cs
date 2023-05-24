@@ -60,7 +60,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
             builder.Services.AddTransient<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>();
             builder.Services.AddSingleton<IEnterspeedValidationService, EnterspeedValidationService>();
             builder.Services.AddTransient<IUmbracoCultureProvider, UmbracoCultureProvider>();
-                
+
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>();
