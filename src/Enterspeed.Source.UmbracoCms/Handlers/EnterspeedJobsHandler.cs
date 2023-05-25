@@ -65,9 +65,10 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                     // If job has been successfully handled and a failed job exists with same id, we should remove it
                     var existingFailedJobToDelete = failedJobsToHandle.FirstOrDefault(x =>
                         x.EntityId == newestJob.EntityId && x.Culture == newestJob.Culture && x.ContentState == newestJob.ContentState);
+
                     if (existingFailedJobToDelete != null)
                     {
-                        existingFailedJobsToDelete.Add(newestJob);
+                        existingFailedJobsToDelete.Add(existingFailedJobToDelete);
                     }
                 }
                 catch (Exception exception)
@@ -79,30 +80,26 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 }
             }
 
-            // Remove existing failed jobs that was handled
+            // Remove existing failed jobs that has been handled
             RemoveExistingFailedJobs(existingFailedJobsToDelete);
 
-            // Throw exception with a combined exception message for all jobs that failed if any
-            if (newFailedJobs.Any())
-            {
-                // Save new failed jobs
-                SaveOrUpdateNewFailedJobs(newFailedJobs);
-
-                var failedJobExceptions = string.Join(Environment.NewLine, newFailedJobs.Select(x => x.Exception));
-                throw new Exception(failedJobExceptions);
-            }
+            // Save or update new failed jobs to database
+            SaveOrUpdateNewFailedJobs(newFailedJobs);
         }
 
-        private void SaveOrUpdateNewFailedJobs(List<EnterspeedJob> failedJobs)
+        private void SaveOrUpdateNewFailedJobs(List<EnterspeedJob> newFailedJobs)
         {
+            if (!newFailedJobs.Any()) return;
+
             var failedJobsToSave = new List<EnterspeedJob>();
-            foreach (var failedJob in failedJobs)
+            foreach (var failedJob in newFailedJobs)
             {
                 var existingJob = _enterspeedJobRepository.GetFailedJob(failedJob.EntityId);
                 if (existingJob != null)
                 {
                     existingJob.Exception = failedJob.Exception;
                     existingJob.CreatedAt = failedJob.CreatedAt;
+                    existingJob.UpdatedAt = failedJob.CreatedAt;
                     _enterspeedJobRepository.Update(existingJob);
                 }
                 else
@@ -113,6 +110,10 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
 
             // Save all jobs that failed
             _enterspeedJobRepository.Save(failedJobsToSave);
+
+            // Throw exception with a combined exception message for all jobs that failed if any
+            var failedJobExceptions = string.Join(Environment.NewLine, newFailedJobs.Select(x => x.Exception));
+            throw new Exception(failedJobExceptions);
         }
 
         private void RemoveExistingFailedJobs(IReadOnlyCollection<EnterspeedJob> failedJobsToDelete)

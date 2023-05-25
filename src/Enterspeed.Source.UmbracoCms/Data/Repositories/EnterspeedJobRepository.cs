@@ -7,6 +7,7 @@ using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Infrastructure.Persistence;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
+
 #else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
@@ -108,7 +109,7 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
         public EnterspeedJob GetFailedJob(string entityId)
         {
             var schema = Database.Query<EnterspeedJobSchema>()
-                .Where(x => x.EntityId.Contains(x.EntityId) && x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                .Where(x => x.EntityId.Contains(entityId) && x.JobState == EnterspeedJobState.Failed.GetHashCode())
                 .FirstOrDefault();
 
             return _mapper.Map<EnterspeedJob>(schema);
