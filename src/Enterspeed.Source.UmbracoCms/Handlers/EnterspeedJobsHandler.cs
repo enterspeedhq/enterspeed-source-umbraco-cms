@@ -31,11 +31,12 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         {
             // Process nodes
             var failedJobs = new List<EnterspeedJob>();
+
+            // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
             var failedJobsToHandle =
                 _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
             var failedJobsToDelete = new List<EnterspeedJob>();
 
-            // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
             var jobsByEntityIdAndContentState = jobs.GroupBy(x => new { x.EntityId, x.ContentState, x.Culture });
             foreach (var jobInfo in jobsByEntityIdAndContentState)
             {
