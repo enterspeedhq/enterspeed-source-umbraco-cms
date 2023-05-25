@@ -82,7 +82,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             // Remove existing failed jobs that was handled
             RemoveFromFailedJobs(failedJobsToDelete);
 
-            // Save new failed jobs
+            // Save existing and new failed jobs
             SaveFailedJobs(failedJobs);
 
             // Throw exception with a combined exception message for all jobs that failed if any
