@@ -64,7 +64,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                     handler.Handle(newestJob);
 
                     // If job has been successfully handled and a failed job exists with same id, we should remove it
-                    var existingFailedJob = failedJobsToHandle.FirstOrDefault(fj => fj.Id == newestJob.Id);
+                    var existingFailedJob = failedJobsToHandle.FirstOrDefault(x => x.EntityId == newestJob.EntityId && x.Culture == newestJob.Culture && x.ContentState == newestJob.ContentState);
                     if (existingFailedJob != null)
                     {
                         failedJobsToDelete.Add(newestJob);
