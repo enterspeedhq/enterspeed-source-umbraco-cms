@@ -30,12 +30,11 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         public void HandleJobs(IList<EnterspeedJob> jobs)
         {
             // Process nodes
-            var failedJobs = new List<EnterspeedJob>();
+            var newFailedJobs = new List<EnterspeedJob>();
 
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
-            var failedJobsToHandle =
-                _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
-            var failedJobsToDelete = new List<EnterspeedJob>();
+            var failedJobsToHandle = _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
+            var existingFailedJobsToDelete = new List<EnterspeedJob>();
 
             var jobsByEntityIdAndContentState = jobs.GroupBy(x => new { x.EntityId, x.ContentState, x.Culture });
             foreach (var jobInfo in jobsByEntityIdAndContentState)
@@ -54,7 +53,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 if (handler == null)
                 {
                     var message = $"No job handler available for {newestJob.EntityId} {newestJob.EntityType}";
-                    failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, message));
+                    newFailedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, message));
                     _logger.LogWarning(message);
                     continue;
                 }
@@ -64,36 +63,37 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                     handler.Handle(newestJob);
 
                     // If job has been successfully handled and a failed job exists with same id, we should remove it
-                    var existingFailedJob = failedJobsToHandle.FirstOrDefault(x => x.EntityId == newestJob.EntityId && x.Culture == newestJob.Culture && x.ContentState == newestJob.ContentState);
-                    if (existingFailedJob != null)
+                    var existingFailedJobToDelete = failedJobsToHandle.FirstOrDefault(x =>
+                        x.EntityId == newestJob.EntityId && x.Culture == newestJob.Culture && x.ContentState == newestJob.ContentState);
+                    if (existingFailedJobToDelete != null)
                     {
-                        failedJobsToDelete.Add(newestJob);
+                        existingFailedJobsToDelete.Add(newestJob);
                     }
                 }
                 catch (Exception exception)
                 {
                     // Exceptions has a ToString() override which formats the full exception nicely.
                     var exceptionAsString = exception.ToString();
-                    failedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, exceptionAsString));
+                    newFailedJobs.Add(_enterspeedJobFactory.GetFailedJob(newestJob, exceptionAsString));
                     _logger.LogError(exceptionAsString);
                 }
             }
 
             // Remove existing failed jobs that was handled
-            RemoveFromFailedJobs(failedJobsToDelete);
-
-            // Save existing and new failed jobs
-            SaveFailedJobs(failedJobs);
+            RemoveExistingFailedJobs(existingFailedJobsToDelete);
 
             // Throw exception with a combined exception message for all jobs that failed if any
-            if (failedJobs.Any())
+            if (newFailedJobs.Any())
             {
-                var failedJobExceptions = string.Join(Environment.NewLine, failedJobs.Select(x => x.Exception));
+                // Save new failed jobs
+                SaveOrUpdateNewFailedJobs(newFailedJobs);
+
+                var failedJobExceptions = string.Join(Environment.NewLine, newFailedJobs.Select(x => x.Exception));
                 throw new Exception(failedJobExceptions);
             }
         }
 
-        private void SaveFailedJobs(List<EnterspeedJob> failedJobs)
+        private void SaveOrUpdateNewFailedJobs(List<EnterspeedJob> failedJobs)
         {
             var failedJobsToSave = new List<EnterspeedJob>();
             foreach (var failedJob in failedJobs)
@@ -115,7 +115,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             _enterspeedJobRepository.Save(failedJobsToSave);
         }
 
-        private void RemoveFromFailedJobs(IReadOnlyCollection<EnterspeedJob> failedJobsToDelete)
+        private void RemoveExistingFailedJobs(IReadOnlyCollection<EnterspeedJob> failedJobsToDelete)
         {
             if (failedJobsToDelete.Any())
             {
