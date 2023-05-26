@@ -65,7 +65,7 @@
         vm.deletingFailedJobs = true;
 
         if (vm.selectedDeleteMode === "Selected") {
-            let failedJobsToDelete = vm.failedJobs.filter(fj => fj.selected === true);
+            let failedJobsToDelete = vm.getSelectedFailedJobs();
 
             if (failedJobsToDelete.length) {
                 let jobIdsToDelete = {
@@ -88,6 +88,10 @@
         }
 
         vm.deletingFailedJobs = false;
+    }
+
+    vm.getSelectedFailedJobs = function () {
+        return vm.failedJobs.filter(fj => fj.selected === true);
     }
 
     $scope.getData = function () {
