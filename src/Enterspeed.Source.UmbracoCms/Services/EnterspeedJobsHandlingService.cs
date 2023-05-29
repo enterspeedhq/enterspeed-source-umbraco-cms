@@ -71,7 +71,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             foreach (var job in oldJobs)
             {
                 job.State = EnterspeedJobState.Failed;
-                job.Exception = $"Job processing timed out. Last updated at: {job.UpdatedAt}";
+                job.Exception = $"Job processing timed out for {job.EntityId}. Last updated at: {job.UpdatedAt}";
                 job.UpdatedAt = DateTime.UtcNow;
             }
 
