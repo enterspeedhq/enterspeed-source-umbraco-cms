@@ -81,15 +81,15 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             RemoveExistingFailedJobs(existingFailedJobsToDelete);
 
             // Save or update new failed jobs to database
-            SaveOrUpdateNewFailedJobs(newFailedJobs);
+            SaveOrUpdateFailedJobs(newFailedJobs);
         }
 
-        private void SaveOrUpdateNewFailedJobs(List<EnterspeedJob> newFailedJobs)
+        public void SaveOrUpdateFailedJobs(List<EnterspeedJob> failedJobs)
         {
-            if (!newFailedJobs.Any()) return;
+            if (!failedJobs.Any()) return;
 
             var failedJobsToSave = new List<EnterspeedJob>();
-            foreach (var failedJob in newFailedJobs)
+            foreach (var failedJob in failedJobs)
             {
                 var existingJob = _enterspeedJobRepository.GetFailedJob(failedJob.EntityId);
                 if (existingJob != null)
@@ -109,7 +109,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             _enterspeedJobRepository.Save(failedJobsToSave);
 
             // Throw exception with a combined exception message for all jobs that failed if any
-            var failedJobExceptions = string.Join(Environment.NewLine, newFailedJobs.Select(x => x.Exception));
+            var failedJobExceptions = string.Join(Environment.NewLine, failedJobs.Select(x => x.Exception));
             throw new Exception(failedJobExceptions);
         }
 
