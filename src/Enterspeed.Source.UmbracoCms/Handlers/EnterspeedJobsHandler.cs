@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
@@ -94,7 +94,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             var failedJobsToSave = new List<EnterspeedJob>();
             foreach (var failedJob in failedJobs)
             {
-                var existingJob = _enterspeedJobRepository.GetFailedJob(failedJob.EntityId);
+                var existingJob = _enterspeedJobRepository.GetFailedJob(failedJob.EntityId, failedJob.Culture);
                 if (existingJob != null)
                 {
                     existingJob.Exception = failedJob.Exception;
