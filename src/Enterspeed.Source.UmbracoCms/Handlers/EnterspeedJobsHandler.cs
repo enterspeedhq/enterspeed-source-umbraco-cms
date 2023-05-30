@@ -80,17 +80,16 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             // Remove existing failed jobs that has been handled
             RemoveExistingFailedJobs(existingFailedJobsToDelete);
 
-            // Save or update new failed jobs to database
-            SaveOrUpdateFailedJobs(newFailedJobs);
-
             // Delete all jobs queued for processing
             _enterspeedJobRepository.Delete(jobs.Select(j => j.Id).ToList());
+
+            // Save or update new failed jobs to database
+            SaveOrUpdateFailedJobs(newFailedJobs);
         }
 
         public void SaveOrUpdateFailedJobs(List<EnterspeedJob> failedJobs)
         {
             if (!failedJobs.Any()) return;
-
             var failedJobsToSave = new List<EnterspeedJob>();
             foreach (var failedJob in failedJobs)
             {
