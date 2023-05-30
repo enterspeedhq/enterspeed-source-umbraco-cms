@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
@@ -82,6 +82,9 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
 
             // Save or update new failed jobs to database
             SaveOrUpdateFailedJobs(newFailedJobs);
+
+            // Delete all jobs queued for processing
+            _enterspeedJobRepository.Delete(jobs.Select(j => j.Id).ToList());
         }
 
         public void SaveOrUpdateFailedJobs(List<EnterspeedJob> failedJobs)
