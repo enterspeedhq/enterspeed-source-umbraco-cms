@@ -62,6 +62,9 @@
     }
 
     vm.deleteFailedJobs = function () {
+        if (!confirm("Are you sure you want to delete the failed job(s)?")) {
+            return;
+        }
         vm.deletingFailedJobs = true;
 
         if (vm.selectedDeleteMode === "Selected") {
