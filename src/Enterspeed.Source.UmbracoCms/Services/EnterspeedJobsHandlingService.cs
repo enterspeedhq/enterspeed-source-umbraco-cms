@@ -48,6 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 return;
             }
+
             _logger.LogDebug("Handling {jobsCount} jobs", jobs.Count);
 
             // Update jobs from pending to processing
@@ -56,6 +57,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 job.State = EnterspeedJobState.Processing;
                 job.UpdatedAt = DateTime.UtcNow;
             }
+
             _enterspeedJobRepository.Save(jobs);
             _enterspeedJobsHandler.HandleJobs(jobs);
         }
@@ -63,17 +65,18 @@ namespace Enterspeed.Source.UmbracoCms.Services
         public virtual void InvalidateOldProcessingJobs()
         {
             var oldJobs = _enterspeedJobRepository.GetOldProcessingTasks().ToList();
-            if (oldJobs.Any())
-            {
-                foreach (var job in oldJobs)
-                {
-                    job.State = EnterspeedJobState.Failed;
-                    job.Exception = $"Job processing timed out. Last updated at: {job.UpdatedAt}";
-                    job.UpdatedAt = DateTime.UtcNow;
-                }
+            if (!oldJobs.Any()) return;
 
-                _enterspeedJobRepository.Save(oldJobs);
+            // Updating old processing jobs, so they are set as failed instead. 
+            foreach (var job in oldJobs)
+            {
+                job.State = EnterspeedJobState.Failed;
+                job.Exception = $"Job processing timed out for {job.EntityId}. Last updated at: {job.UpdatedAt}";
+                job.UpdatedAt = DateTime.UtcNow;
             }
+
+            // Save new failed job or update existing failed job.
+            _enterspeedJobsHandler.SaveOrUpdateFailedJobs(oldJobs);
         }
     }
 }

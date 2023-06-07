@@ -10,8 +10,12 @@
     justify-content: space-between;
 }
 
-.dashboard-list-item {
+.pointer {
     cursor: pointer;
+}
+
+.background-hover:hover {
+    background-color: #f3f3f5;
 }
 
 .dashboard-list-header {

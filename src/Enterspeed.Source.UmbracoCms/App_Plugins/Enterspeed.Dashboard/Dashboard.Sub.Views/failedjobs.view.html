@@ -16,7 +16,7 @@
                 <div class="dashboard-list-item-property" style="width:20%">Updated at</div>
             </li>
             <li ng-repeat="job in vm.failedJobs | filter:q | startFrom:vm.pagination.pageIndex*vm.pagination.pageSize | limitTo:vm.pagination.pageSize">
-                <div class="dashboard-list-item" ng-click="vm.toggleException($index)">
+                <div class="dashboard-list-item background-hover pointer" ng-click="vm.toggleException($index)">
                     <div ng-if="vm.selectedDeleteMode == 'Everything'" class="dashboard-list-item-property"
                          style="width: 3%">
                         <span ng-class="{'icon-navigation-right': $index !== vm.activeException, 'icon-navigation-down': $index === vm.activeException}"></span>
@@ -79,7 +79,7 @@
                                 action="vm.deleteFailedJobs()"
                                 button-style="danger"
                                 label="Delete"
-                                disabled="vm.deletingFailedJobs">
+                                disabled="vm.deletingFailedJobs || (vm.selectedDeleteMode === 'Selected' && !vm.getSelectedFailedJobs().length)">
                     </umb-button>
                 </div>
             </div>

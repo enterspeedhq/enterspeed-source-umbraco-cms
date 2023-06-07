@@ -9,7 +9,7 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
         IList<EnterspeedJob> GetFailedJobs(List<string> entityIds);
         IList<EnterspeedJob> GetPendingJobs(int count);
         IList<EnterspeedJob> GetOldProcessingTasks(int olderThanMinutes = 60);
-        EnterspeedJob GetFailedJob(string entityId);
+        EnterspeedJob GetFailedJob(string entityId, string culture);
         void Update(EnterspeedJob job);
         void Save(IList<EnterspeedJob> jobs);
         void Delete(IList<int> ids);
