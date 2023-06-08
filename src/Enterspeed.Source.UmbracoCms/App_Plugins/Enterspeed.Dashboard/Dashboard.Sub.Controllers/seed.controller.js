@@ -75,7 +75,7 @@
         });
     };
 
-    function getNumberOfPendingJobs () {
+    function getNumberOfPendingJobs() {
         dashboardResources.getNumberOfPendingJobs().then(function (result) {
             if (result.data.isSuccess) {
                 vm.numberOfPendingJobs = result.data.data.numberOfPendingJobs;
@@ -87,42 +87,45 @@
         });
     };
 
-    vm.openSelectNode = function(section) {
+    vm.openSelectNode = function (section) {
         editorService.open({
             title: "Select " + section + " node",
             subtitle: "Select a node to include in the seed",
             view: "/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Views/selectNode.html",
             contentType: section,
             size: "small",
-            submit: function(value) {
-                if (!value.target || !value.target.id) {
+            submit: function (value) {
+                if (!value.targets) {
                     return;
                 }
 
-                if (value.target.id === "-1") {
-                    vm.selectedNodesToSeed[section] = [value.target];
-                }
-                else {
-                    var existingNodeIndex = vm.selectedNodesToSeed[section].findIndex(element => element.id === value.target.id);
-                    if (existingNodeIndex >= 0) {
-                        vm.selectedNodesToSeed[section][existingNodeIndex] = value.target;
-                    } else {
-                        vm.selectedNodesToSeed[section].push(value.target);
+                for (var i = 0; i < value.targets.length; i++) {
+                    let target = value.targets[i];
+                    if (target.id === "-1") {
+                        vm.selectedNodesToSeed[section] = [target];
+                    }
+                    else {
+                        var existingNodeIndex = vm.selectedNodesToSeed[section].findIndex(element => element.id === target.id);
+                        if (existingNodeIndex >= 0) {
+                            vm.selectedNodesToSeed[section][existingNodeIndex] = target;
+                        } else {
+                            vm.selectedNodesToSeed[section].push(target);
+                        }
                     }
                 }
 
             },
-            close: function() {
+            close: function () {
                 editorService.close();
             }
         });
     }
 
-    vm.removeSelectNode = function(section, index) {
+    vm.removeSelectNode = function (section, index) {
         vm.selectedNodesToSeed[section].splice(index, 1);
     }
 
-    vm.allowAddingNodes = function(section) {
+    vm.allowAddingNodes = function (section) {
         return vm.selectedNodesToSeed[section].findIndex(element => element.id === "-1") < 0;
     }
 
