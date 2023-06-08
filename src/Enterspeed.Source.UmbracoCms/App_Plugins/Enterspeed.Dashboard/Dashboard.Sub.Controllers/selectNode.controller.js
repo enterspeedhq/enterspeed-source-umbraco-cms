@@ -9,14 +9,6 @@
         resetNodeSelection();
     }
 
-    vm.changeIncludeDescendants = function () {
-        if (vm.includeDescendants) {
-            for (let i = 0; i < $scope.model.targets.length; i++) {
-                $scope.targets[i].includeDescendants = vm.includeDescendants;
-            }
-        }
-    }
-
     $scope.onTreeInit = function () {
         $scope.dialogTreeApi.callbacks.treeNodeSelect(nodeSelectHandler);
     }
@@ -64,11 +56,14 @@
                     id: "-1",
                     name: "Everything",
                     icon: "icon-item-arrangement",
-                    includeDescendents: true
+                    includeDescendants: true
                 });
 
             } else {
-                $scope.model.target.includeDescendents = vm.includeDescendants;
+                for (let i = 0; i < $scope.model.targets.length; i++) {
+                    
+                    $scope.model.targets[i].includeDescendants = vm.includeDescendants;
+                }
             }
 
             $scope.model.submit($scope.model);

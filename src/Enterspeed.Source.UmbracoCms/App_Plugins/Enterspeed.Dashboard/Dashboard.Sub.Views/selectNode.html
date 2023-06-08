@@ -20,16 +20,15 @@
                         </umb-checkbox>
                     </div>
                     <div class="umb-control-group" ng-if="!vm.includeEverything">
-                        <h5>Descendents</h5>
-                        <umb-checkbox model="vm.includeDescendents"
-                                      text="Include descendents"
-                                      input-id="includeDescendents"
-                                      ng-click="vm.changeIncludeDescendants()">
+                        <h5>Descendants</h5>
+                        <umb-checkbox model="vm.includeDescendants"
+                                      text="Include descendants"
+                                      input-id="includeDescendants">
                         </umb-checkbox>
                     </div>
 
                     <div class="umb-control-group" ng-if="!vm.includeEverything">
-                        <h5>Node</h5>
+                        <h5>Nodes</h5>
                         <div ng-if="vm.contentType == 'content'">
                             <umb-tree section="content"
                                       treealias="content"
