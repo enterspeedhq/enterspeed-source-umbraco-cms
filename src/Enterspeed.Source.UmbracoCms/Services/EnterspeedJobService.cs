@@ -164,7 +164,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
                 allContent.Add(contentNode);
 
-                if (contentSeedNode.IncludeDescendents)
+                if (contentSeedNode.IncludeDescendants)
                 {
                     var descendants = _contentService.GetPagedDescendants(contentSeedNode.Id, 0, int.MaxValue, out var total).ToList();
 
@@ -296,7 +296,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
                 allDictionaryItems.Add(dictionaryItem);
 
-                if (dictionarySeedNode.IncludeDescendents)
+                if (dictionarySeedNode.IncludeDescendants)
                 {
                     var descendants = _localizationService.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
 
@@ -378,7 +378,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
                 allMediaItems.Add(mediaNode);
 
-                if (mediaSeedNode.IncludeDescendents)
+                if (mediaSeedNode.IncludeDescendants)
                 {
                     var descendants = _mediaService
                         .GetPagedDescendants(mediaSeedNode.Id, 0, int.MaxValue, out _).ToList();
