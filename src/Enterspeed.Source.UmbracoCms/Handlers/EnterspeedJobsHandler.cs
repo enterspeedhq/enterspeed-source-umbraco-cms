@@ -32,6 +32,10 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             _enterspeedPostJobsHandler = enterspeedPostJobsHandler;
         }
 
+        /// <summary>
+        /// Methods handle all incoming jobs to process. Umbraco Hosted service calls this implementation
+        /// </summary>
+        /// <param name="jobsToProcess"></param>
         public void HandleJobs(IList<EnterspeedJob> jobsToProcess)
         {
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
@@ -42,7 +46,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             HandleJobs(jobsToProcess, failedJobsToHandle);
             HandlePostJobs(jobsToProcess);
         }
-
+        
         private void HandleJobs(IEnumerable<EnterspeedJob> jobsToProcess, IList<EnterspeedJob> failedJobsToHandle)
         {
             var jobsByEntityIdAndContentState =
@@ -64,8 +68,8 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 HandleJob(jobToHandle, failedJobsToHandle);
             }
         }
-
-        private void HandleJob(EnterspeedJob jobToHandle, IList<EnterspeedJob> failedJobsToHandle)
+        
+        private void HandleJob(EnterspeedJob jobToHandle, IEnumerable<EnterspeedJob> failedJobsToHandle)
         {
             var handler = _jobHandlers.FirstOrDefault(f => f.CanHandle(jobToHandle));
             if (handler == null)
