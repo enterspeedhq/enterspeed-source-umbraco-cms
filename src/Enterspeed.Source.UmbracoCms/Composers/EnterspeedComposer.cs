@@ -141,6 +141,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
                 // Dictionaries
                 .Append<EnterspeedDictionaryItemPublishJobHandler>()
                 .Append<EnterspeedDictionaryItemDeleteJobHandler>()
+                .Append<EnterspeedRootDictionaryItemPublishJobHandler>()
 
                 // Preview content
                 .Append<EnterspeedPreviewContentPublishJobHandler>()
@@ -149,6 +150,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
                 // Preview dictionaries
                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
                 .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>()
+                .Append<EnterspeedPreviewRootDictionaryItemPublishJobHandler>()
 
                 // Media 
                 .Append<EnterspeedMediaPublishJobHandler>()

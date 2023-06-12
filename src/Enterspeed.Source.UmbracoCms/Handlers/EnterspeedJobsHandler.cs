@@ -4,7 +4,10 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
 {
@@ -14,17 +17,23 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         private readonly ILogger<EnterspeedJobsHandler> _logger;
         private readonly EnterspeedJobHandlerCollection _jobHandlers;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IEnterspeedConfigurationService _configuration;
+        private readonly ILocalizationService _localizationService;
 
         public EnterspeedJobsHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
             ILogger<EnterspeedJobsHandler> logger,
             EnterspeedJobHandlerCollection jobHandlers,
-            IEnterspeedJobFactory enterspeedJobFactory)
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IEnterspeedConfigurationService configuration,
+            ILocalizationService localizationService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _logger = logger;
             _jobHandlers = jobHandlers;
             _enterspeedJobFactory = enterspeedJobFactory;
+            _configuration = configuration;
+            _localizationService = localizationService;
         }
 
         public void HandleJobs(IList<EnterspeedJob> jobs)
@@ -33,7 +42,8 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             var newFailedJobs = new List<EnterspeedJob>();
 
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
-            var failedJobsToHandle = _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
+            var failedJobsToHandle =
+                _enterspeedJobRepository.GetFailedJobs(jobs.Select(x => x.EntityId).Distinct().ToList());
             var existingFailedJobsToDelete = new List<EnterspeedJob>();
 
             var jobsByEntityIdAndContentState = jobs.GroupBy(x => new { x.EntityId, x.ContentState, x.Culture });
@@ -64,7 +74,8 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
 
                     // If job has been successfully handled and a failed job exists with same id, we should remove it
                     var existingFailedJobToDelete = failedJobsToHandle.Where(x =>
-                        x.EntityId == newestJob.EntityId && x.Culture == newestJob.Culture && x.ContentState == newestJob.ContentState).ToList();
+                        x.EntityId == newestJob.EntityId && x.Culture == newestJob.Culture &&
+                        x.ContentState == newestJob.ContentState).ToList();
 
                     existingFailedJobsToDelete.AddRange(existingFailedJobToDelete);
                 }
@@ -77,14 +88,45 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 }
             }
 
-            // Remove existing failed jobs that has been handled
-            RemoveExistingFailedJobs(existingFailedJobsToDelete);
+            // Check if any dictionaries amongst handled jobs. If any then create root dictionary items
+            if (jobs.Any(a => a.EntityType == EnterspeedJobEntityType.Dictionary))
+            {
+                HandleRootDictionaries();
+            }
 
-            // Delete all jobs queued for processing
-            _enterspeedJobRepository.Delete(jobs.Select(j => j.Id).ToList());
+                // Remove existing failed jobs that has been handled
+                RemoveExistingFailedJobs(existingFailedJobsToDelete);
 
-            // Save or update new failed jobs to database
-            SaveOrUpdateFailedJobs(newFailedJobs);
+                // Delete all jobs queued for processing
+                _enterspeedJobRepository.Delete(jobs.Select(j => j.Id).ToList());
+
+                // Save or update new failed jobs to database
+                SaveOrUpdateFailedJobs(newFailedJobs);
+            }
+
+        private void HandleRootDictionaries()
+        {
+            var languageIsoCodes = _localizationService.GetAllLanguages()
+                .Select(s => s.IsoCode)
+                .ToList();
+
+            // Per configured destination, process separate jobs
+            var stateConfigurations = new Dictionary<EnterspeedContentState, bool>()
+            {
+                { EnterspeedContentState.Preview, _configuration.IsPreviewConfigured() },
+                { EnterspeedContentState.Publish, _configuration.IsPublishConfigured() },
+            };
+
+            foreach (var destination in stateConfigurations.Where(w => w.Value))
+            {
+                // Create job per culture of requested dictionary items
+                var dictionaryItemsRootJobs = languageIsoCodes
+                    .Select(isoCode => GetDictionaryItemsRootJob(isoCode, destination.Key))
+                    .ToList();
+
+                // Has to be handled in the end, when dictionary items are ingested
+                HandleJobs(dictionaryItemsRootJobs);
+            }
         }
 
         public void SaveOrUpdateFailedJobs(List<EnterspeedJob> failedJobs)
@@ -119,8 +161,24 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         {
             if (failedJobsToDelete.Any())
             {
-                _enterspeedJobRepository.Delete(failedJobsToDelete.Select(x => x.Id).Concat(failedJobsToDelete.Select(x => x.Id)).ToList());
+                _enterspeedJobRepository.Delete(failedJobsToDelete.Select(x => x.Id)
+                    .Concat(failedJobsToDelete.Select(x => x.Id)).ToList());
             }
+        }
+
+        protected EnterspeedJob GetDictionaryItemsRootJob(string culture, EnterspeedContentState contentState)
+        {
+            return new EnterspeedJob
+            {
+                EntityId = UmbracoDictionariesRootEntity.EntityId,
+                EntityType = EnterspeedJobEntityType.Dictionary,
+                Culture = culture,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                JobType = EnterspeedJobType.Publish,
+                State = EnterspeedJobState.Processing,
+                ContentState = contentState
+            };
         }
     }
 }
