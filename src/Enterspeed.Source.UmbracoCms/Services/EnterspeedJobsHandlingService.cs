@@ -79,7 +79,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             }
 
             // Save new failed job or update existing failed job.
-            _enterspeedPostJobsHandler.UpsertFailedJobs(oldJobs);
+            _enterspeedPostJobsHandler.HandleFailedJobs(oldJobs);
         }
     }
 }

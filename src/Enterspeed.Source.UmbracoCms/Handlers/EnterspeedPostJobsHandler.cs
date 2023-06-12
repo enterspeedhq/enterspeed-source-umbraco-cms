@@ -38,54 +38,53 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             IList<EnterspeedJob> newFailedJobs)
         {
             HandleRootDictionaries(processedJobs);
-            RemoveProcessedJobs(processedJobs);
-            RemoveExistingFailedJobs(existingFailedJobs);
+            HandleProcessedJobs(processedJobs);
+            HandleExistingFailedJobs(existingFailedJobs);
 
             // WARNING: This throws an exception if any new failed jobs. This should should not be called before any other method
             // TODO: Handle in a different way?
-            UpsertFailedJobs(newFailedJobs);
+            HandleFailedJobs(newFailedJobs);
         }
 
         /// <summary>
-        /// Removes all processed jobs from the database and thereby effectively removing the jobs that has been processed
-        /// from the queue.
+        /// Removes all processed jobs from the database and thereby effectively removing the jobs from the queue that
+        /// has been processed.
         /// </summary>
         /// <param name="processedJobs"></param>
-        private void RemoveProcessedJobs(IEnumerable<EnterspeedJob> processedJobs)
+        private void HandleProcessedJobs(IEnumerable<EnterspeedJob> processedJobs)
         {
             _enterspeedJobRepository.Delete(processedJobs.Select(j => j.Id).ToList());
         }
 
         /// <summary>
-        /// Checks of any processed jobs of type dictionary present and creates a virtual root source entity in enterspeed.
+        /// Checks if any processed jobs of type dictionary present and creates a virtual root source entity in Enterspeed.
         /// </summary>
         /// <param name="jobs"></param>
         private void HandleRootDictionaries(IEnumerable<EnterspeedJob> jobs)
         {
             // Check if any dictionaries amongst handled jobs. If any then create root dictionary items
-            if (jobs.Any(a => a.EntityType == EnterspeedJobEntityType.Dictionary))
+            if (jobs.All(a => a.EntityType != EnterspeedJobEntityType.Dictionary)) return;
+
+            var languageIsoCodes = _localizationService.GetAllLanguages()
+                .Select(s => s.IsoCode)
+                .ToList();
+
+            // Per configured destination, process separate jobs
+            var stateConfigurations = new Dictionary<EnterspeedContentState, bool>()
             {
-                var languageIsoCodes = _localizationService.GetAllLanguages()
-                    .Select(s => s.IsoCode)
+                { EnterspeedContentState.Preview, _configuration.IsPreviewConfigured() },
+                { EnterspeedContentState.Publish, _configuration.IsPublishConfigured() },
+            };
+
+            foreach (var destination in stateConfigurations.Where(w => w.Value))
+            {
+                // Create job per culture of requested dictionary items
+                var dictionaryItemsRootJobs = languageIsoCodes
+                    .Select(isoCode => _enterspeedJobFactory.GetDictionaryItemRootJob(isoCode, destination.Key))
                     .ToList();
 
-                // Per configured destination, process separate jobs
-                var stateConfigurations = new Dictionary<EnterspeedContentState, bool>()
-                {
-                    { EnterspeedContentState.Preview, _configuration.IsPreviewConfigured() },
-                    { EnterspeedContentState.Publish, _configuration.IsPublishConfigured() },
-                };
-
-                foreach (var destination in stateConfigurations.Where(w => w.Value))
-                {
-                    // Create job per culture of requested dictionary items
-                    var dictionaryItemsRootJobs = languageIsoCodes
-                        .Select(isoCode => _enterspeedJobFactory.GetDictionaryItemRootJob(isoCode, destination.Key))
-                        .ToList();
-
-                    // Add to queue. We dont want to make recursive calls directly to the jobs handler
-                    _enterspeedJobRepository.Save(dictionaryItemsRootJobs);
-                }
+                // Add to queue. We dont want to make recursive calls directly to the jobs handler
+                _enterspeedJobRepository.Save(dictionaryItemsRootJobs);
             }
         }
 
@@ -93,13 +92,13 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         /// Jobs that failed while processing are being created or updated in the database.
         /// Update is happening to avoid multiple database entries of the same error.
         /// </summary>
-        /// <param name="failedJobs"></param>
+        /// <param name="newFailedJobs"></param>
         /// <exception cref="Exception"></exception>
-        public void UpsertFailedJobs(IList<EnterspeedJob> failedJobs)
+        public void HandleFailedJobs(IList<EnterspeedJob> newFailedJobs)
         {
-            if (!failedJobs.Any()) return;
+            if (!newFailedJobs.Any()) return;
             var failedJobsToSave = new List<EnterspeedJob>();
-            foreach (var failedJob in failedJobs)
+            foreach (var failedJob in newFailedJobs)
             {
                 var existingJob = _enterspeedJobRepository.GetFailedJob(failedJob.EntityId, failedJob.Culture);
                 if (existingJob != null)
@@ -118,20 +117,20 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             _enterspeedJobRepository.Save(failedJobsToSave);
 
             // Throw exception with a combined exception message for all jobs that failed if any
-            var failedJobExceptions = string.Join(Environment.NewLine, failedJobs.Select(x => x.Exception));
+            var failedJobExceptions = string.Join(Environment.NewLine, newFailedJobs.Select(x => x.Exception));
             throw new Exception(failedJobExceptions);
         }
 
         /// <summary>
-        /// Removes existing failed jobs that has successfully been processed
+        /// Removes existing failed jobs that has successfully been processed.
         /// </summary>
-        /// <param name="failedJobsToDelete"></param>
-        private void RemoveExistingFailedJobs(IReadOnlyCollection<EnterspeedJob> failedJobsToDelete)
+        /// <param name="existingFailedJobs"></param>
+        private void HandleExistingFailedJobs(IReadOnlyCollection<EnterspeedJob> existingFailedJobs)
         {
-            if (failedJobsToDelete.Any())
+            if (existingFailedJobs.Any())
             {
-                _enterspeedJobRepository.Delete(failedJobsToDelete.Select(x => x.Id)
-                    .Concat(failedJobsToDelete.Select(x => x.Id)).ToList());
+                _enterspeedJobRepository.Delete(existingFailedJobs.Select(x => x.Id)
+                    .Concat(existingFailedJobs.Select(x => x.Id)).ToList());
             }
         }
     }

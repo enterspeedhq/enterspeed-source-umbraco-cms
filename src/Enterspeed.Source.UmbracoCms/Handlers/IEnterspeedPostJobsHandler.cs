@@ -9,6 +9,6 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             IReadOnlyCollection<EnterspeedJob> existingFailedJobs,
             IList<EnterspeedJob> newFailedJobs);
 
-        void UpsertFailedJobs(IList<EnterspeedJob> failedJobs);
+        void HandleFailedJobs(IList<EnterspeedJob> newFailedJobs);
     }
 }
