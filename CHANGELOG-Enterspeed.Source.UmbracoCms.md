@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [unreleased]
+## [2.5.0 - 2023-06-12]
 ### Addded
 - Added buttons to clear a single or all failed jobs in the failed jobs list
 - Only store last version of a failed job in the failed jobs list
 - Logging actual exception instead of just a generic error message on ingest error
 
-## [2.4.0 - 2023-08-05]
+## [2.4.0 - 2023-05-08]
 ### Addded
 - Option for users to manually select nodes and do a custom seed. This way users don't have to do full seeds, but can select only a sub-node and it's descendent or eg. only seed all media nodes.
 - Option for users to clear the seed job queue. If you misclicked the seed button or just changed your mind, you can now clear the job queue with a click of a button on the seed page
@@ -22,14 +22,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Resolve correct url by culture in `DefaultMultiUrlPickerPropertyValueConverter`
 - Removed double slash after domain for redirects if domain ends with slash
 
-## [2.3.1 - 2023-19-04]
+## [2.3.1 - 2023-04-19]
 ### Addded
 - Added loggin of Umbraco version
 
 ### Updated
 - Update dpendency to Enterspeed.Source.Sdk v1.0.1
 
-## [2.3.0 - 2023-29-03]
+## [2.3.0 - 2023-03-29]
 ### Addded
 - Added option to customize culture logic (contribution by [Mikkel Keller](https://github.com/K3llr))
 - Added option to create custom notification handlers
@@ -40,7 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - Made methods on `UmbracoRedirectsService` virtual to allow overring logic
 
-## [2.2.0 - 2023.03.02]
+## [2.2.0 - 2023-03-02]
 ### Addded
 - Ingesting preview media when doing a seed
 
