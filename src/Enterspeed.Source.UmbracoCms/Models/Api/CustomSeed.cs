@@ -10,6 +10,6 @@
     public class CustomSeedNode
     {
         public int Id { get; set; }
-        public bool IncludeDescendents { get; set; }
+        public bool IncludeDescendants { get; set; }
     }
 }

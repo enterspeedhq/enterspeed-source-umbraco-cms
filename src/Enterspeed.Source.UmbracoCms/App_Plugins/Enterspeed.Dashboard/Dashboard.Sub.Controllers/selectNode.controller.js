@@ -1,10 +1,11 @@
 ﻿function selectNodeController($scope) {
-    var vm = this;
-    vm.includeDescendents = false;
+    let vm = this;
+    vm.includeDescendants = false;
     vm.includeEverything = false;
 
     function init() {
         vm.contentType = $scope.model.contentType;
+        $scope.model.targets = [];
         resetNodeSelection();
     }
 
@@ -14,7 +15,7 @@
 
     function resetNodeSelection() {
         $scope.dialogTreeApi = {};
-        $scope.model.target = {};
+        $scope.model.targets = [];
     }
 
     function nodeSelectHandler(args) {
@@ -23,16 +24,22 @@
             args.event.stopPropagation();
         }
 
-        if ($scope.currentNode) {
-            //un-select if there's a current one selected
-            $scope.currentNode.selected = false;
-        }
-
         $scope.currentNode = args.node;
-        $scope.currentNode.selected = true;
-        $scope.model.target.id = args.node.id;
-        $scope.model.target.name = args.node.name;
-        $scope.model.target.icon = args.node.icon;
+
+        // Check if exists already. If it exists, then we remove
+        let existingTargetIndex = $scope.model.targets.findIndex(element => element.id === args.node.id);
+        if (existingTargetIndex > -1) {
+            $scope.model.targets.splice(existingTargetIndex, 1);
+            $scope.currentNode.selected = false;
+        } else {
+            $scope.model.targets.push({
+                id: args.node.id,
+                name: args.node.name,
+                icon: args.node.icon
+            });
+
+            $scope.currentNode.selected = true;
+        }
     }
 
     vm.close = function () {
@@ -44,13 +51,19 @@
     vm.submit = function () {
         if ($scope.model && $scope.model.submit) {
             if (vm.includeEverything) {
-                $scope.model.target.id = "-1";
-                $scope.model.target.name = "Everything";
-                $scope.model.target.icon = "icon-item-arrangement";
-                $scope.model.target.includeDescendents = true;
+                $scope.model.targets = [];
+                $scope.model.targets.push({
+                    id: "-1",
+                    name: "Everything",
+                    icon: "icon-item-arrangement",
+                    includeDescendants: true
+                });
 
             } else {
-                $scope.model.target.includeDescendents = vm.includeDescendents;
+                for (let i = 0; i < $scope.model.targets.length; i++) {
+                    
+                    $scope.model.targets[i].includeDescendants = vm.includeDescendants;
+                }
             }
 
             $scope.model.submit($scope.model);
