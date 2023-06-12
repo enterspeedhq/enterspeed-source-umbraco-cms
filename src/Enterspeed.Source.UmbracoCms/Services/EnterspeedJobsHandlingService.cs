@@ -12,16 +12,19 @@ namespace Enterspeed.Source.UmbracoCms.Services
     {
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobsHandler _enterspeedJobsHandler;
+        private readonly IEnterspeedPostJobsHandler _enterspeedPostJobsHandler;
         private readonly ILogger<EnterspeedJobsHandlingService> _logger;
 
         public EnterspeedJobsHandlingService(
             IEnterspeedJobRepository enterspeedJobRepository,
             ILogger<EnterspeedJobsHandlingService> logger,
-            IEnterspeedJobsHandler enterspeedJobsHandler)
+            IEnterspeedJobsHandler enterspeedJobsHandler,
+            IEnterspeedPostJobsHandler enterspeedPostJobsHandler)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _logger = logger;
             _enterspeedJobsHandler = enterspeedJobsHandler;
+            _enterspeedPostJobsHandler = enterspeedPostJobsHandler;
         }
 
         public virtual void HandlePendingJobs(int batchSize)
@@ -76,7 +79,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             }
 
             // Save new failed job or update existing failed job.
-            _enterspeedJobsHandler.SaveOrUpdateFailedJobs(oldJobs);
+            _enterspeedPostJobsHandler.UpsertFailedJobs(oldJobs);
         }
     }
 }
