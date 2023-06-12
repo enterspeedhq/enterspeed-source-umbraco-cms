@@ -4,6 +4,7 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Services;
 
@@ -62,9 +63,12 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         /// <param name="jobs"></param>
         private void HandleRootDictionaries(IEnumerable<EnterspeedJob> jobs)
         {
-            // Check if any dictionaries amongst handled jobs. If any then create root dictionary items
-            if (jobs.All(a => a.EntityType != EnterspeedJobEntityType.Dictionary)) return;
-
+            // Check if any dictionaries amongst handled jobs that are not a global dictionary.
+            // If any then create root dictionary items
+            if (!jobs.Any(j =>
+                    j.EntityType == EnterspeedJobEntityType.Dictionary &&
+                    !j.EntityId.Equals(UmbracoDictionariesRootEntity.EntityId))) return;
+            
             var languageIsoCodes = _localizationService.GetAllLanguages()
                 .Select(s => s.IsoCode)
                 .ToList();
@@ -87,6 +91,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 _enterspeedJobRepository.Save(dictionaryItemsRootJobs);
             }
         }
+
 
         /// <summary>
         /// Jobs that failed while processing are being created or updated in the database.

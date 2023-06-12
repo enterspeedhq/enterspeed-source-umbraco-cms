@@ -41,9 +41,9 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.Dictionaries
         public virtual bool CanHandle(EnterspeedJob job)
         {
             return !UmbracoDictionariesRootEntity.EntityId.Equals(job.EntityId, StringComparison.InvariantCultureIgnoreCase)
-                   && _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview) != null
+                   && _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
                    && job.EntityType == EnterspeedJobEntityType.Dictionary 
-                   && job.ContentState == EnterspeedContentState.Preview
+                   && job.ContentState == EnterspeedContentState.Publish
                    && job.JobType == EnterspeedJobType.Publish;
         }
 

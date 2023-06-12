@@ -4,6 +4,7 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Lucene.Net.Util;
 using Microsoft.Extensions.Logging;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
@@ -15,8 +16,6 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         private readonly EnterspeedJobHandlerCollection _jobHandlers;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IEnterspeedPostJobsHandler _enterspeedPostJobsHandler;
-        private static List<EnterspeedJob> NewFailedJobs => new();
-        private static List<EnterspeedJob> ExistingFailedJobsToDelete => new();
 
         public EnterspeedJobsHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
@@ -38,17 +37,21 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         /// <param name="jobsToProcess"></param>
         public void HandleJobs(IList<EnterspeedJob> jobsToProcess)
         {
+            var newFailedJobs = new List<EnterspeedJob>();
+            var existingFailedJobsToDelete = new List<EnterspeedJob>();
+
+            HandleJobs(jobsToProcess, newFailedJobs, existingFailedJobsToDelete);
+            HandlePostJobs(jobsToProcess, newFailedJobs, existingFailedJobsToDelete);
+        }
+
+        private void HandleJobs(IList<EnterspeedJob> jobsToProcess,
+            IList<EnterspeedJob> newFailedJobs, IList<EnterspeedJob> existingFailedJobsToDelete)
+        {
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
             // TODO: Not a fan of assigning this variable here and parsing it around. Refactor?
             var failedJobsToHandle =
                 _enterspeedJobRepository.GetFailedJobs(jobsToProcess.Select(x => x.EntityId).Distinct().ToList());
 
-            HandleJobs(jobsToProcess, failedJobsToHandle);
-            HandlePostJobs(jobsToProcess);
-        }
-        
-        private void HandleJobs(IEnumerable<EnterspeedJob> jobsToProcess, IList<EnterspeedJob> failedJobsToHandle)
-        {
             var jobsByEntityIdAndContentState =
                 jobsToProcess.GroupBy(x => new { x.EntityId, x.ContentState, x.Culture });
 
@@ -65,26 +68,22 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                     continue;
                 }
 
-                HandleJob(jobToHandle, failedJobsToHandle);
-            }
-        }
-        
-        private void HandleJob(EnterspeedJob jobToHandle, IEnumerable<EnterspeedJob> failedJobsToHandle)
-        {
-            var handler = _jobHandlers.FirstOrDefault(f => f.CanHandle(jobToHandle));
-            if (handler == null)
-            {
-                var message = $"No job handler available for {jobToHandle.EntityId} {jobToHandle.EntityType}";
-                NewFailedJobs.Add(_enterspeedJobFactory.GetFailedJob(jobToHandle, message));
-                _logger.LogWarning(message);
-                return;
-            }
+                var handler = _jobHandlers.FirstOrDefault(f => f.CanHandle(jobToHandle));
+                if (handler == null)
+                {
+                    var message = $"No job handler available for {jobToHandle.EntityId} {jobToHandle.EntityType}";
+                    newFailedJobs.Add(_enterspeedJobFactory.GetFailedJob(jobToHandle, message));
+                    _logger.LogWarning(message);
+                    return;
+                }
 
-            HandleJob(handler, jobToHandle, failedJobsToHandle);
+                HandleJob(handler, jobToHandle, failedJobsToHandle, newFailedJobs, existingFailedJobsToDelete);
+            }
         }
 
         private void HandleJob(IEnterspeedJobHandler handler, EnterspeedJob jobToHandle,
-            IEnumerable<EnterspeedJob> failedJobsToHandle)
+            IEnumerable<EnterspeedJob> failedJobsToHandle, ICollection<EnterspeedJob> newFailedJobs,
+            IList<EnterspeedJob> existingFailedJobsToDelete)
         {
             try
             {
@@ -95,20 +94,21 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                     x.EntityId == jobToHandle.EntityId && x.Culture == jobToHandle.Culture &&
                     x.ContentState == jobToHandle.ContentState).ToList();
 
-                ExistingFailedJobsToDelete.AddRange(existingFailedJobToDelete);
+                existingFailedJobsToDelete.AddRange(existingFailedJobToDelete);
             }
             catch (Exception exception)
             {
                 // Exceptions has a ToString() override which formats the full exception nicely.
                 var exceptionAsString = exception.ToString();
-                NewFailedJobs.Add(_enterspeedJobFactory.GetFailedJob(jobToHandle, exceptionAsString));
+                newFailedJobs.Add(_enterspeedJobFactory.GetFailedJob(jobToHandle, exceptionAsString));
                 _logger.LogError(exceptionAsString);
             }
         }
 
-        private void HandlePostJobs(IList<EnterspeedJob> jobsToProcess)
+        private void HandlePostJobs(IList<EnterspeedJob> jobsToProcess, IList<EnterspeedJob> newFailedJobs,
+            IReadOnlyCollection<EnterspeedJob> existingFailedJobsToDelete)
         {
-            _enterspeedPostJobsHandler.Handle(jobsToProcess, ExistingFailedJobsToDelete, NewFailedJobs);
+            _enterspeedPostJobsHandler.Handle(jobsToProcess, existingFailedJobsToDelete, newFailedJobs);
         }
     }
 }
