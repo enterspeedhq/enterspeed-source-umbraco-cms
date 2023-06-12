@@ -31,15 +31,15 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         /// Handles cleanup after the initial jobs-handler has done its work
         /// </summary>
         /// <param name="processedJobs"></param>
-        /// <param name="existingFailedJobs"></param>
+        /// <param name="existingFailedJobsToDelete"></param>
         /// <param name="newFailedJobs"></param>
         public void Handle(IList<EnterspeedJob> processedJobs,
-            IReadOnlyCollection<EnterspeedJob> existingFailedJobs,
+            IReadOnlyCollection<EnterspeedJob> existingFailedJobsToDelete,
             IList<EnterspeedJob> newFailedJobs)
         {
             HandleRootDictionaries(processedJobs);
             HandleProcessedJobs(processedJobs);
-            HandleExistingFailedJobs(existingFailedJobs);
+            HandleExistingFailedJobs(existingFailedJobsToDelete);
 
             // WARNING: This throws an exception if any new failed jobs. This should should not be called before any other method
             // TODO: Handle in a different way?
