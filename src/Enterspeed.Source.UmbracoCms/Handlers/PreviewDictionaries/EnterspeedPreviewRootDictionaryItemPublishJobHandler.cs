@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
+
 
 namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewDictionaries
 {
@@ -40,7 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewDictionaries
             Ingest(umbracoData, job);
         }
 
-        internal UmbracoDictionariesRootEntity CreateUmbracoDictionaryEntity(EnterspeedJob job)
+        private UmbracoDictionariesRootEntity CreateUmbracoDictionaryEntity(EnterspeedJob job)
         {
             try
             {
@@ -54,14 +57,12 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewDictionaries
             }
         }
 
-        internal void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
+        private void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
         {
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Exception != null
-                    ? ingestResponse.Exception.Message
-                    : ingestResponse.Message;
+                var message = JsonSerializer.Serialize(new ErrorResponse(ingestResponse));
                 throw new JobHandlingException(
                     $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
             }

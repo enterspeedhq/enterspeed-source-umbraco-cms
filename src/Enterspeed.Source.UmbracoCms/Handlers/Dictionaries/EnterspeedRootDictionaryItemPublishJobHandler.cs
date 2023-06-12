@@ -1,15 +1,17 @@
 ﻿using System;
+using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers.Dictionaries
 {
- public class EnterspeedRootDictionaryItemPublishJobHandler : IEnterspeedJobHandler
+    public class EnterspeedRootDictionaryItemPublishJobHandler : IEnterspeedJobHandler
     {
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
@@ -27,11 +29,12 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.Dictionaries
 
         public bool CanHandle(EnterspeedJob job)
         {
-            return UmbracoDictionariesRootEntity.EntityId.Equals(job.EntityId, StringComparison.InvariantCultureIgnoreCase)
-                &&  _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
-                && job.EntityType == EnterspeedJobEntityType.Dictionary
-                && job.ContentState == EnterspeedContentState.Publish
-                && job.JobType == EnterspeedJobType.Publish;
+            return UmbracoDictionariesRootEntity.EntityId.Equals(job.EntityId,
+                       StringComparison.InvariantCultureIgnoreCase)
+                   && _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
+                   && job.EntityType == EnterspeedJobEntityType.Dictionary
+                   && job.ContentState == EnterspeedContentState.Publish
+                   && job.JobType == EnterspeedJobType.Publish;
         }
 
         public void Handle(EnterspeedJob job)
@@ -40,7 +43,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.Dictionaries
             Ingest(umbracoData, job);
         }
 
-        internal UmbracoDictionariesRootEntity CreateUmbracoDictionaryEntity(EnterspeedJob job)
+        private UmbracoDictionariesRootEntity CreateUmbracoDictionaryEntity(EnterspeedJob job)
         {
             try
             {
@@ -54,14 +57,13 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.Dictionaries
             }
         }
 
-        internal void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
+        private void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
         {
-            var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
+            var ingestResponse = _enterspeedIngestService.Save(umbracoData,
+                _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish));
             if (!ingestResponse.Success)
             {
-                var message = ingestResponse.Exception != null
-                    ? ingestResponse.Exception.Message
-                    : ingestResponse.Message;
+                var message = JsonSerializer.Serialize(new ErrorResponse(ingestResponse));
                 throw new JobHandlingException(
                     $"Failed ingesting entity ({job.EntityId}/{job.Culture}). Message: {message}");
             }
