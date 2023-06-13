@@ -24,6 +24,14 @@
         $scope.$on('$locationChangeStart', function () {
             clearInterval(intervalId);
         });
+
+        window.addEventListener(
+            "hashchange",
+            () => {
+                clearInterval(intervalId);
+            },
+            false
+        );
     }
 
     vm.seed = function () {
