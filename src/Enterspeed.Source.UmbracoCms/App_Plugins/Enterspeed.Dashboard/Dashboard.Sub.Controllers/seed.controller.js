@@ -1,4 +1,4 @@
-﻿function seedController(dashboardResources, notificationsService, editorService) {
+﻿function seedController(dashboardResources, notificationsService, editorService, $scope) {
     var vm = this;
     vm.seedState = "success";
     vm.clearPendingJobsState = "success";
@@ -14,11 +14,16 @@
     vm.selectedNodesToSeed['content'] = [];
     vm.selectedNodesToSeed['media'] = [];
     vm.selectedNodesToSeed['dictionary'] = [];
+    let intervalId;
 
     function init() {
         getNumberOfPendingJobs();
 
-        setInterval(getNumberOfPendingJobs, 10 * 1000);
+        intervalId = setInterval(getNumberOfPendingJobs, 10 * 1000);
+
+        $scope.$on('$locationChangeStart', function () {
+            clearInterval(intervalId);
+        });
     }
 
     vm.seed = function () {
@@ -103,8 +108,7 @@
                     let target = value.targets[i];
                     if (target.id === "-1") {
                         vm.selectedNodesToSeed[section] = [target];
-                    }
-                    else {
+                    } else {
                         var existingNodeIndex = vm.selectedNodesToSeed[section].findIndex(element => element.id === target.id);
                         if (existingNodeIndex >= 0) {
                             vm.selectedNodesToSeed[section][existingNodeIndex] = target;
