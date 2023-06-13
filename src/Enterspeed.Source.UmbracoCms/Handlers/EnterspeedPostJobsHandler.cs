@@ -6,6 +6,8 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Services;
+using Microsoft.Extensions.Logging;
+using Serilog;
 using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
@@ -16,16 +18,22 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         private readonly IEnterspeedConfigurationService _configuration;
         private readonly ILocalizationService _localizationService;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly EnterspeedJobHandlerCollection _enterspeedJobHandlerCollection;
+        private readonly ILogger<EnterspeedPostJobsHandler> _logger;
 
         public EnterspeedPostJobsHandler(IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobFactory enterspeedJobFactory,
             IEnterspeedConfigurationService configuration,
-            ILocalizationService localizationService)
+            ILocalizationService localizationService,
+            EnterspeedJobHandlerCollection enterspeedJobHandlerCollection,
+            ILogger<EnterspeedPostJobsHandler> logger)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobFactory = enterspeedJobFactory;
             _configuration = configuration;
             _localizationService = localizationService;
+            _enterspeedJobHandlerCollection = enterspeedJobHandlerCollection;
+            _logger = logger;
         }
 
         /// <summary>
@@ -68,7 +76,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             if (!jobs.Any(j =>
                     j.EntityType == EnterspeedJobEntityType.Dictionary &&
                     !j.EntityId.Equals(UmbracoDictionariesRootEntity.EntityId))) return;
-            
+
             var languageIsoCodes = _localizationService.GetAllLanguages()
                 .Select(s => s.IsoCode)
                 .ToList();
@@ -87,8 +95,27 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                     .Select(isoCode => _enterspeedJobFactory.GetDictionaryItemRootJob(isoCode, destination.Key))
                     .ToList();
 
-                // Add to queue. We dont want to make recursive calls directly to the jobs handler
-                _enterspeedJobRepository.Save(dictionaryItemsRootJobs);
+                foreach (var rootJob in dictionaryItemsRootJobs)
+                {
+                    var handler = _enterspeedJobHandlerCollection.FirstOrDefault(jh => jh.CanHandle(rootJob));
+                    if (handler == null)
+                    {
+                        var message = $"No job handler available for {rootJob.EntityId} {rootJob.EntityType}";
+                        _logger.LogWarning(message);
+                        continue;
+                    }
+
+                    try
+                    {
+                        handler.Handle(rootJob);
+                    }
+                    catch (Exception exception)
+                    {
+                        // Exceptions has a ToString() override which formats the full exception nicely.
+                        var exceptionAsString = exception.ToString();
+                        _logger.LogError(exceptionAsString);
+                    }
+                }
             }
         }
 
