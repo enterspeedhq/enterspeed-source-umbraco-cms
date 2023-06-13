@@ -21,10 +21,6 @@
 
         intervalId = setInterval(getNumberOfPendingJobs, 10 * 1000);
 
-        $scope.$on('$locationChangeStart', function () {
-            clearInterval(intervalId);
-        });
-
         window.addEventListener(
             "hashchange",
             () => {
