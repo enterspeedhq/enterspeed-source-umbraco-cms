@@ -263,6 +263,7 @@
     <Compile Include="Extensions\UrlStringExtensions.cs" />
     <Compile Include="Factories\EnterspeedJobFactory.cs" />
     <Compile Include="Models\Api\ErrorResponse.cs" />
+    <Compile Include="Models\Api\JobIdsToDelete.cs" />
     <Compile Include="Models\UmbFile.cs" />
     <Compile Include="Models\UmbracoMediaEntity.cs" />
     <Compile Include="Models\UmbracoModels\PublishedPropertyBase.cs" />
