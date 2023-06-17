@@ -1,4 +1,4 @@
-﻿function seedController(dashboardResources, notificationsService, editorService, $scope) {
+﻿function seedController(dashboardResources, notificationsService, editorService) {
     var vm = this;
     vm.seedState = "success";
     vm.clearPendingJobsState = "success";
