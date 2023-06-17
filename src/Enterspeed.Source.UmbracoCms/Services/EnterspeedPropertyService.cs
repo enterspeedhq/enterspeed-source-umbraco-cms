@@ -78,12 +78,12 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
         private IDomain GetDomain(IPublishedContent content, string culture)
         {
-            var domain = _domainService.GetAssignedDomains(content.Id, false)?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
+            var domain = _domainService.GetAssignedDomains(content.Id, false)
+                ?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
             return domain;
         }
 
-        public IDictionary<string, IEnterspeedProperty> ConvertProperties(IEnumerable<IPublishedProperty> properties,
-            string culture = null)
+        public IDictionary<string, IEnterspeedProperty> ConvertProperties(IEnumerable<IPublishedProperty> properties, string culture = null)
         {
             var output = new Dictionary<string, IEnterspeedProperty>();
 
