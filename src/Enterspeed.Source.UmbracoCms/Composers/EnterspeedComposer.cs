@@ -167,29 +167,15 @@ namespace Enterspeed.Source.UmbracoCms.Composers
                 .Add<EnterspeedJobMappingDefinition>();
 
             // Notification handlers
-            builder
-                .AddNotificationHandler<ContentPublishingNotification,
-                    EnterspeedContentPublishingNotificationHandler>();
-            builder
-                .AddNotificationHandler<ContentCacheRefresherNotification,
-                    EnterspeedContentCacheRefresherNotificationHandler>();
-            builder
-                .AddNotificationHandler<ContentMovedToRecycleBinNotification,
-                    EnterspeedContentUnpublishingNotificationHandler>();
-            builder
-                .AddNotificationHandler<ContentUnpublishingNotification,
-                    EnterspeedContentUnpublishingNotificationHandler>();
-            builder
-                .AddNotificationHandler<DictionaryItemSavedNotification,
-                    EnterspeedDictionaryItemSavedNotificationHandler>();
-            builder
-                .AddNotificationHandler<DictionaryItemDeletingNotification,
-                    EnterspeedDictionaryItemDeletingNotificationHandler>();
+            builder.AddNotificationHandler<ContentPublishingNotification, EnterspeedContentPublishingNotificationHandler>();
+            builder.AddNotificationHandler<ContentCacheRefresherNotification, EnterspeedContentCacheRefresherNotificationHandler>();
+            builder.AddNotificationHandler<ContentMovedToRecycleBinNotification, EnterspeedContentUnpublishingNotificationHandler>();
+            builder.AddNotificationHandler<ContentUnpublishingNotification, EnterspeedContentUnpublishingNotificationHandler>();
+            builder.AddNotificationHandler<DictionaryItemSavedNotification, EnterspeedDictionaryItemSavedNotificationHandler>();
+            builder.AddNotificationHandler<DictionaryItemDeletingNotification, EnterspeedDictionaryItemDeletingNotificationHandler>();
             builder.AddNotificationHandler<MediaSavedNotification, EnterspeedMediaItemSavedEventHandler>();
             builder.AddNotificationHandler<MediaMovedNotification, EnterspeedMediaMovedEventHandler>();
-            builder
-                .AddNotificationHandler<MediaMovedToRecycleBinNotification,
-                    EnterspeedMediaTrashedNotificationHandler>();
+            builder.AddNotificationHandler<MediaMovedToRecycleBinNotification, EnterspeedMediaTrashedNotificationHandler>();
 
             // Components
             builder.Components().Append<EnterspeedJobsComponent>();

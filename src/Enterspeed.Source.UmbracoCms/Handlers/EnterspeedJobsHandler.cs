@@ -45,7 +45,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         }
 
         private void HandleJobs(IList<EnterspeedJob> jobsToProcess,
-            IList<EnterspeedJob> newFailedJobs, IList<EnterspeedJob> existingFailedJobsToDelete)
+            ICollection<EnterspeedJob> newFailedJobs, IList<EnterspeedJob> existingFailedJobsToDelete)
         {
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
             // TODO: Not a fan of assigning this variable here and parsing it around. Refactor?
