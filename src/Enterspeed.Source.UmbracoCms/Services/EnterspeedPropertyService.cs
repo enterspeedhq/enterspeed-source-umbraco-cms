@@ -66,10 +66,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 ["domain"] = new StringEnterspeedProperty("domain", GetDomain(content, culture)?.DomainName),
                 ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
                 ["level"] = new NumberEnterspeedProperty("level", content.Level),
-                ["createDate"] =
-                    new StringEnterspeedProperty("createDate", content.CreateDate.ToEnterspeedFormatString()),
-                ["updateDate"] = new StringEnterspeedProperty("updateDate",
-                    content.CultureDate(culture).ToEnterspeedFormatString()),
+                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToEnterspeedFormatString()),
+                ["updateDate"] = new StringEnterspeedProperty("updateDate", content.CultureDate(culture).ToEnterspeedFormatString()),
                 ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, culture))
             };
 
@@ -80,9 +78,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
         private IDomain GetDomain(IPublishedContent content, string culture)
         {
-            var domain = _domainService.GetAssignedDomains(content.Id, false)
-                ?.FirstOrDefault(p =>
-                    string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
+            var domain = _domainService.GetAssignedDomains(content.Id, false)?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
             return domain;
         }
 
@@ -137,8 +133,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             var publishedMedia = context.UmbracoContext.Media?.GetById(media.Id);
             if (publishedMedia != null)
             {
-                var properties =
-                    publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
+                var properties = publishedMedia.Properties.Where(p => !p.Alias.Equals(Constants.Conventions.Media.File));
                 enterspeedProperties = ConvertProperties(properties);
             }
             else
@@ -147,8 +142,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 enterspeedProperties = new Dictionary<string, IEnterspeedProperty>();
             }
 
-            MapAdditionalMediaProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia,
-                string.Empty);
+            MapAdditionalMediaProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
 
             enterspeedProperties.Add(MetaData, CreateMediaMetaProperties(media, publishedMedia));
 
@@ -163,14 +157,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 { "name", new StringEnterspeedProperty("name", media.Name) },
                 { "path", new StringEnterspeedProperty("path", media.Path) },
-                {
-                    "createDate",
-                    new StringEnterspeedProperty("createDate", media.CreateDate.ToEnterspeedFormatString())
-                },
-                {
-                    "updateDate",
-                    new StringEnterspeedProperty("updateDate", media.UpdateDate.ToEnterspeedFormatString())
-                },
+                { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToEnterspeedFormatString()) },
+                { "updateDate", new StringEnterspeedProperty("updateDate", media.UpdateDate.ToEnterspeedFormatString()) },
                 { "level", new NumberEnterspeedProperty("level", media.Level) },
                 { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
             };
@@ -178,12 +166,9 @@ namespace Enterspeed.Source.UmbracoCms.Services
             if (media.ContentType.Name == "Image")
             {
                 metaData.Add("size", new StringEnterspeedProperty("size", media.GetValue<string>("umbracoBytes")));
-                metaData.Add("width",
-                    new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()));
-                metaData.Add("height",
-                    new StringEnterspeedProperty("height", media.GetValue<int>("umbracoHeight").ToString()));
-                metaData.Add("contentType",
-                    new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
+                metaData.Add("width", new StringEnterspeedProperty("width", media.GetValue<int>("umbracoWidth").ToString()));
+                metaData.Add("height", new StringEnterspeedProperty("height", media.GetValue<int>("umbracoHeight").ToString()));
+                metaData.Add("contentType", new StringEnterspeedProperty("contentType", media.GetValue<string>("umbracoExtension")));
                 metaData.Add("focalPoint", GetFocalPoint(media));
             }
 
@@ -199,8 +184,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         /// <param name="data"></param>
         /// <param name="content"></param>
         /// <param name="culture"></param>
-        protected virtual void MapAdditionalProperties(Dictionary<string, IEnterspeedProperty> data,
-            IPublishedContent content, string culture)
+        protected virtual void MapAdditionalProperties(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
         {
         }
 
@@ -210,8 +194,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         /// <param name="data"></param>
         /// <param name="content"></param>
         /// <param name="culture"></param>
-        protected virtual void MapAdditionalMediaProperties(Dictionary<string, IEnterspeedProperty> data,
-            IPublishedContent content, string culture)
+        protected virtual void MapAdditionalMediaProperties(Dictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
         {
         }
 
@@ -221,8 +204,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         /// <param name="metaData"></param>
         /// <param name="content"></param>
         /// <param name="culture"></param>
-        protected virtual void MapAdditionalMetaData(Dictionary<string, IEnterspeedProperty> metaData,
-            IPublishedContent content, string culture)
+        protected virtual void MapAdditionalMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
         {
         }
 
@@ -232,8 +214,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         /// <param name="metaData"></param>
         /// <param name="content"></param>
         /// <param name="culture"></param>
-        protected virtual void MapAdditionalMediaMetaData(Dictionary<string, IEnterspeedProperty> metaData,
-            IPublishedContent content, string culture)
+        protected virtual void MapAdditionalMediaMetaData(Dictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
         {
         }
 
