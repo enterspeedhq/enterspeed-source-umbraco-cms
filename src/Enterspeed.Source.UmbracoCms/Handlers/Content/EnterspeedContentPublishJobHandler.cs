@@ -62,8 +62,11 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.Content
         {
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
-                // set variation context, so data is resolved in the correct culture
-                _variationContextAccessor.VariationContext = new VariationContext(job.Culture);
+                if (!string.IsNullOrEmpty(job.Culture))
+                {
+                    // set variation context, so data is resolved in the correct culture
+                    _variationContextAccessor.VariationContext = new VariationContext(job.Culture);
+                }
 
                 var content = GetContent(job, context);
                 if (!CanIngest(content, job))

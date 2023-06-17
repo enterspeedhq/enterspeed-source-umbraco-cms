@@ -25,6 +25,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
         private readonly IEnterspeedGuardService _enterspeedGuardService;
         private readonly IUrlFactory _urlFactory;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
+        private readonly IVariationContextAccessor _variationContextAccessor;
 
         public EnterspeedPreviewContentPublishJobHandler(
             IUmbracoContextFactory umbracoContextFactory,
@@ -34,7 +35,8 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
             IUmbracoRedirectsService redirectsService,
             IEnterspeedGuardService enterspeedGuardService,
             IUrlFactory urlFactory,
-            IEnterspeedConnectionProvider enterspeedConnectionProvider)
+            IEnterspeedConnectionProvider enterspeedConnectionProvider,
+            IVariationContextAccessor variationContextAccessor)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
@@ -44,6 +46,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
             _enterspeedGuardService = enterspeedGuardService;
             _urlFactory = urlFactory;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
+            _variationContextAccessor = variationContextAccessor;
         }
 
         public virtual bool CanHandle(EnterspeedJob job)
@@ -58,6 +61,12 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
         {
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
+                if (!string.IsNullOrEmpty(job.Culture))
+                {
+                    // set variation context, so data is resolved in the correct culture
+                    _variationContextAccessor.VariationContext = new VariationContext(job.Culture);
+                }
+
                 var content = GetContent(job, context);
                 if (!CanIngest(content, job))
                 {
