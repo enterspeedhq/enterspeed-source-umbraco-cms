@@ -64,8 +64,14 @@ namespace Enterspeed.Source.UmbracoCms.Services
         public bool IsPreviewConfigured()
         {
             var configuration = GetConfiguration();
-            return configuration is { IsConfigured: true } 
+            return configuration is { IsConfigured: true }
                    && !string.IsNullOrWhiteSpace(configuration.PreviewApiKey);
+        }
+
+        public bool IsRootDictionariesDisabled()
+        {
+            var configuration = GetConfiguration();
+            return configuration.RootDictionariesDisabled;
         }
 
         public void Save(EnterspeedUmbracoConfiguration configuration)
@@ -80,13 +86,15 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 throw new ConfigurationException("Configuration value for Enterspeed.MediaDomain must be absolute url");
             }
-            
+
             configuration.IsConfigured = true;
             _keyValueService.SetValue(ConfigurationApiKeyDatabaseKey, configuration.ApiKey);
             _keyValueService.SetValue(ConfigurationBaseUrlDatabaseKey, configuration.BaseUrl);
             _keyValueService.SetValue(ConfigurationConnectionTimeoutDatabaseKey, configuration.ConnectionTimeout.ToString());
             _keyValueService.SetValue(ConfigurationMediaDomainDatabaseKey, configuration.MediaDomain);
             _keyValueService.SetValue(ConfigurationPreviewApiKeyDatabaseKey, configuration.PreviewApiKey);
+
+            GetOptionalSettings(configuration);
 
             _enterspeedUmbracoConfiguration = configuration;
 
@@ -95,9 +103,16 @@ namespace Enterspeed.Source.UmbracoCms.Services
             connectionProvider.Initialize();
         }
 
+        private void GetOptionalSettings(EnterspeedUmbracoConfiguration configuration)
+        {
+            var enterspeedSection = _configuration.GetSection("Enterspeed");
+            configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("DisableRootDictionaries");
+        }
+
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()
         {
-            var endpoint = _configuration["Enterspeed:Endpoint"]; // The naming for endpoint does not match the baseUrl property so this property is mapped manually
+            var endpoint = _configuration[
+                "Enterspeed:Endpoint"]; // The naming for endpoint does not match the baseUrl property so this property is mapped manually
             var configuration = _configuration.GetSection("Enterspeed").Get<EnterspeedUmbracoConfiguration>();
 
             if (configuration == null || string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(configuration.ApiKey))

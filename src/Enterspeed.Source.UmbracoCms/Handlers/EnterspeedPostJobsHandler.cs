@@ -7,7 +7,6 @@ using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.Extensions.Logging;
-using Serilog;
 using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
@@ -20,13 +19,16 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly EnterspeedJobHandlerCollection _enterspeedJobHandlerCollection;
         private readonly ILogger<EnterspeedPostJobsHandler> _logger;
+        private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
+
 
         public EnterspeedPostJobsHandler(IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobFactory enterspeedJobFactory,
             IEnterspeedConfigurationService configuration,
             ILocalizationService localizationService,
             EnterspeedJobHandlerCollection enterspeedJobHandlerCollection,
-            ILogger<EnterspeedPostJobsHandler> logger)
+            ILogger<EnterspeedPostJobsHandler> logger,
+            IEnterspeedConfigurationService enterspeedConfigurationService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobFactory = enterspeedJobFactory;
@@ -34,6 +36,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             _localizationService = localizationService;
             _enterspeedJobHandlerCollection = enterspeedJobHandlerCollection;
             _logger = logger;
+            _enterspeedConfigurationService = enterspeedConfigurationService;
         }
 
         /// <summary>
@@ -46,7 +49,11 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             IReadOnlyCollection<EnterspeedJob> existingFailedJobsToDelete,
             IList<EnterspeedJob> newFailedJobs)
         {
-            HandleRootDictionaries(processedJobs);
+            if (!_enterspeedConfigurationService.IsRootDictionariesDisabled())
+            {
+                HandleRootDictionaries(processedJobs);
+            }
+
             HandleProcessedJobs(processedJobs);
             HandleExistingFailedJobs(existingFailedJobsToDelete);
 
