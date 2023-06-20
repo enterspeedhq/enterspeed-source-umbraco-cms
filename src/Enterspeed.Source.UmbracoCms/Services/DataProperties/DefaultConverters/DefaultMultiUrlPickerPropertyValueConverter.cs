@@ -16,18 +16,15 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IUmbracoMediaUrlProvider _mediaUrlProvider;
-        private readonly ILogger<DefaultMultiUrlPickerPropertyValueConverter> _logger;
 
         public DefaultMultiUrlPickerPropertyValueConverter(
             IUmbracoContextFactory umbracoContextFactory,
             IEntityIdentityService entityIdentityService,
-            IUmbracoMediaUrlProvider mediaUrlProvider,
-            ILogger<DefaultMultiUrlPickerPropertyValueConverter> logger)
+            IUmbracoMediaUrlProvider mediaUrlProvider)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _entityIdentityService = entityIdentityService;
             _mediaUrlProvider = mediaUrlProvider;
-            _logger = logger;
         }
 
         public bool IsConverter(IPublishedPropertyType propertyType)
