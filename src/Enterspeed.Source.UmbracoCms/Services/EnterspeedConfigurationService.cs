@@ -94,8 +94,6 @@ namespace Enterspeed.Source.UmbracoCms.Services
             _keyValueService.SetValue(ConfigurationMediaDomainDatabaseKey, configuration.MediaDomain);
             _keyValueService.SetValue(ConfigurationPreviewApiKeyDatabaseKey, configuration.PreviewApiKey);
 
-            GetOptionalSettings(configuration);
-
             _enterspeedUmbracoConfiguration = configuration;
 
             // Reinitialize connections in case of changes in the configuration
@@ -103,10 +101,10 @@ namespace Enterspeed.Source.UmbracoCms.Services
             connectionProvider.Initialize();
         }
 
-        private void GetOptionalSettings(EnterspeedUmbracoConfiguration configuration)
+        private void SetOptionalSettings(EnterspeedUmbracoConfiguration configuration)
         {
             var enterspeedSection = _configuration.GetSection("Enterspeed");
-            configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("DisableRootDictionaries");
+            configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("RootDictionariesDisabled");
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()
@@ -124,6 +122,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
             configuration.IsConfigured = true;
             configuration.ConfiguredFromSettingsFile = true;
             configuration.SystemInformation = GetUmbracoVersion();
+            
+            SetOptionalSettings(configuration);
 
             return configuration;
         }
@@ -157,6 +157,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 configuration.ConnectionTimeout = connectionTimeout;
             }
+            
+            SetOptionalSettings(configuration);
 
             return configuration;
         }
