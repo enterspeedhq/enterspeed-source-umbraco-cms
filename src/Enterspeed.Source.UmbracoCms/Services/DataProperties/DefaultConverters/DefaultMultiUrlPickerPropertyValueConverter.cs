@@ -93,8 +93,6 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
                 if (link.Udi.EntityType == "document")
                 {
                     var content = context.Content.GetById(link.Udi);
-                    // link.url always contains the url for the default culture (maybe a bug in Umbraco?), so we resolve the url for the correct culture our self
-                    url = content is not null ? content.GetUrl(_logger, culture, UrlMode.Absolute) : "#";
                     if (content != null)
                     {
                         idProperty = new StringEnterspeedProperty(_entityIdentityService.GetId(content, culture));
