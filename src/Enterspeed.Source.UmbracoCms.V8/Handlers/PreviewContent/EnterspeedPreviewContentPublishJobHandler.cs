@@ -27,6 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent
         private readonly IUrlFactory _urlFactory;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
         private readonly IPublishedRouter _publishedRouter;
+        private readonly IVariationContextAccessor _variationContextAccessor;
 
         public EnterspeedPreviewContentPublishJobHandler(
             IUmbracoContextFactory umbracoContextFactory,
@@ -37,7 +38,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent
             IEnterspeedGuardService enterspeedGuardService,
             IUrlFactory urlFactory,
             IEnterspeedConnectionProvider enterspeedConnectionProvider,
-            IPublishedRouter publishedRouter)
+            IPublishedRouter publishedRouter,
+            IVariationContextAccessor variationContextAccessor)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
@@ -48,6 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent
             _urlFactory = urlFactory;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
             _publishedRouter = publishedRouter;
+            _variationContextAccessor = variationContextAccessor;
         }
 
         public virtual bool CanHandle(EnterspeedJob job)
@@ -62,6 +65,11 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent
         {
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
+                if (!string.IsNullOrEmpty(job.Culture))
+                {
+                    _variationContextAccessor.VariationContext = new VariationContext(job.Culture);
+                }
+
                 var content = GetContent(job, context);
                 if (!CanIngest(content, job))
                 {
