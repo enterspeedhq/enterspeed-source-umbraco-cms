@@ -103,7 +103,6 @@
     init();
 }
 
-
 angular.module("umbraco").controller("FailedJobsController", failedJobsController);
 
 angular.module("umbraco").filter('startFrom', function () {

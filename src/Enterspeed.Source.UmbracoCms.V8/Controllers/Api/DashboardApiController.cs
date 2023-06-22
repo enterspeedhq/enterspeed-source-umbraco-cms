@@ -19,6 +19,7 @@ using Enterspeed.Source.UmbracoCms.V8.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.V8.Providers;
 using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core;
+using Umbraco.Core.Scoping;
 using Umbraco.Web.WebApi;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
@@ -31,19 +32,22 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
         private readonly IEnterspeedConnection _enterspeedConnection;
         private readonly IRuntimeState _runtimeState;
+        private readonly IScopeProvider _scopeProvider;
 
         public DashboardApiController(
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
-            IRuntimeState runtimeState)
+            IRuntimeState runtimeState,
+            IScopeProvider scopeProvider)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;
             _enterspeedConfigurationService = enterspeedConfigurationService;
             _enterspeedConnection = enterspeedConnection;
             _runtimeState = runtimeState;
+            _scopeProvider = scopeProvider;
         }
 
         [HttpGet]
@@ -193,6 +197,42 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
             }
 
             return response;
+        }
+
+
+        [HttpPost]
+        public ApiResponse DeleteFailedJobs()
+        {
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var failedJobs = _enterspeedJobRepository.GetFailedJobs();
+                if (failedJobs != null && failedJobs.Any())
+                {
+                    _enterspeedJobRepository.Delete(failedJobs.Select(fj => fj.Id).ToList());
+                }
+            }
+
+            return new ApiResponse()
+            {
+                IsSuccess = true
+            };
+        }
+
+        [HttpPost]
+        public ApiResponse DeleteJobs(JobIdsToDelete jobIdsToDelete)
+        {
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                if (jobIdsToDelete != null && jobIdsToDelete.Ids.Any())
+                {
+                    _enterspeedJobRepository.Delete(jobIdsToDelete.Ids);
+                }
+            }
+
+            return new ApiResponse()
+            {
+                IsSuccess = true
+            };
         }
     }
 }

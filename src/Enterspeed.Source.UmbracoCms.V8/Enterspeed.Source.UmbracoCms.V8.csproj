@@ -345,6 +345,7 @@
     <Compile Include="Models\Api\ApiResponse.cs" />
     <Compile Include="Models\Api\EnterspeedUmbracoConfigurationResponse.cs" />
     <Compile Include="Models\Api\ErrorResponse.cs" />
+    <Compile Include="Models\Api\JobIdsToDelete.cs" />
     <Compile Include="Models\Api\SeedResponse.cs" />
     <Compile Include="Models\Configuration\EnterspeedUmbracoConfiguration.cs" />
     <Compile Include="Models\ConnectionType.cs" />
