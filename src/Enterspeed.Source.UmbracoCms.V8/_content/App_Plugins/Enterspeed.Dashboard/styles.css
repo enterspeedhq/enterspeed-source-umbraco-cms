@@ -1,54 +1,62 @@
 ﻿.dashboard-list {
-	display: flex;
-	flex-direction: column;
-	padding: 0;
-	margin: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 10px;
 }
 
 .dashboard-list-item, .dashboard-list-header {
-	display: flex;
-	justify-content: space-between;
+    display: flex;
+    justify-content: space-between;
 }
 
 .dashboard-list-item {
-	cursor: pointer;
+    cursor: pointer;
+}
+
+.dashboard-list-item .checkbox {
+    margin:0;
 }
 
 .dashboard-list-header {
-	font-weight: 700;
+    font-weight: 700;
 }
 
 .dashboard-list-item-property {
-	display: flex;
-	padding: 5px 20px 5px 0;
+    display: flex;
+    padding: 5px 20px 5px 0;
+}
+
+.dashboard-list-item-property .umb-form-check__input {
+    margin-top: 0px;
 }
 
 .dashboard-list-item-exception {
-	padding: 20px;
-	margin: 5px 0 20px 0;
-	border: 1px solid #e9e9eb;
+    padding: 20px;
+    margin: 5px 0 20px 0;
+    border: 1px solid #e9e9eb;
 }
 
 .dashboard-list li {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 .seed-dashboard-response {
-	padding: 5px 0 20px 5px;
+    padding: 5px 0 20px 5px;
 }
 
 .configuration-dashboard-property {
-	padding: 10px 5px;
+    padding: 10px 5px;
 }
 
 .configuration-dashboard-property label {
-	font-weight: 700;
+    font-weight: 700;
 }
 
 .configuration-dashboard-property input {
-	width: 750px;
+    width: 750px;
 }
 
 .info-box {
@@ -57,7 +65,6 @@
     display: table;
     font-size: 15px;
     line-height: 20px;
-    margin-bottom: 0;
     padding: 6px 14px;
     vertical-align: middle;
     color: white;
@@ -65,5 +72,5 @@
 }
 
 .seed-dashboard-text {
-	padding: 0 0 20px 5px;
+    padding: 0 0 20px 5px;
 }

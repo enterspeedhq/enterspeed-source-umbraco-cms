@@ -3,12 +3,15 @@
     vm.loadingFailedJobs = false;
     vm.failedJobs = [];
     vm.activeException = "";
+    vm.deleteModes = ['Everything', 'Selected'];
+    vm.selectedDeleteMode = vm.deleteModes[0];
+    vm.deleteModeSelectOpen = false;
 
     function init() {
         vm.getFailedJobs();
     }
 
-    vm.toggleException = function(index) {
+    vm.toggleException = function (index) {
         if (index === vm.activeException) {
             vm.activeException = "";
         } else {
@@ -49,6 +52,50 @@
             vm.loadingFailedJobs = false;
         });
     };
+
+    vm.setDeleteMode = function (deleteMode) {
+        vm.selectedDeleteMode = deleteMode;
+    }
+
+    vm.toggleDeleteModeSelect = function () {
+        vm.deleteModeSelectOpen = !vm.deleteModeSelectOpen;
+    }
+
+    vm.deleteFailedJobs = function () {
+        if (!confirm("Are you sure you want to delete the failed job(s)?")) {
+            return;
+        }
+        vm.deletingFailedJobs = true;
+
+        if (vm.selectedDeleteMode === "Selected") {
+            let failedJobsToDelete = vm.getSelectedFailedJobs();
+
+            if (failedJobsToDelete.length) {
+                let jobIdsToDelete = {
+                    Ids: failedJobsToDelete.map(fj => fj.id)
+                }
+
+                dashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
+                    if (result.data.isSuccess) {
+                        vm.getFailedJobs();
+                    }
+                });
+            }
+
+        } else {
+            dashboardResources.deleteFailedJobs().then(function (result) {
+                if (result.data.isSuccess) {
+                    vm.getFailedJobs();
+                }
+            });
+        }
+
+        vm.deletingFailedJobs = false;
+    }
+
+    vm.getSelectedFailedJobs = function () {
+        return vm.failedJobs.filter(fj => fj.selected === true);
+    }
 
     $scope.getData = function () {
         return $filter('filter')(vm.failedJobs, $scope.q);

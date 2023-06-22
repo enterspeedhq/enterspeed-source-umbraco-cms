@@ -11,6 +11,7 @@ using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.UmbracoCms.V7.Contexts;
 using Enterspeed.Source.UmbracoCms.V7.Data.Models;
+using Enterspeed.Source.UmbracoCms.V7.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V7.Extensions;
 using Enterspeed.Source.UmbracoCms.V7.Models.Api;
 using Enterspeed.Source.UmbracoCms.V7.Models.Configuration;
@@ -173,6 +174,37 @@ namespace Enterspeed.Source.UmbracoCms.V7.Controllers.Api
             }
 
             return response;
+        }
+
+        [HttpPost]
+        public ApiResponse DeleteFailedJobs()
+        {
+            var jobRepository = EnterspeedContext.Current.Repositories.JobRepository;
+            var failedJobs = jobRepository.GetFailedJobs().ToList();
+
+            if (failedJobs.Any())
+            {
+                jobRepository.Delete(failedJobs.Select(fj => fj.Id).ToList());
+            }
+
+            return new ApiResponse()
+            {
+                IsSuccess = true
+            };
+        }
+
+        [HttpPost]
+        public ApiResponse DeleteJobs(JobIdsToDelete jobIdsToDelete)
+        {
+            if (jobIdsToDelete != null && jobIdsToDelete.Ids.Any())
+            {
+                EnterspeedContext.Current.Repositories.JobRepository.Delete(jobIdsToDelete.Ids);
+            }
+
+            return new ApiResponse()
+            {
+                IsSuccess = true
+            };
         }
     }
 }
