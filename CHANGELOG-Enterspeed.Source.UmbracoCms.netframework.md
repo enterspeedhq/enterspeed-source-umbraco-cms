@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Updated
+- VariationContext is set to the correct culture in the jobs pipeline
 - Update dpendency to Enterspeed.Source.Sdk v1.0.2
 
 ### Fixed
