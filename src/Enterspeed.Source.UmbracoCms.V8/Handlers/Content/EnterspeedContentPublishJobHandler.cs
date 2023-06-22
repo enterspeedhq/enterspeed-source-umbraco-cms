@@ -27,6 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
         private readonly IPublishedRouter _publishedRouter;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
         private readonly IUrlFactory _urlFactory;
+        private readonly IVariationContextAccessor _variationContextAccessor;
 
         public EnterspeedContentPublishJobHandler(
             IUmbracoContextFactory umbracoContextFactory,
@@ -37,7 +38,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             IEnterspeedGuardService enterspeedGuardService,
             IPublishedRouter publishedRouter,
             IUrlFactory urlFactory,
-            IEnterspeedConnectionProvider enterspeedConnectionProvider)
+            IEnterspeedConnectionProvider enterspeedConnectionProvider,
+            IVariationContextAccessor variationContextAccessor)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedPropertyService = enterspeedPropertyService;
@@ -48,21 +50,26 @@ namespace Enterspeed.Source.UmbracoCms.V8.Handlers
             _publishedRouter = publishedRouter;
             _urlFactory = urlFactory;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
+            _variationContextAccessor = variationContextAccessor;
         }
 
         public virtual bool CanHandle(EnterspeedJob job)
         {
-            return
-                _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
-                && job.EntityType == EnterspeedJobEntityType.Content
-                && job.JobType == EnterspeedJobType.Publish
-                && job.ContentState == EnterspeedContentState.Publish;
+            return _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
+                   && job.EntityType == EnterspeedJobEntityType.Content
+                   && job.JobType == EnterspeedJobType.Publish
+                   && job.ContentState == EnterspeedContentState.Publish;
         }
 
         public virtual void Handle(EnterspeedJob job)
         {
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
+                if (!string.IsNullOrEmpty(job.Culture))
+                {
+                    _variationContextAccessor.VariationContext = new VariationContext(job.Culture);
+                }
+
                 var content = GetContent(job, context);
                 if (!CanIngest(content, job))
                 {

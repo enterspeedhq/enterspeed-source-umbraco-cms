@@ -54,6 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
             builder.Services.AddTransient<IEnterspeedJobsHandler, EnterspeedJobsHandler>();
+            builder.Services.AddTransient<IEnterspeedPostJobsHandler, EnterspeedPostJobsHandler>();
             builder.Services.AddTransient<IEnterspeedGuardService, EnterspeedGuardService>();
             builder.Services.AddTransient<IUrlFactory, UrlFactory>();
             builder.Services.AddTransient<IEnterspeedJobFactory, EnterspeedJobFactory>();
@@ -141,6 +142,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
                 // Dictionaries
                 .Append<EnterspeedDictionaryItemPublishJobHandler>()
                 .Append<EnterspeedDictionaryItemDeleteJobHandler>()
+                .Append<EnterspeedRootDictionaryItemPublishJobHandler>()
 
                 // Preview content
                 .Append<EnterspeedPreviewContentPublishJobHandler>()
@@ -149,6 +151,7 @@ namespace Enterspeed.Source.UmbracoCms.Composers
                 // Preview dictionaries
                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
                 .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>()
+                .Append<EnterspeedPreviewRootDictionaryItemPublishJobHandler>()
 
                 // Media 
                 .Append<EnterspeedMediaPublishJobHandler>()
