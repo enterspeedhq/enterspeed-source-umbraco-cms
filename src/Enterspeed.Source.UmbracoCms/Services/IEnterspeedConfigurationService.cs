@@ -8,5 +8,6 @@ namespace Enterspeed.Source.UmbracoCms.Services
         EnterspeedUmbracoConfiguration GetConfiguration();
         bool IsPublishConfigured();
         bool IsPreviewConfigured();
+        bool IsRootDictionariesDisabled();
     }
 }

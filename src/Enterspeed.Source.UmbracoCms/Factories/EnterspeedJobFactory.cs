@@ -1,5 +1,6 @@
 ﻿using System;
 using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
@@ -132,6 +133,21 @@ namespace Enterspeed.Source.UmbracoCms.Factories
                 CreatedAt = now,
                 UpdatedAt = now,
                 ContentState = state,
+            };
+        }
+
+        public EnterspeedJob GetDictionaryItemRootJob(string culture, EnterspeedContentState contentState)
+        {
+            return new EnterspeedJob
+            {
+                EntityId = UmbracoDictionariesRootEntity.EntityId,
+                EntityType = EnterspeedJobEntityType.Dictionary,
+                Culture = culture,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                JobType = EnterspeedJobType.Publish,
+                State = EnterspeedJobState.Pending,
+                ContentState = contentState
             };
         }
     }
