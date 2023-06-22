@@ -40,11 +40,11 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.Dictionaries
 
         public virtual bool CanHandle(EnterspeedJob job)
         {
-            return
-                _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
-                && job.EntityType == EnterspeedJobEntityType.Dictionary
-                && job.ContentState == EnterspeedContentState.Publish
-                && job.JobType == EnterspeedJobType.Publish;
+            return !UmbracoDictionariesRootEntity.EntityId.Equals(job.EntityId, StringComparison.InvariantCultureIgnoreCase)
+                   && _enterspeedConnectionProvider.GetConnection(ConnectionType.Publish) != null
+                   && job.EntityType == EnterspeedJobEntityType.Dictionary 
+                   && job.ContentState == EnterspeedContentState.Publish
+                   && job.JobType == EnterspeedJobType.Publish;
         }
 
         public virtual void Handle(EnterspeedJob job)

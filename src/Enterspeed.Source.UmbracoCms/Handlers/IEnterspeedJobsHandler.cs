@@ -5,7 +5,6 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
 {
     public interface IEnterspeedJobsHandler
     {
-        void HandleJobs(IList<EnterspeedJob> jobs);
-        void SaveOrUpdateFailedJobs(List<EnterspeedJob> failedJobs);
+        void HandleJobs(IList<EnterspeedJob> jobsToProcess);
     }
 }

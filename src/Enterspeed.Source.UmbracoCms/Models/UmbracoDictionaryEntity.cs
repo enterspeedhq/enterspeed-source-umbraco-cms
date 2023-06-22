@@ -28,7 +28,19 @@ namespace Enterspeed.Source.UmbracoCms.Models
         public string Type => "umbDictionary";
         public string Url => null;
         public string[] Redirects => null;
-        public string ParentId => _dictionaryItem.ParentId.HasValue ? _entityIdentityService.GetId(_dictionaryItem.ParentId, _culture) : null;
+
+        public  string ParentId
+        {
+            get
+            {
+                var parentId = _dictionaryItem.ParentId.HasValue
+                    ? _entityIdentityService.GetId(_dictionaryItem.ParentId, _culture)
+                    : _entityIdentityService.GetId(UmbracoDictionariesRootEntity.EntityId, _culture);
+
+                return parentId;
+            }
+        }
+
         public IDictionary<string, IEnterspeedProperty> Properties { get; }
     }
 }
