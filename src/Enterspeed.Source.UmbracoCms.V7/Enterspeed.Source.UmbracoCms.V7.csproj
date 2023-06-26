@@ -303,6 +303,7 @@
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMediaPickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMemberGroupPickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMemberPickerPropertyValueConverter.cs" />
+    <Compile Include="Services\DataProperties\DefaultConverters\DefaultMultiNodeTreePicker2PropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultMultiNodeTreePickerPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultNestedContentPropertyValueConverter.cs" />
     <Compile Include="Services\DataProperties\DefaultConverters\DefaultNumericPropertyValueConverter.cs" />
