@@ -7,6 +7,7 @@ using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
@@ -20,6 +21,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         private readonly EnterspeedJobHandlerCollection _enterspeedJobHandlerCollection;
         private readonly ILogger<EnterspeedPostJobsHandler> _logger;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
+        private readonly IScopeProvider _scopeProvider;
 
 
         public EnterspeedPostJobsHandler(IEnterspeedJobRepository enterspeedJobRepository,
@@ -28,7 +30,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             ILocalizationService localizationService,
             EnterspeedJobHandlerCollection enterspeedJobHandlerCollection,
             ILogger<EnterspeedPostJobsHandler> logger,
-            IEnterspeedConfigurationService enterspeedConfigurationService)
+            IEnterspeedConfigurationService enterspeedConfigurationService, IScopeProvider scopeProvider)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobFactory = enterspeedJobFactory;
@@ -37,6 +39,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             _enterspeedJobHandlerCollection = enterspeedJobHandlerCollection;
             _logger = logger;
             _enterspeedConfigurationService = enterspeedConfigurationService;
+            _scopeProvider = scopeProvider;
         }
 
         /// <summary>
@@ -49,17 +52,22 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             IReadOnlyCollection<EnterspeedJob> existingFailedJobsToDelete,
             IList<EnterspeedJob> newFailedJobs)
         {
-            if (!_enterspeedConfigurationService.IsRootDictionariesDisabled())
+            using (var scope = _scopeProvider.CreateScope())
             {
-                HandleRootDictionaries(processedJobs);
+                if (!_enterspeedConfigurationService.IsRootDictionariesDisabled())
+                {
+                    HandleRootDictionaries(processedJobs);
+                }
+
+                HandleProcessedJobs(processedJobs);
+                HandleExistingFailedJobs(existingFailedJobsToDelete);
+
+                // WARNING: This throws an exception if any new failed jobs. This should should not be called before any other method
+                // TODO: Handle in a different way?
+                HandleFailedJobs(newFailedJobs);
+
+                scope.Complete();
             }
-
-            HandleProcessedJobs(processedJobs);
-            HandleExistingFailedJobs(existingFailedJobsToDelete);
-
-            // WARNING: This throws an exception if any new failed jobs. This should should not be called before any other method
-            // TODO: Handle in a different way?
-            HandleFailedJobs(newFailedJobs);
         }
 
         /// <summary>

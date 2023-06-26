@@ -6,6 +6,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Lucene.Net.Util;
 using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Scoping;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
 {
@@ -16,19 +17,22 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         private readonly EnterspeedJobHandlerCollection _jobHandlers;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IEnterspeedPostJobsHandler _enterspeedPostJobsHandler;
+        private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedJobsHandler(
             IEnterspeedJobRepository enterspeedJobRepository,
             ILogger<EnterspeedJobsHandler> logger,
             EnterspeedJobHandlerCollection jobHandlers,
             IEnterspeedJobFactory enterspeedJobFactory,
-            IEnterspeedPostJobsHandler enterspeedPostJobsHandler)
+            IEnterspeedPostJobsHandler enterspeedPostJobsHandler,
+            IScopeProvider scopeProvider)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _logger = logger;
             _jobHandlers = jobHandlers;
             _enterspeedJobFactory = enterspeedJobFactory;
             _enterspeedPostJobsHandler = enterspeedPostJobsHandler;
+            _scopeProvider = scopeProvider;
         }
 
         /// <summary>
@@ -48,13 +52,13 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             ICollection<EnterspeedJob> newFailedJobs, IList<EnterspeedJob> existingFailedJobsToDelete)
         {
             // Fetch all failed jobs for these content ids. We need to do this to delete the failed jobs if they no longer fails
-            // TODO: Not a fan of assigning this variable here and parsing it around. Refactor?
-            var failedJobsToHandle =
-                _enterspeedJobRepository.GetFailedJobs(jobsToProcess.Select(x => x.EntityId).Distinct().ToList());
+            List<EnterspeedJob> failedJobsToHandle;
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                failedJobsToHandle = _enterspeedJobRepository.GetFailedJobs(jobsToProcess.Select(x => x.EntityId).Distinct().ToList()).ToList();
+            }
 
-            var jobsByEntityIdAndContentState =
-                jobsToProcess.GroupBy(x => new { x.EntityId, x.ContentState, x.Culture });
-
+            var jobsByEntityIdAndContentState = jobsToProcess.GroupBy(x => new { x.EntityId, x.ContentState, x.Culture });
             foreach (var jobInfo in jobsByEntityIdAndContentState)
             {
                 // Get newest job to handle
