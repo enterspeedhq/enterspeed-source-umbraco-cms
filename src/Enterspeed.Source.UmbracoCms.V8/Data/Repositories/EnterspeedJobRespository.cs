@@ -98,7 +98,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
                 return;
             }
 
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (var scope = _scopeProvider.CreateScope())
             {
                 foreach (var job in jobs)
                 {
@@ -106,16 +106,20 @@ namespace Enterspeed.Source.UmbracoCms.V8.Data.Repositories
                     scope.Database.Save(jobToSave);
                     job.Id = jobToSave.Id;
                 }
+
+                scope.Complete();
             }
         }
 
         public void Delete(IList<int> ids)
         {
-            using (var scope = _scopeProvider.CreateScope(autoComplete: true))
+            using (var scope = _scopeProvider.CreateScope())
             {
                 scope.Database.DeleteMany<EnterspeedJobSchema>()
                     .Where(x => ids.Contains(x.Id))
                     .Execute();
+
+                scope.Complete();
             }
         }
     }
