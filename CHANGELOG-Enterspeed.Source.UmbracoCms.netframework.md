@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 
 ### Added 
-- Added support for Umbraco.MultiNodeTreePicker2
+- Added support for Umbraco.MultiNodeTreePicker2 in Umbraco 7
 - Added buttons to clear a single or all failed jobs in the failed jobs list
 
 ### Updated
