@@ -5,17 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
-
-### Added 
 - Added support for Umbraco.MultiNodeTreePicker2 in Umbraco 7
-- Added buttons to clear a single or all failed jobs in the failed jobs list
+
+## [3.8.0 - 2023-06-27]
+### Added 
+- Added buttons to clear a single or all failed jobs in the failed jobs list (Umbraco 7 & 8)
 
 ### Updated
-- VariationContext is set to the correct culture in the jobs pipeline
-- Update dpendency to Enterspeed.Source.Sdk v1.0.2
+- Update dependency to Enterspeed.Source.Sdk v1.0.2 (Umbraco 7 & 8)
 
 ### Fixed
-- Removed double slash after domain for redirects if domain ends with slash
+- VariationContext is set to the correct culture in the jobs pipeline (Umbraco 8)
+- Removed double slash after domain for redirects if domain ends with slash (Umbraco 8)
 - Fixed mapping of Umbraco.Tag data type (Umbraco 7)
 
 ## [3.7.1 - 2023-04-19]

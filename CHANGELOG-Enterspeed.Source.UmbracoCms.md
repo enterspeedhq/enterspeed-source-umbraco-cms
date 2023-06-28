@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [3.0.0 - 2023-06-27]
+### Breaking
+- Virtual source-entities for root dictionary items. This new feaures adds a originParentId to dictionary items in the root, making at easier to group all dictionary items of a specific culture in your Enterspeed schema. If this is a breaking change for you, you can simple disable the new feature by setting `DisableRootDictionaries` to true in the appsettings.json file under the `Enterspeed` section.
 
 ### Fixed
-- Fixed issue with how pending jobs are fetched. 
-### Updated
 - VariationContext is set to the correct culture in the jobs pipeline
-- Virtual source-entities for root dictionary items
+- Fixed issue with how pending jobs are fetched. 
+
 
 ## [2.5.0 - 2023-06-12]
 ### Addded
