@@ -199,7 +199,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
             return response;
         }
 
-
         [HttpPost]
         public ApiResponse DeleteFailedJobs()
         {

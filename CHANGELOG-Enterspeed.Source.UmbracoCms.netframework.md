@@ -4,8 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-
 ## [Unreleased]
+### Added 
+- Added support for Umbraco.MultiNodeTreePicker2 in Umbraco 7
+- 
 ### Fixed 
 - Added areas to StartupDashboardSection in config/Dashboard.config during package installation if missing (Umbraco 7)
 
