@@ -104,6 +104,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.EventHandlers
                 .Append<DefaultMemberGroupPickerPropertyValueConverter>()
                 .Append<DefaultMemberPickerPropertyValueConverter>()
                 .Append<DefaultMultiNodeTreePickerPropertyValueConverter>()
+                .Append<DefaultMultiNodeTreePicker2PropertyValueConverter>()
                 .Append<DefaultNestedContentPropertyValueConverter>()
                 .Append<DefaultNumericPropertyValueConverter>()
                 .Append<DefaultRadioButtonListPropertyValueConverter>()
