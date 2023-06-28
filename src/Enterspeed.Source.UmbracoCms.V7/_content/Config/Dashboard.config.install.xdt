@@ -9,7 +9,7 @@
   </section>
   <section alias="StartupDashboardSection" xdt:Transform="InsertIfMissing" xdt:Locator="Match(alias)">
 	<areas xdt:Transform="InsertIfMissing">
-	  <area>content</area>
+	  <area xdt:Transform="InsertIfMissing">content</area>
 	</areas>
 	<tab caption="Enterspeed" xdt:Transform="InsertIfMissing" xdt:Locator="Match(caption)">
       <access>
