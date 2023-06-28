@@ -8,7 +8,10 @@
     </tab>
   </section>
   <section alias="StartupDashboardSection" xdt:Transform="InsertIfMissing" xdt:Locator="Match(alias)">
-    <tab caption="Enterspeed" xdt:Transform="InsertIfMissing" xdt:Locator="Match(caption)">
+	<areas xdt:Transform="InsertIfMissing">
+	  <area xdt:Transform="InsertIfMissing">content</area>
+	</areas>
+	<tab caption="Enterspeed" xdt:Transform="InsertIfMissing" xdt:Locator="Match(caption)">
       <access>
         <grant>admin</grant>
       </access>

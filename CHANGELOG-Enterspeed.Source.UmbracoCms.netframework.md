@@ -7,6 +7,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [Unreleased]
 ### Added 
 - Added support for Umbraco.MultiNodeTreePicker2 in Umbraco 7
+- 
+### Fixed 
+- Added areas to StartupDashboardSection in config/Dashboard.config during package installation if missing (Umbraco 7)
 
 ## [3.8.0 - 2023-06-27]
 ### Added 
