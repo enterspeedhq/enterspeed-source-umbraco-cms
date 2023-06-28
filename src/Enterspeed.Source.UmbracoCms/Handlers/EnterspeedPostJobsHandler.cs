@@ -21,7 +21,6 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
         private readonly EnterspeedJobHandlerCollection _enterspeedJobHandlerCollection;
         private readonly ILogger<EnterspeedPostJobsHandler> _logger;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
-        private readonly IScopeProvider _scopeProvider;
 
 
         public EnterspeedPostJobsHandler(IEnterspeedJobRepository enterspeedJobRepository,
@@ -30,7 +29,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             ILocalizationService localizationService,
             EnterspeedJobHandlerCollection enterspeedJobHandlerCollection,
             ILogger<EnterspeedPostJobsHandler> logger,
-            IEnterspeedConfigurationService enterspeedConfigurationService, IScopeProvider scopeProvider)
+            IEnterspeedConfigurationService enterspeedConfigurationService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobFactory = enterspeedJobFactory;
@@ -39,7 +38,6 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             _enterspeedJobHandlerCollection = enterspeedJobHandlerCollection;
             _logger = logger;
             _enterspeedConfigurationService = enterspeedConfigurationService;
-            _scopeProvider = scopeProvider;
         }
 
         /// <summary>
@@ -52,22 +50,17 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
             IReadOnlyCollection<EnterspeedJob> existingFailedJobsToDelete,
             IList<EnterspeedJob> newFailedJobs)
         {
-            using (var scope = _scopeProvider.CreateScope())
+            if (!_enterspeedConfigurationService.IsRootDictionariesDisabled())
             {
-                if (!_enterspeedConfigurationService.IsRootDictionariesDisabled())
-                {
-                    HandleRootDictionaries(processedJobs);
-                }
-
-                HandleProcessedJobs(processedJobs);
-                HandleExistingFailedJobs(existingFailedJobsToDelete);
-
-                // WARNING: This throws an exception if any new failed jobs. This should should not be called before any other method
-                // TODO: Handle in a different way?
-                HandleFailedJobs(newFailedJobs);
-
-                scope.Complete();
+                HandleRootDictionaries(processedJobs);
             }
+
+            HandleProcessedJobs(processedJobs);
+            HandleExistingFailedJobs(existingFailedJobsToDelete);
+
+            // WARNING: This throws an exception if any new failed jobs. This should should not be called before any other method
+            // TODO: Handle in a different way?
+            HandleFailedJobs(newFailedJobs);
         }
 
         /// <summary>
@@ -133,7 +126,6 @@ namespace Enterspeed.Source.UmbracoCms.Handlers
                 }
             }
         }
-
 
         /// <summary>
         /// Jobs that failed while processing are being created or updated in the database.

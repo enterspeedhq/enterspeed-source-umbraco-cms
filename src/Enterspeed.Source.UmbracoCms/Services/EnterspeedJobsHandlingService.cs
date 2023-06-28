@@ -15,20 +15,17 @@ namespace Enterspeed.Source.UmbracoCms.Services
         private readonly IEnterspeedJobsHandler _enterspeedJobsHandler;
         private readonly IEnterspeedPostJobsHandler _enterspeedPostJobsHandler;
         private readonly ILogger<EnterspeedJobsHandlingService> _logger;
-        private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedJobsHandlingService(
             IEnterspeedJobRepository enterspeedJobRepository,
             ILogger<EnterspeedJobsHandlingService> logger,
             IEnterspeedJobsHandler enterspeedJobsHandler,
-            IEnterspeedPostJobsHandler enterspeedPostJobsHandler,
-            IScopeProvider scopeProvider)
+            IEnterspeedPostJobsHandler enterspeedPostJobsHandler)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _logger = logger;
             _enterspeedJobsHandler = enterspeedJobsHandler;
             _enterspeedPostJobsHandler = enterspeedPostJobsHandler;
-            _scopeProvider = scopeProvider;
         }
 
         public virtual void HandlePendingJobs(int batchSize)
@@ -36,12 +33,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
             int jobCount;
             do
             {
-                List<EnterspeedJob> jobs;
-                using (_scopeProvider.CreateScope(autoComplete: true))
-                {
-                    jobs = _enterspeedJobRepository.GetPendingJobs(batchSize).ToList();
-                    jobCount = jobs.Count;
-                }
+                var jobs = _enterspeedJobRepository.GetPendingJobs(batchSize).ToList();
+                jobCount = jobs.Count;
 
                 try
                 {
@@ -70,12 +63,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 job.UpdatedAt = DateTime.UtcNow;
             }
 
-            using (var scope = _scopeProvider.CreateScope())
-            {
-                _enterspeedJobRepository.Save(jobs);
-                scope.Complete();
-            }
-
+            _enterspeedJobRepository.Save(jobs);
             _enterspeedJobsHandler.HandleJobs(jobs);
         }
 
