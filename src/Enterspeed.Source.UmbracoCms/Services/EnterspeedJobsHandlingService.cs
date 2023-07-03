@@ -5,6 +5,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Handlers;
 using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Scoping;
 
 namespace Enterspeed.Source.UmbracoCms.Services
 {
@@ -34,6 +35,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 var jobs = _enterspeedJobRepository.GetPendingJobs(batchSize).ToList();
                 jobCount = jobs.Count;
+
                 try
                 {
                     HandleJobs(jobs);

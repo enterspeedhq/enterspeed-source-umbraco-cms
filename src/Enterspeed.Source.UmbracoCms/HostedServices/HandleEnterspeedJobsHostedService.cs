@@ -9,6 +9,7 @@ using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.HostedServices;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
+
 #else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
@@ -35,7 +36,6 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
                 var logger = serviceProvider.GetRequiredService<ILogger<HandleEnterspeedJobsHostedService>>();
                 var serverRoleAccessor = serviceProvider.GetRequiredService<IServerRoleAccessor>();
                 var configurationService = serviceProvider.GetRequiredService<IEnterspeedConfigurationService>();
-                var scopeProvider = serviceProvider.GetRequiredService<IScopeProvider>();
 
                 // Don't do anything if the site is not running.
                 if (runtimeState.Level != RuntimeLevel.Run)
@@ -50,11 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
 
                 if (serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher || serverRoleAccessor.CurrentServerRole == ServerRole.Single)
                 {
-                    // Handle jobs in batches of 50
-                    using (var scope = scopeProvider.CreateScope(autoComplete: true))
-                    {
-                        enterspeedJobsHandlingService.HandlePendingJobs(50);
-                    }
+                    enterspeedJobsHandlingService.HandlePendingJobs(50);
                 }
                 else
                 {

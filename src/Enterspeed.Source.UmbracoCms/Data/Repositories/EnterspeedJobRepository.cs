@@ -5,6 +5,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Schemas;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Infrastructure.Persistence;
+using Umbraco.Cms.Infrastructure.Serialization;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 
@@ -18,27 +19,33 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
     {
         private readonly IScopeAccessor _scopeAccessor;
         private readonly IUmbracoMapper _mapper;
+        private readonly IScopeProvider _scopeProvider;
 
         public EnterspeedJobRepository(
             IUmbracoMapper mapper,
-            IScopeAccessor scopeAccessor)
+            IScopeAccessor scopeAccessor,
+            IScopeProvider scopeProvider)
         {
             _mapper = mapper;
             _scopeAccessor = scopeAccessor;
+            _scopeProvider = scopeProvider;
         }
 
         private IUmbracoDatabase Database => _scopeAccessor.AmbientScope.Database;
 
         public IList<EnterspeedJob> GetFailedJobs()
         {
-            var result = new List<EnterspeedJob>();
-            var failedJobs = Database.Query<EnterspeedJobSchema>()
-                .Where(x => x.JobState == EnterspeedJobState.Failed.GetHashCode())
-                .OrderBy(x => x.CreatedAt)
-                .ToList();
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var result = new List<EnterspeedJob>();
+                var failedJobs = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                    .OrderBy(x => x.CreatedAt)
+                    .ToList();
 
-            result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(failedJobs));
-            return result;
+                result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(failedJobs));
+                return result;
+            }
         }
 
         public IList<EnterspeedJob> GetFailedJobs(List<string> entityIds)
@@ -48,47 +55,61 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
                 return new List<EnterspeedJob>();
             }
 
-            var result = new List<EnterspeedJob>();
-            var failedJobs = Database.Query<EnterspeedJobSchema>()
-                .Where(x => entityIds.Contains(x.EntityId) && x.JobState == EnterspeedJobState.Failed.GetHashCode())
-                .OrderBy(x => x.CreatedAt)
-                .ToList();
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var result = new List<EnterspeedJob>();
+                var failedJobs = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => entityIds.Contains(x.EntityId) && x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                    .OrderBy(x => x.CreatedAt)
+                    .ToList();
 
-            result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(failedJobs));
-            return result;
+                result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(failedJobs));
+                return result;
+            }
         }
 
         public IList<EnterspeedJob> GetPendingJobs(int count)
         {
             var result = new List<EnterspeedJob>();
-            var pendingJobs = Database.Query<EnterspeedJobSchema>()
-                .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
-                .OrderBy(x => x.CreatedAt)
-                .Limit(count)
-                .ToList();
 
-            result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(pendingJobs));
-            return result;
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var pendingJobs = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
+                    .OrderBy(x => x.CreatedAt)
+                    .Limit(count)
+                    .ToList();
+
+                result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(pendingJobs));
+                return result;
+            }
         }
 
         public int GetNumberOfPendingJobs()
         {
-            var numberOfPendingJobs = Database.Query<EnterspeedJobSchema>()
-                .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
-                .Count();
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var numberOfPendingJobs = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
+                    .Count();
 
-            return numberOfPendingJobs;
+                return numberOfPendingJobs;
+            }
         }
 
         public IList<EnterspeedJob> GetOldProcessingTasks(int olderThanMinutes = 60)
         {
-            var result = new List<EnterspeedJob>();
-            var dateThreshhold = DateTime.UtcNow.AddMinutes(olderThanMinutes * -1);
-            var pendingJobs = Database.Query<EnterspeedJobSchema>()
-                .Where(x => x.JobState == EnterspeedJobState.Processing.GetHashCode() && x.UpdatedAt <= dateThreshhold)
-                .ToList();
-            result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(pendingJobs));
-            return result;
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var result = new List<EnterspeedJob>();
+                var dateTresHold = DateTime.UtcNow.AddMinutes(olderThanMinutes * -1);
+                var pendingJobs = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => x.JobState == EnterspeedJobState.Processing.GetHashCode() &&
+                                x.UpdatedAt <= dateTresHold)
+                    .ToList();
+                result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(pendingJobs));
+                return result;
+            }
         }
 
         public void Save(IList<EnterspeedJob> jobs)
@@ -98,43 +119,63 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
                 return;
             }
 
-            foreach (var job in jobs)
+            using (var scope = _scopeProvider.CreateScope())
             {
-                var jobToSave = _mapper.Map<EnterspeedJobSchema>(job);
-                Database.Save(jobToSave);
-                job.Id = jobToSave.Id;
+                foreach (var job in jobs)
+                {
+                    var jobToSave = _mapper.Map<EnterspeedJobSchema>(job);
+                    Database.Save(jobToSave);
+                    job.Id = jobToSave.Id;
+                }
+
+                scope.Complete();
             }
         }
 
         public EnterspeedJob GetFailedJob(string entityId, string culture)
         {
-            var schema = Database.Query<EnterspeedJobSchema>()
-                .Where(x => x.EntityId.Contains(entityId)
-                            && x.Culture.Equals(culture)
-                            && x.JobState == EnterspeedJobState.Failed.GetHashCode())
-                .FirstOrDefault();
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var schema = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => x.EntityId.Contains(entityId)
+                                && x.Culture.Equals(culture)
+                                && x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                    .FirstOrDefault();
 
-            return _mapper.Map<EnterspeedJob>(schema);
+                return _mapper.Map<EnterspeedJob>(schema);
+            }
         }
 
         public void Update(EnterspeedJob job)
         {
-            var schema = _mapper.Map<EnterspeedJobSchema>(job);
-            Database.Update(schema);
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                var schema = _mapper.Map<EnterspeedJobSchema>(job);
+                Database.Update(schema);
+                scope.Complete();
+            }
         }
 
         public void Delete(IList<int> ids)
         {
-            Database.DeleteMany<EnterspeedJobSchema>()
-                .Where(x => ids.Contains(x.Id))
-                .Execute();
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                Database.DeleteMany<EnterspeedJobSchema>()
+                    .Where(x => ids.Contains(x.Id))
+                    .Execute();
+                scope.Complete();
+            }
         }
 
         public void ClearPendingJobs()
         {
-            Database.DeleteMany<EnterspeedJobSchema>()
-                .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
-                .Execute();
+            using (var scope = _scopeProvider.CreateScope())
+            {
+                Database.DeleteMany<EnterspeedJobSchema>()
+                    .Where(x => x.JobState == EnterspeedJobState.Pending.GetHashCode())
+                    .Execute();
+                scope.Complete();
+            }
         }
     }
 }
