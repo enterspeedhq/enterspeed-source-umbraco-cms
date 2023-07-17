@@ -47,14 +47,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 var src = imageNode.GetAttributeValue("src", string.Empty);
                 if (src.StartsWith("/media/"))
                 {
-                    var absolutePath = mediaDomainUrl.AbsolutePath;
-                    if (!absolutePath.Equals("/"))
-                    {
-                        src = absolutePath + src;
-                    }
-
-
-                    imageNode.SetAttributeValue("src", new Uri(mediaDomainUrl, src).ToString());
+                    src = $"{mediaDomainUrl.AbsoluteUri.TrimEnd('/')}/{src.TrimStart('/')}";
+                    imageNode.SetAttributeValue("src", src);
                 }
             }
 

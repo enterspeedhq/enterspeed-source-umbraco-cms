@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Fixed
+- Fixed an issue with relative image paths in the rich text parser.
 - Deadlock issue on the jobs table has been fixed
 
 ## [3.0.0 - 2023-06-27]
