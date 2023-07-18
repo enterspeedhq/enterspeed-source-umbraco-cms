@@ -6,7 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Fixed
-- Ensuring that scope is completede correctly in repositories
+- Fixed an issue with relative image paths in the rich text parser.
+- Ensuring that scope is completed correctly in repositories
 
 ### Added 
 - Added support for Umbraco.MultiNodeTreePicker2 in Umbraco 7

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using HtmlAgilityPack;
 using Umbraco.Web.Templates;
@@ -46,7 +47,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 var src = imageNode.GetAttributeValue("src", string.Empty);
                 if (src.StartsWith("/media/"))
                 {
-                    imageNode.SetAttributeValue("src", new Uri(mediaDomainUrl, src).ToString());
+                    src = $"{mediaDomainUrl.AbsoluteUri.TrimEnd('/')}/{src.TrimStart('/')}";
+                    imageNode.SetAttributeValue("src", src);
                 }
             }
 
