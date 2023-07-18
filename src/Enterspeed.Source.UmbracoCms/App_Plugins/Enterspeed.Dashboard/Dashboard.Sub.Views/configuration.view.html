@@ -4,33 +4,33 @@
 	</umb-load-indicator>
 
 	<div class="configuration-dashboard-content" ng-if="!vm.loadingConfiguration">
-		
-        <div ng-if="vm.serverRole === 'Subscriber'" class="info-box">
-            <strong>Enterspeed jobs will not run on this current server.</strong><br/>
-            Enterspeed jobs will only run on servers with Umbraco role of <i>SchedulingPublisher</i> or <i>Single</i>. Current Umbraco server role is <i>{{vm.serverRole}}</i>.
-        </div>
+
+		<div ng-if="vm.serverRole === 'Subscriber'" class="info-box">
+			<strong>Enterspeed jobs will not run on this current server.</strong><br />
+			Enterspeed jobs will only run on servers with Umbraco role of <i>SchedulingPublisher</i> or <i>Single</i>. Current Umbraco server role is <i>{{vm.serverRole}}</i>.
+		</div>
 
 		<div ng-if="vm.configuration.configuredFromSettingsFile" class="info-box">
 			<strong>The configuration is loaded from the <i>appsettings.json</i> file.</strong><br />
 			Go to the <i>appsettings.json</i> file to change the values.
 		</div>
 
-        <div class="configuration-dashboard-property">
+		<div class="configuration-dashboard-property">
 			<label for="api-key">Enterspeed endpoint *</label><br />
 			<input type="text" id="api-key" class="input-field" ng-model="vm.configuration.baseUrl" placeholder="Enterspeed base url" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
 		</div>
 		<div class="configuration-dashboard-property">
-            <label for="media-domain">Media domain</label><br />
-            <input type="text" id="media-domain" class="input-field" ng-model="vm.configuration.mediaDomain" placeholder="Media domain" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
-        </div>
+			<label for="media-domain">Media domain</label><br />
+			<input type="text" id="media-domain" class="input-field" ng-model="vm.configuration.mediaDomain" placeholder="Media domain (optional)" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
+		</div>
 		<div class="configuration-dashboard-property">
 			<label for="api-key">Api key *</label><br />
 			<input type="text" id="api-key" class="input-field" ng-model="vm.configuration.apiKey" placeholder="Enterspeed API Key" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
 		</div>
 		<div class="configuration-dashboard-property">
-            <label for="preview-api-key">Preview api key</label><br />
-            <input type="text" id="preview-api-key" class="input-field" ng-model="vm.configuration.previewApiKey" placeholder="Enterspeed preview API Key" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
-        </div>
+			<label for="preview-api-key">Preview api key</label><br />
+			<input type="text" id="preview-api-key" class="input-field" ng-model="vm.configuration.previewApiKey" placeholder="Enterspeed preview API Key (optional)" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
+		</div>
 
 		<umb-button action="vm.saveConfiguration()"
 					type="button"

@@ -11,7 +11,7 @@
             </div>
             <div class="configuration-dashboard-property">
                 <label for="media-domain">Media domain</label><br />
-                <input type="text" id="media-domain" class="input-field" ng-model="vm.configuration.mediaDomain" placeholder="Media domain" ng-disabled="vm.buttonState === 'busy'" />
+                <input type="text" id="media-domain" class="input-field" ng-model="vm.configuration.mediaDomain" placeholder="Media domain (optional)" ng-disabled="vm.buttonState === 'busy'" />
             </div>
             <div class="configuration-dashboard-property">
                 <label for="api-key">Api key *</label><br />
@@ -19,7 +19,7 @@
             </div>
             <div class="configuration-dashboard-property">
                 <label for="preview-api-key">Preview Api key</label><br />
-                <input type="text" id="preview-api-key" class="input-field" ng-model="vm.configuration.previewApiKey" placeholder="Enterspeed Preview API Key" ng-disabled="vm.buttonState === 'busy'" />
+                <input type="text" id="preview-api-key" class="input-field" ng-model="vm.configuration.previewApiKey" placeholder="Enterspeed Preview API Key (optional)" ng-disabled="vm.buttonState === 'busy'" />
             </div>
 
             <umb-button action="vm.saveConfiguration()"
