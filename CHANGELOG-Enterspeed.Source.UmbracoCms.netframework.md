@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Fixed
+- Fixed an issue with missing seed information in Umbraco 7
 - Fixed an issue with relative image paths in the rich text parser.
 - Ensuring that scope is completed correctly in repositories
 
