@@ -23,10 +23,13 @@
 			<label for="media-domain">Media domain</label><br />
 			<input type="text" id="media-domain" class="input-field" ng-model="vm.configuration.mediaDomain" placeholder="Media domain (optional)" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
 		</div>
-		<div class="configuration-dashboard-property">
-			<label for="api-key">Api key *</label><br />
-			<input type="text" id="api-key" class="input-field" ng-model="vm.configuration.apiKey" placeholder="Enterspeed API Key" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
-		</div>
+        <div class="configuration-dashboard-property">
+            <label class="custom-tooltip" for="api-key">
+                Api key *
+                <span class="custom-tooltiptext">You can find your API key under Settings and Data Source in the <a href="https://app.enterspeed.com/settings/data-sources" target="_blank">Enterspeed App</a></span>
+            </label><br />
+            <input type="text" id="api-key" class="input-field" ng-model="vm.configuration.apiKey" placeholder="Enterspeed API Key" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
+        </div>
 		<div class="configuration-dashboard-property">
 			<label for="preview-api-key">Preview api key</label><br />
 			<input type="text" id="preview-api-key" class="input-field" ng-model="vm.configuration.previewApiKey" placeholder="Enterspeed preview API Key (optional)" ng-disabled="vm.buttonState === 'busy' || vm.configuration.configuredFromSettingsFile" />
