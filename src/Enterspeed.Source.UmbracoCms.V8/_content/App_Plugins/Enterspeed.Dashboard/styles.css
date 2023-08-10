@@ -14,9 +14,9 @@
     cursor: pointer;
 }
 
-.dashboard-list-item .checkbox {
-    margin:0;
-}
+    .dashboard-list-item .checkbox {
+        margin: 0;
+    }
 
 .dashboard-list-header {
     font-weight: 700;
@@ -27,9 +27,9 @@
     padding: 5px 20px 5px 0;
 }
 
-.dashboard-list-item-property .umb-form-check__input {
-    margin-top: 0px;
-}
+    .dashboard-list-item-property .umb-form-check__input {
+        margin-top: 0px;
+    }
 
 .dashboard-list-item-exception {
     padding: 20px;
@@ -51,13 +51,13 @@
     padding: 10px 5px;
 }
 
-.configuration-dashboard-property label {
-    font-weight: 700;
-}
+    .configuration-dashboard-property label {
+        font-weight: 700;
+    }
 
-.configuration-dashboard-property input {
-    width: 750px;
-}
+    .configuration-dashboard-property input {
+        width: 750px;
+    }
 
 .info-box {
     border-radius: 3px;
@@ -74,3 +74,33 @@
 .seed-dashboard-text {
     padding: 0 0 20px 5px;
 }
+
+.custom-tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+    .custom-tooltip .custom-tooltiptext {
+        visibility: hidden;
+        width: 220px;
+        background-color: black;
+        color: #fff;
+        text-align: center;
+        border-radius: 3px;
+        padding: 6px;
+        /* Position the tooltip */
+        position: absolute;
+        z-index: 1;
+        font-weight: normal;
+        font-size: 12px;
+    }
+
+        .custom-tooltip .custom-tooltiptext a {
+            color: white;
+            font-weight: bold;
+        }
+
+    .custom-tooltip:hover .custom-tooltiptext {
+        visibility: visible;
+    }
