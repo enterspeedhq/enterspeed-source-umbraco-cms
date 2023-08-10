@@ -6,15 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Added 
-- Tooltip added to API key label (U7/U8)
+- Tooltip added to API key label (Umbraco 7 & 8)
 
 ### Fixed
-- Fixed an issue with missing seed information in Umbraco 7
-- Fixed an issue with relative image paths in the rich text parser.
-- Ensuring that scope is completed correctly in repositories
+- Fixed an issue with missing seed information (Umbraco 7)
+- Fixed an issue with relative image paths in the rich text parser. (Umbraco 8)
+- Ensuring that scope is completed correctly in repositories (Umbraco 8)
 
 ### Added 
-- Added support for Umbraco.MultiNodeTreePicker2 in Umbraco 7
+- Added support for Umbraco.MultiNodeTreePicker2 (Umbraco 7)
 
 ### Fixed 
 - Added areas to StartupDashboardSection in config/Dashboard.config during package installation if missing (Umbraco 7)
