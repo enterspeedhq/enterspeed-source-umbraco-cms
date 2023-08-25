@@ -77,6 +77,14 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             EnqueueJobs(jobs);
         }
 
+        /// <summary>
+        /// This seeds all descendants of a parent, when parent has been renamed
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="content"></param>
+        /// <param name="isPublishConfigured"></param>
+        /// <param name="jobs"></param>
+        /// <param name="isPreviewConfigured"></param>
         private void HandleParentNameChange(UmbracoContextReference context, IContent content, bool isPublishConfigured, ICollection<EnterspeedJob> jobs, bool isPreviewConfigured)
         {
             if (context.UmbracoContext.Content != null)
@@ -108,9 +116,15 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             }
         }
 
+        /// <summary>
+        /// This only handles variants that has been unpublished. Publishing is handled in the ContentCacheUpdated method
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="isPublishConfigured"></param>
+        /// <param name="jobs"></param>
+        /// <param name="isPreviewConfigured"></param>
         private void HandleUnpublishedVariants(IContent content, bool isPublishConfigured, List<EnterspeedJob> jobs, bool isPreviewConfigured)
         {
-            // This only handles variants that has been unpublished. Publishing is handled in the ContentCacheUpdated method
             if (content.ContentType.VariesByCulture())
             {
                 List<IContent> descendants = null;
