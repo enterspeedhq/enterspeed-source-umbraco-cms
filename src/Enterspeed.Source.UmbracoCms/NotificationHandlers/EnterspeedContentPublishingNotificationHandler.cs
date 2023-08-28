@@ -93,7 +93,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                 var nameHasChanged = currentlyPublishedContent != null && !currentlyPublishedContent.Name.Equals(content.Name);
                 if (nameHasChanged)
                 {
-                    foreach (var descendant in _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out var totalRecords).ToList())
+                    foreach (var descendant in currentlyPublishedContent.Descendants("*").ToList())
                     {
                         var descendantCultures = descendant.ContentType.VariesByCulture()
                             ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
