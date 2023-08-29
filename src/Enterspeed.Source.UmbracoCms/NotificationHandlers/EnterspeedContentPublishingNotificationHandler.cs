@@ -78,7 +78,11 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         }
 
         /// <summary>
-        /// This seeds all descendants of a parent, when parent has been renamed
+        /// This seeds all descendants of a parent, when parent node has been renamed.
+        /// The IsDirty method to check for name changes does not work if node is saved first and published after. That is why we are using the publishing event here
+        /// since we can detect the name change comparing the version to be published, with the currently published version of the node. 
+        /// In the EnterspeedContentCacheRefresherNotificationHandler we cannot compare with the published node, since the node we are publishing and comparing with
+        /// is already a part of the publishing cache. 
         /// </summary>
         /// <param name="context"></param>
         /// <param name="content"></param>
@@ -90,26 +94,25 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             if (context.UmbracoContext.Content != null)
             {
                 var currentlyPublishedContent = context.UmbracoContext.Content.GetById(content.Id);
-                var nameHasChanged = currentlyPublishedContent != null && !currentlyPublishedContent.Name.Equals(content.Name);
-                if (nameHasChanged)
+                var nameHasChanged = !currentlyPublishedContent?.Name?.Equals(content.Name);
+                if (nameHasChanged is not true) return;
+
+                foreach (var descendant in currentlyPublishedContent.Descendants("*").ToList())
                 {
-                    foreach (var descendant in currentlyPublishedContent.Descendants("*").ToList())
+                    var descendantCultures = descendant.ContentType.VariesByCulture()
+                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
+
+                    foreach (var descendantCulture in descendantCultures)
                     {
-                        var descendantCultures = descendant.ContentType.VariesByCulture()
-                            ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
-                            : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
-
-                        foreach (var descendantCulture in descendantCultures)
+                        if (isPublishConfigured)
                         {
-                            if (isPublishConfigured)
-                            {
-                                jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Publish));
-                            }
+                            jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Publish));
+                        }
 
-                            if (isPreviewConfigured)
-                            {
-                                jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Preview));
-                            }
+                        if (isPreviewConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Preview));
                         }
                     }
                 }
