@@ -91,7 +91,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                 var isDirty = content.IsPropertyDirty("Name");
                 if (isDirty is not true) return;
 
-                foreach (var descendant in _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out var totalRecords).ToList())
+                foreach (var descendant in _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out _).ToList())
                 {
                     var descendantCultures = descendant.ContentType.VariesByCulture()
                         ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
