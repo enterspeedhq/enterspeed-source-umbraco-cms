@@ -109,11 +109,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                         {
                             jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Publish));
                         }
-
-                        if (isPreviewConfigured)
-                        {
-                            jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Preview));
-                        }
                     }
                 }
             }

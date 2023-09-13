@@ -73,14 +73,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             composition.Register<IEnterspeedConnectionProvider>(
                 c =>
-            {
-                var configurationProvider = c.GetInstance<IEnterspeedConfigurationProvider>();
-                var configurationService = c.GetInstance<IEnterspeedConfigurationService>();
+                {
+                    var configurationProvider = c.GetInstance<IEnterspeedConfigurationProvider>();
+                    var configurationService = c.GetInstance<IEnterspeedConfigurationService>();
 
-                var connectionProvider = new EnterspeedConnectionProvider(configurationService, configurationProvider);
+                    var connectionProvider = new EnterspeedConnectionProvider(configurationService, configurationProvider);
 
-                return connectionProvider;
-            }, Lifetime.Singleton);
+                    return connectionProvider;
+                }, Lifetime.Singleton);
 
             composition.EnterspeedPropertyValueConverters()
                 .Append<DefaultBlockListPropertyValueConverter>()
@@ -132,29 +132,29 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             // Job handlers
             composition.EnterspeedJobHandlers()
-                 // Content
-                 .Append<EnterspeedContentPublishJobHandler>()
-                 .Append<EnterspeedContentDeleteJobHandler>()
+                // Content
+                .Append<EnterspeedContentPublishJobHandler>()
+                .Append<EnterspeedContentDeleteJobHandler>()
 
-                 // Dictionaries
-                 .Append<EnterspeedDictionaryItemPublishJobHandler>()
-                 .Append<EnterspeedDictionaryItemDeleteJobHandler>()
+                // Dictionaries
+                .Append<EnterspeedDictionaryItemPublishJobHandler>()
+                .Append<EnterspeedDictionaryItemDeleteJobHandler>()
 
-                 // Media
-                 .Append<EnterspeedMediaPublishJobHandler>()
-                 .Append<EnterspeedMediaTrashedJobHandler>()
+                // Media
+                .Append<EnterspeedMediaPublishJobHandler>()
+                .Append<EnterspeedMediaTrashedJobHandler>()
 
-                 // Preview media
-                 .Append<EnterspeedPreviewMediaPublishJobHandler>()
-                 .Append<EnterspeedPreviewMediaTrashedJobHandler>()
+                // Preview media
+                .Append<EnterspeedPreviewMediaPublishJobHandler>()
+                .Append<EnterspeedPreviewMediaTrashedJobHandler>()
 
-                 // Preview content
-                 .Append<EnterspeedPreviewContentPublishJobHandler>()
-                 .Append<EnterspeedPreviewContentDeleteJobHandler>()
+                // Preview content
+                .Append<EnterspeedPreviewContentPublishJobHandler>()
+                .Append<EnterspeedPreviewContentDeleteJobHandler>()
 
-                 // Preview dictionaries
-                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
-                 .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
+                // Preview dictionaries
+                .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()
+                .Append<EnterspeedPreviewDictionaryItemDeleteJobHandler>();
 
             // Mapping definitions
             composition.WithCollectionBuilder<MapDefinitionCollectionBuilder>()
@@ -162,6 +162,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
 
             // Register event components
             composition.Components().Append<EnterspeedContentPublishingEventHandler>();
+            composition.Components().Append<EnterspeedContentSavingEventHandler>();
             composition.Components().Append<EnterspeedContentCacheRefresherEventHandler>();
             composition.Components().Append<EnterspeedContentTrashingEventHandler>();
             composition.Components().Append<EnterspeedContentUnpublishingEventHandler>();

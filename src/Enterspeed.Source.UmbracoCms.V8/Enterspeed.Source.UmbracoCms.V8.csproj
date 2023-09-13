@@ -296,6 +296,7 @@
     <Compile Include="EventHandlers\BaseEnterspeedEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentCacheRefresherEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentPublishingEventHandler.cs" />
+    <Compile Include="EventHandlers\EnterspeedContentSavingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentTrashingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedContentUnpublishingEventHandler.cs" />
     <Compile Include="EventHandlers\EnterspeedMediaMovedEventHandler.cs" />
