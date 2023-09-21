@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [unreleased]
 ### Added 
 - Added option to manually register Enterspeed using `.addEnterspeed()` on the Umbraco builder if you are not using Umbracos `.AddComposers()` method.
+- Rename of node updates urls on all descendants in Enterspeed sources.
 
 ## [3.0.1 - 2023-08-11]
 ### Added 

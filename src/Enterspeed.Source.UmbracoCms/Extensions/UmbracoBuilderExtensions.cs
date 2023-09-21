@@ -174,7 +174,7 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
             builder.AddNotificationHandler<MediaSavedNotification, EnterspeedMediaItemSavedEventHandler>();
             builder.AddNotificationHandler<MediaMovedNotification, EnterspeedMediaMovedEventHandler>();
             builder.AddNotificationHandler<MediaMovedToRecycleBinNotification, EnterspeedMediaTrashedNotificationHandler>();
-
+            builder.AddNotificationHandler<ContentSavingNotification, EnterspeedContentSavingNotificationHandler>();
             // Components
             builder.Components().Append<EnterspeedJobsComponent>();
 

@@ -33,10 +33,9 @@ namespace Enterspeed.Source.UmbracoCms.Factories
                 .Select(int.Parse)
                 .ToList();
 
-            var ancestorPath = pathAsIds;
-            ancestorPath.Remove(content.Id);
+            pathAsIds.Remove(content.Id);
 
-            var ancestorsAndSelf = ancestorPath
+            var ancestorsAndSelf = pathAsIds
                 .Select(x => umb.Content.GetById(preview, x))
                 .Where(x => x != null)
                 .ToList();
@@ -46,7 +45,7 @@ namespace Enterspeed.Source.UmbracoCms.Factories
 
             var domains = umb.Domains.GetAll(false).ToList();
             var urlSegments = new List<string>();
-
+            
             foreach (var ancestor in ancestorsAndSelf)
             {
                 var urlSegment = GetUrlSegment(culture, domains, ancestor, content.Path, out var isAssignedDomain);
@@ -89,7 +88,6 @@ namespace Enterspeed.Source.UmbracoCms.Factories
         protected virtual string GetUrlSegment(string culture, IEnumerable<Domain> domains, IPublishedContent ancestor, string path, out bool isAssignedDomain)
         {
             var assignedDomain = domains.FirstOrDefault(x => x.ContentId == ancestor.Id && x.Culture.Equals(culture, StringComparison.OrdinalIgnoreCase));
-
             if (assignedDomain != null)
             {
                 if (assignedDomain.Name.StartsWith("/"))

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
@@ -75,7 +74,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
                     if (node != null && isPublishConfigured)
                     {
-                        var audit = Current.Services.AuditService.GetPagedItemsByEntity(payload.Id, 0, 2, out var totalLogs)
+                        var audit = Current.Services.AuditService.GetPagedItemsByEntity(payload.Id, 0, 2, out _)
                             .FirstOrDefault();
 
                         if (audit == null)
@@ -140,8 +139,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 
                         foreach (var culture in cultures)
                         {
-                            var now = DateTime.UtcNow;
-
                             jobs.Add(_enterspeedJobFactory.GetPublishJob(savedNode, culture, EnterspeedContentState.Preview));
 
                             if (payload.ChangeTypes == TreeChangeTypes.RefreshBranch)
