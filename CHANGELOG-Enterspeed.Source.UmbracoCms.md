@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0 - 2023-09-21]
+### Added 
+- Added option to manually register Enterspeed using `.addEnterspeed()` on the Umbraco builder if you are not using Umbracos `.AddComposers()` method.
+- Rename of node updates urls on all descendants in Enterspeed sources.
+
 ## [3.0.1 - 2023-08-11]
 ### Added 
 - Tooltip added to API key label

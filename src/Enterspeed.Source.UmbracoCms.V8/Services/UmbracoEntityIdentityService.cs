@@ -9,6 +9,13 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
     public class UmbracoEntityIdentityService : IEntityIdentityService
     {
+        private readonly IUmbracoCultureProvider _umbracoCultureProvider;
+
+        public UmbracoEntityIdentityService(IUmbracoCultureProvider umbracoCultureProvider)
+        {
+            _umbracoCultureProvider = umbracoCultureProvider;
+        }
+
         public string GetId(IPublishedContent content, string culture)
         {
             if (content == null)
@@ -84,10 +91,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             return GetId(id, string.Empty);
         }
 
-        private static string GetDefaultCulture(IPublishedContent content)
+        private string GetDefaultCulture(IPublishedContent content)
         {
-            var umbracoCultureProvider = Current.Factory.GetInstance<IUmbracoCultureProvider>();
-            return umbracoCultureProvider.GetCultureForNonCultureVariant(content);
+            return _umbracoCultureProvider.GetCultureForNonCultureVariant(content);
         }
     }
 }

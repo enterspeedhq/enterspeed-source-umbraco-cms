@@ -11,6 +11,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Umbraco.Cms.Core;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -63,56 +64,106 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                 return;
             }
 
-            // This only handles variants that has been unpublished. Publishing is handled in the ContentCacheUpdated method
             var jobs = new List<EnterspeedJob>();
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
                 foreach (var content in entities)
                 {
-                    if (!content.ContentType.VariesByCulture())
-                    {
-                        continue;
-                    }
+                    HandleUnpublishedVariants(content, isPublishConfigured, jobs, isPreviewConfigured);
+                    HandleParentNameChange(context, content, isPublishConfigured, jobs, isPreviewConfigured);
+                }
+            }
 
-                    List<IContent> descendants = null;
+            EnqueueJobs(jobs);
+        }
 
-                    foreach (var culture in _umbracoCultureProvider.GetCulturesForCultureVariant(content))
+        /// <summary>
+        /// This seeds all descendants of a parent, when parent node has been renamed.
+        /// The IsDirty method to check for name changes does not work if node is saved first and published after. That is why we are using the publishing event here
+        /// since we can detect the name change comparing the version to be published, with the currently published version of the node. 
+        /// In the EnterspeedContentCacheRefresherNotificationHandler we cannot compare with the published node, since the node we are publishing and comparing with
+        /// is already a part of the publishing cache. 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="content"></param>
+        /// <param name="isPublishConfigured"></param>
+        /// <param name="jobs"></param>
+        /// <param name="isPreviewConfigured"></param>
+        private void HandleParentNameChange(UmbracoContextReference context, IContent content, bool isPublishConfigured, ICollection<EnterspeedJob> jobs, bool isPreviewConfigured)
+        {
+            if (context.UmbracoContext.Content != null)
+            {
+                var currentlyPublishedContent = context.UmbracoContext.Content.GetById(content.Id);
+                var nameHasChanged = !currentlyPublishedContent?.Name?.Equals(content.Name);
+                if (nameHasChanged is not true) return;
+
+                foreach (var descendant in currentlyPublishedContent.Descendants("*").ToList())
+                {
+                    var descendantCultures = descendant.ContentType.VariesByCulture()
+                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
+
+                    foreach (var descendantCulture in descendantCultures)
                     {
-                        var isCultureUnpublished = content.IsPropertyDirty(ContentBase.ChangeTrackingPrefix.UnpublishedCulture + culture);
-                        if (isCultureUnpublished)
+                        if (isPublishConfigured)
                         {
-                            if (isPublishConfigured)
-                            {
-                                jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Publish));
-                            }
+                            jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Publish));
+                        }
+                    }
+                }
+            }
+        }
 
-                            if (isPreviewConfigured)
-                            {
-                                jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Preview));
-                            }
+        /// <summary>
+        /// This only handles variants that has been unpublished. Publishing is handled in the ContentCacheUpdated method
+        /// </summary>
+        /// <param name="content"></param>
+        /// <param name="isPublishConfigured"></param>
+        /// <param name="jobs"></param>
+        /// <param name="isPreviewConfigured"></param>
+        private void HandleUnpublishedVariants(IContent content, bool isPublishConfigured, List<EnterspeedJob> jobs, bool isPreviewConfigured)
+        {
+            if (content.ContentType.VariesByCulture())
+            {
+                List<IContent> descendants = null;
 
-                            if (descendants == null)
-                            {
-                                descendants = _contentService
-                                    .GetPagedDescendants(content.Id, 0, int.MaxValue, out var totalRecords).ToList();
-                            }
+                foreach (var culture in _umbracoCultureProvider.GetCulturesForCultureVariant(content))
+                {
+                    var isCultureUnpublished =
+                        content.IsPropertyDirty(ContentBase.ChangeTrackingPrefix.UnpublishedCulture + culture);
+                    if (isCultureUnpublished)
+                    {
+                        if (isPublishConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Publish));
+                        }
 
-                            foreach (var descendant in descendants)
+                        if (isPreviewConfigured)
+                        {
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(content, culture, EnterspeedContentState.Preview));
+                        }
+
+                        if (descendants == null)
+                        {
+                            descendants = _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out var totalRecords).ToList();
+                        }
+
+                        foreach (var descendant in descendants)
+                        {
+                            if (descendant.ContentType.VariesByCulture())
                             {
-                                if (descendant.ContentType.VariesByCulture())
+                                var descendantCultures =
+                                    _umbracoCultureProvider.GetCulturesForCultureVariant(descendant);
+                                if (descendantCultures.Contains(culture))
                                 {
-                                    var descendantCultures = _umbracoCultureProvider.GetCulturesForCultureVariant(descendant);
-                                    if (descendantCultures.Contains(culture))
+                                    if (isPublishConfigured)
                                     {
-                                        if (isPublishConfigured)
-                                        {
-                                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, culture, EnterspeedContentState.Publish));
-                                        }
+                                        jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, culture, EnterspeedContentState.Publish));
+                                    }
 
-                                        if (isPreviewConfigured)
-                                        {
-                                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, culture, EnterspeedContentState.Preview));
-                                        }
+                                    if (isPreviewConfigured)
+                                    {
+                                        jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, culture, EnterspeedContentState.Preview));
                                     }
                                 }
                             }
@@ -120,8 +171,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                     }
                 }
             }
-
-            EnqueueJobs(jobs);
         }
     }
 }
