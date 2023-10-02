@@ -10,6 +10,9 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.DataPropertyValueConverter
             this Composition composition)
             => composition.WithCollectionBuilder<EnterspeedPropertyValueConverterCollectionBuilder>();
 
+        public static EnterspeedPropertyMetaDataCollectionBuilder EnterspeedPropertyMetaDataServices(this Composition composition)
+            => composition.WithCollectionBuilder<EnterspeedPropertyMetaDataCollectionBuilder>();
+
         public static EnterspeedGridEditorValueConverterCollectionBuilder EnterspeedGridEditorValueConverters(
             this Composition composition)
             => composition.WithCollectionBuilder<EnterspeedGridEditorValueConverterCollectionBuilder>();
