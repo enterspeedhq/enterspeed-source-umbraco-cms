@@ -113,6 +113,9 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
                 .Append<DefaultTextboxPropertyValueConverter>()
                 .Append<DefaultUserPickerPropertyValueConverter>();
 
+            // Property metadata services
+            builder.EnterspeedPropertyMetaDataServices();
+
             // Default grid editor value converters
             builder.EnterspeedGridEditorValueConverters()
                 .Append<DefaultRichTextEditorGridEditorValueConverter>()
