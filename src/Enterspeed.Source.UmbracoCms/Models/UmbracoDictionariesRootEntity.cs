@@ -5,7 +5,7 @@ using Enterspeed.Source.UmbracoCms.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Models
 {
-    public class UmbracoDictionariesRootEntity : IEnterspeedEntity
+    public class UmbracoDictionariesRootEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly string _culture;

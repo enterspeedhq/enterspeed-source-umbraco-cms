@@ -7,7 +7,7 @@ using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Enterspeed.Source.UmbracoCms.Models
 {
-    public class UmbracoContentEntity : IEnterspeedEntity
+    public class UmbracoContentEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {
         private readonly IPublishedContent _content;
         private readonly IEntityIdentityService _entityIdentityService;

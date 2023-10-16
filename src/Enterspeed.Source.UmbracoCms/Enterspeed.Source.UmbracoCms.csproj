@@ -17,10 +17,12 @@
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
+		  <RestoreSources>$(RestoreSources);../../../LocalNuGetFeed;https://api.nuget.org/v3/index.json</RestoreSources>
+
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Enterspeed.Source.Sdk" Version="1.0.2" />
+		<PackageReference Include="Enterspeed.Source.Sdk" Version="0.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
