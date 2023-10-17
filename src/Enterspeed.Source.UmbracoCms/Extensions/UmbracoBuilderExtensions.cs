@@ -113,6 +113,9 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
                 .Append<DefaultTextboxPropertyValueConverter>()
                 .Append<DefaultUserPickerPropertyValueConverter>();
 
+            // Property data mappers
+            builder.EnterspeedPropertyDataMappers();
+
             // Property metadata mappers
             builder.EnterspeedPropertyMetaDataMappers();
 

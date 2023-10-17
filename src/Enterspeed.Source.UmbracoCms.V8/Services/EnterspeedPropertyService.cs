@@ -26,6 +26,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly IDomainService _domainService;
         private readonly IEnterspeedValidationService _enterspeedValidationService;
         private readonly EnterspeedPropertyMetaDataMapperCollection _enterspeedPropertyMetaDataMapperCollection;
+        private readonly EnterspeedPropertyDataMapperCollection _enterspeedPropertyDataMapperCollection;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
@@ -33,7 +34,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             ILogger logger,
             IDomainService domainService,
             IEnterspeedValidationService enterspeedValidationService,
-            EnterspeedPropertyMetaDataMapperCollection enterspeedPropertyMetaDataMapperCollection)
+            EnterspeedPropertyMetaDataMapperCollection enterspeedPropertyMetaDataMapperCollection,
+            EnterspeedPropertyDataMapperCollection enterspeedPropertyDataMapperCollection)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
@@ -42,6 +44,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _identityService = Current.Factory.GetInstance<IEntityIdentityService>();
             _enterspeedValidationService = enterspeedValidationService;
             _enterspeedPropertyMetaDataMapperCollection = enterspeedPropertyMetaDataMapperCollection;
+            _enterspeedPropertyDataMapperCollection = enterspeedPropertyDataMapperCollection;
         }
 
         public IDictionary<string, IEnterspeedProperty> GetProperties(IPublishedContent content, string culture = null)
@@ -50,6 +53,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             var enterspeedProperties = ConvertProperties(properties, culture);
 
             MapAdditionalProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, content, culture);
+            ApplyPropertyDataMappers(enterspeedProperties, content, culture);
 
             enterspeedProperties.Add(MetaData, CreateNodeMetaData(content, culture));
 
@@ -74,7 +78,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
 
             MapAdditionalMetaData(metaData, content, culture);
             ApplyPropertyMetaDataMappers(metaData, content, culture);
-
 
             return new ObjectEnterspeedProperty(MetaData, metaData);
         }
@@ -146,8 +149,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 }
 
                 MapAdditionalMediaProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
-
-                ApplyPropertyMetaDataMappers(enterspeedProperties, publishedMedia, string.Empty);
+                ApplyPropertyDataMappers(enterspeedProperties, publishedMedia, string.Empty);
 
                 enterspeedProperties.Add(MetaData, CreateMediaProperties(media, publishedMedia));
 
@@ -178,6 +180,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
 
             MapAdditionalMediaMetaData(metaData, publishedMedia, string.Empty);
+            ApplyPropertyMetaDataMappers(metaData, publishedMedia, string.Empty);
 
             var metaProperties = new ObjectEnterspeedProperty(MetaData, metaData);
             return metaProperties;
@@ -282,6 +285,22 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 if (propertyAdditionalDataService.IsMapper(content))
                 {
                     propertyAdditionalDataService.MapAdditionalMetaData(metaData, content, culture);
+                }
+            }
+        }
+
+        private void ApplyPropertyDataMappers(IDictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        {
+            if (content == null)
+            {
+                return;
+            }
+
+            foreach (var propertyAdditionalDataService in _enterspeedPropertyDataMapperCollection)
+            {
+                if (propertyAdditionalDataService.IsMapper(content))
+                {
+                    propertyAdditionalDataService.MapAdditionalData(data, content, culture);
                 }
             }
         }

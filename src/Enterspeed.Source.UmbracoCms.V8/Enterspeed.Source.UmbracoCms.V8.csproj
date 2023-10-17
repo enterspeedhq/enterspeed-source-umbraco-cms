@@ -269,6 +269,8 @@
     <Compile Include="Components\DataPropertyValueConverter\CompositionExtensions.cs" />
     <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollection.cs" />
     <Compile Include="Components\DataPropertyValueConverter\EnterspeedGridEditorValueConverterCollectionBuilder.cs" />
+    <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyDataMapperCollection.cs" />
+    <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyDataMapperCollectionBuilder.cs" />
     <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyMetaDataMapperCollection.cs" />
     <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyMetaDataMapperCollectionBuilder.cs" />
     <Compile Include="Components\DataPropertyValueConverter\EnterspeedPropertyValueConverterCollection.cs" />
@@ -412,6 +414,7 @@
     <Compile Include="Services\IEnterspeedGridEditorService.cs" />
     <Compile Include="Services\IEnterspeedGuardService.cs" />
     <Compile Include="Services\IEnterspeedJobsHandlingService.cs" />
+    <Compile Include="Services\IEnterspeedPropertyDataMapper.cs" />
     <Compile Include="Services\IEnterspeedPropertyMetaDataMapper.cs" />
     <Compile Include="Services\IEnterspeedPropertyService.cs" />
     <Compile Include="Services\IEnterspeedJobService.cs" />
