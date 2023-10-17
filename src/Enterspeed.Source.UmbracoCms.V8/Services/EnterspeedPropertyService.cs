@@ -25,13 +25,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly ILogger _logger;
         private readonly IDomainService _domainService;
         private readonly IEnterspeedValidationService _enterspeedValidationService;
+        private readonly EnterspeedPropertyMetaDataCollection _enterspeedPropertyMetaDataCollection;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
             IUmbracoContextFactory umbracoContextFactory,
             ILogger logger,
             IDomainService domainService,
-            IEnterspeedValidationService enterspeedValidationService)
+            IEnterspeedValidationService enterspeedValidationService,
+            EnterspeedPropertyMetaDataCollection enterspeedPropertyMetaDataCollection)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
@@ -39,6 +41,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             _domainService = domainService;
             _identityService = Current.Factory.GetInstance<IEntityIdentityService>();
             _enterspeedValidationService = enterspeedValidationService;
+            _enterspeedPropertyMetaDataCollection = enterspeedPropertyMetaDataCollection;
         }
 
         public IDictionary<string, IEnterspeedProperty> GetProperties(IPublishedContent content, string culture = null)
@@ -70,6 +73,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             };
 
             MapAdditionalMetaData(metaData, content, culture);
+            MapAdditionalContentMetaData(metaData, content, culture);
+
 
             return new ObjectEnterspeedProperty("metaData", metaData);
         }
@@ -141,6 +146,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 }
 
                 MapAdditionalMediaProperties((Dictionary<string, IEnterspeedProperty>)enterspeedProperties, publishedMedia, string.Empty);
+
+                MapAdditionalContentMetaData(enterspeedProperties, publishedMedia, string.Empty);
 
                 enterspeedProperties.Add(MetaData, CreateMediaProperties(media, publishedMedia));
 
@@ -261,6 +268,22 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             }
 
             return new StringEnterspeedProperty("focalPoint", null);
+        }
+
+        private void MapAdditionalContentMetaData(IDictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture)
+        {
+            if (content == null)
+            {
+                return;
+            }
+
+            foreach (var propertyAdditionalDataService in _enterspeedPropertyMetaDataCollection)
+            {
+                if (propertyAdditionalDataService.IsAllowed(content))
+                {
+                    propertyAdditionalDataService.MapAdditionalMetaData(metaData, content, culture);
+                }
+            }
         }
     }
 }
