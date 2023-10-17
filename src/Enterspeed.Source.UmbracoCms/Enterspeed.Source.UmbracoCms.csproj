@@ -17,8 +17,6 @@
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
-		  <RestoreSources>$(RestoreSources);../../../LocalNuGetFeed;https://api.nuget.org/v3/index.json</RestoreSources>
-
 	</PropertyGroup>
 
 	<ItemGroup>
