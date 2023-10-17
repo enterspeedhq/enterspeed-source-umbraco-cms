@@ -6,7 +6,7 @@ using Umbraco.Core.Models;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Models
 {
-    public class UmbracoDictionaryEntity : IEnterspeedEntity
+    public class UmbracoDictionaryEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {
         private readonly IDictionaryItem _dictionaryItem;
         private readonly IEntityIdentityService _entityIdentityService;

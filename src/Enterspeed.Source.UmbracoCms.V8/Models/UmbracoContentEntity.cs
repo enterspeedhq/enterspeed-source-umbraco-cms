@@ -8,7 +8,7 @@ using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Models
 {
-    public class UmbracoContentEntity : IEnterspeedEntity
+    public class UmbracoContentEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {
         private readonly IPublishedContent _content;
         private readonly IEntityIdentityService _entityIdentityService;
