@@ -4,9 +4,9 @@ using Umbraco.Core.Models.PublishedContent;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
-    public interface IEnterspeedPropertyMetaDataService
+    public interface IEnterspeedPropertyMetaDataMapper
     {
-        bool IsAllowed(IPublishedContent content);
+        bool IsMapper(IPublishedContent content);
         void MapAdditionalMetaData(IDictionary<string, IEnterspeedProperty> metaData, IPublishedContent content, string culture);
     }
 }

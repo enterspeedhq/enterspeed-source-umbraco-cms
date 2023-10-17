@@ -5,9 +5,9 @@ using Umbraco.Cms.Core.Composing;
 
 namespace Enterspeed.Source.UmbracoCms.DataPropertyValueConverters
 {
-    public sealed class EnterspeedPropertyMetaDataCollection : BuilderCollectionBase<IEnterspeedPropertyMetaDataService>
+    public sealed class EnterspeedPropertyMetaDataMapperCollection : BuilderCollectionBase<IEnterspeedPropertyMetaDataMapper>
     {
-        public EnterspeedPropertyMetaDataCollection(Func<IEnumerable<IEnterspeedPropertyMetaDataService>> items)
+        public EnterspeedPropertyMetaDataMapperCollection(Func<IEnumerable<IEnterspeedPropertyMetaDataMapper>> items)
             : base(items)
         {
         }
