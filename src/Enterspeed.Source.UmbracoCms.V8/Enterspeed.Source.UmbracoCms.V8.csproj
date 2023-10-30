@@ -48,7 +48,7 @@
       <HintPath>..\..\lib\packages\CSharpTest.Net.Collections.14.906.1403.1082\lib\net40\CSharpTest.Net.Collections.dll</HintPath>
     </Reference>
     <Reference Include="Enterspeed.Source.Sdk, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\lib\packages\Enterspeed.Source.Sdk.2.0.0-alpha.2\lib\netstandard2.0\Enterspeed.Source.Sdk.dll</HintPath>
+      <HintPath>..\..\lib\packages\Enterspeed.Source.Sdk.2.0.0-alpha.3\lib\netstandard2.0\Enterspeed.Source.Sdk.dll</HintPath>
     </Reference>
     <Reference Include="Examine, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\lib\packages\Examine.1.0.2\lib\net452\Examine.dll</HintPath>
