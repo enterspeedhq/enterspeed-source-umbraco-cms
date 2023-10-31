@@ -11,7 +11,6 @@ using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.EventHandlers;
 using Enterspeed.Source.UmbracoCms.V8.Extensions;
 using Enterspeed.Source.UmbracoCms.V8.Factories;
-using Enterspeed.Source.UmbracoCms.V8.Guards;
 using Enterspeed.Source.UmbracoCms.V8.Handlers;
 using Enterspeed.Source.UmbracoCms.V8.Handlers.Media;
 using Enterspeed.Source.UmbracoCms.V8.Handlers.PreviewContent;
@@ -112,6 +111,12 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                 .Append<DefaultTextboxPropertyValueConverter>()
                 .Append<DefaultUserPickerPropertyValueConverter>();
 
+            // Property data mappers
+            composition.EnterspeedPropertyDataMappers();
+
+            // Property metadata mappers
+            composition.EnterspeedPropertyMetaDataMappers();
+
             // Default grid editor value converters
             composition.EnterspeedGridEditorValueConverters()
                 .Append<DefaultRichTextEditorGridEditorValueConverter>()
@@ -121,8 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components
                 .Append<DefaultEmbedGridEditorValueConverter>();
 
             // Content handling guards
-            composition.EnterspeedContentHandlingGuards()
-                .Append<ContentCultureUrlRequiredGuard>();
+            composition.EnterspeedContentHandlingGuards();
 
             // Dictionary items handling guards
             composition.EnterspeedDictionaryItemHandlingGuards();

@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added 
+- Added `EnterspeedPropertyMetaDataMappers` and `EnterspeedPropertyDataMappers`. These are additions to 
+  `MapAdditionalMetaData` and `MapAdditionalProperties` on the `EnterspeedPropertyService` class, but useful if you
+  have more complex mapping or different mapping based on different types. (contribution by [Adrian Ochmann](https://github.com/aochmann))
 ### Fixed 
 - Ingest jobs from `Save` or `Save and Publish` will only be executed on servers configured as `ServerRole.Master` or `ServerRole.Single` just like Ingest jobs from seed.configured as `ServerRole.Master` and `ServerRole.Single`.
 
