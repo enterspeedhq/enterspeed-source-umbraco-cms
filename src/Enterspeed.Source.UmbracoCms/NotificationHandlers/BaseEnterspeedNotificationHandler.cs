@@ -4,8 +4,9 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
-using Umbraco.Cms.Core;
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Core.Web;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
@@ -23,6 +24,8 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         protected readonly IUmbracoContextFactory _umbracoContextFactory;
         protected readonly IScopeProvider _scopeProvider;
         protected readonly IAuditService _auditService;
+        protected readonly IServerRoleAccessor _serverRoleAccessor;
+        protected readonly ILogger _logger;
 
         protected BaseEnterspeedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -30,7 +33,9 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider,
-            IAuditService auditService)
+            IAuditService auditService,
+            IServerRoleAccessor serverRoleAccessor,
+            ILogger logger)
         {
             _configurationService = configurationService;
             _enterspeedJobRepository = enterspeedJobRepository;
@@ -38,6 +43,8 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             _umbracoContextFactory = umbracoContextFactory;
             _scopeProvider = scopeProvider;
             _auditService = auditService;
+            _serverRoleAccessor = serverRoleAccessor;
+            _logger = logger;
         }
 
         protected bool IsPublishConfigured()
@@ -59,14 +66,21 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
             _enterspeedJobRepository.Save(jobs);
 
-            using (_umbracoContextFactory.EnsureUmbracoContext())
+            if (_configurationService.RunJobsOnServer(_serverRoleAccessor.CurrentServerRole))
             {
-                if (_scopeProvider.Context != null)
+                using (_umbracoContextFactory.EnsureUmbracoContext())
                 {
-                    var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
-                    // Add a callback to the current Scope which will execute when it's completed
-                    _scopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
+                    if (_scopeProvider.Context != null)
+                    {
+                        var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
+                        // Add a callback to the current Scope which will execute when it's completed
+                        _scopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
+                    }
                 }
+            }
+            else
+            {
+                _logger.LogInformation("Enterspeed jobs does not run on servers with {role} role.", _serverRoleAccessor.CurrentServerRole.ToString());
             }
         }
 

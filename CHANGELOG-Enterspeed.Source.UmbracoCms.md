@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed 
+- Ingest jobs from `Save` or `Save and Publish` will only be executed on servers configured as `ServerRole.SchedulingPublisher` or `ServerRole.Single` just like Ingest jobs from seed.configured as `ServerRole.Master` and `ServerRole.Single`. Also upgraded the logging about this from debug to information.
+ 
 ## [3.1.0 - 2023-09-21]
 ### Added 
 - Added option to manually register Enterspeed using `.addEnterspeed()` on the Umbraco builder if you are not using Umbracos `.AddComposers()` method.

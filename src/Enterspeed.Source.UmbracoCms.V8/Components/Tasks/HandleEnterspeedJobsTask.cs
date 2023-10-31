@@ -39,14 +39,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.Tasks
                 return true;
             }
 
-            if (_runtime.ServerRole == ServerRole.Master || _runtime.ServerRole == ServerRole.Single)
+            if (_configurationService.RunJobsOnServer(_runtime.ServerRole))
             {
                 // Handle jobs in batches of 50
                 _enterspeedJobsHandlingService.HandlePendingJobs(50);
             }
             else
             {
-                _logger.Info<HandleEnterspeedJobsTask>("Does not run on servers with {role} role.", _runtime.ToString());
+                _logger.Info<HandleEnterspeedJobsTask>("Enterspeed jobs does not run on servers with {role} role.", _runtime.ToString());
             }
 
             return true;

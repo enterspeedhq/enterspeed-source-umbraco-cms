@@ -12,6 +12,8 @@ using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Providers;
 using static Umbraco.Cms.Core.Collections.TopoGraph;
+using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Sync;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -38,14 +40,18 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
             IUmbracoCultureProvider umbracoCultureProvider,
-            IAuditService auditService)
+            IAuditService auditService,
+            IServerRoleAccessor serverRoleAccessor,
+            ILogger<EnterspeedContentUnpublishingNotificationHandler> logger)
             : base(
                   configurationService,
                   enterspeedJobRepository,
                   enterspeedJobsHandlingService,
                   umbracoContextFactory,
                   scopeProvider,
-                  auditService)
+                  auditService,
+                  serverRoleAccessor,
+                  logger)
         {
             _contentService = contentService;
             _enterspeedJobFactory = enterspeedJobFactory;

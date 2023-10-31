@@ -32,7 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
                 var serviceProvider = serviceScope.ServiceProvider;
                 var runtimeState = serviceProvider.GetRequiredService<IRuntimeState>();
                 var enterspeedJobsHandlingService = serviceProvider.GetRequiredService<IEnterspeedJobsHandlingService>();
-                var logger = serviceProvider.GetRequiredService<ILogger<HandleEnterspeedJobsHostedService>>();
+                var logger = serviceProvider.GetRequiredService<ILogger<InvalidateEnterspeedJobsHostedService>>();
                 var serverRoleAccessor = serviceProvider.GetRequiredService<IServerRoleAccessor>();
                 var configurationService = serviceProvider.GetRequiredService<IEnterspeedConfigurationService>();
                 var scopeProvider = serviceProvider.GetRequiredService<IScopeProvider>();
@@ -48,7 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
                     return Task.CompletedTask;
                 }
 
-                if (serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher || serverRoleAccessor.CurrentServerRole == ServerRole.Single)
+                if (configurationService.RunJobsOnServer(serverRoleAccessor.CurrentServerRole))
                 {
                     using (var scope = scopeProvider.CreateScope(autoComplete: true))
                     {
@@ -57,7 +57,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
                 }
                 else
                 {
-                    logger.LogInformation("Does not run on servers with {role} role.", serverRoleAccessor.CurrentServerRole.ToString());
+                    logger.LogInformation("Enterspeed jobs does not run on servers with {role} role.", serverRoleAccessor.CurrentServerRole.ToString());
                 }
 
                 return Task.CompletedTask;

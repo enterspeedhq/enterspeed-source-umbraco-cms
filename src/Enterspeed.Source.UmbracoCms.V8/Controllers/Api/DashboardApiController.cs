@@ -90,9 +90,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();
+            var runJobsOnServer = _enterspeedConfigurationService.RunJobsOnServer(_runtimeState.ServerRole);
             return new ApiResponse<EnterspeedUmbracoConfigurationResponse>
             {
-                Data = new EnterspeedUmbracoConfigurationResponse(config, _runtimeState.ServerRole),
+                Data = new EnterspeedUmbracoConfigurationResponse(config, _runtimeState.ServerRole, runJobsOnServer),
                 IsSuccess = true
             };
         }

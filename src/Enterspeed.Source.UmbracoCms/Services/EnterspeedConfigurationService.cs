@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Configuration;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Sync;
 
 namespace Enterspeed.Source.UmbracoCms.Services
 {
@@ -74,6 +75,12 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return configuration.RootDictionariesDisabled;
         }
 
+        public bool RunJobsOnServer(ServerRole serverRole)
+        {
+            var configuration = GetConfiguration();
+            return configuration.RunJobsOnAllServerRoles || serverRole == ServerRole.SchedulingPublisher || serverRole == ServerRole.Single;
+        }
+
         public void Save(EnterspeedUmbracoConfiguration configuration)
         {
             if (configuration == null)
@@ -105,6 +112,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         {
             var enterspeedSection = _configuration.GetSection("Enterspeed");
             configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("RootDictionariesDisabled");
+            configuration.RunJobsOnAllServerRoles = enterspeedSection.GetValue<bool>("RunJobsOnAllServerRoles");
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()

@@ -48,13 +48,13 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
                     return Task.CompletedTask;
                 }
 
-                if (serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher || serverRoleAccessor.CurrentServerRole == ServerRole.Single)
+                if(configurationService.RunJobsOnServer(serverRoleAccessor.CurrentServerRole))
                 {
                     enterspeedJobsHandlingService.HandlePendingJobs(50);
                 }
                 else
                 {
-                    logger.LogInformation("Does not run on servers with {role} role.", serverRoleAccessor.CurrentServerRole.ToString());
+                    logger.LogInformation("Enterspeed jobs does not run on servers with {role} role.", serverRoleAccessor.CurrentServerRole.ToString());
                 }
 
                 return Task.CompletedTask;

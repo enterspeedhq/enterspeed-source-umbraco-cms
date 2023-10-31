@@ -8,6 +8,8 @@ using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
+using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Sync;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -27,14 +29,18 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider,
             IAuditService auditService,
-            IEnterspeedJobFactory enterspeedJobFactory)
+            IEnterspeedJobFactory enterspeedJobFactory,
+            IServerRoleAccessor serverRoleAccessor,
+            ILogger<EnterspeedMediaTrashedNotificationHandler> logger)
             : base(
                 configurationService,
                 enterspeedJobRepository,
                 enterspeedJobsHandlingService,
                 umbracoContextFactory,
                 scopeProvider,
-                auditService)
+                auditService,
+                serverRoleAccessor,
+                logger)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
         }
