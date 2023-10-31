@@ -1,4 +1,4 @@
-﻿function dashboardController() {
+﻿function enterspeedDashboardController() {
     var vm = this;
     vm.changeTab = changeTab;
 
@@ -28,8 +28,8 @@
 
     function init() {
     }
-    
+
     init();
 }
 
-angular.module("umbraco").controller("DashboardController", dashboardController);
+angular.module("umbraco").controller("DashboardController", enterspeedDashboardController);

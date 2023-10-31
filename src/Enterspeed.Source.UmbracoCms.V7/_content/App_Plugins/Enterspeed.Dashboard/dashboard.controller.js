@@ -1,4 +1,4 @@
-﻿function dashboardController() {
+﻿function enterspeedDashboardController() {
     var vm = this;
 
     vm.loadingFailedJobs = false;
@@ -24,4 +24,4 @@
     init();
 }
 
-angular.module("umbraco").controller("DashboardController", dashboardController);
+angular.module("umbraco").controller("DashboardController", enterspeedDashboardController);
