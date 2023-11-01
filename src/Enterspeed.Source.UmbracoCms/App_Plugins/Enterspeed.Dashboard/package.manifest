@@ -9,7 +9,7 @@
     "~/App_Plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/enterspeed-selectNode.controller.js",
 
 		// Resources
-		"~/App_Plugins/Enterspeed.Dashboard/Dashboard.Resources/dashboard.resources.js"
+		"~/App_Plugins/Enterspeed.Dashboard/Dashboard.Resources/enterspeed-dashboard.resources.js"
 	],
 	"css": [
 		"~/App_Plugins/Enterspeed.Dashboard/styles.css"

@@ -1,4 +1,4 @@
-﻿function seedController(dashboardResources, notificationsService) {
+﻿function enterspeedSeedController(enterspeedDashboardRessource, notificationsService) {
     var vm = this;
     vm.seedState = "success";
     vm.seedResponse = null;
@@ -8,7 +8,7 @@
 
     vm.seed = function () {
         vm.seedState = "busy";
-        dashboardResources.seed().then(function (result) {
+        enterspeedDashboardRessource.seed().then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Seed", "Successfully started seeding Enterspeed")
                 vm.seedResponse = result.data.data;
@@ -24,4 +24,4 @@
     init();
 }
 
-angular.module("umbraco").controller("SeedController", seedController);
+angular.module("umbraco").controller("EnterspeedSeedController", enterspeedSeedController);

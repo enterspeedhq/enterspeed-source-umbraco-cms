@@ -15,4 +15,4 @@
     init();
 }
 
-angular.module("umbraco").controller("DashboardSettingsController", enterspeedDashboardSettingsController);
+angular.module("umbraco").controller("EnterspeedDashboardSettingsController", enterspeedDashboardSettingsController);

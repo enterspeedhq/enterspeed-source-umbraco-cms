@@ -1,4 +1,4 @@
-﻿function enterspeedSeedController(dashboardResources, notificationsService, editorService) {
+﻿function enterspeedSeedController(enterspeedDashboardRessource, notificationsService, editorService) {
     var vm = this;
     vm.seedState = "success";
     vm.clearPendingJobsState = "success";
@@ -32,7 +32,7 @@
 
     vm.seed = function () {
         vm.seedState = "busy";
-        dashboardResources.seed().then(function (result) {
+        enterspeedDashboardRessource.seed().then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Seed", "Successfully started seeding to Enterspeed");
                 vm.seedResponse = result.data.data;
@@ -53,7 +53,7 @@
             mediaNodes: vm.selectedNodesToSeed['media'],
             dictionaryNodes: vm.selectedNodesToSeed['dictionary']
         };
-        dashboardResources.customSeed(customSeed).then(function (result) {
+        enterspeedDashboardRessource.customSeed(customSeed).then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Seed", "Successfully started seeding Enterspeed");
                 vm.seedResponse = result.data.data;
@@ -73,7 +73,7 @@
 
     vm.clearPendingJobs = function () {
         vm.clearPendingJobsState = "busy";
-        dashboardResources.clearPendingJobs().then(function (result) {
+        enterspeedDashboardRessource.clearPendingJobs().then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Clear job queue", "Successfully cleared the queue of pending jobs");
                 vm.numberOfPendingJobs = 0;
@@ -85,7 +85,7 @@
     };
 
     function getNumberOfPendingJobs() {
-        dashboardResources.getNumberOfPendingJobs().then(function (result) {
+        enterspeedDashboardRessource.getNumberOfPendingJobs().then(function (result) {
             if (result.data.isSuccess) {
                 vm.numberOfPendingJobs = result.data.data.numberOfPendingJobs;
             } else {
