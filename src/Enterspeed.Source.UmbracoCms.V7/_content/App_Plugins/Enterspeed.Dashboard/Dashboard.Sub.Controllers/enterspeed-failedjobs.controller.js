@@ -103,7 +103,7 @@
     init();
 }
 
-angular.module("umbraco").controller("EnterspeedFailedJobsController", failedJobsController);
+angular.module("umbraco").controller("EnterspeedFailedJobsController", enterspeedFailedJobsController);
 
 angular.module("umbraco").filter('startFrom', function () {
     return function (input, start) {
