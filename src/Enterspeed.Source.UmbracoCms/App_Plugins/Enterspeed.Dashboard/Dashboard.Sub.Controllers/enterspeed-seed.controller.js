@@ -1,4 +1,4 @@
-﻿function seedController(dashboardResources, notificationsService, editorService) {
+﻿function enterspeedSeedController(dashboardResources, notificationsService, editorService) {
     var vm = this;
     vm.seedState = "success";
     vm.clearPendingJobsState = "success";
@@ -148,4 +148,4 @@
     init();
 }
 
-angular.module("umbraco").controller("SeedController", seedController);
+angular.module("umbraco").controller("EnterspeedSeedController", enterspeedSeedController);

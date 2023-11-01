@@ -1,4 +1,4 @@
-﻿function failedJobsController(dashboardResources, $scope, $filter, $timeout) {
+﻿function enterspeedFailedJobsController(dashboardResources, $scope, $filter, $timeout) {
     var vm = this;
     vm.loadingFailedJobs = false;
     vm.failedJobs = [];
@@ -104,7 +104,7 @@
     init();
 }
 
-angular.module("umbraco").controller("FailedJobsController", failedJobsController);
+angular.module("umbraco").controller("EnterspeedFailedJobsController", enterspeedFailedJobsController);
 
 angular.module("umbraco").filter('startFrom', function () {
     return function (input, start) {
