@@ -48,7 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
                     return Task.CompletedTask;
                 }
 
-                if (configurationService.RunJobsOnServer(serverRoleAccessor.CurrentServerRole))
+                if (enterspeedJobsHandlingService.IsJobsProcessingEnabled())
                 {
                     using (var scope = scopeProvider.CreateScope(autoComplete: true))
                     {

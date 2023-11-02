@@ -66,7 +66,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 
             _enterspeedJobRepository.Save(jobs);
 
-            if (_configurationService.RunJobsOnServer(_serverRoleAccessor.CurrentServerRole))
+            if (_enterspeedJobsHandlingService.IsJobsProcessingEnabled())
             {
                 using (_umbracoContextFactory.EnsureUmbracoContext())
                 {

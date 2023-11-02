@@ -10,6 +10,5 @@ namespace Enterspeed.Source.UmbracoCms.Services
         bool IsPublishConfigured();
         bool IsPreviewConfigured();
         bool IsRootDictionariesDisabled();
-        bool RunJobsOnServer(ServerRole serverRole);
     }
 }

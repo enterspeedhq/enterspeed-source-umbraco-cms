@@ -6,6 +6,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Handlers;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Scoping;
+using Umbraco.Cms.Core.Sync;
 
 namespace Enterspeed.Source.UmbracoCms.Services
 {
@@ -14,18 +15,32 @@ namespace Enterspeed.Source.UmbracoCms.Services
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobsHandler _enterspeedJobsHandler;
         private readonly IEnterspeedPostJobsHandler _enterspeedPostJobsHandler;
+        private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
+        private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly ILogger<EnterspeedJobsHandlingService> _logger;
 
         public EnterspeedJobsHandlingService(
             IEnterspeedJobRepository enterspeedJobRepository,
             ILogger<EnterspeedJobsHandlingService> logger,
             IEnterspeedJobsHandler enterspeedJobsHandler,
-            IEnterspeedPostJobsHandler enterspeedPostJobsHandler)
+            IEnterspeedPostJobsHandler enterspeedPostJobsHandler,
+            IEnterspeedConfigurationService enterspeedConfigurationService,
+            IServerRoleAccessor serverRoleAccessor)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _logger = logger;
             _enterspeedJobsHandler = enterspeedJobsHandler;
             _enterspeedPostJobsHandler = enterspeedPostJobsHandler;
+            _enterspeedConfigurationService = enterspeedConfigurationService;
+            _serverRoleAccessor = serverRoleAccessor;
+        }
+
+        public bool IsJobsProcessingEnabled()
+        {
+            var configuration = _enterspeedConfigurationService.GetConfiguration();
+            return configuration.RunJobsOnAllServerRoles 
+                   || _serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher 
+                   || _serverRoleAccessor.CurrentServerRole == ServerRole.Single;
         }
 
         public virtual void HandlePendingJobs(int batchSize)

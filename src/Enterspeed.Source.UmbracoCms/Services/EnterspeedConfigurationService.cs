@@ -75,12 +75,6 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return configuration.RootDictionariesDisabled;
         }
 
-        public bool RunJobsOnServer(ServerRole serverRole)
-        {
-            var configuration = GetConfiguration();
-            return configuration.RunJobsOnAllServerRoles || serverRole == ServerRole.SchedulingPublisher || serverRole == ServerRole.Single;
-        }
-
         public void Save(EnterspeedUmbracoConfiguration configuration)
         {
             if (configuration == null)
