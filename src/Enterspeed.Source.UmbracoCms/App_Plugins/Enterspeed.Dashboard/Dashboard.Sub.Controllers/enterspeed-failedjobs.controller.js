@@ -1,15 +1,30 @@
 ﻿function enterspeedFailedJobsController(enterspeedDashboardRessource, $scope, $filter, $timeout) {
     var vm = this;
     vm.loadingFailedJobs = false;
+    vm.loadingConfiguration = false;
     vm.failedJobs = [];
     vm.activeException = "";
     vm.deleteModes = ['Everything', 'Selected'];
     vm.selectedDeleteMode = vm.deleteModes[0];
+    vm.configuration = {};
     vm.deleteModeSelectOpen = false;
 
     function init() {
+        getConfiguration();
         vm.getFailedJobs();
     }
+
+    function getConfiguration() {
+        vm.loadingConfiguration = true;
+        dashboardResources.getEnterspeedConfiguration()
+            .then(function (result) {
+                if (result.data.isSuccess) {
+                    vm.runJobsOnServer = result.data.data.runJobsOnServer;
+                    vm.serverRole = result.data.data.serverRole;
+                    vm.loadingConfiguration = false;
+                }
+            });
+    };
 
     vm.toggleException = function (index) {
         if (index === vm.activeException) {

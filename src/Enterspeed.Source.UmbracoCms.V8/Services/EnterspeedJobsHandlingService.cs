@@ -4,7 +4,9 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Handlers;
+using Umbraco.Core;
 using Umbraco.Core.Logging;
+using Umbraco.Core.Sync;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
@@ -12,16 +14,22 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
     {
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobsHandler _enterspeedJobsHandler;
+        private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
+        private readonly IRuntimeState _runtimeState;
         private readonly ILogger _logger;
 
         public EnterspeedJobsHandlingService(
             IEnterspeedJobRepository enterspeedJobRepository,
             ILogger logger,
-            IEnterspeedJobsHandler enterspeedJobsHandler)
+            IEnterspeedJobsHandler enterspeedJobsHandler,
+            IEnterspeedConfigurationService enterspeedConfigurationService,
+            IRuntimeState runtimeState)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _logger = logger;
             _enterspeedJobsHandler = enterspeedJobsHandler;
+            _enterspeedConfigurationService = enterspeedConfigurationService;
+            _runtimeState = runtimeState;
         }
 
         public virtual void HandlePendingJobs(int batchSize)
@@ -41,6 +49,14 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 }
             }
             while (jobCount > 0);
+        }
+
+        public bool IsJobsProcessingEnabled()
+        {
+            var configuration = _enterspeedConfigurationService.GetConfiguration();
+            return configuration.RunJobsOnAllServerRoles
+                   || _runtimeState.ServerRole == ServerRole.Master
+                   || _runtimeState.ServerRole == ServerRole.Single;
         }
 
         public virtual void HandleJobs(IList<EnterspeedJob> jobs)

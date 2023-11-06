@@ -1,7 +1,12 @@
 ﻿<div ng-controller="EnterspeedFailedJobsController as vm" class="failedjobs-dashboard">
 
-    <umb-load-indicator ng-if="vm.loadingFailedJobs">
+    <umb-load-indicator ng-if="vm.loadingFailedJobs || vm.loadingConfiguration">
     </umb-load-indicator>
+
+    <div ng-if="!vm.runJobsOnServer" class="info-box">
+        <strong>Enterspeed jobs will not run on this current server.</strong><br />
+        Enterspeed jobs will only run on servers with Umbraco role of <i>SchedulingPublisher</i> or <i>Single</i>. Current Umbraco server role is <i>{{vm.serverRole}}</i>.
+    </div>
 
     <div class="failedjobs-dashboard-content" ng-if="!vm.failedjobs-loading">
         <ul class="dashboard-list">
@@ -30,11 +35,17 @@
                     <div class="dashboard-list-item-property" style="width:10%">{{job.entityType}}</div>
                     <div class="dashboard-list-item-property" style="width:10%">{{job.culture}}</div>
                     <div class="dashboard-list-item-property" style="width:15%">{{job.jobType}}</div>
-                    <div class="dashboard-list-item-property" style="width:20%">{{job.createdAt | date:'yyyy-MM-dd
-                        HH:mm:ss'}}
+                    <div class="dashboard-list-item-property" style="width:20%">
+                        {{
+job.createdAt | date:'yyyy-MM-dd
+                        HH:mm:ss'
+                        }}
                     </div>
-                    <div class="dashboard-list-item-property" style="width:20%">{{job.updatedAt | date:'yyyy-MM-dd
-                        HH:mm:ss'}}
+                    <div class="dashboard-list-item-property" style="width:20%">
+                        {{
+job.updatedAt | date:'yyyy-MM-dd
+                        HH:mm:ss'
+                        }}
                     </div>
                 </div>
                 <div class="dashboard-list-item">

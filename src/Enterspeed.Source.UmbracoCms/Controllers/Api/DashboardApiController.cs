@@ -32,6 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
     public class DashboardApiController : UmbracoAuthorizedApiController
     {
         private readonly IServerRoleAccessor _serverRoleAccessor;
+        private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedJobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
@@ -44,7 +45,8 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
             IHttpContextAccessor httpContextAccessor,
-            IServerRoleAccessor serverRoleAccessor)
+            IServerRoleAccessor serverRoleAccessor,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;
@@ -52,6 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
             _enterspeedConnection = enterspeedConnection;
             _httpContextAccessor = httpContextAccessor;
             _serverRoleAccessor = serverRoleAccessor;
+            _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
         }
 
         [HttpGet]
@@ -121,9 +124,10 @@ namespace Enterspeed.Source.UmbracoCms.Controllers.Api
         public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();
+            var runJobsOnServer = _enterspeedJobsHandlingService.IsJobsProcessingEnabled();
             return new ApiResponse<EnterspeedUmbracoConfigurationResponse>
             {
-                Data = new EnterspeedUmbracoConfigurationResponse(config, _serverRoleAccessor.CurrentServerRole),
+                Data = new EnterspeedUmbracoConfigurationResponse(config, _serverRoleAccessor.CurrentServerRole, runJobsOnServer),
                 IsSuccess = true
             };
         }

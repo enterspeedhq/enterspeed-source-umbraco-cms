@@ -1,4 +1,5 @@
 ﻿using Enterspeed.Source.UmbracoCms.V8.Models.Configuration;
+using Umbraco.Core.Sync;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
