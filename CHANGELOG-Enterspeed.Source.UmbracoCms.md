@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
   have more complex mapping or different mapping based on different types. (contribution by [Adrian Ochmann](https://github.com/aochmann))
 ### Fixed 
 - Ingest jobs from `Save` or `Save and Publish` will only be executed on servers configured as `ServerRole.SchedulingPublisher` or `ServerRole.Single` just like Ingest jobs from seed.configured as `ServerRole.Master` and `ServerRole.Single`. Also upgraded the logging about this from debug to information.
+- Prefixed JavaScript controllers to avoid conflicts with other packages
 
 ## [3.1.0 - 2023-09-21]
 ### Added 
