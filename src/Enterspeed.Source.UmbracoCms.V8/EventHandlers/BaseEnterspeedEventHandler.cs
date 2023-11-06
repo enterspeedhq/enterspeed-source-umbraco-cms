@@ -8,9 +8,7 @@ using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core;
 using Umbraco.Core.Logging;
 using Umbraco.Core.Scoping;
-using Umbraco.Core.Sync;
 using Umbraco.Web;
-using Umbraco.Web.HealthCheck.Checks.Config;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
@@ -50,7 +48,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             }
             EnterspeedJobRepository.Save(jobs);
 
-            if (ConfigurationService.RunJobsOnServer(Runtime.ServerRole))
+            if (JobsHandlingService.IsJobsProcessingEnabled())
             {
                 using (UmbracoContextFactory.EnsureUmbracoContext())
                 {

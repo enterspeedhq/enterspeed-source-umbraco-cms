@@ -9,6 +9,5 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         EnterspeedUmbracoConfiguration GetConfiguration();
         bool IsPublishConfigured();
         bool IsPreviewConfigured();
-        bool RunJobsOnServer(ServerRole serverRole);
     }
 }

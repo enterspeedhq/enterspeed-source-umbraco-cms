@@ -39,7 +39,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Components.Tasks
                 return true;
             }
 
-            if(_configurationService.RunJobsOnServer(_runtime.ServerRole))
+            if(_enterspeedJobsHandlingService.IsJobsProcessingEnabled())
             {
                 _enterspeedJobsHandlingService.InvalidateOldProcessingJobs();
             }

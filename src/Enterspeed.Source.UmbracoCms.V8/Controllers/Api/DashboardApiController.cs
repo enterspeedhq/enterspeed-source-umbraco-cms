@@ -33,6 +33,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         private readonly IEnterspeedConnection _enterspeedConnection;
         private readonly IRuntimeState _runtimeState;
         private readonly IScopeProvider _scopeProvider;
+        private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
 
         public DashboardApiController(
             IEnterspeedJobRepository enterspeedJobRepository,
@@ -40,7 +41,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
             IRuntimeState runtimeState,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IEnterspeedJobsHandlingService enterspeedJobsHandlingService)
         {
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobService = enterspeedJobService;
@@ -48,6 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
             _enterspeedConnection = enterspeedConnection;
             _runtimeState = runtimeState;
             _scopeProvider = scopeProvider;
+            _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
         }
 
         [HttpGet]
@@ -90,7 +93,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Controllers.Api
         public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();
-            var runJobsOnServer = _enterspeedConfigurationService.RunJobsOnServer(_runtimeState.ServerRole);
+            var runJobsOnServer = _enterspeedJobsHandlingService.IsJobsProcessingEnabled();
             return new ApiResponse<EnterspeedUmbracoConfigurationResponse>
             {
                 Data = new EnterspeedUmbracoConfigurationResponse(config, _runtimeState.ServerRole, runJobsOnServer),

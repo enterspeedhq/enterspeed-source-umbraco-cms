@@ -89,12 +89,6 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                    && !string.IsNullOrWhiteSpace(configuration.PreviewApiKey);
         }
 
-        public bool RunJobsOnServer(ServerRole serverRole)
-        {
-            var configuration = GetConfiguration();
-            return configuration.RunJobsOnAllServerRoles || serverRole == ServerRole.Master || serverRole == ServerRole.Single;
-        }
-
         public void Save(EnterspeedUmbracoConfiguration configuration)
         {
             if (configuration == null)
