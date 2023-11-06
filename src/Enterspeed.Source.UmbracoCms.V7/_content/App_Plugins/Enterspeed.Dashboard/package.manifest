@@ -1,16 +1,16 @@
 ﻿{
-	"javascript": [
-		// Controllers
-		"/app_plugins/Enterspeed.Dashboard/dashboard.controller.js",
-		"/app_plugins/Enterspeed.Dashboard/settings-dashboard.controller.js",
-		"/app_plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/seed.controller.js",
-		"/app_plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/configuration.controller.js",
-		"/app_plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/failedjobs.controller.js",
+  "javascript": [
+    // Controllers
+    "/app_plugins/Enterspeed.Dashboard/enterspeed-dashboard.controller.js",
+    "/app_plugins/Enterspeed.Dashboard/enterspeed-settings-dashboard.controller.js",
+    "/app_plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/enterspeed-seed.controller.js",
+    "/app_plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/enterspeed-configuration.controller.js",
+    "/app_plugins/Enterspeed.Dashboard/Dashboard.Sub.Controllers/enterspeed-failedjobs.controller.js",
 
-		// Resources
-		"/app_plugins/Enterspeed.Dashboard/Dashboard.Resources/dashboard.resources.js"
-	],
-	"css": [
-		"/app_plugins/Enterspeed.Dashboard/styles.css"
-	]
+    // Resources
+    "/app_plugins/Enterspeed.Dashboard/Dashboard.Resources/enterspeed-dashboard.resources.js"
+  ],
+  "css": [
+    "/app_plugins/Enterspeed.Dashboard/styles.css"
+  ]
 }

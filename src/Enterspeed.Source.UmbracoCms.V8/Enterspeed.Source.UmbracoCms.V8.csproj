@@ -446,17 +446,17 @@
     <Analyzer Include="..\..\lib\packages\StyleCop.Analyzers.1.1.118\analyzers\dotnet\cs\StyleCop.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\enterspeed-dashboard.controller.js" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\dashboard.html" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\dashboard.resources.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\configuration.controller.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\failedjobs.controller.js" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\seed.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\enterspeed-dashboard.resources.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\enterspeed-configuration.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\enterspeed-failedjobs.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\enterspeed-seed.controller.js" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\lang\en-US.xml" />
-    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.controller.js" />
+    <Content Include="_content\App_Plugins\Enterspeed.Dashboard\enterspeed-settings-dashboard.controller.js" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
     <Content Include="_content\App_Plugins\Enterspeed.Dashboard\styles.css" />
     <Content Include="_nuget\icon.png" />
