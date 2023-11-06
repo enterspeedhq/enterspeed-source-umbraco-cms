@@ -5,7 +5,7 @@
 
 	<div class="configuration-dashboard-content" ng-if="!vm.loadingConfiguration">
 
-		<div ng-if="vm.serverRole === 'Subscriber'" class="info-box">
+		<div ng-if="!vm.runJobsOnServer" class="info-box">
 			<strong>Enterspeed jobs will not run on this current server.</strong><br />
 			Enterspeed jobs will only run on servers with Umbraco role of <i>SchedulingPublisher</i> or <i>Single</i>. Current Umbraco server role is <i>{{vm.serverRole}}</i>.
 		</div>

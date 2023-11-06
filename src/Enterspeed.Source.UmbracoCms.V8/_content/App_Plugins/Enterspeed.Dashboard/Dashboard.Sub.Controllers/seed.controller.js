@@ -1,10 +1,25 @@
 ﻿function seedController(dashboardResources, notificationsService) {
     var vm = this;
+    vm.loadingConfiguration = false;
     vm.seedState = "success";
     vm.seedResponse = null;
+    vm.configuration = {};
 
     function init() {
+        getConfiguration();
     }
+
+    function getConfiguration() {
+        vm.loadingConfiguration = true;
+        dashboardResources.getEnterspeedConfiguration()
+            .then(function (result) {
+                if (result.data.isSuccess) {
+                    vm.runJobsOnServer = result.data.data.runJobsOnServer;
+                    vm.serverRole = result.data.data.serverRole;
+                    vm.loadingConfiguration = false;
+                }
+            });
+    };
 
     vm.seed = function () {
         vm.seedState = "busy";

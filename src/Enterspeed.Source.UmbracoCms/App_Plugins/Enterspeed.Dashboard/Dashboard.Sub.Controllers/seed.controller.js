@@ -1,5 +1,6 @@
 ﻿function seedController(dashboardResources, notificationsService, editorService) {
     var vm = this;
+    vm.loadingConfiguration = false;
     vm.seedState = "success";
     vm.clearPendingJobsState = "success";
     vm.numberOfPendingJobs = 0;
@@ -14,9 +15,11 @@
     vm.selectedNodesToSeed['content'] = [];
     vm.selectedNodesToSeed['media'] = [];
     vm.selectedNodesToSeed['dictionary'] = [];
+    vm.configuration = {};
     let intervalId;
 
     function init() {
+        getConfiguration();
         getNumberOfPendingJobs();
 
         intervalId = setInterval(getNumberOfPendingJobs, 10 * 1000);
@@ -29,6 +32,18 @@
             false
         );
     }
+
+    function getConfiguration() {
+        vm.loadingConfiguration = true;
+        dashboardResources.getEnterspeedConfiguration()
+            .then(function (result) {
+                if (result.data.isSuccess) {
+                    vm.runJobsOnServer = result.data.data.runJobsOnServer;
+                    vm.serverRole = result.data.data.serverRole;
+                    vm.loadingConfiguration = false;
+                }
+            });
+    };
 
     vm.seed = function () {
         vm.seedState = "busy";

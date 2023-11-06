@@ -10,8 +10,11 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.HostedServices;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
+using Umbraco.Cms.Core.Sync;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -35,14 +38,18 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
-            IUmbracoCultureProvider umbracoCultureProvider)
+            IUmbracoCultureProvider umbracoCultureProvider,
+            IServerRoleAccessor serverRoleAccessor,
+            ILogger<EnterspeedContentPublishingNotificationHandler> logger)
             : base(
                   configurationService,
                   enterspeedJobRepository,
                   enterspeedJobsHandlingService,
                   umbracoContextFactory,
                   scopeProvider,
-                  auditService)
+                  auditService,
+                  serverRoleAccessor,
+                  logger)
         {
             _contentService = contentService;
             _enterspeedJobFactory = enterspeedJobFactory;
