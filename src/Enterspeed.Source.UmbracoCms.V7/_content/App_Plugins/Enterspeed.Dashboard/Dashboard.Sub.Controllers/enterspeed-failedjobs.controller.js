@@ -1,4 +1,4 @@
-﻿function failedJobsController(dashboardResources, $scope, $filter, $timeout) {
+﻿function enterspeedFailedJobsController(enterspeedDashboardResources, $scope, $filter, $timeout) {
     var vm = this;
     vm.loadingFailedJobs = false;
     vm.failedJobs = [];
@@ -10,7 +10,7 @@
         vm.getFailedJobs();
     }
 
-    vm.toggleException = function(index) {
+    vm.toggleException = function (index) {
         if (index === vm.activeException) {
             vm.activeException = "";
         } else {
@@ -42,7 +42,7 @@
     vm.getFailedJobs = function () {
         vm.loadingFailedJobs = true;
 
-        dashboardResources.getFailedJobs().then(function (result) {
+        enterspeedDashboardResources.getFailedJobs().then(function (result) {
             if (result.data.isSuccess) {
                 vm.failedJobs = result.data.data;
                 vm.pagination.totalPages = Math.ceil(vm.failedJobs.length / vm.pagination.pageSize);
@@ -78,7 +78,7 @@
                     Ids: failedJobsToDelete.map(fj => fj.id)
                 }
 
-                dashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
+                enterspeedDashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
                     if (result.data.isSuccess) {
                         vm.getFailedJobs();
                     }
@@ -86,7 +86,7 @@
             }
 
         } else {
-            dashboardResources.deleteFailedJobs().then(function (result) {
+            enterspeedDashboardResources.deleteFailedJobs().then(function (result) {
                 if (result.data.isSuccess) {
                     vm.getFailedJobs();
                 }
@@ -99,11 +99,11 @@
     vm.getSelectedFailedJobs = function () {
         return vm.failedJobs.filter(fj => fj.selected === true);
     }
-    
+
     init();
 }
 
-angular.module("umbraco").controller("FailedJobsController", failedJobsController);
+angular.module("umbraco").controller("EnterspeedFailedJobsController", enterspeedFailedJobsController);
 
 angular.module("umbraco").filter('startFrom', function () {
     return function (input, start) {

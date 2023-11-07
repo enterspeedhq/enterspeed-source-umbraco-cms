@@ -1,29 +1,38 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Enterspeed.Source.UmbracoCms.V8.Components.Tasks;
 using Enterspeed.Source.UmbracoCms.V8.Data.Models;
 using Enterspeed.Source.UmbracoCms.V8.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.V8.Services;
+using Umbraco.Core;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Scoping;
 using Umbraco.Web;
 
 namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
 {
     public abstract class BaseEnterspeedEventHandler
-    { 
+    {
         protected IUmbracoContextFactory UmbracoContextFactory { get; }
         protected IEnterspeedJobRepository EnterspeedJobRepository { get; }
         protected IEnterspeedJobsHandlingService JobsHandlingService { get; }
         protected IEnterspeedConfigurationService ConfigurationService { get; }
         protected IScopeProvider ScopeProvider { get; set; }
+        protected IRuntimeState Runtime { get; }
+        protected ILogger Logger { get; }
 
         protected BaseEnterspeedEventHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService jobsHandlingService,
             IEnterspeedConfigurationService configurationService,
-            IScopeProvider scopeProvider)
+            IScopeProvider scopeProvider,
+            IRuntimeState runtime,
+            ILogger logger)
         {
+            Runtime = runtime;
+            Logger = logger;
             UmbracoContextFactory = umbracoContextFactory;
             EnterspeedJobRepository = enterspeedJobRepository;
             JobsHandlingService = jobsHandlingService;
@@ -37,17 +46,23 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             {
                 return;
             }
-
             EnterspeedJobRepository.Save(jobs);
 
-            using (UmbracoContextFactory.EnsureUmbracoContext())
+            if (JobsHandlingService.IsJobsProcessingEnabled())
             {
-                if (ScopeProvider.Context != null)
+                using (UmbracoContextFactory.EnsureUmbracoContext())
                 {
-                    var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
-                    // Add a callback to the current Scope which will execute when it's completed
-                    ScopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
+                    if (ScopeProvider.Context != null)
+                    {
+                        var key = $"UpdateEnterspeed_{DateTime.Now.Ticks}";
+                        // Add a callback to the current Scope which will execute when it's completed
+                        ScopeProvider.Context.Enlist(key, scopeCompleted => HandleJobs(scopeCompleted, jobs));
+                    }
                 }
+            }
+            else
+            {
+                Logger.Info<HandleEnterspeedJobsTask>("Enterspeed jobs does not run on servers with {role} role.", Runtime.ToString());
             }
         }
 

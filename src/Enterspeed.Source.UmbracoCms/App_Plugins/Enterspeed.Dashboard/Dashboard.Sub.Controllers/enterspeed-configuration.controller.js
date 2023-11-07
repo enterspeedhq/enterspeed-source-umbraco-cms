@@ -1,4 +1,4 @@
-﻿function configurationController(dashboardResources, notificationsService, $scope, $filter, $timeout) {
+﻿function enterspeedConfigurationController(enterspeedDashboardRessource, notificationsService, $scope, $filter, $timeout) {
     var vm = this;
     vm.loadingConfiguration = false;
     vm.buttonState = null;
@@ -11,13 +11,15 @@
     vm.getConfiguration = function () {
         vm.loadingConfiguration = true;
         vm.buttonState = "busy";
-        dashboardResources.getEnterspeedConfiguration()
-            .then(function(result) {
+        enterspeedDashboardRessource.getEnterspeedConfiguration()
+            .then(function (result) {
                 if (result.data.isSuccess) {
                     vm.configuration.baseUrl = result.data.data.configuration.baseUrl;
                     vm.configuration.apiKey = result.data.data.configuration.apiKey;
                     vm.configuration.mediaDomain = result.data.data.configuration.mediaDomain;
                     vm.configuration.previewApiKey = result.data.data.configuration.previewApiKey;
+                    vm.configuration.configuredFromSettingsFile = result.data.data.configuration.configuredFromSettingsFile;
+                    vm.runJobsOnServer = result.data.data.runJobsOnServer;
                     vm.serverRole = result.data.data.serverRole;
                     vm.loadingConfiguration = false;
                     vm.buttonState = null;
@@ -33,7 +35,7 @@
             return;
         }
 
-        dashboardResources.saveEnterspeedConfiguration(vm.configuration)
+        enterspeedDashboardRessource.saveEnterspeedConfiguration(vm.configuration)
             .then(function (result) {
                 if (result.data.success) {
                     notificationsService.success("Configuration saved");
@@ -59,7 +61,7 @@
             return;
         }
 
-        dashboardResources.testEnterspeedConfiguration(vm.configuration).then(function (result) {
+        enterspeedDashboardRessource.testEnterspeedConfiguration(vm.configuration).then(function (result) {
             if (result.data.success) {
                 notificationsService.success("Connection succeeded");
             } else {
@@ -90,4 +92,4 @@
     init();
 }
 
-angular.module("umbraco").controller("ConfigurationController", configurationController);
+angular.module("umbraco").controller("EnterspeedConfigurationController", enterspeedConfigurationController);
