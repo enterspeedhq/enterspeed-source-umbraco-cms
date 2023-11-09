@@ -8,6 +8,7 @@ using Umbraco.Core;
 using Umbraco.Core.Composing;
 using Umbraco.Core.Configuration;
 using Umbraco.Core.Services;
+using Umbraco.Core.Sync;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Services
 {
@@ -22,8 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
         private readonly string _configurationMediaDomainDatabaseKey = "Enterspeed+Configuration+MediaDomain";
         private readonly string _configurationApiKeyDatabaseKey = "Enterspeed+Configuration+ApiKey";
         private readonly string _configurationPreviewApiKeyDatabaseKey = "Enterspeed+Configuration+PreviewApiKey";
-        private readonly string _configurationConnectionTimeoutDatabaseKey =
-            "Enterspeed+Configuration+ConnectionTimeout";
+        private readonly string _configurationConnectionTimeoutDatabaseKey = "Enterspeed+Configuration+ConnectionTimeout";
         private readonly string _configurationBaseUrlDatabaseKey = "Enterspeed+Configuration+BaseUrl";
 
         public EnterspeedConfigurationService(IKeyValueService keyValueService)
@@ -69,6 +69,8 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 PreviewApiKey = webConfigPreviewApikey?.Trim(),
                 SystemInformation = GetUmbracoVersion()
             };
+
+            SetOptionalSettings(_configuration);
 
             return _configuration;
         }
@@ -136,6 +138,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
             if (configuration != null)
             {
                 configuration.SystemInformation = GetUmbracoVersion();
+                SetOptionalSettings(configuration);
             }
 
             return configuration;
@@ -170,7 +173,15 @@ namespace Enterspeed.Source.UmbracoCms.V8.Services
                 configuration.ConnectionTimeout = connectionTimeout;
             }
 
+            SetOptionalSettings(configuration);
+
             return configuration;
+        }
+
+        private void SetOptionalSettings(EnterspeedUmbracoConfiguration configuration)
+        {
+            bool.TryParse(ConfigurationManager.AppSettings["Enterspeed.RunJobsOnAllServerRoles"], out var runJobsOnAllServerRoles);
+            configuration.RunJobsOnAllServerRoles = runJobsOnAllServerRoles;
         }
 
         private static string GetUmbracoVersion()

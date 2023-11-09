@@ -1,4 +1,4 @@
-﻿function selectNodeController($scope) {
+﻿function enterspeedSelectNodeController($scope) {
     let vm = this;
     vm.includeDescendants = false;
     vm.includeEverything = false;
@@ -61,7 +61,7 @@
 
             } else {
                 for (let i = 0; i < $scope.model.targets.length; i++) {
-                    
+
                     $scope.model.targets[i].includeDescendants = vm.includeDescendants;
                 }
             }
@@ -75,4 +75,4 @@
     init();
 }
 
-angular.module("umbraco").controller("SelectNodeController", selectNodeController);
+angular.module("umbraco").controller("EnterspeedSelectNodeController", enterspeedSelectNodeController);

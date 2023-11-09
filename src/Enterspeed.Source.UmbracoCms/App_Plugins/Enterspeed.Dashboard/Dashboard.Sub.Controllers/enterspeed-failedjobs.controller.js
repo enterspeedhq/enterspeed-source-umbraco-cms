@@ -1,15 +1,30 @@
-﻿function failedJobsController(dashboardResources, $scope, $filter, $timeout) {
+﻿function enterspeedFailedJobsController(enterspeedDashboardRessource, $scope, $filter, $timeout) {
     var vm = this;
     vm.loadingFailedJobs = false;
+    vm.loadingConfiguration = false;
     vm.failedJobs = [];
     vm.activeException = "";
     vm.deleteModes = ['Everything', 'Selected'];
     vm.selectedDeleteMode = vm.deleteModes[0];
+    vm.configuration = {};
     vm.deleteModeSelectOpen = false;
 
     function init() {
+        getConfiguration();
         vm.getFailedJobs();
     }
+
+    function getConfiguration() {
+        vm.loadingConfiguration = true;
+        dashboardResources.getEnterspeedConfiguration()
+            .then(function (result) {
+                if (result.data.isSuccess) {
+                    vm.runJobsOnServer = result.data.data.runJobsOnServer;
+                    vm.serverRole = result.data.data.serverRole;
+                    vm.loadingConfiguration = false;
+                }
+            });
+    };
 
     vm.toggleException = function (index) {
         if (index === vm.activeException) {
@@ -43,7 +58,7 @@
     vm.getFailedJobs = function () {
         vm.loadingFailedJobs = true;
 
-        dashboardResources.getFailedJobs().then(function (result) {
+        enterspeedDashboardRessource.getFailedJobs().then(function (result) {
             if (result.data.isSuccess) {
                 vm.failedJobs = result.data.data;
                 vm.pagination.totalPages = Math.ceil(vm.failedJobs.length / vm.pagination.pageSize);
@@ -75,7 +90,7 @@
                     Ids: failedJobsToDelete.map(fj => fj.id)
                 }
 
-                dashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
+                enterspeedDashboardRessource.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
                     if (result.data.isSuccess) {
                         vm.getFailedJobs();
                     }
@@ -83,7 +98,7 @@
             }
 
         } else {
-            dashboardResources.deleteFailedJobs().then(function (result) {
+            enterspeedDashboardRessource.deleteFailedJobs().then(function (result) {
                 if (result.data.isSuccess) {
                     vm.getFailedJobs();
                 }
@@ -104,7 +119,7 @@
     init();
 }
 
-angular.module("umbraco").controller("FailedJobsController", failedJobsController);
+angular.module("umbraco").controller("EnterspeedFailedJobsController", enterspeedFailedJobsController);
 
 angular.module("umbraco").filter('startFrom', function () {
     return function (input, start) {

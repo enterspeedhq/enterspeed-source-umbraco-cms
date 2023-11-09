@@ -59,7 +59,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\selectNode.controller.js" />
+	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\enterspeed-selectNode.controller.js" />
 	  <None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\selectNode.html" />
 	</ItemGroup>
 

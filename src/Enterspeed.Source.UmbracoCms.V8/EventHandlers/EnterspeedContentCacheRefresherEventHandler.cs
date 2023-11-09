@@ -8,6 +8,7 @@ using Enterspeed.Source.UmbracoCms.V8.Services;
 using Umbraco.Core;
 using Umbraco.Core.Cache;
 using Umbraco.Core.Composing;
+using Umbraco.Core.Logging;
 using Umbraco.Core.Models;
 using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.Scoping;
@@ -29,8 +30,10 @@ namespace Enterspeed.Source.UmbracoCms.V8.EventHandlers
             IEnterspeedConfigurationService configurationService,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
-            IUmbracoCultureProvider umbracoCultureProvider)
-            : base(umbracoContextFactory, enterspeedJobRepository, jobsHandlingService, configurationService, scopeProvider)
+            IUmbracoCultureProvider umbracoCultureProvider,
+            IRuntimeState runtime,
+            ILogger logger)
+            : base(umbracoContextFactory, enterspeedJobRepository, jobsHandlingService, configurationService, scopeProvider, runtime, logger)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
             _umbracoCultureProvider = umbracoCultureProvider;
