@@ -7,7 +7,7 @@ using Umbraco.Cms.Core.Models;
 
 namespace Enterspeed.Source.UmbracoCms.Models
 {
-    public class UmbracoMediaEntity : IEnterspeedEntity
+    public class UmbracoMediaEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {
         private readonly IMedia _media;
         private readonly IEntityIdentityService _entityIdentityService;

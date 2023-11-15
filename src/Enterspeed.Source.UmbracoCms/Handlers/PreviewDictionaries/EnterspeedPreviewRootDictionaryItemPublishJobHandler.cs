@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Models;
+using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Exceptions;
@@ -57,7 +59,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewDictionaries
             }
         }
 
-        private void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
+        private void Ingest(IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>> umbracoData, EnterspeedJob job)
         {
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
             if (!ingestResponse.Success)

@@ -10,6 +10,8 @@ using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
+using System.Collections.Generic;
+using Enterspeed.Source.Sdk.Api.Models.Properties;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
 {
@@ -94,7 +96,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia
             }
         }
 
-        protected virtual void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
+        protected virtual void Ingest(IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>> umbracoData, EnterspeedJob job)
         {
             var ingestResponse = _enterspeedIngestService.Save(umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
             if (!ingestResponse.Success)

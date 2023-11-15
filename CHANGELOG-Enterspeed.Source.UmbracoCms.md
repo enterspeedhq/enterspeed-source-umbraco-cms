@@ -4,11 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.0 - 2023-11-15]
+### Breaking
+- Upgraded `Enterspeed.Source.Sdk` to 2.0.0 meaning that `properties` on `IEnterspeedEntity` is changes to 
+  `object` instead of `<IDictionary<string, IEnterspeedProperty>>`. A generic version of IEnterspeedEntity is added.  
+  This is a breaking change if you have created your own types implementing `IEnterspeedEntity`. If that's the case 
+  you just need to make it generic of `<IDictionary<string, IEnterspeedProperty>>`.
+
 ## [3.2.0 - 2023-11-06]
-### Added 
+### Breaking 
 - Added `EnterspeedPropertyMetaDataMappers` and `EnterspeedPropertyDataMappers`. These are additions to 
   `MapAdditionalMetaData` and `MapAdditionalProperties` on the `EnterspeedPropertyService` class, but useful if you
-  have more complex mapping or different mapping based on different types. (contribution by [Adrian Ochmann](https://github.com/aochmann))
+  have more complex mapping or different mapping based on different types. (contribution by [Adrian Ochmann](https://github.com/aochmann))  
+  This is a breaking changes if you have overridden `EnterspeedPropertyService` as it has two new dependencies that needs to be added.  
+  As a breaking changes this change should have been part of the new major.
 
 ### Fixed 
 - Ingest jobs from `Save` or `Save and Publish` will only be executed on servers configured as `ServerRole.SchedulingPublisher` or `ServerRole.Single` just like Ingest jobs from seed.

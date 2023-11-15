@@ -12,6 +12,8 @@ using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
+using Enterspeed.Source.Sdk.Api.Models.Properties;
+using System.Collections.Generic;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
 {
@@ -112,7 +114,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
             return content;
         }
 
-        protected virtual void Ingest(IEnterspeedEntity umbracoData, EnterspeedJob job)
+        protected virtual void Ingest(IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>> umbracoData, EnterspeedJob job)
         {
             var ingestResponse = _enterspeedIngestService.Save(
                 umbracoData, _enterspeedConnectionProvider.GetConnection(ConnectionType.Preview));
