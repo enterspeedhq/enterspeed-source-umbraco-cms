@@ -7,7 +7,7 @@ using Umbraco.Core.Models;
 
 namespace Enterspeed.Source.UmbracoCms.V8.Models
 {
-    public class UmbracoMediaEntity : IEnterspeedEntity
+    public class UmbracoMediaEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {
         private readonly IMedia _media;
         private readonly IEntityIdentityService _entityIdentityService;
@@ -21,7 +21,7 @@ namespace Enterspeed.Source.UmbracoCms.V8.Models
         {
             _media = media;
             _entityIdentityService = entityIdentityService;
-            
+
             Url = !string.IsNullOrWhiteSpace(customUrl) ? customUrl : _media.GetMediaUrl(enterspeedConfigurationService.GetConfiguration());
             Properties = propertyService.GetProperties(_media);
         }
