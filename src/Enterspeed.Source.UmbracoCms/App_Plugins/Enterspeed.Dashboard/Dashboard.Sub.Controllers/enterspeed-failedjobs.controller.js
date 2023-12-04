@@ -16,7 +16,7 @@
 
     function getConfiguration() {
         vm.loadingConfiguration = true;
-        dashboardResources.getEnterspeedConfiguration()
+        enterspeedDashboardRessource.getEnterspeedConfiguration()
             .then(function (result) {
                 if (result.data.isSuccess) {
                     vm.runJobsOnServer = result.data.data.runJobsOnServer;
