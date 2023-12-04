@@ -1,4 +1,4 @@
-﻿function enterspeedSeedController(enterspeedDashboardRessource, notificationsService) {
+﻿function enterspeedSeedController(enterspeedDashboardResources, notificationsService) {
     var vm = this;
     vm.loadingConfiguration = false;
     vm.seedState = "success";
@@ -11,7 +11,7 @@
 
     function getConfiguration() {
         vm.loadingConfiguration = true;
-        dashboardResources.getEnterspeedConfiguration()
+        enterspeedDashboardResources.getEnterspeedConfiguration()
             .then(function (result) {
                 if (result.data.isSuccess) {
                     vm.runJobsOnServer = result.data.data.runJobsOnServer;
@@ -23,7 +23,7 @@
 
     vm.seed = function () {
         vm.seedState = "busy";
-        enterspeedDashboardRessource.seed().then(function (result) {
+        enterspeedDashboardResources.seed().then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Seed", "Successfully started seeding Enterspeed")
                 vm.seedResponse = result.data.data;

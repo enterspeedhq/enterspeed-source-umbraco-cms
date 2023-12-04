@@ -1,5 +1,5 @@
 ﻿angular.module('umbraco.resources')
-    .factory('enterspeedDashboardRessource',
+    .factory('enterspeedDashboardResources',
         function ($http) {
             return {
                 getFailedJobs: function () {

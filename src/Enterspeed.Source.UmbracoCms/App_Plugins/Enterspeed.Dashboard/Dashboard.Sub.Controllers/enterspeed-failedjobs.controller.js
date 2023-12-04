@@ -1,4 +1,4 @@
-﻿function enterspeedFailedJobsController(enterspeedDashboardRessource, $scope, $filter, $timeout) {
+﻿function enterspeedFailedJobsController(enterspeedDashboardResources, $scope, $filter, $timeout) {
     var vm = this;
     vm.loadingFailedJobs = false;
     vm.loadingConfiguration = false;
@@ -16,7 +16,7 @@
 
     function getConfiguration() {
         vm.loadingConfiguration = true;
-        dashboardResources.getEnterspeedConfiguration()
+        enterspeedDashboardResources.getEnterspeedConfiguration()
             .then(function (result) {
                 if (result.data.isSuccess) {
                     vm.runJobsOnServer = result.data.data.runJobsOnServer;
@@ -58,7 +58,7 @@
     vm.getFailedJobs = function () {
         vm.loadingFailedJobs = true;
 
-        enterspeedDashboardRessource.getFailedJobs().then(function (result) {
+        enterspeedDashboardResources.getFailedJobs().then(function (result) {
             if (result.data.isSuccess) {
                 vm.failedJobs = result.data.data;
                 vm.pagination.totalPages = Math.ceil(vm.failedJobs.length / vm.pagination.pageSize);
@@ -90,7 +90,7 @@
                     Ids: failedJobsToDelete.map(fj => fj.id)
                 }
 
-                enterspeedDashboardRessource.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
+                enterspeedDashboardResources.deleteSelectedFailedJobs(jobIdsToDelete).then(function (result) {
                     if (result.data.isSuccess) {
                         vm.getFailedJobs();
                     }
@@ -98,7 +98,7 @@
             }
 
         } else {
-            enterspeedDashboardRessource.deleteFailedJobs().then(function (result) {
+            enterspeedDashboardResources.deleteFailedJobs().then(function (result) {
                 if (result.data.isSuccess) {
                     vm.getFailedJobs();
                 }

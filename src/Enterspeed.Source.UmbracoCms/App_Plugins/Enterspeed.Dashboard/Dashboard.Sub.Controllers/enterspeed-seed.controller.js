@@ -1,4 +1,4 @@
-﻿function enterspeedSeedController(enterspeedDashboardRessource, notificationsService, editorService) {
+﻿function enterspeedSeedController(enterspeedDashboardResources, notificationsService, editorService) {
     var vm = this;
     vm.loadingConfiguration = false;
     vm.seedState = "success";
@@ -35,7 +35,7 @@
 
     function getConfiguration() {
         vm.loadingConfiguration = true;
-        dashboardResources.getEnterspeedConfiguration()
+        enterspeedDashboardResources.getEnterspeedConfiguration()
             .then(function (result) {
                 if (result.data.isSuccess) {
                     vm.runJobsOnServer = result.data.data.runJobsOnServer;
@@ -47,7 +47,7 @@
 
     vm.seed = function () {
         vm.seedState = "busy";
-        enterspeedDashboardRessource.seed().then(function (result) {
+        enterspeedDashboardResources.seed().then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Seed", "Successfully started seeding to Enterspeed");
                 vm.seedResponse = result.data.data;
@@ -68,7 +68,7 @@
             mediaNodes: vm.selectedNodesToSeed['media'],
             dictionaryNodes: vm.selectedNodesToSeed['dictionary']
         };
-        enterspeedDashboardRessource.customSeed(customSeed).then(function (result) {
+        enterspeedDashboardResources.customSeed(customSeed).then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Seed", "Successfully started seeding Enterspeed");
                 vm.seedResponse = result.data.data;
@@ -88,7 +88,7 @@
 
     vm.clearPendingJobs = function () {
         vm.clearPendingJobsState = "busy";
-        enterspeedDashboardRessource.clearPendingJobs().then(function (result) {
+        enterspeedDashboardResources.clearPendingJobs().then(function (result) {
             if (result.data.isSuccess) {
                 notificationsService.success("Clear job queue", "Successfully cleared the queue of pending jobs");
                 vm.numberOfPendingJobs = 0;
@@ -100,7 +100,7 @@
     };
 
     function getNumberOfPendingJobs() {
-        enterspeedDashboardRessource.getNumberOfPendingJobs().then(function (result) {
+        enterspeedDashboardResources.getNumberOfPendingJobs().then(function (result) {
             if (result.data.isSuccess) {
                 vm.numberOfPendingJobs = result.data.data.numberOfPendingJobs;
             } else {
