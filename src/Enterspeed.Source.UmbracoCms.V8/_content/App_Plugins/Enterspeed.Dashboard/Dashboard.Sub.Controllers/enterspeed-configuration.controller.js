@@ -1,4 +1,4 @@
-﻿function enterspeedConfigurationController(enterspeedDashboardRessource, notificationsService, $scope, $filter, $timeout) {
+﻿function enterspeedConfigurationController(enterspeedDashboardResources, notificationsService, $scope, $filter, $timeout) {
     var vm = this;
     vm.loadingConfiguration = false;
     vm.buttonState = null;
@@ -11,7 +11,7 @@
     vm.getConfiguration = function () {
         vm.loadingConfiguration = true;
         vm.buttonState = "busy";
-        enterspeedDashboardRessource.getEnterspeedConfiguration()
+        enterspeedDashboardResources.getEnterspeedConfiguration()
             .then(function(result) {
                 if (result.data.isSuccess) {
                     vm.configuration.baseUrl = result.data.data.configuration.baseUrl;
@@ -34,7 +34,7 @@
             return;
         }
 
-        enterspeedDashboardRessource.saveEnterspeedConfiguration(vm.configuration)
+        enterspeedDashboardResources.saveEnterspeedConfiguration(vm.configuration)
             .then(function (result) {
                 if (result.data.success) {
                     notificationsService.success("Configuration saved");
@@ -60,7 +60,7 @@
             return;
         }
 
-        enterspeedDashboardRessource.testEnterspeedConfiguration(vm.configuration).then(function (result) {
+        enterspeedDashboardResources.testEnterspeedConfiguration(vm.configuration).then(function (result) {
             if (result.data.success) {
                 notificationsService.success("Connection succeeded");
             } else {
