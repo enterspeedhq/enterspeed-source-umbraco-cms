@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.1 - 2023-12-05]
+### Fixed
+- Fixed renaming of `enterspeedDashboardResources` that coursed the Seed and Failed jobs views to fail.
+
 ## [4.0.0 - 2023-11-15]
 ### Breaking
 - Upgraded `Enterspeed.Source.Sdk` to 2.0.0 meaning that `properties` on `IEnterspeedEntity` is changes to 
