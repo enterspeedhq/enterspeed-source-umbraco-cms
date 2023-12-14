@@ -126,7 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 var value = dictionaryItem.Translations
                     .FirstOrDefault(x => x.Language.IsoCode.Equals(culture, StringComparison.OrdinalIgnoreCase))?.Value;
-
+                output.Add("nodeId", new NumberEnterspeedProperty(dictionaryItem.Id));
                 output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
                 output.Add("translation", new StringEnterspeedProperty(value ?? string.Empty));
                 output.Add("culture", new StringEnterspeedProperty(culture));
