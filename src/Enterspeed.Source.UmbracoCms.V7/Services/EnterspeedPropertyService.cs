@@ -78,6 +78,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
 
                 if (!string.IsNullOrWhiteSpace(value))
                 {
+                    output.Add("nodeId", new NumberEnterspeedProperty(dictionaryItem.Id));
                     output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
                     output.Add("translation", new StringEnterspeedProperty(value));
                     output.Add("culture", new StringEnterspeedProperty(culture));
