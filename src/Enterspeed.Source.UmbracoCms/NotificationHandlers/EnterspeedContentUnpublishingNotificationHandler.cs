@@ -11,9 +11,12 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using static Umbraco.Cms.Core.Collections.TopoGraph;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Sync;
+using static Umbraco.Cms.Core.Constants.Conventions;
+
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
 #else
@@ -42,6 +45,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IUmbracoCultureProvider umbracoCultureProvider,
             IAuditService auditService,
             IServerRoleAccessor serverRoleAccessor,
+            IEnterspeedMasterContentService enterspeedMasterContentService,
             ILogger<EnterspeedContentUnpublishingNotificationHandler> logger)
             : base(
                   configurationService,
@@ -51,6 +55,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                   scopeProvider,
                   auditService,
                   serverRoleAccessor,
+                  enterspeedMasterContentService,
                   logger)
         {
             _contentService = contentService;
@@ -58,6 +63,11 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             _umbracoCultureProvider = umbracoCultureProvider;
         }
 
+        /// <summary>
+        /// Note: The Umbraco unpublishing notification is only fired when entire document is unpublished (all variants)
+        /// Unpublishing a culture needs to update the published cache, and therefore triggers the publishing notifications
+        /// </summary>
+        /// <param name="notification"></param>
         public void Handle(ContentUnpublishingNotification notification)
         {
             var entities = notification.UnpublishedEntities.ToList();

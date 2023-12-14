@@ -11,5 +11,6 @@ namespace Enterspeed.Source.UmbracoCms.Services
         IDictionary<string, IEnterspeedProperty> ConvertProperties(IEnumerable<IPublishedProperty> properties, string culture = null);
         IDictionary<string, IEnterspeedProperty> GetProperties(IDictionaryItem dictionaryItem, string culture);
         IDictionary<string, IEnterspeedProperty> GetProperties(IMedia media);
+        void ApplyPropertyDataMappers(IDictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture);
     }
 }

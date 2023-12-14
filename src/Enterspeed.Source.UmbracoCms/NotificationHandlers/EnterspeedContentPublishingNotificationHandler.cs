@@ -12,6 +12,7 @@ using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.HostedServices;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Sync;
@@ -40,6 +41,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IAuditService auditService,
             IUmbracoCultureProvider umbracoCultureProvider,
             IServerRoleAccessor serverRoleAccessor,
+            IEnterspeedMasterContentService enterspeedMasterContentService,
             ILogger<EnterspeedContentPublishingNotificationHandler> logger)
             : base(
                   configurationService,
@@ -49,6 +51,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                   scopeProvider,
                   auditService,
                   serverRoleAccessor,
+                  enterspeedMasterContentService,
                   logger)
         {
             _contentService = contentService;

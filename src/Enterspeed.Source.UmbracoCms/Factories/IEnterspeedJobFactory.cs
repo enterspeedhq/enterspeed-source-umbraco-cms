@@ -15,5 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.Factories
         EnterspeedJob GetPublishJob(IMedia media, string culture, EnterspeedContentState state);
         EnterspeedJob GetDeleteJob(IMedia media, string culture, EnterspeedContentState state);
         EnterspeedJob GetDictionaryItemRootJob(string culture, EnterspeedContentState contentState);
+        EnterspeedJob GetPublishMasterContentJob(string nodeId, string culture, EnterspeedContentState state);
+        EnterspeedJob GetDeleteMasterContentJob(string nodeId, string culture, EnterspeedContentState state);
     }
 }

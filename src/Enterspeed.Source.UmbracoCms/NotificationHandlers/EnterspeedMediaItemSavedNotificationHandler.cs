@@ -4,6 +4,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Services;
@@ -34,6 +35,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IAuditService auditService,
             IMediaService mediaService,
             IServerRoleAccessor serverRoleAccessor,
+            IEnterspeedMasterContentService enterspeedMasterContentService,
             ILogger<EnterspeedMediaItemSavedEventHandler> logger)
             : base(
                 configurationService,
@@ -43,6 +45,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                 scopeProvider,
                 auditService,
                 serverRoleAccessor,
+                enterspeedMasterContentService,
                 logger)
         {
             _enterspeedJobFactory = enterspeedJobFactory;

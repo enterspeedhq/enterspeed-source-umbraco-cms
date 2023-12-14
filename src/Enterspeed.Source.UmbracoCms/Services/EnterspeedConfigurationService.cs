@@ -75,6 +75,12 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return configuration.RootDictionariesDisabled;
         }
 
+        public bool IsMasterContentDisabled()
+        {
+            var configuration = GetConfiguration();
+            return configuration.EnableMasterContent;
+        }
+
         public void Save(EnterspeedUmbracoConfiguration configuration)
         {
             if (configuration == null)
@@ -107,6 +113,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             var enterspeedSection = _configuration.GetSection("Enterspeed");
             configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("RootDictionariesDisabled");
             configuration.RunJobsOnAllServerRoles = enterspeedSection.GetValue<bool>("RunJobsOnAllServerRoles");
+            configuration.EnableMasterContent = enterspeedSection.GetValue<bool>("EnableMasterContent");
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()

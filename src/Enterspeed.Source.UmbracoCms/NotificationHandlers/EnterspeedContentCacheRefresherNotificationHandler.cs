@@ -14,6 +14,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Sync;
 #if NET5_0
@@ -39,6 +40,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IAuditService auditService,
             IUmbracoCultureProvider umbracoCultureProvider,
             IServerRoleAccessor serverRoleAccessor,
+            IEnterspeedMasterContentService enterspeedMasterContentService,
             ILogger<EnterspeedContentCacheRefresherNotificationHandler> logger)
             : base(
                   configurationService,
@@ -48,6 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                   scopeProvider,
                   auditService,
                   serverRoleAccessor,
+                  enterspeedMasterContentService,
                   logger)
         {
             _enterspeedJobFactory = enterspeedJobFactory;

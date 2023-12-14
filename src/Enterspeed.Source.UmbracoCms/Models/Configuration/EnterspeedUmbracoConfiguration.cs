@@ -10,5 +10,6 @@ namespace Enterspeed.Source.UmbracoCms.Models.Configuration
         public string PreviewApiKey { get; set; }
         public bool RootDictionariesDisabled { get; set; }
         public bool RunJobsOnAllServerRoles { get; set; }
+        public bool EnableMasterContent { get; set; }
     }
 }
