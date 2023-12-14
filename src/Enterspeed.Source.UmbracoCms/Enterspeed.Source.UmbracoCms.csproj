@@ -20,7 +20,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Enterspeed.Source.Sdk" Version="2.0.1-alpha.4" />
+		<PackageReference Include="Enterspeed.Source.Sdk" Version="2.0.1" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
