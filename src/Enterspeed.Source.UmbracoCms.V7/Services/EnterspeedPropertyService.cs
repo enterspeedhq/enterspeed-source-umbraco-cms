@@ -113,6 +113,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
+                { "nodeId", new NumberEnterspeedProperty("nodeId", media.Id) },
                 { "name", new StringEnterspeedProperty("name", media.Name) },
                 { "path", new StringEnterspeedProperty("path", media.Path) },
                 { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToEnterspeedFormatString()) },
@@ -138,6 +139,7 @@ namespace Enterspeed.Source.UmbracoCms.V7.Services
             var culture = content.GetCulture().IetfLanguageTag.ToLowerInvariant();
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
+                ["nodeId"] = new NumberEnterspeedProperty("nodeId", content.Id),
                 ["name"] = new StringEnterspeedProperty("name", content.Name),
                 ["culture"] = new StringEnterspeedProperty("culture", culture),
                 ["domain"] = new StringEnterspeedProperty("domain", GetDomain(content, culture)?.DomainName),
