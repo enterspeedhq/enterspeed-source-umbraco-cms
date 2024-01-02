@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 ### Fixed
-- The URL for medias selected in `DefaultMultiNodeTreePickerPropertyValueConverter` does not add custom media domain
+- The URL for medias selected in `DefaultMultiNodeTreePickerPropertyValueConverter` does not add custom media domain (Umbraco 8)
 
 ## [4.1.0 - 2023-12-14]
 ### Added
