@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Extensions;
-using Enterspeed.Source.UmbracoCms.Services.DataProperties;
+using Enterspeed.Source.UmbracoCms.Providers;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
@@ -13,13 +13,16 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
     public class DefaultMultiNodeTreePickerPropertyValueConverter : IEnterspeedPropertyValueConverter
     {
         private readonly IEntityIdentityService _entityIdentityService;
+        private readonly IUmbracoMediaUrlProvider _mediaUrlProvider;
         private readonly ILogger<DefaultMultiNodeTreePickerPropertyValueConverter> _logger;
 
         public DefaultMultiNodeTreePickerPropertyValueConverter(
             IEntityIdentityService entityIdentityService,
+            IUmbracoMediaUrlProvider mediaUrlProvider,
             ILogger<DefaultMultiNodeTreePickerPropertyValueConverter> logger)
         {
             _entityIdentityService = entityIdentityService;
+            _mediaUrlProvider = mediaUrlProvider;
             _logger = logger;
         }
 
@@ -92,9 +95,13 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
                 { "name", new StringEnterspeedProperty(node.Name) }
             };
 
-            if (node.ContentType.ItemType is PublishedItemType.Content or PublishedItemType.Media)
+            if (node.ContentType.ItemType is PublishedItemType.Content)
             {
                 properties.Add("url", new StringEnterspeedProperty(node.GetUrl(_logger, culture, UrlMode.Absolute)));
+            }
+            else if (node.ContentType.ItemType is PublishedItemType.Media)
+            {
+                properties.Add("url", new StringEnterspeedProperty(_mediaUrlProvider.GetUrl(node)));
             }
 
             return new ObjectEnterspeedProperty(properties);

@@ -70,6 +70,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
+                ["nodeId"] = new NumberEnterspeedProperty("nodeId", content.Id),
                 ["name"] = new StringEnterspeedProperty("name", content.Name(culture)),
                 ["culture"] = new StringEnterspeedProperty("culture", culture),
                 ["domain"] = new StringEnterspeedProperty("domain", GetDomain(content, culture)?.DomainName),
@@ -125,7 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 var value = dictionaryItem.Translations
                     .FirstOrDefault(x => x.Language.IsoCode.Equals(culture, StringComparison.OrdinalIgnoreCase))?.Value;
-
+                output.Add("nodeId", new NumberEnterspeedProperty(dictionaryItem.Id));
                 output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
                 output.Add("translation", new StringEnterspeedProperty(value ?? string.Empty));
                 output.Add("culture", new StringEnterspeedProperty(culture));
@@ -166,12 +167,13 @@ namespace Enterspeed.Source.UmbracoCms.Services
         {
             var metaData = new Dictionary<string, IEnterspeedProperty>
             {
+                { "nodeId", new NumberEnterspeedProperty("nodeId", media.Id) },
                 { "name", new StringEnterspeedProperty("name", media.Name) },
                 { "path", new StringEnterspeedProperty("path", media.Path) },
                 { "createDate", new StringEnterspeedProperty("createDate", media.CreateDate.ToEnterspeedFormatString()) },
                 { "updateDate", new StringEnterspeedProperty("updateDate", media.UpdateDate.ToEnterspeedFormatString()) },
                 { "level", new NumberEnterspeedProperty("level", media.Level) },
-                { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) },
+                { "nodePath", new ArrayEnterspeedProperty("nodePath", GetNodePath(media)) }
             };
 
             if (media.ContentType.Name == "Image")

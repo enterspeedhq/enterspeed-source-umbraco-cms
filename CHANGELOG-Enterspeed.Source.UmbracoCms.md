@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Fixed
+- The URL for medias selected in `DefaultMultiNodeTreePickerPropertyValueConverter` does not add custom media domain
+
+## [4.1.0 - 2023-12-14]
+### Added
+- Added Umbraco 13 support
+- Added nodeId to `Content`, `Media` and `Dictionary` entities in the metaData object
+
 ## [4.0.1 - 2023-12-05]
 ### Fixed
 - Fixed renaming of `enterspeedDashboardResources` that coursed the Seed and Failed jobs views to fail.
