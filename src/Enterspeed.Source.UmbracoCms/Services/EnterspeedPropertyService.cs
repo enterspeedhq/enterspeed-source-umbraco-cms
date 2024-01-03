@@ -277,7 +277,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return new StringEnterspeedProperty("focalPoint", null);
         }
 
-        public void ApplyPropertyDataMappers(IDictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
+        private void ApplyPropertyDataMappers(IDictionary<string, IEnterspeedProperty> data, IPublishedContent content, string culture)
         {
             if (content is null)
             {

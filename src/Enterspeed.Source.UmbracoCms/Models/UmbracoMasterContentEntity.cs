@@ -12,22 +12,17 @@ namespace Enterspeed.Source.UmbracoCms.Models
     {
         private readonly IPublishedContent _content;
         private readonly IEntityIdentityService _entityIdentityService;
-        private readonly IEnterspeedPropertyService _enterspeedPropertyService;
 
         public UmbracoMasterContentEntity(
             IPublishedContent content,
-            IEntityIdentityService entityIdentityService,
-            IEnterspeedPropertyService enterspeedPropertyService)
+            IEntityIdentityService entityIdentityService)
         {
             _content = content;
             _entityIdentityService = entityIdentityService;
-            _enterspeedPropertyService = enterspeedPropertyService;
             Properties = new Dictionary<string, IEnterspeedProperty>
             {
                 { "timestamp", new StringEnterspeedProperty(DateTime.UtcNow.ToEnterspeedFormatString()) }
             };
-
-            _enterspeedPropertyService.ApplyPropertyDataMappers(Properties, content, string.Empty);
         }
 
         public string Id => _entityIdentityService.GetId(_content.Id);
