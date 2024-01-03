@@ -55,7 +55,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
             if (_enterspeedMasterContentService.IsMasterContentEnabled())
             {
-                jobs.AddRange(_enterspeedMasterContentService.CreateMasterContentJobs(jobs));
+                jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(jobs));
             }
 
             _enterspeedJobRepository.Save(jobs);
@@ -99,7 +99,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
             if (_enterspeedMasterContentService.IsMasterContentEnabled())
             {
-                jobs.AddRange(_enterspeedMasterContentService.CreateMasterContentJobs(jobs));
+                jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(jobs));
             }
 
             _enterspeedJobRepository.Save(jobs);

@@ -12,10 +12,8 @@ using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services.DataProperties;
-using static Umbraco.Cms.Core.Collections.TopoGraph;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Sync;
-using static Umbraco.Cms.Core.Constants.Conventions;
 
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
@@ -33,6 +31,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         private readonly IContentService _contentService;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IUmbracoCultureProvider _umbracoCultureProvider;
+        private readonly IEnterspeedMasterContentService _enterspeedMasterContentService;
 
         public EnterspeedContentUnpublishingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -55,12 +54,12 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                   scopeProvider,
                   auditService,
                   serverRoleAccessor,
-                  enterspeedMasterContentService,
                   logger)
         {
             _contentService = contentService;
             _enterspeedJobFactory = enterspeedJobFactory;
             _umbracoCultureProvider = umbracoCultureProvider;
+            _enterspeedMasterContentService = enterspeedMasterContentService;
         }
 
         /// <summary>
@@ -143,6 +142,11 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                         }
                     }
                 }
+            }
+
+            if (_enterspeedMasterContentService.IsMasterContentEnabled())
+            {
+                jobs.AddRange(_enterspeedMasterContentService.CreateDeleteMasterContentJobs(jobs));
             }
 
             EnqueueJobs(jobs);

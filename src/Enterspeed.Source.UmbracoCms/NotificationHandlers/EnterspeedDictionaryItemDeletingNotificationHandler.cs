@@ -4,7 +4,6 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Services;
-using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Notifications;
@@ -35,7 +34,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
             IServerRoleAccessor serverRoleAccessor,
-            IEnterspeedMasterContentService enterspeedMasterContentService,
             ILogger<EnterspeedDictionaryItemDeletingNotificationHandler> logger)
             : base(
                   configurationService,
@@ -45,7 +43,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                   scopeProvider,
                   auditService,
                   serverRoleAccessor,
-                  enterspeedMasterContentService,
                   logger)
         {
             _localizationService = localizationService;

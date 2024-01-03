@@ -29,6 +29,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IUmbracoCultureProvider _umbracoCultureProvider;
+        private readonly IEnterspeedMasterContentService _enterspeedMasterContentService;
 
         public EnterspeedContentCacheRefresherNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -50,11 +51,11 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                   scopeProvider,
                   auditService,
                   serverRoleAccessor,
-                  enterspeedMasterContentService,
                   logger)
         {
             _enterspeedJobFactory = enterspeedJobFactory;
             _umbracoCultureProvider = umbracoCultureProvider;
+            _enterspeedMasterContentService = enterspeedMasterContentService;
         }
 
         public void Handle(ContentCacheRefresherNotification notification)
@@ -177,6 +178,11 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                         }
                     }
                 }
+            }
+
+            if (_enterspeedMasterContentService.IsMasterContentEnabled())
+            {
+                jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(jobs));
             }
 
             EnqueueJobs(jobs);

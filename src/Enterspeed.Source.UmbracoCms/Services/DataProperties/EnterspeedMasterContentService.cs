@@ -3,19 +3,16 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Extensions;
 using Enterspeed.Source.UmbracoCms.Factories;
-using Umbraco.Cms.Core.Web;
 
 namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
 {
     public class EnterspeedMasterContentService : IEnterspeedMasterContentService
     {
-        private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
 
-        public EnterspeedMasterContentService(IUmbracoContextFactory umbracoContextFactory, IEnterspeedJobFactory enterspeedJobFactory, IEnterspeedConfigurationService enterspeedConfigurationService)
+        public EnterspeedMasterContentService(IEnterspeedJobFactory enterspeedJobFactory, IEnterspeedConfigurationService enterspeedConfigurationService)
         {
-            _umbracoContextFactory = umbracoContextFactory;
             _enterspeedJobFactory = enterspeedJobFactory;
             _enterspeedConfigurationService = enterspeedConfigurationService;
         }
@@ -25,7 +22,7 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
             return _enterspeedConfigurationService.IsMasterContentDisabled();
         }
 
-        public virtual List<EnterspeedJob> CreateMasterContentJobs(List<EnterspeedJob> variantJobs)
+        public virtual List<EnterspeedJob> CreatePublishMasterContentJobs(List<EnterspeedJob> variantJobs)
         {
             var jobs = new List<EnterspeedJob>();
 
@@ -41,7 +38,24 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
                 {
                     jobs.Add(_enterspeedJobFactory.GetPublishMasterContentJob(uniqueContentVariantJob.EntityId, string.Empty, uniqueContentVariantJob.ContentState));
                 }
-                else if(uniqueContentVariantJob.JobType == EnterspeedJobType.Delete && ShouldDeleteMasterContent(uniqueContentVariantJob))
+            }
+
+            return jobs;
+        }
+
+        public virtual List<EnterspeedJob> CreateDeleteMasterContentJobs(List<EnterspeedJob> variantJobs)
+        {
+            var jobs = new List<EnterspeedJob>();
+
+            var uniqueContentVariantJobs = GetUniqueContentVariantJobs(variantJobs);
+            if (!uniqueContentVariantJobs.Any())
+            {
+                return jobs;
+            }
+
+            foreach (var uniqueContentVariantJob in uniqueContentVariantJobs)
+            {
+                if(uniqueContentVariantJob.JobType == EnterspeedJobType.Delete)
                 {
                     jobs.Add(_enterspeedJobFactory.GetDeleteMasterContentJob(uniqueContentVariantJob.EntityId, string.Empty, uniqueContentVariantJob.ContentState));
                 }
@@ -67,18 +81,6 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
             uniqueContentVariantJobs.AddRange(publishContentJobs);
 
             return uniqueContentVariantJobs;
-        }
-
-        // TODO this approach is not working, we need to listen if the event fire is the ContentUnpublishingNotification
-        protected virtual bool ShouldDeleteMasterContent(EnterspeedJob job)
-        {
-            using var context = _umbracoContextFactory.EnsureUmbracoContext();
-
-            var isContentId = int.TryParse(job.EntityId, out var contentId);
-            //var content = isContentId ? context.UmbracoContext.Content.GetById(job.ContentState == EnterspeedContentState.Preview, contentId) : null;
-            var hasContent = isContentId && context.UmbracoContext.Content.HasById(job.ContentState == EnterspeedContentState.Preview, contentId);
-            
-            return !hasContent;
         }
     }
 }

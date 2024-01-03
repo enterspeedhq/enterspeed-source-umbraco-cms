@@ -4,7 +4,6 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
-using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
@@ -26,7 +25,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         protected readonly IScopeProvider _scopeProvider;
         protected readonly IAuditService _auditService;
         protected readonly IServerRoleAccessor _serverRoleAccessor;
-        private readonly IEnterspeedMasterContentService _enterspeedMasterContentService;
         protected readonly ILogger _logger;
 
         protected BaseEnterspeedNotificationHandler(
@@ -37,7 +35,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IScopeProvider scopeProvider,
             IAuditService auditService,
             IServerRoleAccessor serverRoleAccessor,
-            IEnterspeedMasterContentService enterspeedMasterContentService,
             ILogger logger)
         {
             _configurationService = configurationService;
@@ -47,7 +44,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             _scopeProvider = scopeProvider;
             _auditService = auditService;
             _serverRoleAccessor = serverRoleAccessor;
-            _enterspeedMasterContentService = enterspeedMasterContentService;
             _logger = logger;
         }
 
@@ -66,11 +62,6 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             if (!jobs.Any())
             {
                 return;
-            }
-
-            if (_enterspeedMasterContentService.IsMasterContentEnabled())
-            {
-                jobs.AddRange(_enterspeedMasterContentService.CreateMasterContentJobs(jobs));
             }
 
             _enterspeedJobRepository.Save(jobs);
