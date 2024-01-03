@@ -20,6 +20,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
     {
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedIngestService _enterspeedIngestService;
+        private readonly IEnterspeedPropertyService _enterspeedPropertyService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IEnterspeedGuardService _enterspeedGuardService;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
@@ -27,12 +28,14 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
         public EnterspeedPreviewMasterContentPublishJobHandler(
             IUmbracoContextFactory umbracoContextFactory,
             IEnterspeedIngestService enterspeedIngestService,
+            IEnterspeedPropertyService enterspeedPropertyService,
             IEntityIdentityService entityIdentityService,
             IEnterspeedGuardService enterspeedGuardService,
             IEnterspeedConnectionProvider enterspeedConnectionProvider)
         {
             _umbracoContextFactory = umbracoContextFactory;
             _enterspeedIngestService = enterspeedIngestService;
+            _enterspeedPropertyService = enterspeedPropertyService;
             _entityIdentityService = entityIdentityService;
             _enterspeedGuardService = enterspeedGuardService;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
@@ -65,7 +68,7 @@ namespace Enterspeed.Source.UmbracoCms.Handlers.PreviewContent
         {
             try
             {
-                return new UmbracoMasterContentEntity(content, _entityIdentityService);
+                return new UmbracoMasterContentEntity(content, _enterspeedPropertyService, _entityIdentityService);
             }
             catch (Exception e)
             {

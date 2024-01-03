@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.Extensions;
@@ -15,7 +14,6 @@ using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
-using static Umbraco.Cms.Core.Constants.Conventions;
 
 namespace Enterspeed.Source.UmbracoCms.Services
 {
@@ -83,6 +81,33 @@ namespace Enterspeed.Source.UmbracoCms.Services
 
             MapAdditionalMetaData(metaData, content, culture);
             ApplyPropertyMetaDataMappers(metaData, content, culture);
+
+            return new ObjectEnterspeedProperty(MetaData, metaData);
+        }
+
+        public IDictionary<string, IEnterspeedProperty> GetMasterContentProperties(IPublishedContent content)
+        {
+            var enterspeedProperties = new Dictionary<string, IEnterspeedProperty>
+            {
+                { "timestamp", new StringEnterspeedProperty(DateTime.UtcNow.ToEnterspeedFormatString()) },
+                { MetaData, CreateMasterContentMetaData(content) }
+            };
+
+            _enterspeedValidationService.LogValidationErrors(enterspeedProperties);
+
+            return enterspeedProperties;
+        }
+
+        private IEnterspeedProperty CreateMasterContentMetaData(IPublishedContent content)
+        {
+            var metaData = new Dictionary<string, IEnterspeedProperty>
+            {
+                ["nodeId"] = new NumberEnterspeedProperty("nodeId", content.Id),
+                ["sortOrder"] = new NumberEnterspeedProperty("sortOrder", content.SortOrder),
+                ["level"] = new NumberEnterspeedProperty("level", content.Level),
+                ["createDate"] = new StringEnterspeedProperty("createDate", content.CreateDate.ToEnterspeedFormatString()),
+                ["nodePath"] = new ArrayEnterspeedProperty("nodePath", GetNodePath(content.Path, string.Empty))
+            };
 
             return new ObjectEnterspeedProperty(MetaData, metaData);
         }
