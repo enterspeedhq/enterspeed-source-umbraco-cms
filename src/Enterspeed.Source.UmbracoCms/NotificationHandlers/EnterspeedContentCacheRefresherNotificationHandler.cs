@@ -62,6 +62,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         {
             var isPublishConfigured = IsPublishConfigured();
             var isPreviewConfigured = IsPreviewConfigured();
+            var masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant = new HashSet<string>();
 
             if (!isPublishConfigured && !isPreviewConfigured)
             {
@@ -142,6 +143,14 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                                 }
                             }
                         }
+                        else if (audit.AuditType.Equals(AuditType.UnpublishVariant))
+                        {
+                            // If audit type is UnpublishVariant and we still have a publishedNode, then we know only the node is still published in another language
+                            if (publishedNode != null && isPublishConfigured)
+                            {
+                                masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant.Add(payload.Id.ToString());
+                            }
+                        }
                     }
 
                     if (savedNode != null && isPreviewConfigured)
@@ -183,6 +192,10 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             if (_enterspeedMasterContentService.IsMasterContentEnabled())
             {
                 jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(jobs));
+                if (masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant.Any())
+                {
+                    jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant.ToArray()));
+                }
             }
 
             EnqueueJobs(jobs);

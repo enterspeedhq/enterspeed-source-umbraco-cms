@@ -7,6 +7,7 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
     {
         bool IsMasterContentEnabled();
         List<EnterspeedJob> CreatePublishMasterContentJobs(List<EnterspeedJob> variantJobs);
+        List<EnterspeedJob> CreatePublishMasterContentJobs(string[] entityIds);
         List<EnterspeedJob> CreateDeleteMasterContentJobs(List<EnterspeedJob> variantJobs);
     }
 }

@@ -43,6 +43,18 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
             return jobs;
         }
 
+        public virtual List<EnterspeedJob> CreatePublishMasterContentJobs(string[] entityIds)
+        {
+            var jobs = new List<EnterspeedJob>();
+
+            foreach (var entityId in entityIds)
+            {
+                jobs.Add(_enterspeedJobFactory.GetPublishMasterContentJob(entityId, string.Empty, EnterspeedContentState.Publish));
+            }
+
+            return jobs;
+        }
+
         public virtual List<EnterspeedJob> CreateDeleteMasterContentJobs(List<EnterspeedJob> variantJobs)
         {
             var jobs = new List<EnterspeedJob>();
