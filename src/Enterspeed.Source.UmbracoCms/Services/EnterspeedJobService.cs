@@ -5,6 +5,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
@@ -22,6 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IUmbracoContextFactory _umbracoContextFactory;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IEnterspeedMasterContentService _enterspeedMasterContentService;
 
         public EnterspeedJobService(
             IContentService contentService,
@@ -29,6 +31,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             IUmbracoContextFactory umbracoContextFactory,
             ILocalizationService localizationService,
             IEnterspeedJobFactory enterspeedJobFactory,
+            IEnterspeedMasterContentService enterspeedMasterContentService,
             IMediaService mediaService,
             IUmbracoCultureProvider umbracoCultureProvider)
         {
@@ -37,6 +40,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             _umbracoContextFactory = umbracoContextFactory;
             _localizationService = localizationService;
             _enterspeedJobFactory = enterspeedJobFactory;
+            _enterspeedMasterContentService = enterspeedMasterContentService;
             _mediaService = mediaService;
             _umbracoCultureProvider = umbracoCultureProvider;
         }
@@ -48,6 +52,11 @@ namespace Enterspeed.Source.UmbracoCms.Services
             var mediaJobs = GetMediaJobs(publish, preview, out var mediaCount);
 
             var jobs = contentJobs.Union(dictionaryJobs).Union(mediaJobs).ToList();
+
+            if (_enterspeedMasterContentService.IsMasterContentEnabled())
+            {
+                jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(jobs));
+            }
 
             _enterspeedJobRepository.Save(jobs);
             var numberOfPendingJobs = _enterspeedJobRepository.GetNumberOfPendingJobs();
@@ -87,6 +96,11 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 : GetDictionaryJobs(publish, preview, customSeed, out customSeedDictionaryCount);
 
             var jobs = contentJobs.Union(dictionaryJobs).Union(mediaJobs).ToList();
+
+            if (_enterspeedMasterContentService.IsMasterContentEnabled())
+            {
+                jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(jobs));
+            }
 
             _enterspeedJobRepository.Save(jobs);
             var numberOfPendingJobs = _enterspeedJobRepository.GetNumberOfPendingJobs();

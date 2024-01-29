@@ -10,7 +10,6 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
-using Enterspeed.Source.UmbracoCms.HostedServices;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;

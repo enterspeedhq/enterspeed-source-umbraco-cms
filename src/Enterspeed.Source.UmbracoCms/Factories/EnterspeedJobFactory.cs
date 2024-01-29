@@ -150,5 +150,37 @@ namespace Enterspeed.Source.UmbracoCms.Factories
                 ContentState = contentState
             };
         }
+
+        public EnterspeedJob GetPublishMasterContentJob(string nodeId, string culture, EnterspeedContentState state)
+        {
+            var now = DateTime.UtcNow;
+            return new EnterspeedJob
+            {
+                EntityId = nodeId,
+                EntityType = EnterspeedJobEntityType.MasterContent,
+                Culture = culture,
+                JobType = EnterspeedJobType.Publish,
+                State = EnterspeedJobState.Pending,
+                CreatedAt = now,
+                UpdatedAt = now,
+                ContentState = state
+            };
+        }
+
+        public EnterspeedJob GetDeleteMasterContentJob(string nodeId, string culture, EnterspeedContentState state)
+        {
+            var now = DateTime.UtcNow;
+            return new EnterspeedJob
+            {
+                EntityId = nodeId,
+                EntityType = EnterspeedJobEntityType.MasterContent,
+                Culture = culture,
+                JobType = EnterspeedJobType.Delete,
+                State = EnterspeedJobState.Pending,
+                CreatedAt = now,
+                UpdatedAt = now,
+                ContentState = state
+            };
+        }
     }
 }
