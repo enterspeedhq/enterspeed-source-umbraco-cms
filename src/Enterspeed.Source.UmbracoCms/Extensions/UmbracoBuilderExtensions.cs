@@ -22,6 +22,7 @@ using Enterspeed.Source.UmbracoCms.HostedServices;
 using Enterspeed.Source.UmbracoCms.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters;
 using Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultGridConverters;
 using Microsoft.Extensions.DependencyInjection;
@@ -63,6 +64,7 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>();
+            builder.Services.AddSingleton<IEnterspeedMasterContentService, EnterspeedMasterContentService>();
             builder.Services.AddSingleton<IJsonSerializer, SystemTextJsonSerializer>();
             builder.Services.AddSingleton<IEnterspeedConnection, EnterspeedConnection>();
             builder.Services.AddSingleton<IUmbracoRichTextParser, UmbracoRichTextParser>();
@@ -142,6 +144,10 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
                 // Content
                 .Append<EnterspeedContentPublishJobHandler>()
                 .Append<EnterspeedContentDeleteJobHandler>()
+                
+                // Master Content
+                .Append<EnterspeedMasterContentPublishJobHandler>()
+                .Append<EnterspeedMasterContentDeleteJobHandler>()
 
                 // Dictionaries
                 .Append<EnterspeedDictionaryItemPublishJobHandler>()
@@ -151,6 +157,10 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
                 // Preview content
                 .Append<EnterspeedPreviewContentPublishJobHandler>()
                 .Append<EnterspeedPreviewContentDeleteJobHandler>()
+
+                // Preview master content
+                .Append<EnterspeedPreviewMasterContentPublishJobHandler>()
+                .Append<EnterspeedPreviewMasterContentDeleteJobHandler>()
 
                 // Preview dictionaries
                 .Append<EnterspeedPreviewDictionaryItemPublishJobHandler>()

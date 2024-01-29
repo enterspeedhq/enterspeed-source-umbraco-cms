@@ -14,6 +14,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Sync;
 #if NET5_0
@@ -28,6 +29,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IUmbracoCultureProvider _umbracoCultureProvider;
+        private readonly IEnterspeedMasterContentService _enterspeedMasterContentService;
 
         public EnterspeedContentCacheRefresherNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -39,6 +41,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IAuditService auditService,
             IUmbracoCultureProvider umbracoCultureProvider,
             IServerRoleAccessor serverRoleAccessor,
+            IEnterspeedMasterContentService enterspeedMasterContentService,
             ILogger<EnterspeedContentCacheRefresherNotificationHandler> logger)
             : base(
                   configurationService,
@@ -52,12 +55,14 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         {
             _enterspeedJobFactory = enterspeedJobFactory;
             _umbracoCultureProvider = umbracoCultureProvider;
+            _enterspeedMasterContentService = enterspeedMasterContentService;
         }
 
         public void Handle(ContentCacheRefresherNotification notification)
         {
             var isPublishConfigured = IsPublishConfigured();
             var isPreviewConfigured = IsPreviewConfigured();
+            var masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant = new HashSet<string>();
 
             if (!isPublishConfigured && !isPreviewConfigured)
             {
@@ -138,6 +143,14 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                                 }
                             }
                         }
+                        else if (audit.AuditType.Equals(AuditType.UnpublishVariant))
+                        {
+                            // If audit type is UnpublishVariant and we still have a publishedNode, then we know only the node is still published in another language
+                            if (publishedNode != null && isPublishConfigured)
+                            {
+                                masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant.Add(payload.Id.ToString());
+                            }
+                        }
                     }
 
                     if (savedNode != null && isPreviewConfigured)
@@ -173,6 +186,15 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                             }
                         }
                     }
+                }
+            }
+
+            if (_enterspeedMasterContentService.IsMasterContentEnabled())
+            {
+                jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(jobs));
+                if (masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant.Any())
+                {
+                    jobs.AddRange(_enterspeedMasterContentService.CreatePublishMasterContentJobs(masterVariantsToUpdateDoToUnpublishOfASingleLanguageVariant.ToArray()));
                 }
             }
 

@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0 - 2024-01-29]
+### Added
+- Added the option to have the package ingesting a master variant source entity. 
+  Nodes are ingested to Enterspeed as one source entity per language, but with this feature you can also have a shared master variant ingested.
+  This can be useful if you want to have a schemas triggered when one of the language variants changes or when all varaints are unpublished.  
+  Note: the feature is disabled by default and must be enabled in the `appsettings.json` file under the `Enterspeed` setting by setting `EnableMasterContent` to `true`.
+
+### Fixed
+- The URL for medias selected in `DefaultMultiNodeTreePickerPropertyValueConverter` does not add custom media domain
+
 ## [4.1.0 - 2023-12-14]
 ### Added
 - Added Umbraco 13 support

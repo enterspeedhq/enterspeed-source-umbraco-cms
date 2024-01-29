@@ -3,6 +3,7 @@
     public enum EnterspeedJobEntityType
     {
         Content,
+        MasterContent,
         Media,
         Dictionary
     }
