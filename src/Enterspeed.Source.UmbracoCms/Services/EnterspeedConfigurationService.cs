@@ -81,6 +81,12 @@ namespace Enterspeed.Source.UmbracoCms.Services
             return configuration.EnableMasterContent;
         }
 
+        public bool IsWildcardDomainEnabled()
+        {
+            var configuration = GetConfiguration();
+            return configuration.EnableWildcardDomains;
+        }
+
         public void Save(EnterspeedUmbracoConfiguration configuration)
         {
             if (configuration == null)
@@ -114,6 +120,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("RootDictionariesDisabled");
             configuration.RunJobsOnAllServerRoles = enterspeedSection.GetValue<bool>("RunJobsOnAllServerRoles");
             configuration.EnableMasterContent = enterspeedSection.GetValue<bool>("EnableMasterContent");
+            configuration.EnableWildcardDomains = enterspeedSection.GetValue<bool>("EnableWildcardDomains");
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()
@@ -131,7 +138,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             configuration.IsConfigured = true;
             configuration.ConfiguredFromSettingsFile = true;
             configuration.SystemInformation = GetUmbracoVersion();
-            
+
             SetOptionalSettings(configuration);
 
             return configuration;
@@ -166,7 +173,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             {
                 configuration.ConnectionTimeout = connectionTimeout;
             }
-            
+
             SetOptionalSettings(configuration);
 
             return configuration;

@@ -10,5 +10,6 @@ namespace Enterspeed.Source.UmbracoCms.Services
         bool IsPreviewConfigured();
         bool IsRootDictionariesDisabled();
         bool IsMasterContentDisabled();
+        bool IsWildcardDomainEnabled();
     }
 }
