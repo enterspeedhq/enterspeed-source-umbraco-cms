@@ -1,15 +1,15 @@
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import { LitElement, html, css, customElement, property } from "@umbraco-cms/backoffice/external/lit";
 
-@customElement('enterspeed_source_umbracocms_v14_-dashboard')
-export class Enterspeed_Source_UmbracoCms_V14_Dashboard extends UmbElementMixin(LitElement) {
+@customElement('enterspeed-dashboard')
+export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
 
     constructor() {
         super();
     }
 
     @property()
-    title = 'Enterspeed.Source.UmbracoCms.V14+ dashboard'
+    title = 'Enterspeed.Source.UmbracoCms dashboard'
 
     render() {
         return html`
@@ -28,10 +28,10 @@ export class Enterspeed_Source_UmbracoCms_V14_Dashboard extends UmbElementMixin(
 }
 
 
-export default Enterspeed_Source_UmbracoCms_V14_Dashboard;
+export default enterspeed_dashboard;
 
 declare global {
     interface HtmlElementTagNameMap {
-        'Enterspeed.Source.UmbracoCms.V14+-dashboard': Enterspeed_Source_UmbracoCms_V14_Dashboard
+        'enterspeed_dashboard': enterspeed_dashboard
     }
 }
