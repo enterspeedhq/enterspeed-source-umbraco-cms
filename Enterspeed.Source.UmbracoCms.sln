@@ -22,6 +22,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.Tests", "tests\Enterspeed.Source.UmbracoCms.Tests\Enterspeed.Source.UmbracoCms.Tests.csproj", "{DFEC5371-B474-4183-9C31-8A09E277AB5A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V14+", "src\Enterspeed.Source.UmbracoCms.V14+\Enterspeed.Source.UmbracoCms.V14+.csproj", "{294C5521-EFFE-44EA-8E12-FBC0D4111CD9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Enterspeed.Source.UmbracoCms.Core", "src\Enterspeed.Source.UmbracoCms.Core\Enterspeed.Source.UmbracoCms.Core.csproj", "{B52806D5-AC02-455F-81EA-2BC146C0840B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +40,14 @@ Global
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{294C5521-EFFE-44EA-8E12-FBC0D4111CD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294C5521-EFFE-44EA-8E12-FBC0D4111CD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294C5521-EFFE-44EA-8E12-FBC0D4111CD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294C5521-EFFE-44EA-8E12-FBC0D4111CD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B52806D5-AC02-455F-81EA-2BC146C0840B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B52806D5-AC02-455F-81EA-2BC146C0840B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B52806D5-AC02-455F-81EA-2BC146C0840B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B52806D5-AC02-455F-81EA-2BC146C0840B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +55,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
+		{294C5521-EFFE-44EA-8E12-FBC0D4111CD9} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
+		{B52806D5-AC02-455F-81EA-2BC146C0840B} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E57FEE32-F9D9-4173-8300-40CF8BC054E1}

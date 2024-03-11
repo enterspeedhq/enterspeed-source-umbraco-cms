@@ -80,4 +80,8 @@
 		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Core\Enterspeed.Source.UmbracoCms.Core.csproj" />
+	</ItemGroup>
+
 </Project>

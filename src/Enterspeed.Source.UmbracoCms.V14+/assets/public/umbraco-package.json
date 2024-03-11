@@ -1,0 +1,15 @@
+{
+    "$schema": "../umbraco-package-schema.json",
+    "name": "Enterspeed.Source.UmbracoCms.V14+",
+    "id": "Enterspeed.Source.UmbracoCms.V14+",
+    "version": "0.1.0",
+    "allowTelemetry": true,
+    "extensions": [
+        {
+            "name": "Enterspeed.Source.UmbracoCms.V14+.entrypoint",
+            "alias": "Enterspeed.Source.UmbracoCms.V14+.EntryPoint",
+            "type": "entryPoint",
+            "js": "/app_plugins/Enterspeed.Source.UmbracoCms.V14+/assets.js"
+        }
+    ]
+}
