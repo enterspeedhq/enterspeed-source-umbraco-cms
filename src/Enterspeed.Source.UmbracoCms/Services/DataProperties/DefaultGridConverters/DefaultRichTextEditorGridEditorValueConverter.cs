@@ -1,5 +1,6 @@
 ﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Models.Grid;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Extensions;
 
 namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultGridConverters

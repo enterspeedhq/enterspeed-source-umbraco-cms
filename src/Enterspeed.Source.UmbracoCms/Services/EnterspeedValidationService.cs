@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Enterspeed.Source.Sdk.Api.Models.Properties;
+﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 
 namespace Enterspeed.Source.UmbracoCms.Services
 {

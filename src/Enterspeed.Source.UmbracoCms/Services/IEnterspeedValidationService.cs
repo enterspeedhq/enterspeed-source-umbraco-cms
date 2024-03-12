@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using Enterspeed.Source.Sdk.Api.Models.Properties;
+﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
+using System.Collections.Generic;
 
 namespace Enterspeed.Source.UmbracoCms.Services
 {

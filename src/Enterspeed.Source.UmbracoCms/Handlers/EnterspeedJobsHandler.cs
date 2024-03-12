@@ -6,6 +6,7 @@ using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
 using Lucene.Net.Util;
 using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Scoping;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers
 {

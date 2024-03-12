@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Microsoft.Extensions.Logging;
 

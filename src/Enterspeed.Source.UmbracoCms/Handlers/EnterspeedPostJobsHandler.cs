@@ -7,6 +7,7 @@ using Enterspeed.Source.UmbracoCms.Factories;
 using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Handlers

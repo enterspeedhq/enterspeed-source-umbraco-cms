@@ -12,9 +12,9 @@
 	</PropertyGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
-		<PackageReference Include="Umbraco.Cms.Core" Version="13.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.Website" Version="13.0.0" />
-		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="13.0.0" />
+		<PackageReference Include="Umbraco.Cms.Core" Version="14.0.0-beta001" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="14.0.0-beta001" />
+		<PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="14.0.0--preview008.preview.392.g9a27408" />
 	</ItemGroup>
 	
 	<ItemGroup>

@@ -5,6 +5,7 @@ using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Handlers;
 using Microsoft.Extensions.Logging;
+using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Sync;
 
 namespace Enterspeed.Source.UmbracoCms.Services

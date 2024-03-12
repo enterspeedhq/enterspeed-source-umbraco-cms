@@ -1,5 +1,6 @@
 ﻿using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
 namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters

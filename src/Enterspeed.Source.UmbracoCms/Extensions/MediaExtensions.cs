@@ -1,8 +1,8 @@
-﻿using Enterspeed.Source.UmbracoCms.Models.Configuration;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.PropertyEditors.ValueConverters;
+using Enterspeed.Source.UmbracoCms.Models.Configuration;
 
 namespace Enterspeed.Source.UmbracoCms.Extensions
 {

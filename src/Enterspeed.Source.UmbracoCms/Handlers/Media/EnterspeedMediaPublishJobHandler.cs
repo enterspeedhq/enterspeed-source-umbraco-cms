@@ -1,17 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Models;
-using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.Sdk.Api.Services;
 using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Exceptions;
 using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
+using System.Collections.Generic;
+using Enterspeed.Source.Sdk.Api.Models.Properties;
+
 
 namespace Enterspeed.Source.UmbracoCms.Handlers.Media
 {

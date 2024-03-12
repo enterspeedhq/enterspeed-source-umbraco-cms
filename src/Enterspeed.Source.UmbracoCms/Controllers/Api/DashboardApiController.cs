@@ -1,8 +1,4 @@
-﻿#if NET5_0
-
-#else
-#endif
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,19 +7,24 @@ using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
-using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Extensions;
-using Enterspeed.Source.UmbracoCms.Models.Api;
-using Enterspeed.Source.UmbracoCms.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.Providers;
-using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.BackOffice.Filters;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.Models.Api;
+using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Umbraco.Cms.Core.Sync;
+#if NET5_0
+
+#else
+using Umbraco.Cms.Infrastructure.Scoping;
+#endif
 
 namespace Enterspeed.Source.UmbracoCms.Controllers.Api
 {

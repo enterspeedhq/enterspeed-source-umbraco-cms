@@ -1,13 +1,12 @@
-﻿
-using Enterspeed.Source.UmbracoCms.Data.Migration;
+﻿using Enterspeed.Source.UmbracoCms.Data.Migration;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Migrations;
-using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Infrastructure.Migrations;
 using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
 #if NET5_0
+using Umbraco.Cms.Core.Scoping;
 #else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
