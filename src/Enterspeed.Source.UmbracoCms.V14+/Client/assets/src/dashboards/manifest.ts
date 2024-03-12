@@ -3,8 +3,8 @@ import type { ManifestDashboard } from "@umbraco-cms/backoffice/extension-regist
 const dashboards: Array<ManifestDashboard> = [
   {
     type: "dashboard",
-    name: "Enterspeed.Dashboardd",
-    alias: "enterspeed_dashboardd",
+    name: "Enterspeed.Dashboard",
+    alias: "enterspeed_dashboard",
     elementName: "enterspeed-dashboard",
     js: () => import("./dashboard.element.js"),
     weight: -10,
