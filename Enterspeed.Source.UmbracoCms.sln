@@ -8,12 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{0215A9EA-3011-4D81-B588-FC322C54D8A6}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
-		azure-pipelines-u9+.yml = azure-pipelines-u9+.yml
-		CHANGELOG-Enterspeed.Source.UmbracoCms.md = CHANGELOG-Enterspeed.Source.UmbracoCms.md
 		NuGet.Config = NuGet.Config
-		README-NUGET.md = README-NUGET.md
-		README.md = README.md
-		umbraco-marketplace-enterspeed.source.umbracocms.json = umbraco-marketplace-enterspeed.source.umbracocms.json
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7971E102-218B-4A98-962E-BF881CBA2B2C}"
@@ -21,6 +16,23 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj", "{896E4006-B8D9-47E5-A7E0-82BE2A10DA93}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.Tests", "tests\Enterspeed.Source.UmbracoCms.Tests\Enterspeed.Source.UmbracoCms.Tests.csproj", "{DFEC5371-B474-4183-9C31-8A09E277AB5A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enterspeed.Source.UmbracoCms.V9+", "Enterspeed.Source.UmbracoCms.V9+", "{EA280487-2D27-4C16-99D6-863FE0409155}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enterspeed.Source.UmbracoCms.V14+", "Enterspeed.Source.UmbracoCms.V14+", "{F11EA876-AAEC-4F8B-A452-E54BCB82C922}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{61FE07EA-49BA-4B07-87C7-8CCB295DE826}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{26E12C0B-E242-40F2-AD73-441A7F701209}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines-u9+.yml = azure-pipelines-u9+.yml
+		CHANGELOG-Enterspeed.Source.UmbracoCms.md = CHANGELOG-Enterspeed.Source.UmbracoCms.md
+		umbraco-marketplace-enterspeed.source.umbracocms.json = umbraco-marketplace-enterspeed.source.umbracocms.json
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V9+", "src\Enterspeed.Source.UmbracoCms.V9+\Enterspeed.Source.UmbracoCms.V9+.csproj", "{99FEF548-8FA2-4561-A3A8-A0126B2DD48A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V14+", "src\Enterspeed.Source.UmbracoCms.V14+\Enterspeed.Source.UmbracoCms.V14+.csproj", "{95ED3BB6-E43A-4FE3-A966-94568075825C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +48,14 @@ Global
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99FEF548-8FA2-4561-A3A8-A0126B2DD48A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99FEF548-8FA2-4561-A3A8-A0126B2DD48A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99FEF548-8FA2-4561-A3A8-A0126B2DD48A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99FEF548-8FA2-4561-A3A8-A0126B2DD48A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95ED3BB6-E43A-4FE3-A966-94568075825C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95ED3BB6-E43A-4FE3-A966-94568075825C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95ED3BB6-E43A-4FE3-A966-94568075825C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95ED3BB6-E43A-4FE3-A966-94568075825C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,6 +63,10 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{896E4006-B8D9-47E5-A7E0-82BE2A10DA93} = {E824C1D6-7128-450F-9D7E-381D3891FCD7}
 		{DFEC5371-B474-4183-9C31-8A09E277AB5A} = {7971E102-218B-4A98-962E-BF881CBA2B2C}
+		{61FE07EA-49BA-4B07-87C7-8CCB295DE826} = {F11EA876-AAEC-4F8B-A452-E54BCB82C922}
+		{26E12C0B-E242-40F2-AD73-441A7F701209} = {EA280487-2D27-4C16-99D6-863FE0409155}
+		{99FEF548-8FA2-4561-A3A8-A0126B2DD48A} = {EA280487-2D27-4C16-99D6-863FE0409155}
+		{95ED3BB6-E43A-4FE3-A966-94568075825C} = {F11EA876-AAEC-4F8B-A452-E54BCB82C922}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E57FEE32-F9D9-4173-8300-40CF8BC054E1}
