@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
 		<TargetFrameworks>net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
@@ -80,6 +79,10 @@
 	  <None Remove="App_Plugins\Enterspeed.Dashboard\package.manifest" />
 	  <None Remove="App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
 	  <None Remove="App_Plugins\Enterspeed.Dashboard\styles.css" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj" />
 	</ItemGroup>
 
 </Project>
