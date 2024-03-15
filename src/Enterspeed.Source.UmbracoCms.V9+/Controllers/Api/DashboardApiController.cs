@@ -26,7 +26,7 @@ using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.Controllers.Api
+namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
 {
     [JsonCamelCaseFormatter]
     public class DashboardApiController : UmbracoAuthorizedApiController
