@@ -78,4 +78,8 @@
 		<ProjectReference Include="..\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\App_Plugins\" />
+	</ItemGroup>
+
 </Project>
