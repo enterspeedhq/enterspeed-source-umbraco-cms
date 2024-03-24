@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using Asp.Versioning;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
@@ -18,15 +19,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Umbraco.Cms.Api.Common.Attributes;
+using Umbraco.Cms.Api.Common.Filters;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Web.Common.Authorization;
-using Umbraco.Cms.Web.Common.Controllers;
+using Umbraco.Cms.Web.Common.Routing;
 
 
 namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
 {
-    [Authorize(Policy = AuthorizationPolicies.BackOfficeAccess)]
-    public class DashboardApiController : UmbracoApiController
+    [ApiController]
+    [MapToApi("Enterspeed")]
+    [BackOfficeRoute("enterspeed/api/dashboard/")]
+    [JsonOptionsName(Constants.JsonOptionsNames.BackOffice)]
+    public class DashboardController : ControllerBase
     {
         private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
@@ -36,7 +43,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
         private readonly IEnterspeedConnection _enterspeedConnection;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DashboardApiController(
+        public DashboardController(
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
@@ -54,7 +61,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
             _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
         }
 
-        [HttpGet]
+        [HttpGet()]
         public ApiResponse<List<EnterspeedJob>> GetFailedJobs()
         {
             var result = _enterspeedJobRepository.GetFailedJobs().ToList();
@@ -65,7 +72,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
             };
         }
 
-        [HttpGet]
+        [HttpGet("seed")]
         public IActionResult Seed()
         {
             var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();

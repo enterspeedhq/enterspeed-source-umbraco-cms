@@ -7,8 +7,13 @@ import {
   property,
 } from "@umbraco-cms/backoffice/external/lit";
 
+import { EnterspeedContext } from "../ressources/enterspeed.context";
+import { seedResponse } from "../types";
+
 @customElement("enterspeed-jobs")
 export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
+  #enterspeedContext = new EnterspeedContext(this);
+
   constructor() {
     super();
   }
@@ -35,10 +40,12 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   ];
 
   @property({ type: Object })
-  seedResponse = null;
+  seedResponse: seedResponse | undefined;
 
   seed() {
-    
+    this.#enterspeedContext.seed().then((response) => {
+      this.seedResponse = response.data?.data;
+    });
   }
 
   renderSeedModeSelects() {
@@ -186,13 +193,14 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     if (this.seedResponse != null) {
       return html` <div
         class="seed-dashboard-response"
-        ng-if="vm.seedResponse !== null"
       >
         <h4>Seed Response</h4>
-        <div>Jobs added: {{vm.seedResponse.jobsAdded}}</div>
-        <div>Content items: {{vm.seedResponse.contentCount}}</div>
-        <div>Dictionary items: {{vm.seedResponse.dictionaryCount}}</div>
-        <div>Media items: {{vm.seedResponse.mediaCount}}</div>
+        <div>
+          Jobs added: ${this.seedResponse.jobsAdded}div>
+          <div>Content items: ${this.seedResponse.ContentCount}</div>
+          <div>Dictionary items: ${this.seedResponse.DictionaryCount}</div>
+          <div>Media items: ${this.seedResponse.MediaCount}</div>
+        </div>
       </div>`;
     }
   }

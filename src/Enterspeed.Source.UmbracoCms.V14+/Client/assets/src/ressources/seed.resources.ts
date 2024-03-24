@@ -6,7 +6,7 @@ export class SeedResource {
       method: "get",
     };
 
-    const response = await fetch("/umbraco/enterspeed/api/seed", request);
+    const response = await fetch("/umbraco/enterspeed/api/dashboard/seed", request);
     const data: apiResponse<seedResponse> = await response.json();
 
     return data;
@@ -15,12 +15,12 @@ export class SeedResource {
   public static async customSeed(
     customSeed: customSeedNodes
   ): Promise<apiResponse<seedResponse>> {
-    const request: RequestInit = {
-      method: "post",
+    const request: RequestInit = { 
+      method: "get",
       body: JSON.stringify(customSeed),
     };
 
-    const response = await fetch("/umbraco/enterspeed/api/customSeed", request);
+    const response = await fetch("/umbraco/enterspeed/api/dashboard/customSeed", request);
     const data: apiResponse<seedResponse> = await response.json();
 
     return data;
