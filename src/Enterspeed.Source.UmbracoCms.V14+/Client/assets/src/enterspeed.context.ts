@@ -1,8 +1,8 @@
 import { UmbContextBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { EnterspeedRepository } from "./enterspeed.repository";
-import { customSeedNodes } from "../types";
+import { EnterspeedRepository } from "./repository/enterspeed.repository";
+import { customSeedNodes } from "./types";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
   private readonly enterspeedRepository = new EnterspeedRepository(this);

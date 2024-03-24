@@ -1,21 +1,21 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { ISeedDataSource, SeedDataSource } from "./seed.datasource";
+import { IJobDataSource, JobDataSource } from "./sources/job.datasource";
 import { customSeedNodes } from "../types";
 
 export class EnterspeedRepository extends UmbControllerBase {
-  #seedDataSource: ISeedDataSource;
+  #jobDataSource: IJobDataSource;
 
   constructor(host: UmbControllerHost) {
     super(host);
-    this.#seedDataSource = new SeedDataSource(host);
+    this.#jobDataSource = new JobDataSource(host);
   }
 
   async seed() {
-    return await this.#seedDataSource.seed();
+    return await this.#jobDataSource.seed();
   }
 
   async customSeed(customSeedNodes: customSeedNodes) {
-    return await this.#seedDataSource.customSeed(customSeedNodes);
+    return await this.#jobDataSource.customSeed(customSeedNodes);
   }
 }

@@ -1,6 +1,6 @@
-import { customSeedNodes, seedResponse, apiResponse } from "../types";
+import { customSeedNodes, seedResponse, apiResponse } from "../../types";
 
-export class SeedResource {
+export class JobResource {
   public static async seed(): Promise<apiResponse<seedResponse>> {
     const request: RequestInit = {
       method: "get",
@@ -25,4 +25,5 @@ export class SeedResource {
 
     return data;
   }
+  
 }

@@ -1,17 +1,17 @@
 import { UmbDataSourceResponse } from "@umbraco-cms/backoffice/repository";
-import { seedResponse, customSeedNodes, apiResponse } from "../types";
+import { seedResponse, customSeedNodes, apiResponse } from "../../types";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { SeedResource } from "./seed.resources";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
+import { JobResource } from "../resources/job.resource";
 
-export interface ISeedDataSource {
+export interface IJobDataSource {
   seed(): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>>;
   customSeed(
     customSeedNodes: customSeedNodes
   ): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>>;
 }
 
-export class SeedDataSource implements ISeedDataSource {
+export class JobDataSource implements IJobDataSource {
   #host: UmbControllerHost;
 
   constructor(host: UmbControllerHost) {
@@ -19,7 +19,7 @@ export class SeedDataSource implements ISeedDataSource {
   }
 
   async seed(): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>> {
-    return await tryExecuteAndNotify(this.#host, SeedResource.seed());
+    return await tryExecuteAndNotify(this.#host, JobResource.seed());
   }
 
   async customSeed(
@@ -27,7 +27,7 @@ export class SeedDataSource implements ISeedDataSource {
   ): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>> {
     return await tryExecuteAndNotify(
       this.#host,
-      SeedResource.customSeed(customSeedNodes)
+      JobResource.customSeed(customSeedNodes)
     );
   }
 }

@@ -7,7 +7,7 @@ import {
   property,
 } from "@umbraco-cms/backoffice/external/lit";
 
-import { EnterspeedContext } from "../ressources/enterspeed.context";
+import { EnterspeedContext } from "../enterspeed.context";
 import { seedResponse } from "../types";
 
 @customElement("enterspeed-jobs")
@@ -48,6 +48,8 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     });
   }
 
+  clearJobQueue() {}
+  
   renderSeedModeSelects() {
     return html` <div class="seed-dashboard-text block-form">
       <h2>What to seed</h2>
@@ -92,7 +94,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         <uui-button type="button" style="" look="primary" color="default" label="Seed" 
         @click="${() => this.seed()}"></uui-button>
         </uui-button>
-        <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue (33)"></uui-button>
+        <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue" @click="${()=> this.clearJobQueue()}"></uui-button>
         </uui-button>
       </div>
     </div>
