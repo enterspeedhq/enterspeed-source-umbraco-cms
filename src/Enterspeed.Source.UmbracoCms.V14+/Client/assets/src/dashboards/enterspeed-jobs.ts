@@ -26,8 +26,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   loadingConfiguration = false;
 
   @property({ type: String })
-  selectedSeedMode = "Everything"
-
+  selectedSeedMode = "Everything";
 
   @property({ attribute: false })
   seedModes: Array<Option> = [
@@ -35,14 +34,17 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     { name: "Seed mode: Custom", value: "Custom" },
   ];
 
+  @property({ type: Object })
+  seedResponse = null;
+
   renderSeedModeSelects() {
     return html` <div class="seed-dashboard-text block-form">
       <h2>What to seed</h2>
-     
+
       <div class="umb-control-group">
         <uui-select
           .options=${this.seedModes}
-          @change=${(e) => this.selectedSeedMode = e.target.value}
+          @change=${(e) => (this.selectedSeedMode = e.target.value)}
           label="Select seed mode"
           placeholder="Select an option"
         ></uui-select>
@@ -61,8 +63,8 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
 
   renderSeedModes() {
     if (this.selectedSeedMode == "Everything") {
-      return html` <div
-      class="seed-dashboard-text">
+      return html` 
+      <div class="seed-dashboard-text">
       <h4>Full seed</h4>
       <p>
         Seeding will queue jobs for all content, media and dictionary item for
@@ -81,90 +83,112 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue (33)"></uui-button>
         </uui-button>
         </div>
-    </div>`
+    </div>
+    `;
     } else {
-      return html`
-      <div class="seed-dashboard-text">
-      <div>
-        <h4>Custom seed</h4>
-        <p>
-          With a custom seed you can select the nodes you want to seed for all
-          cultures and publish and preview (if configured). This action can
-          take a while to finish.
-        </p>
-        <p>
-          <i
-            >The job queue length is the queue length on Umbraco before the
-            nodes are ingested into Enterspeed.</i
-          >
-        </p>
-      </div>
-      <div class="custom-seed-content-type-container">
-        <div class="custom-seed-content-type-box">
-          <h5>Content</h5>
-          <div
-            ui-sortable="sortableOptions"
-            ng-if="vm.selectedNodesToSeed['content'].length"
-            ng-model="vm.selectedNodesToSeed['content']"
-          >
-            <uii-node-preview
-              ng-repeat="link in vm.selectedNodesToSeed['content']"
-              icon="link.icon"
-              name="link.name"
-              published="link.published"
-              description="link.includeDescendants ? 'Including descendants' : 'Excluding descendants'"
-              sortable="true"
-              allow-remove="true"
-              on-remove="vm.removeSelectNode('content', $index)"
+      return html` <div class="seed-dashboard-text">
+        <div>
+          <h4>Custom seed</h4>
+          <p>
+            With a custom seed you can select the nodes you want to seed for all
+            cultures and publish and preview (if configured). This action can
+            take a while to finish.
+          </p>
+          <p>
+            <i
+              >The job queue length is the queue length on Umbraco before the
+              nodes are ingested into Enterspeed.</i
             >
-            </uii-node-preview>
-          </div>
-          <uui-button class="add-button" look="placeholder" label="Choose" type="button" color="default" style="width:100%"></uui-button>
+          </p>
         </div>
-        <div class="custom-seed-content-type-box">
-          <h5>Media</h5>
-          <div
-            ui-sortable="sortableOptions"
-            ng-if="vm.selectedNodesToSeed['media'].length"
-            ng-model="vm.selectedNodesToSeed['media']"
-          >
-            <uii-node-preview
-              ng-repeat="link in vm.selectedNodesToSeed['media']"
-              icon="link.icon"
-              name="link.name"
-              published="link.published"
-              description="link.includeDescendants ? 'Including descendants' : 'Excluding descendants'"
-              sortable="true"
-              allow-remove="true"
-              on-remove="vm.removeSelectNode('media', $index)"
+        <div class="custom-seed-content-type-container">
+          <div class="custom-seed-content-type-box">
+            <h5>Content</h5>
+            <div
+              ui-sortable="sortableOptions"
+              ng-if="vm.selectedNodesToSeed['content'].length"
+              ng-model="vm.selectedNodesToSeed['content']"
             >
-            </uii-node-preview>
+              <uii-node-preview
+                ng-repeat="link in vm.selectedNodesToSeed['content']"
+                icon="link.icon"
+                name="link.name"
+                published="link.published"
+                description="link.includeDescendants ? 'Including descendants' : 'Excluding descendants'"
+                sortable="true"
+                allow-remove="true"
+                on-remove="vm.removeSelectNode('content', $index)"
+              >
+              </uii-node-preview>
+            </div>
+
+            <umb-controller-host-provider>
+              <umb-input-tree type="content"></umb-input-tree>
+            </umb-controller-host-provider>
           </div>
-          <uui-button class="add-button" look="placeholder" label="Choose" type="button" color="default" style="width:100%"></uui-button>
-        </div>
-        <div class="custom-seed-content-type-box">
-          <h5>Dictionary</h5>
-          <div
-            ui-sortable="sortableOptions"
-            ng-if="vm.selectedNodesToSeed['dictionary'].length"
-            ng-model="vm.selectedNodesToSeed['dictionary']"
-          >
-            <uii-node-preview
-              ng-repeat="link in vm.selectedNodesToSeed['dictionary']"
-              icon="link.icon"
-              name="link.name"
-              published="link.published"
-              description="link.includeDescendants ? 'Including descendants' : 'Excluding descendants'"
-              sortable="true"
-              allow-remove="true"
-              on-remove="vm.removeSelectNode('dictionary', $index)"
+          <div class="custom-seed-content-type-box">
+            <h5>Media</h5>
+            <div
+              ui-sortable="sortableOptions"
+              ng-if="vm.selectedNodesToSeed['media'].length"
+              ng-model="vm.selectedNodesToSeed['media']"
             >
-            </uii-node-preview>
+              <uii-node-preview
+                ng-repeat="link in vm.selectedNodesToSeed['media']"
+                icon="link.icon"
+                name="link.name"
+                published="link.published"
+                description="link.includeDescendants ? 'Including descendants' : 'Excluding descendants'"
+                sortable="true"
+                allow-remove="true"
+                on-remove="vm.removeSelectNode('media', $index)"
+              >
+              </uii-node-preview>
+            </div>
+            <umb-controller-host-provider>
+              <umb-input-tree type="content"></umb-input-tree>
+            </umb-controller-host-provider>
           </div>
-          <uui-button class="add-button" look="placeholder" label="Choose" type="button" color="default" style="width:100%"></uui-button>
+          <div class="custom-seed-content-type-box">
+            <h5>Dictionary</h5>
+            <div
+              ui-sortable="sortableOptions"
+              ng-if="vm.selectedNodesToSeed['dictionary'].length"
+              ng-model="vm.selectedNodesToSeed['dictionary']"
+            >
+              <uii-node-preview
+                ng-repeat="link in vm.selectedNodesToSeed['dictionary']"
+                icon="link.icon"
+                name="link.name"
+                published="link.published"
+                description="link.includeDescendants ? 'Including descendants' : 'Excluding descendants'"
+                sortable="true"
+                allow-remove="true"
+                on-remove="vm.removeSelectNode('dictionary', $index)"
+              >
+              </uii-node-preview>
+            </div>
+            <umb-controller-host-provider>
+              <umb-input-tree type="content"></umb-input-tree>
+            </umb-controller-host-provider>
+          </div>
         </div>
-        </div>
-      </div>`
+      </div>`;
+    }
+  }
+
+  renderDasboardResponse() {
+    if (this.seedResponse != null) {
+      return html` <div
+        class="seed-dashboard-response"
+        ng-if="vm.seedResponse !== null"
+      >
+        <h4>Seed Response</h4>
+        <div>Jobs added: {{vm.seedResponse.jobsAdded}}</div>
+        <div>Content items: {{vm.seedResponse.contentCount}}</div>
+        <div>Dictionary items: {{vm.seedResponse.dictionaryCount}}</div>
+        <div>Media items: {{vm.seedResponse.mediaCount}}</div>
+      </div>`;
     }
   }
 
@@ -174,33 +198,8 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         <div class="seed-dashboard">
           <uui-load-indicator ng-if="vm.loadingConfiguration">
           </uui-load-indicator>
-          ${this.renderServerMessage()} 
-          ${this.renderSeedModeSelects()}
-          ${this.renderSeedModes()}
-          
-          <div>
-          <uui-button
-            action="vm.customSeed()"
-            type="button"
-            button-style="action"
-            label="Seed"
-          >
-          </uui-button>
-          <uui-button
-            action="vm.clearPendingJobs()"
-            type="button"
-            button-style="action"
-            label="Clear job queue ({{vm.numberOfPendingJobs}})"
-          >
-          </uui-button>
-        </div>
-          <div class="seed-dashboard-response" ng-if="vm.seedResponse !== null">
-            <h4>Seed Response</h4>
-            <div>Jobs added: {{vm.seedResponse.jobsAdded}}</div>
-            <div>Content items: {{vm.seedResponse.contentCount}}</div>
-            <div>Dictionary items: {{vm.seedResponse.dictionaryCount}}</div>
-            <div>Media items: {{vm.seedResponse.mediaCount}}</div>
-          </div>
+          ${this.renderServerMessage()} ${this.renderSeedModeSelects()}
+          ${this.renderSeedModes()} ${this.renderDasboardResponse()}
         </div>
       </uui-box>
     `;
