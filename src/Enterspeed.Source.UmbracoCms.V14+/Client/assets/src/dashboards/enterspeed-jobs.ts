@@ -37,6 +37,10 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   @property({ type: Object })
   seedResponse = null;
 
+  seed() {
+    
+  }
+
   renderSeedModeSelects() {
     return html` <div class="seed-dashboard-text block-form">
       <h2>What to seed</h2>
@@ -64,7 +68,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   renderSeedModes() {
     if (this.selectedSeedMode == "Everything") {
       return html` 
-      <div class="seed-dashboard-text">
+    <div class="seed-dashboard-text">
       <h4>Full seed</h4>
       <p>
         Seeding will queue jobs for all content, media and dictionary item for
@@ -78,11 +82,12 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         >
       </p>
       <div class="seed-dashboard-content">
-        <uui-button type="button" style="" look="primary" color="default" label="Seed"></uui-button>
+        <uui-button type="button" style="" look="primary" color="default" label="Seed" 
+        @click="${() => this.seed()}"></uui-button>
         </uui-button>
         <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue (33)"></uui-button>
         </uui-button>
-        </div>
+      </div>
     </div>
     `;
     } else {
