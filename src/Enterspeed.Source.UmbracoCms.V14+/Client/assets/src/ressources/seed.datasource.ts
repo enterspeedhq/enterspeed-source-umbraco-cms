@@ -1,14 +1,14 @@
 import { UmbDataSourceResponse } from "@umbraco-cms/backoffice/repository";
-import { seedResponse, customSeedNodes } from "../types";
+import { seedResponse, customSeedNodes, apiResponse } from "../types";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { SeedResource } from "./seed.resources";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
 
 export interface ISeedDataSource {
-  seed(): Promise<UmbDataSourceResponse<seedResponse>>;
+  seed(): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>>;
   customSeed(
     customSeedNodes: customSeedNodes
-  ): Promise<UmbDataSourceResponse<seedResponse>>;
+  ): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>>;
 }
 
 export class SeedDataSource implements ISeedDataSource {
@@ -18,13 +18,13 @@ export class SeedDataSource implements ISeedDataSource {
     this.#host = host;
   }
 
-  async seed(): Promise<UmbDataSourceResponse<seedResponse>> {
+  async seed(): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>> {
     return await tryExecuteAndNotify(this.#host, SeedResource.seed());
   }
 
   async customSeed(
     customSeedNodes: customSeedNodes
-  ): Promise<UmbDataSourceResponse<seedResponse>> {
+  ): Promise<UmbDataSourceResponse<apiResponse<seedResponse>>> {
     return await tryExecuteAndNotify(
       this.#host,
       SeedResource.customSeed(customSeedNodes)
