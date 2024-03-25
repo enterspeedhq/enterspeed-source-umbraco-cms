@@ -1,3 +1,7 @@
+export interface getNumberOfPendingJobsResponse {
+  numberOfPendingJobs: number;
+}
+
 export interface seedResponse {
   jobsAdded: number;
   numberOfPendingJobs: number;

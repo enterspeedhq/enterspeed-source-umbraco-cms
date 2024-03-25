@@ -6,11 +6,12 @@ import {
   apiResponse,
   apiResponseBase,
   customSeedNodes,
+  getNumberOfPendingJobsResponse,
   seedResponse,
 } from "./types";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
-  private readonly enterspeedRepository = new EnterspeedRepository(this);
+  protected enterspeedRepository = new EnterspeedRepository(this);
 
   constructor(host: UmbControllerHost) {
     super(host, ENTERSPEED_CONTEXT);
@@ -26,8 +27,14 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     return await this.enterspeedRepository.seed();
   }
 
-  public async clearJobQueue(): Promise<apiResponseBase> {
+  public async clearJobQueue(): Promise<apiResponseBase> { 
     return await this.enterspeedRepository.clearPendingJobs();
+  }
+
+  public async getNumberOfPendingJobs(): Promise<
+    apiResponse<getNumberOfPendingJobsResponse>
+  > {
+    return await this.enterspeedRepository.getNumberOfPendingJobs();
   }
 }
 

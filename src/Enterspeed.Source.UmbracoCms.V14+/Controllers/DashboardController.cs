@@ -189,7 +189,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                 });
         }
 
-        [HttpGet]
+        [HttpGet("GetNumberOfPendingJobs")]
         public IActionResult GetNumberOfPendingJobs()
         {
             int numberOfPendingJobs;

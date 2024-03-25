@@ -1,4 +1,5 @@
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
+import { HelloDirective } from "./seed.modes.element";
 import {
   LitElement,
   html,
@@ -13,6 +14,7 @@ import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
+import { directive } from "lit/directive.js";
 
 @customElement("enterspeed-jobs")
 export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
@@ -25,6 +27,8 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     this.consumeContext(UMB_NOTIFICATION_CONTEXT, (context) => {
       this.#notificationContext = context;
     });
+
+    this.initGetNumberOfPendingJobs();
   }
 
   @property()
@@ -39,14 +43,14 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   @property({ type: Boolean })
   loadingConfiguration = false;
 
-  @property({ type: String })
-  seedState = "";
+  @property({ type: Boolean })
+  disableSeedButton?: boolean;
 
   @property({ type: String })
   selectedSeedMode = "Everything";
 
   @property({ type: String })
-  pendingJobState = "";
+  pendingJobState?: string;
 
   @property({ type: Number })
   numberOfPendingJobs = 0;
@@ -60,13 +64,45 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   @property({ type: Object })
   seedResponse: seedResponse | undefined | null;
 
-  async seed() {
-    this.seedState = "busy";
+  initGetNumberOfPendingJobs() {
+    let intervalId = setInterval(
+      () => this.getNumberOfPendingJobs(this.#enterspeedContext),
+      10 * 1000
+    );
+    window.addEventListener(
+      "hashchange",
+      () => {
+        clearInterval(intervalId);
+      },
+      false
+    );
+  }
 
+  getNumberOfPendingJobs(enterspeedContext: EnterspeedContext) {
+    enterspeedContext
+      .getNumberOfPendingJobs()
+      .then((response) => {
+        if (response.isSuccess) {
+          this.numberOfPendingJobs = response.data.numberOfPendingJobs;
+        } else {
+          this.numberOfPendingJobs = 0;
+        }
+      })
+      .catch((error) => {
+        this.#notificationContext?.peek("danger", {
+          data: {
+            headline: "Failed to check queue length",
+            message: error.data.message,
+          },
+        });
+      });
+  }
+
+  async seed() {
+    this.disableSeedButton = true;
     this.#enterspeedContext
       .seed()
       .then((response) => {
-        console.log("Seed response", response);
         if (response.isSuccess) {
           this.seedResponse = response.data;
           this.#notificationContext?.peek("positive", {
@@ -75,6 +111,9 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
               message: "Successfully started seeding to Enterspeed",
             },
           });
+
+          this.numberOfPendingJobs =
+            this.seedResponse?.numberOfPendingJobs || 0;
         } else {
           this.seedResponse = null;
         }
@@ -88,10 +127,10 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         });
       });
 
-    this.seedState = "success";
+    this.disableSeedButton = false;
   }
 
-  async clearPendingJobs() {
+  async clearJobQueue() {
     this.#enterspeedContext
       .clearJobQueue()
       .then((response) => {
@@ -141,33 +180,83 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     </div>`;
   }
 
+  renderSeedButton() {
+    if (this.disableSeedButton) {
+      return html`<uui-button
+        disabled
+        type="button"
+        style=""
+        look="primary"
+        color="default"
+        label="Seed"
+      ></uui-button>`;
+    } else {
+      return html`<uui-button
+        type="button"
+        style=""
+        look="primary"
+        color="default"
+        label="Seed"
+        @click="${async () => this.seed()}"
+      ></uui-button>`;
+    }
+  }
+
+  renderClearJobQueueButton() {
+    if (this.numberOfPendingJobs > 0) {
+      return html`  <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue ${
+        this.numberOfPendingJobs
+      }" @click="${async () => this.clearJobQueue()}"></uui-button>
+      </uui-button>`;
+    } else {
+      return html` <uui-button
+        type="button"
+        disabled
+        style=""
+        look="secondary"
+        color="default"
+        label="Clear job queue ${this.numberOfPendingJobs}"
+      ></uui-button>`;
+    }
+  }
+
+  renderDasboardResponse() {
+    if (this.seedResponse != null) {
+      return html` <div class="seed-dashboard-response">
+        <h4>Seed Response</h4>
+        <div>
+          Jobs added: ${this.seedResponse.jobsAdded}
+          <div>
+            <div>Content items: ${this.seedResponse.contentCount}</div>
+            <div>Dictionary items: ${this.seedResponse.dictionaryCount}</div>
+            <div>Media items: ${this.seedResponse.mediaCount}</div>
+          </div>
+        </div>
+      </div>`;
+    }
+  }
+
   renderSeedModes() {
     if (this.selectedSeedMode == "Everything") {
-      return html` 
-    <div class="seed-dashboard-text">
-      <h4>Full seed</h4>
-      <p>
-        Seeding will queue jobs for all content, media and dictionary item for
-        all cultures and publish and preview (if configured) within this
-        Umbraco installation. This action can take a while to finish.
-      </p>
-      <p>
-        <i
-          >The job queue length is the queue length on Umbraco before the
-          nodes are ingested into Enterspeed.</i
-        >
-      </p>
-      <div class="seed-dashboard-content">
-        <uui-button type="button" style="" look="primary" color="default" label="Seed" 
-        @click="${async () => this.seed()}"></uui-button>
-        </uui-button>
-        <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue ${
-          this.seedResponse?.numberOfPendingJobs
-        }" @click="${async () => this.clearPendingJobs()}"></uui-button>
-        </uui-button>
-      </div>
-    </div>
-    `;
+      return html`
+        <div class="seed-dashboard-text">
+          <h4>Full seed</h4>
+          <p>
+            Seeding will queue jobs for all content, media and dictionary item
+            for all cultures and publish and preview (if configured) within this
+            Umbraco installation. This action can take a while to finish.
+          </p>
+          <p>
+            <i
+              >The job queue length is the queue length on Umbraco before the
+              nodes are ingested into Enterspeed.</i
+            >
+          </p>
+          <div class="seed-dashboard-content">
+            ${this.renderSeedButton()} ${this.renderClearJobQueueButton()}
+          </div>
+        </div>
+      `;
     } else {
       return html` <div class="seed-dashboard-text">
         <div>
@@ -260,25 +349,10 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     }
   }
 
-  renderDasboardResponse() {
-    if (this.seedResponse != null) {
-      return html` <div class="seed-dashboard-response">
-        <h4>Seed Response</h4>
-        <div>
-          Jobs added: ${this.seedResponse.jobsAdded}
-          <div>
-            <div>Content items: ${this.seedResponse.contentCount}</div>
-            <div>Dictionary items: ${this.seedResponse.dictionaryCount}</div>
-            <div>Media items: ${this.seedResponse.mediaCount}</div>
-          </div>
-        </div>
-      </div>`;
-    }
-  }
-
   render() {
     return html`
       <uui-box>
+        <h1>${this.disableSeedButton}</h1>
         <div class="seed-dashboard">
           <uui-load-indicator ng-if="vm.loadingConfiguration">
           </uui-load-indicator>
