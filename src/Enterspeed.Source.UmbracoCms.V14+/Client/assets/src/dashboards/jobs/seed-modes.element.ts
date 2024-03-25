@@ -1,72 +1,38 @@
+import { LitElement, html } from "lit";
+import { customElement, property, state } from "lit/decorators.js";
+import { EnterspeedContext } from "../../enterspeed.context.ts";
+import { seedResponse } from "../../types.ts";
+import { UmbNotificationContext } from "@umbraco-cms/backoffice/notification";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import { HelloDirective } from "./seed.modes.element";
-import {
-  LitElement,
-  html,
-  css,
-  customElement,
-  property,
-} from "@umbraco-cms/backoffice/external/lit";
+import "./seed-response.element.ts";
 
-import { EnterspeedContext } from "../enterspeed.context";
-import { seedResponse } from "../types";
-import {
-  UMB_NOTIFICATION_CONTEXT,
-  UmbNotificationContext,
-} from "@umbraco-cms/backoffice/notification";
-import { directive } from "lit/directive.js";
+@customElement("seed-modes")
+export class seedModesElement extends UmbElementMixin(LitElement) {
+  #disableSeedButton?: boolean;
 
-@customElement("enterspeed-jobs")
-export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
-  #enterspeedContext = new EnterspeedContext(this);
-  #notificationContext!: UmbNotificationContext;
+  @state()
+  private numberOfPendingJobs = 0;
 
-  constructor() {
-    super();
-
-    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (context) => {
-      this.#notificationContext = context;
-    });
-
-    this.initGetNumberOfPendingJobs();
-  }
-
-  @property()
-  title = "Enterspeed jobs";
-
-  @property({ type: Boolean })
-  runJobsOnServer = false;
+  @property({ type: Object })
+  enterspeedContext!: EnterspeedContext;
 
   @property({ type: String })
-  serverRole = "";
+  selectedSeedMode?: string;
 
-  @property({ type: Boolean })
-  loadingConfiguration = false;
-
-  @property({ type: Boolean })
-  disableSeedButton?: boolean;
-
-  @property({ type: String })
-  selectedSeedMode = "Everything";
-
-  @property({ type: String })
-  pendingJobState?: string;
-
-  @property({ type: Number })
-  numberOfPendingJobs = 0;
-
-  @property({ attribute: false })
-  seedModes: Array<Option> = [
-    { name: "Seed mode: Everything", value: "Everything", selected: true },
-    { name: "Seed mode: Custom", value: "Custom" },
-  ];
+  @property({ type: Object })
+  notificationContext!: UmbNotificationContext;
 
   @property({ type: Object })
   seedResponse: seedResponse | undefined | null;
 
+  constructor() {
+    super();
+    this.initGetNumberOfPendingJobs();
+  }
+
   initGetNumberOfPendingJobs() {
     let intervalId = setInterval(
-      () => this.getNumberOfPendingJobs(this.#enterspeedContext),
+      () => this.getNumberOfPendingJobs(this.enterspeedContext!),
       10 * 1000
     );
     window.addEventListener(
@@ -89,7 +55,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         }
       })
       .catch((error) => {
-        this.#notificationContext?.peek("danger", {
+        this.notificationContext?.peek("danger", {
           data: {
             headline: "Failed to check queue length",
             message: error.data.message,
@@ -99,13 +65,12 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   }
 
   async seed() {
-    this.disableSeedButton = true;
-    this.#enterspeedContext
-      .seed()
+    this.#disableSeedButton = true;
+    this.enterspeedContext!.seed()
       .then((response) => {
         if (response.isSuccess) {
           this.seedResponse = response.data;
-          this.#notificationContext?.peek("positive", {
+          this.notificationContext?.peek("positive", {
             data: {
               headline: "Seed",
               message: "Successfully started seeding to Enterspeed",
@@ -119,7 +84,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         }
       })
       .catch((error) => {
-        this.#notificationContext?.peek("danger", {
+        this.notificationContext?.peek("danger", {
           data: {
             headline: "Seed",
             message: error.data.message,
@@ -127,25 +92,24 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
         });
       });
 
-    this.disableSeedButton = false;
+    this.#disableSeedButton = false;
   }
 
   async clearJobQueue() {
-    this.#enterspeedContext
-      .clearJobQueue()
+    this.enterspeedContext!.clearJobQueue()
       .then((response) => {
         if (response.isSuccess) {
-          this.pendingJobState = "success";
-          this.#notificationContext?.peek("positive", {
+          this.notificationContext?.peek("positive", {
             data: {
               headline: "Clear job queue",
               message: "Successfully cleared the queue of pending jobs",
             },
           });
+          this.numberOfPendingJobs = 0;
         }
       })
       .catch((error) => {
-        this.#notificationContext?.peek("danger", {
+        this.notificationContext?.peek("danger", {
           data: {
             headline: "Clear job queue",
             message: error.data.message,
@@ -156,84 +120,9 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     this.seedResponse = null;
   }
 
-  renderSeedModeSelects() {
-    return html` <div class="seed-dashboard-text block-form">
-      <h2>What to seed</h2>
-
-      <div class="umb-control-group">
-        <uui-select
-          .options=${this.seedModes}
-          @change=${(e) => (this.selectedSeedMode = e.target.value)}
-          label="Select seed mode"
-          placeholder="Select an option"
-        ></uui-select>
-      </div>
-    </div>`;
-  }
-
-  renderServerMessage() {
-    return html` <div ?hidden=${!this.runJobsOnServer} class="info-box">
-      <strong>Enterspeed jobs will not run on this current server.</strong>
-      Enterspeed jobs will only run on servers with Umbraco role of
-      <i>SchedulingPublisher</i> or <i>Single</i>. Current Umbraco server role
-      is <i>${this.serverRole}</i>.
-    </div>`;
-  }
-
-  renderSeedButton() {
-    if (this.disableSeedButton) {
-      return html`<uui-button
-        disabled
-        type="button"
-        style=""
-        look="primary"
-        color="default"
-        label="Seed"
-      ></uui-button>`;
-    } else {
-      return html`<uui-button
-        type="button"
-        style=""
-        look="primary"
-        color="default"
-        label="Seed"
-        @click="${async () => this.seed()}"
-      ></uui-button>`;
-    }
-  }
-
-  renderClearJobQueueButton() {
-    if (this.numberOfPendingJobs > 0) {
-      return html`  <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue ${
-        this.numberOfPendingJobs
-      }" @click="${async () => this.clearJobQueue()}"></uui-button>
-      </uui-button>`;
-    } else {
-      return html` <uui-button
-        type="button"
-        disabled
-        style=""
-        look="secondary"
-        color="default"
-        label="Clear job queue ${this.numberOfPendingJobs}"
-      ></uui-button>`;
-    }
-  }
-
-  renderDasboardResponse() {
-    if (this.seedResponse != null) {
-      return html` <div class="seed-dashboard-response">
-        <h4>Seed Response</h4>
-        <div>
-          Jobs added: ${this.seedResponse.jobsAdded}
-          <div>
-            <div>Content items: ${this.seedResponse.contentCount}</div>
-            <div>Dictionary items: ${this.seedResponse.dictionaryCount}</div>
-            <div>Media items: ${this.seedResponse.mediaCount}</div>
-          </div>
-        </div>
-      </div>`;
-    }
+  render() {
+    return html` ${this.renderSeedModes()}
+    <seed-response .seedResponse=${this.seedResponse}></seed-response>`;
   }
 
   renderSeedModes() {
@@ -349,67 +238,51 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     }
   }
 
-  render() {
-    return html`
-      <uui-box>
-        <h1>${this.disableSeedButton}</h1>
-        <div class="seed-dashboard">
-          <uui-load-indicator ng-if="vm.loadingConfiguration">
-          </uui-load-indicator>
-          ${this.renderServerMessage()} ${this.renderSeedModeSelects()}
-          ${this.renderSeedModes()} ${this.renderDasboardResponse()}
-        </div>
-      </uui-box>
-    `;
+  renderSeedButton() {
+    if (this.#disableSeedButton) {
+      return html`<uui-button
+        disabled
+        type="button"
+        style=""
+        look="primary"
+        color="default"
+        label="Seed"
+      ></uui-button>`;
+    } else {
+      return html`<uui-button
+        type="button"
+        style=""
+        look="primary"
+        color="default"
+        label="Seed"
+        @click="${async () => this.seed()}"
+      ></uui-button>`;
+    }
   }
 
-  static styles = css`
-    :host {
-      display: block;
-      padding: 20px;
+  renderClearJobQueueButton() {
+    if (this.numberOfPendingJobs > 0) {
+      return html`  <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue ${
+        this.numberOfPendingJobs
+      }" @click="${async () => this.clearJobQueue()}"></uui-button>
+      </uui-button>`;
+    } else {
+      return html` <uui-button
+        type="button"
+        disabled
+        style=""
+        look="secondary"
+        color="default"
+        label="Clear job queue ${this.numberOfPendingJobs}"
+      ></uui-button>`;
     }
-
-    .seed-dashboard-response {
-      padding: 5px 0 20px 5px;
-    }
-
-    .info-box {
-      width: 750px;
-      border-radius: 3px;
-      background-color: #2152a3;
-      font-size: 15px;
-      line-height: 20px;
-      margin-bottom: 0;
-      padding: 6px 14px;
-      vertical-align: middle;
-      color: white;
-      margin-bottom: 10px;
-    }
-
-    .seed-dashboard-text {
-      padding: 0 0 20px 5px;
-    }
-
-    .custom-seed-content-type-container {
-      display: flex;
-      margin-bottom: 20px;
-    }
-
-    .custom-seed-content-type-box {
-      flex: 1;
-      margin: 0 5px 0 5px;
-      padding: 0 10px 10px 10px;
-      border: solid #e9e9ec 1px;
-      border-radius: 3px;
-      box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.16);
-    }
-  `;
+  }
 }
 
-export default enterspeed_dashboard;
+export default seedModesElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    enterspeed_dashboard: enterspeed_dashboard;
+    "seed-modes": seedModesElement;
   }
 }
