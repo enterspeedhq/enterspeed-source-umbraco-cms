@@ -4,6 +4,7 @@ using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.DataPropertyValueConverters;
 using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -28,6 +29,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
         private readonly IEnterspeedValidationService _enterspeedValidationService;
         private readonly EnterspeedPropertyMetaDataMapperCollection _enterspeedPropertyMetaDataMapperCollection;
         private readonly EnterspeedPropertyDataMapperCollection _enterspeedPropertyDataMapperCollection;
+        private readonly IEnterspeedDictionaryTranslation _enterspeedDictionaryTranslation;
 
         public EnterspeedPropertyService(
             EnterspeedPropertyValueConverterCollection converterCollection,
@@ -37,7 +39,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
             IDomainService domainService,
             IEnterspeedValidationService enterspeedValidationService,
             EnterspeedPropertyMetaDataMapperCollection enterspeedPropertyMetaDataMapperCollection,
-            EnterspeedPropertyDataMapperCollection enterspeedPropertyDataMapperCollection)
+            EnterspeedPropertyDataMapperCollection enterspeedPropertyDataMapperCollection, 
+            IEnterspeedDictionaryTranslation enterspeedDictionaryTranslation)
         {
             _converterCollection = converterCollection;
             _umbracoContextFactory = umbracoContextFactory;
@@ -47,6 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             _enterspeedValidationService = enterspeedValidationService;
             _enterspeedPropertyMetaDataMapperCollection = enterspeedPropertyMetaDataMapperCollection;
             _enterspeedPropertyDataMapperCollection = enterspeedPropertyDataMapperCollection;
+            _enterspeedDictionaryTranslation = enterspeedDictionaryTranslation;
         }
 
         public IDictionary<string, IEnterspeedProperty> GetProperties(IPublishedContent content, string culture = null)
@@ -150,7 +154,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
             if (dictionaryItem?.Translations != null)
             {
                 var value = dictionaryItem.Translations
-                    .FirstOrDefault(x => x.Language.IsoCode.Equals(culture, StringComparison.OrdinalIgnoreCase))?.Value;
+                    .FirstOrDefault(x => _enterspeedDictionaryTranslation.GetIsoCode(x).Equals(culture, StringComparison.OrdinalIgnoreCase))?.Value;
                 output.Add("nodeId", new NumberEnterspeedProperty(dictionaryItem.Id));
                 output.Add("key", new StringEnterspeedProperty(dictionaryItem.ItemKey));
                 output.Add("translation", new StringEnterspeedProperty(value ?? string.Empty));

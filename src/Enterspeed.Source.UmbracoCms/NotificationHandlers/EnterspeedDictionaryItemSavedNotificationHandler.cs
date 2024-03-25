@@ -3,6 +3,7 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
@@ -21,11 +22,13 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
     public class EnterspeedDictionaryItemSavedNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemSavedNotification>
     {
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IEnterspeedDictionaryTranslation _enterspeedDictionaryTranslation;
 
         public EnterspeedDictionaryItemSavedNotificationHandler(
             IEnterspeedConfigurationService configurationService,
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
+            IEnterspeedDictionaryTranslation enterspeedDictionaryTranslation,
             IUmbracoContextFactory umbracoContextFactory,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
@@ -41,6 +44,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                   serverRoleAccessor,
                   logger)
         {
+            _enterspeedDictionaryTranslation = enterspeedDictionaryTranslation;
             _enterspeedJobFactory = enterspeedJobFactory;
         }
 
@@ -62,12 +66,12 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                 {
                     if (isPublishConfigured)
                     {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, _enterspeedDictionaryTranslation.GetIsoCode(translation), EnterspeedContentState.Publish));
                     }
 
                     if (isPreviewConfigured)
                     {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                        jobs.Add(_enterspeedJobFactory.GetPublishJob(dictionaryItem, _enterspeedDictionaryTranslation.GetIsoCode(translation), EnterspeedContentState.Preview));
                     }
                 }
             }

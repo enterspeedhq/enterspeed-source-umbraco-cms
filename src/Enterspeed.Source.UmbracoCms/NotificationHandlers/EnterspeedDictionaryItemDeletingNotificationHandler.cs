@@ -3,6 +3,7 @@ using System.Linq;
 using Enterspeed.Source.UmbracoCms.Data.Models;
 using Enterspeed.Source.UmbracoCms.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
@@ -23,6 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
     {
         private readonly ILocalizationService _localizationService;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
+        private readonly IEnterspeedDictionaryTranslation _enterspeedDictionaryTranslation;
 
         public EnterspeedDictionaryItemDeletingNotificationHandler(
             IEnterspeedConfigurationService configurationService,
@@ -70,12 +72,12 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                     {
                         if (isPublishConfigured)
                         {
-                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Publish));
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, _enterspeedDictionaryTranslation.GetIsoCode(translation), EnterspeedContentState.Publish));
                         }
 
                         if (isPreviewConfigured)
                         {
-                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, translation.Language.IsoCode, EnterspeedContentState.Preview));
+                            jobs.Add(_enterspeedJobFactory.GetDeleteJob(dictionaryItem, _enterspeedDictionaryTranslation.GetIsoCode(translation), EnterspeedContentState.Preview));
                         }
 
                         if (descendants == null)
@@ -89,12 +91,12 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
                             {
                                 if (isPublishConfigured)
                                 {
-                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Publish));
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, _enterspeedDictionaryTranslation.GetIsoCode(descendanttranslation), EnterspeedContentState.Publish));
                                 }
 
                                 if (isPreviewConfigured)
                                 {
-                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, descendanttranslation.Language.IsoCode, EnterspeedContentState.Preview));
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(descendant, _enterspeedDictionaryTranslation.GetIsoCode(descendanttranslation), EnterspeedContentState.Preview));
                                 }
                             }
                         }
