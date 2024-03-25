@@ -9,13 +9,22 @@ import {
 
 import { EnterspeedContext } from "../enterspeed.context";
 import { seedResponse } from "../types";
+import {
+  UMB_NOTIFICATION_CONTEXT,
+  UmbNotificationContext,
+} from "@umbraco-cms/backoffice/notification";
 
 @customElement("enterspeed-jobs")
 export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   #enterspeedContext = new EnterspeedContext(this);
+  #notificationContext!: UmbNotificationContext;
 
   constructor() {
     super();
+
+    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (context) => {
+      this.#notificationContext = context;
+    });
   }
 
   @property()
@@ -31,7 +40,16 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   loadingConfiguration = false;
 
   @property({ type: String })
+  seedState = "";
+
+  @property({ type: String })
   selectedSeedMode = "Everything";
+
+  @property({ type: String })
+  pendingJobState = "";
+
+  @property({ type: Number })
+  numberOfPendingJobs = 0;
 
   @property({ attribute: false })
   seedModes: Array<Option> = [
@@ -40,16 +58,65 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   ];
 
   @property({ type: Object })
-  seedResponse: seedResponse | undefined;
+  seedResponse: seedResponse | undefined | null;
 
-  seed() {
-    this.#enterspeedContext.seed().then((response) => {
-      this.seedResponse = response.data?.data;
-    });
+  async seed() {
+    this.seedState = "busy";
+
+    this.#enterspeedContext
+      .seed()
+      .then((response) => {
+        console.log("Seed response", response);
+        if (response.isSuccess) {
+          this.seedResponse = response.data;
+          this.#notificationContext?.peek("positive", {
+            data: {
+              headline: "Seed",
+              message: "Successfully started seeding to Enterspeed",
+            },
+          });
+        } else {
+          this.seedResponse = null;
+        }
+      })
+      .catch((error) => {
+        this.#notificationContext?.peek("danger", {
+          data: {
+            headline: "Seed",
+            message: error.data.message,
+          },
+        });
+      });
+
+    this.seedState = "success";
   }
 
-  clearJobQueue() {}
-  
+  async clearPendingJobs() {
+    this.#enterspeedContext
+      .clearJobQueue()
+      .then((response) => {
+        if (response.isSuccess) {
+          this.pendingJobState = "success";
+          this.#notificationContext?.peek("positive", {
+            data: {
+              headline: "Clear job queue",
+              message: "Successfully cleared the queue of pending jobs",
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        this.#notificationContext?.peek("danger", {
+          data: {
+            headline: "Clear job queue",
+            message: error.data.message,
+          },
+        });
+      });
+
+    this.seedResponse = null;
+  }
+
   renderSeedModeSelects() {
     return html` <div class="seed-dashboard-text block-form">
       <h2>What to seed</h2>
@@ -92,9 +159,11 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
       </p>
       <div class="seed-dashboard-content">
         <uui-button type="button" style="" look="primary" color="default" label="Seed" 
-        @click="${() => this.seed()}"></uui-button>
+        @click="${async () => this.seed()}"></uui-button>
         </uui-button>
-        <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue" @click="${()=> this.clearJobQueue()}"></uui-button>
+        <uui-button type="button" style="" look="secondary" color="default" label="Clear job queue ${
+          this.seedResponse?.numberOfPendingJobs
+        }" @click="${async () => this.clearPendingJobs()}"></uui-button>
         </uui-button>
       </div>
     </div>
@@ -193,15 +262,15 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
 
   renderDasboardResponse() {
     if (this.seedResponse != null) {
-      return html` <div
-        class="seed-dashboard-response"
-      >
+      return html` <div class="seed-dashboard-response">
         <h4>Seed Response</h4>
         <div>
-          Jobs added: ${this.seedResponse.jobsAdded}div>
-          <div>Content items: ${this.seedResponse.ContentCount}</div>
-          <div>Dictionary items: ${this.seedResponse.DictionaryCount}</div>
-          <div>Media items: ${this.seedResponse.MediaCount}</div>
+          Jobs added: ${this.seedResponse.jobsAdded}
+          <div>
+            <div>Content items: ${this.seedResponse.contentCount}</div>
+            <div>Dictionary items: ${this.seedResponse.dictionaryCount}</div>
+            <div>Media items: ${this.seedResponse.mediaCount}</div>
+          </div>
         </div>
       </div>`;
     }

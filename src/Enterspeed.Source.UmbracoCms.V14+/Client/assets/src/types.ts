@@ -1,9 +1,9 @@
 export interface seedResponse {
   jobsAdded: number;
-  NumberOfPendingJobs: number;
-  ContentCount: number;
-  DictionaryCount: number;
-  MediaCount: number;
+  numberOfPendingJobs: number;
+  contentCount: number;
+  dictionaryCount: number;
+  mediaCount: number;
 }
 
 export interface customSeedNodes {

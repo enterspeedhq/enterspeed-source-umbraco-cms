@@ -2,7 +2,12 @@ import { UmbContextBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { EnterspeedRepository } from "./repository/enterspeed.repository";
-import { customSeedNodes } from "./types";
+import {
+  apiResponse,
+  apiResponseBase,
+  customSeedNodes,
+  seedResponse,
+} from "./types";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
   private readonly enterspeedRepository = new EnterspeedRepository(this);
@@ -11,12 +16,18 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     super(host, ENTERSPEED_CONTEXT);
   }
 
-  public async customSeed(customSeedNodes: customSeedNodes) {
+  public async customSeed(
+    customSeedNodes: customSeedNodes
+  ): Promise<apiResponse<seedResponse>> {
     return await this.enterspeedRepository.customSeed(customSeedNodes);
   }
 
-  public async seed() {
+  public async seed(): Promise<apiResponse<seedResponse>> {
     return await this.enterspeedRepository.seed();
+  }
+
+  public async clearJobQueue(): Promise<apiResponseBase> {
+    return await this.enterspeedRepository.clearPendingJobs();
   }
 }
 

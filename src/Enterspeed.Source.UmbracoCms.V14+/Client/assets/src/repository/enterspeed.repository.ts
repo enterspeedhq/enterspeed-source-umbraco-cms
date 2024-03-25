@@ -1,21 +1,66 @@
 import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
-import { IJobDataSource, JobDataSource } from "./sources/job.datasource";
-import { customSeedNodes } from "../types";
+import {
+  apiResponse,
+  apiResponseBase,
+  customSeedNodes,
+  seedResponse,
+} from "../types";
+import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
 
 export class EnterspeedRepository extends UmbControllerBase {
-  #jobDataSource: IJobDataSource;
-
   constructor(host: UmbControllerHost) {
     super(host);
-    this.#jobDataSource = new JobDataSource(host);
   }
 
-  async seed() {
-    return await this.#jobDataSource.seed();
+  async seed(): Promise<apiResponse<seedResponse>> {
+    const request: RequestInit = {
+      method: "get",
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/seed",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: apiResponse<seedResponse> = await response.data?.json();
+      
+    return data;
   }
 
-  async customSeed(customSeedNodes: customSeedNodes) {
-    return await this.#jobDataSource.customSeed(customSeedNodes);
+  async customSeed(
+    customSeedNodes: customSeedNodes
+  ): Promise<apiResponse<seedResponse>> {
+    const request: RequestInit = {
+      method: "post",
+      body: JSON.stringify(customSeedNodes),
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/customseed",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: apiResponse<seedResponse> = await response.data?.json();
+
+    return data;
+  }
+
+  async clearPendingJobs(): Promise<apiResponseBase> {
+    const request: RequestInit = {
+      method: "post",
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/clearpendingjobs",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: apiResponse<seedResponse> = await response.data?.json();
+
+    return data;
   }
 }

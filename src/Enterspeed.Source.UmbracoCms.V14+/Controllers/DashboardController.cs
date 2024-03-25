@@ -217,7 +217,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                 });
         }
 
-        [HttpPost]
+        [HttpPost("ClearPendingJobs")]
         public IActionResult ClearPendingJobs()
         {
             _enterspeedJobRepository.ClearPendingJobs();
