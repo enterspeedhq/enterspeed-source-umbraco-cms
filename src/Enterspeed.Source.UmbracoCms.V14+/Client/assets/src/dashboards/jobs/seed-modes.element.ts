@@ -84,7 +84,10 @@ export class seedModesElement extends UmbLitElement {
         .numberOfPendingJobs=${this._numberOfPendingJobs}
       ></full-seed-mode>`;
     } else {
-      return html`<custom-seed-mode></custom-seed-mode>`;
+      return html`<custom-seed-mode
+        .seedResponse=${this.seedResponse}
+        .numberOfPendingJobs=${this._numberOfPendingJobs}
+      ></custom-seed-mode>`;
     }
   }
 }

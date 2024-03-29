@@ -15,6 +15,7 @@ using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.V14.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -98,8 +99,8 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                 });
         }
 
-        [HttpPost]
-        public IActionResult CustomSeed(CustomSeed customSeed)
+        [HttpPost("CustomSeed")]
+        public IActionResult CustomSeed([FromBody] CustomSeedModel customSeed)
         {
             var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();
             var previewConfigured = _enterspeedConfigurationService.IsPreviewConfigured();
@@ -115,11 +116,11 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                     });
             }
 
-            var response = _enterspeedJobService.CustomSeed(publishConfigured, previewConfigured, customSeed);
+            //var response = _enterspeedJobService.CustomSeed(publishConfigured, previewConfigured, customSeed);
             return Ok(
                 new ApiResponse<SeedResponse>
                 {
-                    Data = response,
+                    //Data = response,
                     IsSuccess = true
                 });
         }

@@ -10,16 +10,12 @@ export interface seedResponse {
   mediaCount: number;
 }
 
-export interface customSeedNodes {
-  contentNodes: customSeedNode[];
-  mediaNodes: customSeedNode[];
-  dictionaryNodes: customSeedNode[];
+export class customSeedNodes {
+  contentNodes: string[] | undefined;
+  mediaNodes: string[] | undefined;
+  dictionaryNodes: string[] | undefined;
 }
 
-export interface customSeedNode {
-  id: number;
-  includeDescendants: boolean;
-}
 
 export interface apiResponseBase {
   isSuccess: boolean;

@@ -35,6 +35,7 @@ export class EnterspeedRepository extends UmbControllerBase {
   ): Promise<apiResponse<seedResponse>> {
     const request: RequestInit = {
       method: "post",
+      headers: this.getDefaultPostHeader(),
       body: JSON.stringify(customSeedNodes),
     };
 
@@ -46,10 +47,10 @@ export class EnterspeedRepository extends UmbControllerBase {
     const response = await tryExecuteAndNotify(this._host, responsePromise);
     const data: apiResponse<seedResponse> = await response.data?.json();
 
-    return data; 
+    return data;
   }
 
-  async clearPendingJobs(): Promise<apiResponseBase> { 
+  async clearPendingJobs(): Promise<apiResponseBase> {
     const request: RequestInit = {
       method: "post",
     };
@@ -82,5 +83,11 @@ export class EnterspeedRepository extends UmbControllerBase {
       await response.data?.json();
 
     return data;
+  }
+
+  getDefaultPostHeader(): HeadersInit {
+    return {
+      "Content-Type": "application/json",
+    };
   }
 }

@@ -27,7 +27,7 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     return await this.enterspeedRepository.seed();
   }
 
-  public async clearJobQueue(): Promise<apiResponseBase> { 
+  public async clearJobQueue(): Promise<apiResponseBase> {
     return await this.enterspeedRepository.clearPendingJobs();
   }
 
