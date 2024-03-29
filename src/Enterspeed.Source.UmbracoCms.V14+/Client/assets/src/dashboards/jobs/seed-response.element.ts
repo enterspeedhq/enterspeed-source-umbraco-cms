@@ -1,11 +1,10 @@
-import { LitElement, html } from "lit";
+import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
 import { seedResponse } from "../../types";
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("seed-response")
-export class seedResponseELement extends UmbElementMixin(LitElement) {
-
+export class seedResponseELement extends UmbLitElement {
   @property({ type: Object })
   seedResponse: seedResponse | undefined | null;
 
@@ -15,8 +14,7 @@ export class seedResponseELement extends UmbElementMixin(LitElement) {
 
   render() {
     if (this.seedResponse != null) {
-      return html` 
-      <div class="seed-dashboard-response">
+      return html` <div class="seed-dashboard-response">
         <h4>Seed Response</h4>
         <div>
           Jobs added: ${this.seedResponse.jobsAdded}

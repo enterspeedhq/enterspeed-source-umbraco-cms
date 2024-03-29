@@ -1,16 +1,13 @@
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import "./seed-modes.element.ts";
 import {
-  LitElement,
   html,
   customElement,
   property,
 } from "@umbraco-cms/backoffice/external/lit";
-
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("server-message")
-export class serverMessageElement extends UmbElementMixin(LitElement) {
-
+export class serverMessageElement extends UmbLitElement {
   constructor() {
     super();
   }
@@ -20,7 +17,6 @@ export class serverMessageElement extends UmbElementMixin(LitElement) {
 
   @property({ type: String })
   serverRole = "";
-
 
   render() {
     return html` <div ?hidden=${!this.runJobsOnServer} class="info-box">

@@ -5,7 +5,6 @@ import {
   customElement,
   property,
 } from "@umbraco-cms/backoffice/external/lit";
-
 import { seedResponse } from "../../types.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 

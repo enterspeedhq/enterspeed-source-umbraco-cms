@@ -1,15 +1,15 @@
-import { LitElement, html } from "lit";
+import {html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import { EnterspeedContext } from "../../enterspeed.context";
 import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
 import { seedResponse } from "../../types";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("full-seed-mode")
-export class fullSeedModeElement extends UmbElementMixin(LitElement) {
+export class fullSeedModeElement extends UmbLitElement {
   private _enterspeedContext!: EnterspeedContext;
   private _notificationContext!: UmbNotificationContext;
 

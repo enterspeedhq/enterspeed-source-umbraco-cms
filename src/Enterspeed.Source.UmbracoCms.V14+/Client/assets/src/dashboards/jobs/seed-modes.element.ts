@@ -1,4 +1,4 @@
-import { LitElement, html } from "lit";
+import { html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { EnterspeedContext } from "../../enterspeed.context.ts";
 import { seedResponse } from "../../types.ts";
@@ -6,13 +6,13 @@ import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import "./seed-response.element.ts";
 import "./custom-seed-mode.element.ts";
 import "./full-seed-mode.element.ts";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("seed-modes")
-export class seedModesElement extends UmbElementMixin(LitElement) {
+export class seedModesElement extends UmbLitElement {
   private _enterspeedContext!: EnterspeedContext;
   private _notificationContext!: UmbNotificationContext;
 
@@ -80,7 +80,9 @@ export class seedModesElement extends UmbElementMixin(LitElement) {
   renderSeedModes() {
     if (this.selectedSeedMode == "Everything") {
       return html`<full-seed-mode
-      .seedResponse=${this.seedResponse} .numberOfPendingJobs=${this._numberOfPendingJobs}></full-seed-mode>`;
+        .seedResponse=${this.seedResponse}
+        .numberOfPendingJobs=${this._numberOfPendingJobs}
+      ></full-seed-mode>`;
     } else {
       return html`<custom-seed-mode></custom-seed-mode>`;
     }

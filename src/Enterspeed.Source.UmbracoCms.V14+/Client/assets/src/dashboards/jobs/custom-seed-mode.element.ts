@@ -1,9 +1,9 @@
-import { LitElement, html } from "lit";
+import { html } from "lit";
 import { customElement } from "lit/decorators.js";
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("custom-seed-mode")
-export class customSeedModeElement extends UmbElementMixin(LitElement) {
+export class customSeedModeElement extends UmbLitElement {
   constructor() {
     super();
   }
