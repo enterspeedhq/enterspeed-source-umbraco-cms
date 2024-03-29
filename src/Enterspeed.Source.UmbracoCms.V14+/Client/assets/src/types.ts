@@ -16,7 +16,6 @@ export class customSeedNodes {
   dictionaryNodes: string[] | undefined;
 }
 
-
 export interface apiResponseBase {
   isSuccess: boolean;
   errorCode: string;
@@ -25,3 +24,9 @@ export interface apiResponseBase {
 export interface apiResponse<T> extends apiResponseBase {
   data: T;
 }
+
+export type tab = {
+  alias: string;
+  label: string;
+  active?: boolean;
+};

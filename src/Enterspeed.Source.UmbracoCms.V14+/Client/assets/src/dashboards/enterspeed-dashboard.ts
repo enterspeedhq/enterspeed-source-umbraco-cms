@@ -8,26 +8,65 @@ import {
   property,
   css,
 } from "@umbraco-cms/backoffice/external/lit";
+import { tab } from "../types.ts";
 
 @customElement("enterspeed-dashboard")
 export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
-
   constructor() {
     super();
   }
 
+  @property({ type: Array })
+  tabs: tab[] = [
+    {
+      alias: "failedJobsTab",
+      label: "Failed Jobs",
+    },
+    {
+      alias: "seedsTab",
+      label: "Seed",
+      active: true,
+    },
+  ];
+
   @property()
   title = "Enterspeed jobs";
+
+  handleTabChange(selectedTab: tab) {
+    this.tabs = this.tabs.map((tab) => {
+      tab.active = tab.alias === selectedTab.alias;
+      return tab;
+    });
+  }
 
   render() {
     return html`
       <uui-box>
-        <enterspeed-jobs></enterspeed-jobs>
+        <uui-tab-group>
+          ${this.tabs.map(
+            (tab) =>
+              html`
+                <uui-tab
+                  .label=${tab.label}
+                  .active=${tab.active}
+                  @click=${() => this.handleTabChange(tab)}
+                ></uui-tab>
+              `
+          )}
+        </uui-tab-group>
+        ${this.renderContent()}
       </uui-box>
     `;
   }
 
-  
+  renderContent() {
+    if (this.tabs[0].active) {
+      return html``;
+    } else if (this.tabs[1].active) {
+      return html`<enterspeed-jobs></enterspeed-jobs>`;
+    }
+  }
+
   static styles = css`
     :host {
       display: block;
