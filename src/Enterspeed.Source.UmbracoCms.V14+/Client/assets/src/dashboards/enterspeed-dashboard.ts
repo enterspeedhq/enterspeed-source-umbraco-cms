@@ -54,20 +54,6 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
     .seed-dashboard-text {
       padding: 0 0 20px 5px;
     }
-
-    .custom-seed-content-type-container {
-      display: flex;
-      margin-bottom: 20px;
-    }
-
-    .custom-seed-content-type-box {
-      flex: 1;
-      margin: 0 5px 0 5px;
-      padding: 0 10px 10px 10px;
-      border: solid #e9e9ec 1px;
-      border-radius: 3px;
-      box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.16);
-    }
   `;
 }
 

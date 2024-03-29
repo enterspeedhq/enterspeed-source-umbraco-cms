@@ -1,4 +1,5 @@
 ﻿using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCmsV14.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Composing;
@@ -11,6 +12,8 @@ namespace Enterspeed.Source.UmbracoCms.V14
         public void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddTransient<IEnterspeedDictionaryTranslation, EnterspeedDictionaryTranslation>();
+            builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
+
         }
     }
 }
