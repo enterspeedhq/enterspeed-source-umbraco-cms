@@ -1,5 +1,4 @@
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import { EnterspeedContext } from "../enterspeed.context.ts";
 import "./jobs/jobs.element.ts";
 
 import {
@@ -10,22 +9,11 @@ import {
   css,
 } from "@umbraco-cms/backoffice/external/lit";
 
-import {
-  UMB_NOTIFICATION_CONTEXT,
-  UmbNotificationContext,
-} from "@umbraco-cms/backoffice/notification";
-
 @customElement("enterspeed-dashboard")
 export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
-  #enterspeedContext = new EnterspeedContext(this);
-  #notificationContext!: UmbNotificationContext;
 
   constructor() {
     super();
-
-    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (context) => {
-      this.#notificationContext = context;
-    });
   }
 
   @property()
@@ -34,10 +22,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   render() {
     return html`
       <uui-box>
-        <enterspeed-jobs
-          .enterspeedContext=${this.#enterspeedContext}
-          .notificationContext=${this.#notificationContext}
-        ></enterspeed-jobs>
+        <enterspeed-jobs></enterspeed-jobs>
       </uui-box>
     `;
   }

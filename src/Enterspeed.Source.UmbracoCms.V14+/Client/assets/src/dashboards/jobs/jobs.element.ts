@@ -1,30 +1,20 @@
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import "./seed-modes.element.ts";
 import "./server-message.element.ts";
 import {
-  LitElement,
   html,
-  css,
   customElement,
   property,
 } from "@umbraco-cms/backoffice/external/lit";
 
-import { UmbNotificationContext } from "@umbraco-cms/backoffice/notification";
-
 import { seedResponse } from "../../types.ts";
-import { EnterspeedContext } from "../../enterspeed.context.ts";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("enterspeed-jobs")
-export class enterspeedJobsElement extends UmbElementMixin(LitElement) {
+export class enterspeedJobsElement extends UmbLitElement {
+
   constructor() {
     super();
   }
-
-  @property({ type: Object })
-  enterspeedContext!: EnterspeedContext;
-
-  @property({ type: Object })
-  notificationContext!: UmbNotificationContext;
 
   @property()
   title = "Enterspeed jobs";
@@ -79,9 +69,7 @@ export class enterspeedJobsElement extends UmbElementMixin(LitElement) {
         </server-message>
         ${this.renderSeedModeSelects()}
         <seed-modes
-          .enterspeedContext=${this.enterspeedContext}
           .selectedSeedMode=${this.selectedSeedMode}
-          .notificationContext=${this.notificationContext}
           .seedResponse=${this.seedResponse}
         ></seed-modes>
       </div>
