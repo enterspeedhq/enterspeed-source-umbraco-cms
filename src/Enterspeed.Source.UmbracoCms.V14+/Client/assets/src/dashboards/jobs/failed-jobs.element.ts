@@ -6,14 +6,15 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
-import { enterspeedJob } from "../../types";
+import { enterspeedJob, jobIdsToDelete } from "../../types";
 
 @customElement("failed-jobs")
 export class failedJobsElement extends UmbLitElement {
-  private _enterspeedContext = new EnterspeedContext(this);
+  private _enterspeedContext!: EnterspeedContext;
 
   constructor() {
     super();
+    this._enterspeedContext = new EnterspeedContext(this);
     this.getFailedJobs();
   }
   @state()
@@ -31,7 +32,21 @@ export class failedJobsElement extends UmbLitElement {
   @state()
   private _deleteModes = ["Everything", "Selected"];
 
+  @state()
   private _selectedDeleteMode = this._deleteModes[0];
+
+  async getFailedJobs(): Promise<void> {
+    await this._enterspeedContext.getFailedJobs().then((response) => {
+      if (response.isSuccess) {
+        this._loadingFailedJobs = false;
+        this._failedJobs = response.data;
+      }
+    });
+  }
+
+  getSelectedFailedJobs() {
+    return this._failedJobs.filter((fj) => fj.selected === true);
+  }
 
   toggleException(index: number) {
     if (index === this._activeException) {
@@ -41,17 +56,42 @@ export class failedJobsElement extends UmbLitElement {
     }
   }
 
-  getSelectedFailedJobs() {
-    return this._failedJobs.filter((fj) => fj.selected === true);
+  setDeleteMode(deleteMode: string) {
+    console.log(deleteMode);
+    this._selectedDeleteMode = deleteMode;
   }
 
-  getFailedJobs() {
-    this._enterspeedContext.getFailedJobs().then((response) => {
-      if (response.isSuccess) {
-        this._loadingFailedJobs = false;
-        this._failedJobs = response.data;
+  async deleteFailedJobs() {
+    if (!confirm("Are you sure you want to delete the failed job(s)?")) {
+      return;
+    }
+    this._deletingFailedJobs = true;
+
+    if (this._selectedDeleteMode === "Selected") {
+      let failedJobsToDelete = this.getSelectedFailedJobs();
+
+      if (failedJobsToDelete.length) {
+        let idsToDelete = new jobIdsToDelete(
+          failedJobsToDelete.map((fj) => fj.id)
+        );
+
+        await this._enterspeedContext
+          .deleteSelectedFailedJobs(idsToDelete)
+          .then((response) => {
+            if (response.isSuccess) {
+              this.getFailedJobs();
+            }
+          });
       }
-    });
+    } else {
+      await this._enterspeedContext.deleteFailedJobs().then((response) => {
+        if (response.isSuccess) {
+          this.getFailedJobs();
+        }
+      });
+    }
+
+    this._deletingFailedJobs = false;
   }
 
   renderCellValues(failedJob: enterspeedJob, index: number) {
@@ -70,7 +110,7 @@ export class failedJobsElement extends UmbLitElement {
         class="dashboard-list-item-property "
         style="width: 3%"
       >
-        <uui-checkbox .checked=${failedJob.selected}></uui-checkbox>
+        <uui-checkbox label=" " .checked=${failedJob.selected}></uui-checkbox>
       </div>`;
     }
 
@@ -120,6 +160,11 @@ export class failedJobsElement extends UmbLitElement {
   }
 
   render() {
+    const options: Array<Option> = [
+      { name: "Everything", value: "Everything" },
+      { name: "Selected", value: "Selected" },
+    ];
+
     var jobCellsHtml = this._failedJobs?.map((job, index) => {
       return this.renderCellValues(job, index);
     });
@@ -179,38 +224,22 @@ export class failedJobsElement extends UmbLitElement {
                   <br />
 
                   <div class="umb-control-group">
-                    <uui-button
-                      type="button"
-                      label="Mode: ${this._selectedDeleteMode}"
-                      action="vm.toggleDeleteModeSelect()"
-                    >
-                    </uui-button>
-                    <uui-dropdown
-                      ng-if="vm.deleteModeSelectOpen"
-                      on-close="vm.deleteModeSelectOpen = false"
-                    >
-                      <umb-dropdown-item
-                        ng-repeat="deleteMode in vm.deleteModes"
-                      >
-                        <button
-                          type="button"
-                          class="btn-reset"
-                          ng-click="vm.setDeleteMode(deleteMode); vm.deleteModeSelectOpen = false;"
-                        >
-                          {{deleteMode}}
-                        </button>
-                      </umb-dropdown-item>
-                    </uui-dropdown>
+                    <uui-select
+                      .options=${options}
+                      .onchange=${(e) => this.setDeleteMode(e.target.value)}
+                      placeholder="Select an option"
+                    ></uui-select>
 
                     <uui-button
                       type="button"
-                      action="vm.deleteFailedJobs()"
-                      button-style="danger"
+                      look="primary"
+                      color="danger"
                       label="Delete"
-                      .disabled="${this._deletingFailedJobs ||
-                      (this._selectedDeleteMode === "Selected" &&
-                        !this.getSelectedFailedJobs().length)}"
+                      type="button"
+                      @click=${() => this.deleteFailedJobs()}
+                      .disabled="${this._deletingFailedJobs}"
                     >
+                      Delete ${this._selectedDeleteMode}
                     </uui-button>
                   </div>
                 </div>

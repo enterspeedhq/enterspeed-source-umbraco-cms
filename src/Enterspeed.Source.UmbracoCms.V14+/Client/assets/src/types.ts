@@ -81,3 +81,11 @@ export interface enterspeedJob {
   updatedAt: Date;
   selected: boolean;
 }
+
+export class jobIdsToDelete {
+  constructor(jobIds: number[]) {
+    this.jobIds = jobIds;
+  }
+
+  jobIds: number[];
+}

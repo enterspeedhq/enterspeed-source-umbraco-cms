@@ -7,6 +7,7 @@ import {
   enterspeedJob,
   enterspeedUmbracoConfigurationResponse,
   getNumberOfPendingJobsResponse,
+  jobIdsToDelete,
   seedResponse,
 } from "../types";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
@@ -118,6 +119,43 @@ export class EnterspeedRepository extends UmbControllerBase {
 
     const response = await tryExecuteAndNotify(this._host, responsePromise);
     const data: apiResponse<enterspeedJob[]> = await response.data?.json();
+
+    return data;
+  }
+
+  public async deleteSelectedFailedJobs(
+    ids: jobIdsToDelete
+  ): Promise<apiResponseBase> {
+    const request: RequestInit = {
+      method: "post",
+      headers: this.getDefaultPostHeader(),
+      body: JSON.stringify(ids),
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/deletejobs",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: apiResponse<apiResponseBase> = await response.data?.json();
+
+    return data;
+  }
+
+  public async deleteFailedJobs(): Promise<apiResponseBase> {
+    const request: RequestInit = {
+      method: "post",
+      headers: this.getDefaultPostHeader(),
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/deletejobs",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: apiResponse<apiResponseBase> = await response.data?.json();
 
     return data;
   }

@@ -245,7 +245,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
             });
         }
 
-        [HttpPost]
+        [HttpPost("DeleteJobs")]
         public ActionResult DeleteJobs(JobIdsToDelete jobIdsToDelete)
         {
             if (jobIdsToDelete != null && jobIdsToDelete.Ids.Any())

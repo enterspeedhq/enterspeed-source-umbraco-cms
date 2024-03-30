@@ -11,6 +11,7 @@ import {
   seedResponse,
   enterspeedUmbracoConfigurationResponse,
   enterspeedJob,
+  jobIdsToDelete,
 } from "./types";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
@@ -40,12 +41,24 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     return await this.enterspeedRepository.getNumberOfPendingJobs();
   }
 
-  public async getEnterspeedConfiguration(): Promise<apiResponse<enterspeedUmbracoConfigurationResponse>> {
+  public async getEnterspeedConfiguration(): Promise<
+    apiResponse<enterspeedUmbracoConfigurationResponse>
+  > {
     return await this.enterspeedRepository.getEnterspeedConfiguration();
   }
 
   public async getFailedJobs(): Promise<apiResponse<enterspeedJob[]>> {
     return await this.enterspeedRepository.getFailedJobs();
+  }
+
+  public async deleteSelectedFailedJobs(
+    ids: jobIdsToDelete
+  ): Promise<apiResponseBase> {
+    return await this.enterspeedRepository.deleteSelectedFailedJobs(ids);
+  }
+
+  public async deleteFailedJobs(): Promise<apiResponseBase> {
+    return await this.enterspeedRepository.deleteFailedJobs();
   }
 }
 
