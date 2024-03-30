@@ -1,5 +1,6 @@
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import "./jobs/seed.element.ts";
+import "./jobs/failed-jobs.element.ts";
 
 import {
   LitElement,
@@ -61,7 +62,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
 
   renderContent() {
     if (this.tabs[0].active) {
-      return html``;
+      return html`<failed-jobs></failed-jobs>`;
     } else if (this.tabs[1].active) {
       return html`<seed-view></seed-view>`;
     }

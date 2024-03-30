@@ -10,6 +10,7 @@ import {
   getNumberOfPendingJobsResponse,
   seedResponse,
   enterspeedUmbracoConfigurationResponse,
+  enterspeedJob,
 } from "./types";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
@@ -41,6 +42,10 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
 
   public async getEnterspeedConfiguration(): Promise<apiResponse<enterspeedUmbracoConfigurationResponse>> {
     return await this.enterspeedRepository.getEnterspeedConfiguration();
+  }
+
+  public async getFailedJobs(): Promise<apiResponse<enterspeedJob[]>> {
+    return await this.enterspeedRepository.getFailedJobs();
   }
 }
 

@@ -57,3 +57,27 @@ export interface enterspeedUmbracoConfigurationResponse {
   serverRole: serverRole;
   runJobsOnServer: boolean;
 }
+
+enum enterspeedJobType {
+  Publish = 0,
+  Delete = 1,
+}
+
+enum enterspeedJobEntityType {
+  Content,
+  MasterContent,
+  Media,
+  Dictionary,
+}
+
+export interface enterspeedJob {
+  id: number;
+  entityId: string;
+  culture: string;
+  jobType: enterspeedJobType;
+  exception: string;
+  entityType: enterspeedJobEntityType;
+  createdAt: Date;
+  updatedAt: Date;
+  selected: boolean;
+}

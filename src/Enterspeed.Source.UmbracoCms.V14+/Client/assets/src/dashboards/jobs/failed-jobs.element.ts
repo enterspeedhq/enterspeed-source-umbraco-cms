@@ -1,31 +1,134 @@
 import {
   html,
   customElement,
-  property,
+  state,
+  css,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import { EnterspeedContext } from "../../enterspeed.context";
+import { enterspeedJob } from "../../types";
 
 @customElement("failed-jobs")
 export class failedJobsElement extends UmbLitElement {
+  private _enterspeedContext = new EnterspeedContext(this);
+
   constructor() {
     super();
+    this.getFailedJobs();
+  }
+  @state()
+  private _deletingFailedJobs: boolean = false;
+
+  @state()
+  private _loadingFailedJobs: boolean = true;
+
+  @state()
+  private _failedJobs: enterspeedJob[] = [];
+
+  @state()
+  private _activeException: number = -1;
+
+  @state()
+  private _deleteModes = ["Everything", "Selected"];
+
+  private _selectedDeleteMode = this._deleteModes[0];
+
+  toggleException(index: number) {
+    if (index === this._activeException) {
+      this._activeException = -1;
+    } else {
+      this._activeException = index;
+    }
   }
 
-  @property({ type: Boolean })
-  runJobsOnServer = false;
+  getSelectedFailedJobs() {
+    return this._failedJobs.filter((fj) => fj.selected === true);
+  }
 
-  @property({ type: String })
-  serverRole = "";
+  getFailedJobs() {
+    this._enterspeedContext.getFailedJobs().then((response) => {
+      if (response.isSuccess) {
+        this._loadingFailedJobs = false;
+        this._failedJobs = response.data;
+      }
+    });
+  }
+
+  renderCellValues(failedJob: enterspeedJob, index: number) {
+    let selectedDeleteModeHtml;
+    if (this._selectedDeleteMode === "Everything") {
+      selectedDeleteModeHtml = html`<div
+        class="dashboard-list-item-property"
+        style="width: 3%"
+      >
+        ${index !== this._activeException
+          ? html`<uui-icon name="icon-navigation-right"></uui-icon>`
+          : html`<uui-icon name="icon-navigation-down"></uui-icon>`}
+      </div>`;
+    } else {
+      selectedDeleteModeHtml = html`<div
+        class="dashboard-list-item-property "
+        style="width: 3%"
+      >
+        <uui-checkbox .checked=${failedJob.selected}></uui-checkbox>
+      </div>`;
+    }
+
+    let activeException;
+    if (index === this._activeException) {
+      activeException = html`<div
+        class="dashboard-list-item-exception"
+        style="width: 100%"
+      >
+        <h4>Exception</h4>
+        ${failedJob.exception === undefined || failedJob.exception === null
+          ? "No exception"
+          : failedJob.exception}
+      </div>`;
+    }
+
+    return html` <li>
+      <div
+        class="dashboard-list-item background-hover pointer"
+        @click=${() => this.toggleException(index)}
+      >
+        ${selectedDeleteModeHtml}
+        <div class="dashboard-list-item-property" style="width:12%">
+          ${failedJob.id}
+        </div>
+        <div class="dashboard-list-item-property" style="width:10%">
+          ${failedJob.entityId}
+        </div>
+        <div class="dashboard-list-item-property" style="width:10%">
+          ${failedJob.entityType}
+        </div>
+        <div class="dashboard-list-item-property" style="width:10%">
+          ${failedJob.culture}
+        </div>
+        <div class="dashboard-list-item-property" style="width:15%">
+          ${failedJob.jobType}
+        </div>
+        <div class="dashboard-list-item-property" style="width:20%">
+          ${failedJob.createdAt}
+        </div>
+        <div class="dashboard-list-item-property" style="width:20%">
+          ${failedJob.updatedAt}
+        </div>
+      </div>
+      <div class="dashboard-list-item">${activeException}</div>
+    </li>`;
+  }
 
   render() {
+    var jobCellsHtml = this._failedJobs?.map((job, index) => {
+      return this.renderCellValues(job, index);
+    });
+
     return html`
       <div class="failedjobs-dashboard">
         <umb-load-indicator> </umb-load-indicator>
-        <server-message> </server-message>
-        <div
-          class="failedjobs-dashboard-content"
-          ng-if="!vm.failedjobs-loading"
-        >
+        <server-message></server-message>
+        <div class="failedjobs-dashboard-content">
           <ul class="dashboard-list">
             <li class="dashboard-list-header">
               <div class="dashboard-list-item-property" style="width:3%"></div>
@@ -51,63 +154,7 @@ export class failedJobsElement extends UmbLitElement {
                 Updated at
               </div>
             </li>
-            <li
-              ng-repeat="job in vm.failedJobs | filter:q | startFrom:vm.pagination.pageIndex*vm.pagination.pageSize | limitTo:vm.pagination.pageSize"
-            >
-              <div
-                class="dashboard-list-item background-hover pointer"
-                ng-click="vm.toggleException($index)"
-              >
-                <div
-                  ng-if="vm.selectedDeleteMode == 'Everything'"
-                  class="dashboard-list-item-property"
-                  style="width: 3%"
-                >
-                  <span
-                    ng-class="{'icon-navigation-right': $index !== vm.activeException, 'icon-navigation-down': $index === vm.activeException}"
-                  ></span>
-                </div>
-                <div
-                  ng-if="vm.selectedDeleteMode == 'Selected'"
-                  class="dashboard-list-item-property "
-                  style="width: 3%"
-                >
-                  <umb-checkbox model="job.selected"></umb-checkbox>
-                </div>
-                <div class="dashboard-list-item-property" style="width:12%">
-                  {{job.id}}
-                </div>
-                <div class="dashboard-list-item-property" style="width:10%">
-                  {{job.entityId}}
-                </div>
-                <div class="dashboard-list-item-property" style="width:10%">
-                  {{job.entityType}}
-                </div>
-                <div class="dashboard-list-item-property" style="width:10%">
-                  {{job.culture}}
-                </div>
-                <div class="dashboard-list-item-property" style="width:15%">
-                  {{job.jobType}}
-                </div>
-                <div class="dashboard-list-item-property" style="width:20%">
-                  {{ job.createdAt | date:'yyyy-MM-dd HH:mm:ss' }}
-                </div>
-                <div class="dashboard-list-item-property" style="width:20%">
-                  {{ job.updatedAt | date:'yyyy-MM-dd HH:mm:ss' }}
-                </div>
-              </div>
-              <div class="dashboard-list-item">
-                <div
-                  class="dashboard-list-item-exception"
-                  style="width: 100%"
-                  ng-show="$index === vm.activeException"
-                >
-                  <h4>Exception</h4>
-                  {{job.exception === undefined || job.exception === null ? 'No
-                  exception' : job.exception}}
-                </div>
-              </div>
-            </li>
+            ${jobCellsHtml}
           </ul>
 
           <div
@@ -123,49 +170,108 @@ export class failedJobsElement extends UmbLitElement {
             >
             </umb-pagination>
           </div>
-          <div ng-if="vm.failedJobs.length">
-            <div class="seed-dashboard-text block-form">
-              <br />
-              <h4>Delete failed jobs</h4>
-              <br />
 
-              <div class="umb-control-group">
-                <umb-button
-                  type="button"
-                  label="Mode: {{vm.selectedDeleteMode}}"
-                  action="vm.toggleDeleteModeSelect()"
-                >
-                </umb-button>
-                <umb-dropdown
-                  ng-if="vm.deleteModeSelectOpen"
-                  on-close="vm.deleteModeSelectOpen = false"
-                >
-                  <umb-dropdown-item ng-repeat="deleteMode in vm.deleteModes">
-                    <button
+          ${this._failedJobs.length
+            ? html` <div>
+                <div class="seed-dashboard-text block-form">
+                  <br />
+                  <h4>Delete failed jobs</h4>
+                  <br />
+
+                  <div class="umb-control-group">
+                    <uui-button
                       type="button"
-                      class="btn-reset"
-                      ng-click="vm.setDeleteMode(deleteMode); vm.deleteModeSelectOpen = false;"
+                      label="Mode: ${this._selectedDeleteMode}"
+                      action="vm.toggleDeleteModeSelect()"
                     >
-                      {{deleteMode}}
-                    </button>
-                  </umb-dropdown-item>
-                </umb-dropdown>
+                    </uui-button>
+                    <uui-dropdown
+                      ng-if="vm.deleteModeSelectOpen"
+                      on-close="vm.deleteModeSelectOpen = false"
+                    >
+                      <umb-dropdown-item
+                        ng-repeat="deleteMode in vm.deleteModes"
+                      >
+                        <button
+                          type="button"
+                          class="btn-reset"
+                          ng-click="vm.setDeleteMode(deleteMode); vm.deleteModeSelectOpen = false;"
+                        >
+                          {{deleteMode}}
+                        </button>
+                      </umb-dropdown-item>
+                    </uui-dropdown>
 
-                <umb-button
-                  type="button"
-                  action="vm.deleteFailedJobs()"
-                  button-style="danger"
-                  label="Delete"
-                  disabled="vm.deletingFailedJobs || (vm.selectedDeleteMode === 'Selected' && !vm.getSelectedFailedJobs().length)"
-                >
-                </umb-button>
-              </div>
-            </div>
-          </div>
+                    <uui-button
+                      type="button"
+                      action="vm.deleteFailedJobs()"
+                      button-style="danger"
+                      label="Delete"
+                      .disabled="${this._deletingFailedJobs ||
+                      (this._selectedDeleteMode === "Selected" &&
+                        !this.getSelectedFailedJobs().length)}"
+                    >
+                    </uui-button>
+                  </div>
+                </div>
+              </div>`
+            : html``}
         </div>
       </div>
     `;
   }
+
+  static styles = css`
+    :host {
+      display: block;
+      padding: 20px;
+    }
+    .dashboard-list {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      margin: 10px;
+    }
+
+    .dashboard-list-item,
+    .dashboard-list-header {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .pointer {
+      cursor: pointer;
+    }
+
+    .background-hover:hover {
+      background-color: #f3f3f5;
+    }
+
+    .dashboard-list-header {
+      font-weight: 700;
+    }
+
+    .dashboard-list-item-property {
+      display: flex;
+      padding: 5px 20px 5px 0;
+    }
+
+    .dashboard-list-item-property .checkbox {
+      margin-top: 0px;
+    }
+
+    .dashboard-list-item-exception {
+      padding: 20px;
+      margin: 5px 0 20px 0;
+      border: 1px solid #e9e9eb;
+    }
+
+    .dashboard-list li {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+  `;
 }
 
 export default failedJobsElement;

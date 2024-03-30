@@ -4,7 +4,7 @@ import {
   apiResponse,
   apiResponseBase,
   customSeedNodes,
-  enterspeedUmbracoConfiguration,
+  enterspeedJob,
   enterspeedUmbracoConfigurationResponse,
   getNumberOfPendingJobsResponse,
   seedResponse,
@@ -102,6 +102,22 @@ export class EnterspeedRepository extends UmbControllerBase {
     const response = await tryExecuteAndNotify(this._host, responsePromise);
     const data: apiResponse<enterspeedUmbracoConfigurationResponse> =
       await response.data?.json();
+
+    return data;
+  }
+
+  async getFailedJobs(): Promise<apiResponse<enterspeedJob[]>> {
+    const request: RequestInit = {
+      method: "get",
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/getfailedjobs",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: apiResponse<enterspeedJob[]> = await response.data?.json();
 
     return data;
   }

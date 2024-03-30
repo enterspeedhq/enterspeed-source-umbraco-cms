@@ -62,7 +62,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
             _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
         }
 
-        [HttpGet()]
+        [HttpGet("GetFailedJobs")]
         public ApiResponse<List<EnterspeedJob>> GetFailedJobs()
         {
             var result = _enterspeedJobRepository.GetFailedJobs().ToList();
