@@ -125,7 +125,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                 });
         }
 
-        [HttpGet]
+        [HttpGet("GetEnterspeedConfiguration")]
         public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();

@@ -3,11 +3,13 @@ import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { EnterspeedRepository } from "./repository/enterspeed.repository";
 import {
+  enterspeedUmbracoConfiguration,
   apiResponse,
   apiResponseBase,
   customSeedNodes,
   getNumberOfPendingJobsResponse,
   seedResponse,
+  enterspeedUmbracoConfigurationResponse,
 } from "./types";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
@@ -35,6 +37,10 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     apiResponse<getNumberOfPendingJobsResponse>
   > {
     return await this.enterspeedRepository.getNumberOfPendingJobs();
+  }
+
+  public async getEnterspeedConfiguration(): Promise<apiResponse<enterspeedUmbracoConfigurationResponse>> {
+    return await this.enterspeedRepository.getEnterspeedConfiguration();
   }
 }
 

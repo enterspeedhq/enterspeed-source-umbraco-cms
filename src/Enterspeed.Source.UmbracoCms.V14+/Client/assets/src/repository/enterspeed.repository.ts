@@ -4,6 +4,8 @@ import {
   apiResponse,
   apiResponseBase,
   customSeedNodes,
+  enterspeedUmbracoConfiguration,
+  enterspeedUmbracoConfigurationResponse,
   getNumberOfPendingJobsResponse,
   seedResponse,
 } from "../types";
@@ -80,6 +82,25 @@ export class EnterspeedRepository extends UmbControllerBase {
 
     const response = await tryExecuteAndNotify(this._host, responsePromise);
     const data: apiResponse<getNumberOfPendingJobsResponse> =
+      await response.data?.json();
+
+    return data;
+  }
+
+  async getEnterspeedConfiguration(): Promise<
+    apiResponse<enterspeedUmbracoConfigurationResponse>
+  > {
+    const request: RequestInit = {
+      method: "get",
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/getenterspeedconfiguration",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: apiResponse<enterspeedUmbracoConfigurationResponse> =
       await response.data?.json();
 
     return data;

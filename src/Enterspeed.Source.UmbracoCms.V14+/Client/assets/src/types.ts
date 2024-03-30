@@ -30,3 +30,30 @@ export type tab = {
   label: string;
   active?: boolean;
 };
+
+export enum serverRole {
+  Unknown = 0,
+  Single = 1,
+  Subscriber = 2,
+  SchedulingPublisher = 3,
+}
+
+export interface enterspeedUmbracoConfiguration {
+  apiKey: string;
+  baseUrl: string;
+  connectionTimeout: number;
+  ingestVersion: string;
+  systemInformation: string;
+  mediaDomain: string;
+  isConfigured: boolean;
+  configuredFromSettingsFile: boolean;
+  previewApiKey: string;
+  rootDictionariesDisabled: boolean;
+  runJobsOnAllServerRoles: boolean;
+  enableMasterContent: boolean;
+}
+
+export interface enterspeedUmbracoConfigurationResponse {
+  serverRole: serverRole;
+  runJobsOnServer: boolean;
+}

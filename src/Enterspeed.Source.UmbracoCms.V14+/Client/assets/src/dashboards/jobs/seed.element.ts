@@ -8,9 +8,8 @@ import {
 import { seedResponse } from "../../types.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
-@customElement("enterspeed-jobs")
-export class enterspeedJobsElement extends UmbLitElement {
-
+@customElement("seed-view")
+export class seedElement extends UmbLitElement {
   constructor() {
     super();
   }
@@ -61,10 +60,7 @@ export class enterspeedJobsElement extends UmbLitElement {
       <div class="seed-dashboard">
         <uui-load-indicator ng-if="vm.loadingConfiguration">
         </uui-load-indicator>
-        <server-message
-          .runJobsOnServer=${this.runJobsOnServer}
-          .serverRole=${this.serverRole}
-        >
+        <server-message>
         </server-message>
         ${this.renderSeedModeSelects()}
         <seed-modes
@@ -76,10 +72,10 @@ export class enterspeedJobsElement extends UmbLitElement {
   }
 }
 
-export default enterspeedJobsElement;
+export default seedElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "enterspeed-jobs": enterspeedJobsElement;
+    "seed-view": seedElement;
   }
 }
