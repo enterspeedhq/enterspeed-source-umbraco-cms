@@ -10,6 +10,7 @@ import { enterspeedJob, jobIdsToDelete } from "../../types";
 import {
   UUIBooleanInputEvent,
   UUISelectEvent,
+  UUIPaginationEvent,
 } from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("failed-jobs")
@@ -48,12 +49,35 @@ export class failedJobsElement extends UmbLitElement {
   @state()
   private _selectedDeleteMode = this._deleteModes[0].value;
 
+  @state()
+  private _pagination = {
+    pageIndex: 0,
+    pageNumber: 1,
+    totalPages: 1,
+    pageSize: 30,
+  };
+
+  nextPage() {
+    this._pagination.pageIndex = this._pagination.pageIndex + 1;
+  }
+
+  prevPage() {
+    this._pagination.pageIndex = this._pagination.pageIndex - 1;
+  }
+
+  goToPage(pageNumber: number) {
+    this._pagination.pageIndex = pageNumber - 1;
+  }
+
   async getFailedJobs(): Promise<void> {
     this._failedJobs = [];
     await this._enterspeedContext.getFailedJobs().then((response) => {
       if (response.isSuccess) {
         this._loadingFailedJobs = false;
         this._failedJobs = response.data;
+        this._pagination.totalPages = Math.ceil(
+          this._failedJobs.length / this._pagination.pageSize
+        );
       }
     });
   }
@@ -191,84 +215,80 @@ export class failedJobsElement extends UmbLitElement {
       return this.renderCellValues(job, index);
     });
 
-    return html`
-      <div class="failedjobs-dashboard">
-        <umb-load-indicator> </umb-load-indicator>
-        <server-message></server-message>
-        <div class="failedjobs-dashboard-content">
-          <ul class="dashboard-list">
-            <li class="dashboard-list-header">
-              <div class="dashboard-list-item-property" style="width:3%"></div>
-              <div class="dashboard-list-item-property" style="width:12%">
-                ID
-              </div>
-              <div class="dashboard-list-item-property" style="width:10%">
-                Entity ID
-              </div>
-              <div class="dashboard-list-item-property" style="width:10%">
-                Type
-              </div>
-              <div class="dashboard-list-item-property" style="width:10%">
-                Culture
-              </div>
-              <div class="dashboard-list-item-property" style="width:15%">
-                Job type
-              </div>
-              <div class="dashboard-list-item-property" style="width:20%">
-                Created at
-              </div>
-              <div class="dashboard-list-item-property" style="width:20%">
-                Updated at
-              </div>
-            </li>
-            ${jobCellsHtml}
-          </ul>
-
-          <div
-            ng-if="vm.pagination.totalPages > 1 && !vm.dashboard.loading"
-            class="flex justify-center "
-          >
-            <umb-pagination
-              page-number="vm.pagination.pageNumber"
-              total-pages="vm.pagination.totalPages"
-              on-next="vm.nextPage"
-              on-prev="vm.prevPage"
-              on-go-to-page="vm.goToPage"
-            >
-            </umb-pagination>
-          </div>
-
-          ${this._failedJobs.length
-            ? html` <div>
-                <div class="seed-dashboard-text block-form">
-                  <h4>Delete failed jobs</h4>
-
-                  <div class="umb-control-group">
-                    <uui-select
-                      .options=${this._deleteModes}
-                      @change=${(e: UUISelectEvent) =>
-                        this.setDeleteMode(e.target.value.toString())}
-                      placeholder="Select an option"
-                    ></uui-select>
-
-                    <uui-button
-                      type="button"
-                      look="primary"
-                      color="danger"
-                      label="Delete"
-                      type="button"
-                      @click=${() => this.deleteFailedJobs()}
-                      .disabled="${this._deletingFailedJobs}"
-                    >
-                      Delete ${this._selectedDeleteMode}
-                    </uui-button>
-                  </div>
+    if (this._loadingFailedJobs) {
+      return html`<uui-loader-bar></uui-loader-bar>`;
+    } else {
+      return html`
+        <div class="failedjobs-dashboard">
+          <umb-load-indicator> </umb-load-indicator>
+          <server-message></server-message>
+          <div class="failedjobs-dashboard-content">
+            <ul class="dashboard-list">
+              <li class="dashboard-list-header">
+                <div
+                  class="dashboard-list-item-property"
+                  style="width:3%"
+                ></div>
+                <div class="dashboard-list-item-property" style="width:12%">
+                  ID
                 </div>
-              </div>`
-            : html``}
+                <div class="dashboard-list-item-property" style="width:10%">
+                  Entity ID
+                </div>
+                <div class="dashboard-list-item-property" style="width:10%">
+                  Type
+                </div>
+                <div class="dashboard-list-item-property" style="width:10%">
+                  Culture
+                </div>
+                <div class="dashboard-list-item-property" style="width:15%">
+                  Job type
+                </div>
+                <div class="dashboard-list-item-property" style="width:20%">
+                  Created at
+                </div>
+                <div class="dashboard-list-item-property" style="width:20%">
+                  Updated at
+                </div>
+              </li>
+              ${jobCellsHtml}
+            </ul>
+
+            <div class="flex justify-center ">
+              ${this._pagination.pageNumber} ${this._pagination.totalPages}
+            </div>
+
+            ${this._failedJobs.length
+              ? html` <div>
+                  <div class="seed-dashboard-text block-form">
+                    <h4>Delete failed jobs</h4>
+                    <div class="umb-control-group">
+                      <uui-select
+                        .options=${this._deleteModes}
+                        @change=${(e: UUISelectEvent) =>
+                          this.setDeleteMode(e.target.value.toString())}
+                        placeholder="Select an option"
+                      ></uui-select>
+
+                      <uui-button
+                        type="button"
+                        look="primary"
+                        color="danger"
+                        label="Delete"
+                        type="button"
+                        @click=${() => this.deleteFailedJobs()}
+                        .disabled="${this._deletingFailedJobs}"
+                      >
+                        Delete ${this._selectedDeleteMode}
+                      </uui-button>
+                    </div>
+                  </div>
+                </div>`
+              : html``}
+          </div>
         </div>
-      </div>
-    `;
+      `;
+    }
   }
 
   static styles = css`
