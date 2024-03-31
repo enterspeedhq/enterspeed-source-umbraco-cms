@@ -230,7 +230,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                 });
         }
 
-        [HttpPost]
+        [HttpPost("DeleteFailedJobs")]
         public ActionResult DeleteFailedJobs()
         {
             var failedJobs = _enterspeedJobRepository.GetFailedJobs();
@@ -246,7 +246,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
         }
 
         [HttpPost("DeleteJobs")]
-        public ActionResult DeleteJobs(JobIdsToDelete jobIdsToDelete)
+        public ActionResult DeleteJobs([FromBody]JobIdsToDelete jobIdsToDelete)
         {
             if (jobIdsToDelete != null && jobIdsToDelete.Ids.Any())
             {

@@ -1,4 +1,4 @@
-import {html } from "lit";
+import { html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { EnterspeedContext } from "../../enterspeed.context";
 import {
@@ -26,9 +26,12 @@ export class fullSeedModeElement extends UmbLitElement {
     super();
 
     this._enterspeedContext = new EnterspeedContext(this);
-    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (instance) => {
-      this._notificationContext = instance;
-    });
+    this.consumeContext(
+      UMB_NOTIFICATION_CONTEXT,
+      (instance: UmbNotificationContext) => {
+        this._notificationContext = instance;
+      }
+    );
   }
 
   async seed() {

@@ -150,7 +150,7 @@ export class EnterspeedRepository extends UmbControllerBase {
     };
 
     const responsePromise = fetch(
-      "/umbraco/enterspeed/api/dashboard/deletejobs",
+      "/umbraco/enterspeed/api/dashboard/deletefailedjobs",
       request
     );
 

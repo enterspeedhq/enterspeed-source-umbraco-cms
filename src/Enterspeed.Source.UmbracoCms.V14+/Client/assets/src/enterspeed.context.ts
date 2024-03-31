@@ -3,7 +3,6 @@ import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { EnterspeedRepository } from "./repository/enterspeed.repository";
 import {
-  enterspeedUmbracoConfiguration,
   apiResponse,
   apiResponseBase,
   customSeedNodes,

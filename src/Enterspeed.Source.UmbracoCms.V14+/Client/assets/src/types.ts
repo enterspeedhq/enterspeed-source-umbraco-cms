@@ -84,8 +84,8 @@ export interface enterspeedJob {
 
 export class jobIdsToDelete {
   constructor(jobIds: number[]) {
-    this.jobIds = jobIds;
+    this.ids = jobIds;
   }
 
-  jobIds: number[];
+  ids: number[];
 }

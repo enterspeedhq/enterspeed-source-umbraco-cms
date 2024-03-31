@@ -7,6 +7,10 @@ import {
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
 import { enterspeedJob, jobIdsToDelete } from "../../types";
+import {
+  UUIBooleanInputEvent,
+  UUISelectEvent,
+} from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("failed-jobs")
 export class failedJobsElement extends UmbLitElement {
@@ -15,8 +19,11 @@ export class failedJobsElement extends UmbLitElement {
   constructor() {
     super();
     this._enterspeedContext = new EnterspeedContext(this);
+    this._failedJobs = [];
+    this._selectedDeleteMode = "";
     this.getFailedJobs();
   }
+
   @state()
   private _deletingFailedJobs: boolean = false;
 
@@ -24,18 +31,25 @@ export class failedJobsElement extends UmbLitElement {
   private _loadingFailedJobs: boolean = true;
 
   @state()
-  private _failedJobs: enterspeedJob[] = [];
+  private _failedJobs: enterspeedJob[];
 
   @state()
   private _activeException: number = -1;
 
   @state()
-  private _deleteModes = ["Everything", "Selected"];
+  private _deleteModes = [
+    <Option>{
+      name: "Everything",
+      value: "Everything",
+    },
+    <Option>{ name: "Selected", value: "Selected" },
+  ];
 
   @state()
-  private _selectedDeleteMode = this._deleteModes[0];
+  private _selectedDeleteMode = this._deleteModes[0].value;
 
   async getFailedJobs(): Promise<void> {
+    this._failedJobs = [];
     await this._enterspeedContext.getFailedJobs().then((response) => {
       if (response.isSuccess) {
         this._loadingFailedJobs = false;
@@ -45,7 +59,13 @@ export class failedJobsElement extends UmbLitElement {
   }
 
   getSelectedFailedJobs() {
-    return this._failedJobs.filter((fj) => fj.selected === true);
+    this.requestUpdate();
+
+    var selectedJobsToDelete = this._failedJobs.filter(
+      (fj) => fj.selected === true
+    );
+
+    return selectedJobsToDelete;
   }
 
   toggleException(index: number) {
@@ -57,7 +77,8 @@ export class failedJobsElement extends UmbLitElement {
   }
 
   setDeleteMode(deleteMode: string) {
-    console.log(deleteMode);
+    this._deleteModes.filter((dm) => dm.value === deleteMode)[0].selected =
+      true;
     this._selectedDeleteMode = deleteMode;
   }
 
@@ -110,7 +131,13 @@ export class failedJobsElement extends UmbLitElement {
         class="dashboard-list-item-property "
         style="width: 3%"
       >
-        <uui-checkbox label=" " .checked=${failedJob.selected}></uui-checkbox>
+        <uui-checkbox
+          label=" "
+          @change=${(e: UUIBooleanInputEvent) => {
+            failedJob.selected = e.target.value == "on" ? true : false;
+            this.requestUpdate();
+          }}
+        ></uui-checkbox>
       </div>`;
     }
 
@@ -160,11 +187,6 @@ export class failedJobsElement extends UmbLitElement {
   }
 
   render() {
-    const options: Array<Option> = [
-      { name: "Everything", value: "Everything" },
-      { name: "Selected", value: "Selected" },
-    ];
-
     var jobCellsHtml = this._failedJobs?.map((job, index) => {
       return this.renderCellValues(job, index);
     });
@@ -219,14 +241,13 @@ export class failedJobsElement extends UmbLitElement {
           ${this._failedJobs.length
             ? html` <div>
                 <div class="seed-dashboard-text block-form">
-                  <br />
                   <h4>Delete failed jobs</h4>
-                  <br />
 
                   <div class="umb-control-group">
                     <uui-select
-                      .options=${options}
-                      .onchange=${(e) => this.setDeleteMode(e.target.value)}
+                      .options=${this._deleteModes}
+                      @change=${(e: UUISelectEvent) =>
+                        this.setDeleteMode(e.target.value.toString())}
                       placeholder="Select an option"
                     ></uui-select>
 

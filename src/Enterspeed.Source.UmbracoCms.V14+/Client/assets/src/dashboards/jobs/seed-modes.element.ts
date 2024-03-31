@@ -30,9 +30,12 @@ export class seedModesElement extends UmbLitElement {
     this.initGetNumberOfPendingJobs();
 
     this._enterspeedContext = new EnterspeedContext(this);
-    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (instance) => {
-      this._notificationContext = instance;
-    });
+    this.consumeContext(
+      UMB_NOTIFICATION_CONTEXT,
+      (instance: UmbNotificationContext) => {
+        this._notificationContext = instance;
+      }
+    );
   }
 
   initGetNumberOfPendingJobs() {

@@ -7,6 +7,7 @@ import {
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
 import { customSeedNodes, seedResponse } from "../../types";
+import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("custom-seed-mode")
 export class customSeedModeElement extends UmbLitElement {
@@ -33,9 +34,12 @@ export class customSeedModeElement extends UmbLitElement {
     this.selectedContentIds = [""];
 
     this._enterspeedContext = new EnterspeedContext(this);
-    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (instance) => {
-      this._notificationContext = instance;
-    });
+    this.consumeContext(
+      UMB_NOTIFICATION_CONTEXT,
+      (instance: UmbNotificationContext) => {
+        this._notificationContext = instance;
+      }
+    );
   }
 
   async seed() {
@@ -44,7 +48,7 @@ export class customSeedModeElement extends UmbLitElement {
     var customSeed = new customSeedNodes();
 
     customSeed.contentNodes = this.selectedContentIds;
-    customSeed.mediaNodes = this.selectedMediaIds;  
+    customSeed.mediaNodes = this.selectedMediaIds;
     customSeed.dictionaryNodes = [];
 
     this._enterspeedContext!.customSeed(customSeed)
@@ -55,7 +59,7 @@ export class customSeedModeElement extends UmbLitElement {
             data: {
               headline: "Seed",
               message: "Successfully started seeding to Enterspeed",
-            }
+            },
           });
 
           this.numberOfPendingJobs =
@@ -131,7 +135,7 @@ export class customSeedModeElement extends UmbLitElement {
             <h5>Content</h5>
             <umb-controller-host-provider>
               <umb-input-tree
-                .onchange=${(e) =>
+                @change=${(e: UUIBooleanInputEvent) =>
                   this.updateSelectedContentIds(e.target.value)}
                 type="content"
               >
@@ -143,7 +147,8 @@ export class customSeedModeElement extends UmbLitElement {
             <h5>Media</h5>
             <umb-controller-host-provider>
               <umb-input-tree
-                .onchange=${(e) => this.updateSelectedMediaIds(e.target.value)}
+                @change=${(e: UUIBooleanInputEvent) =>
+                  this.updateSelectedMediaIds(e.target.value)}
                 type="media"
               ></umb-input-tree>
             </umb-controller-host-provider>

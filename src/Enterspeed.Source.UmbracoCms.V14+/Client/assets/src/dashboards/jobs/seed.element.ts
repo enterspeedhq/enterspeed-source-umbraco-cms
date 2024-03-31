@@ -7,6 +7,7 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { seedResponse } from "../../types.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("seed-view")
 export class seedElement extends UmbLitElement {
@@ -47,7 +48,7 @@ export class seedElement extends UmbLitElement {
       <div class="umb-control-group">
         <uui-select
           .options=${this.seedModes}
-          @change=${(e) => (this.selectedSeedMode = e.target.value)}
+          @change=${(e : UUISelectEvent) => (this.selectedSeedMode = e.target.value.toString())}
           label="Select seed mode"
           placeholder="Select an option"
         ></uui-select>
