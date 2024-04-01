@@ -4,6 +4,7 @@ import {
   html,
   customElement,
   property,
+  css,
 } from "@umbraco-cms/backoffice/external/lit";
 import { seedResponse } from "../../types.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
@@ -14,10 +15,6 @@ export class seedElement extends UmbLitElement {
   constructor() {
     super();
   }
-
-  @property()
-  title = "Enterspeed jobs";
-
   @property({ type: Boolean })
   runJobsOnServer = false;
 
@@ -71,6 +68,12 @@ export class seedElement extends UmbLitElement {
       </div>
     `;
   }
+
+  static styles = css`
+  :host {
+    display: block;
+    padding: 15px;
+  }`
 }
 
 export default seedElement;

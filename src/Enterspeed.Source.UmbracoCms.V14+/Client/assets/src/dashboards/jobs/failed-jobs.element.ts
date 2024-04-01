@@ -10,8 +10,8 @@ import { enterspeedJob, jobIdsToDelete } from "../../types";
 import {
   UUIBooleanInputEvent,
   UUISelectEvent,
-  UUIPaginationEvent,
 } from "@umbraco-cms/backoffice/external/uui";
+import "./enterspeed-pagination.element";
 
 @customElement("failed-jobs")
 export class failedJobsElement extends UmbLitElement {
@@ -20,8 +20,10 @@ export class failedJobsElement extends UmbLitElement {
   constructor() {
     super();
     this._enterspeedContext = new EnterspeedContext(this);
-    this._failedJobs = [];
+    this._allFailedJobs = [];
+    this._filteredFailedJobs = [];
     this._selectedDeleteMode = "";
+    this._pagination.pageIndex = 0;
     this.getFailedJobs();
   }
 
@@ -32,7 +34,10 @@ export class failedJobsElement extends UmbLitElement {
   private _loadingFailedJobs: boolean = true;
 
   @state()
-  private _failedJobs: enterspeedJob[];
+  private _allFailedJobs: enterspeedJob[];
+
+  @state()
+  private _filteredFailedJobs: enterspeedJob[];
 
   @state()
   private _activeException: number = -1;
@@ -54,38 +59,56 @@ export class failedJobsElement extends UmbLitElement {
     pageIndex: 0,
     pageNumber: 1,
     totalPages: 1,
-    pageSize: 30,
+    pageSize: 50,
   };
 
   nextPage() {
     this._pagination.pageIndex = this._pagination.pageIndex + 1;
+    this.setFilteredJobs();
+    this.requestUpdate();
   }
 
   prevPage() {
     this._pagination.pageIndex = this._pagination.pageIndex - 1;
+    this.setFilteredJobs();
+    this.requestUpdate();
   }
 
   goToPage(pageNumber: number) {
-    this._pagination.pageIndex = pageNumber - 1;
+    this._pagination.pageIndex = pageNumber;
+    this.setFilteredJobs();
+    this.requestUpdate();
   }
 
   async getFailedJobs(): Promise<void> {
-    this._failedJobs = [];
+    this._allFailedJobs = [];
     await this._enterspeedContext.getFailedJobs().then((response) => {
       if (response.isSuccess) {
         this._loadingFailedJobs = false;
-        this._failedJobs = response.data;
+        this._allFailedJobs = response.data;
         this._pagination.totalPages = Math.ceil(
-          this._failedJobs.length / this._pagination.pageSize
+          this._allFailedJobs.length / this._pagination.pageSize
         );
+        if (this._pagination.pageIndex === 0) {
+          this._pagination.pageIndex = 1;
+        }
+
+        // do pagination logic and assign failed jobs to _filteredFailedJobs
+        this.setFilteredJobs();
       }
     });
+  }
+
+  private setFilteredJobs() {
+    const startIndex = this._pagination.pageIndex * this._pagination.pageSize;
+    const endIndex = startIndex + this._pagination.pageSize;
+    this._filteredFailedJobs = this._allFailedJobs.slice(startIndex, endIndex);
   }
 
   getSelectedFailedJobs() {
     this.requestUpdate();
 
-    var selectedJobsToDelete = this._failedJobs.filter(
+    var selectedJobsToDelete = this._filteredFailedJobs.filter(
       (fj) => fj.selected === true
     );
 
@@ -141,7 +164,10 @@ export class failedJobsElement extends UmbLitElement {
 
   renderCellValues(failedJob: enterspeedJob, index: number) {
     let selectedDeleteModeHtml;
-    if (this._selectedDeleteMode === "Everything") {
+    if (
+      this._selectedDeleteMode === "Everything" ||
+      this._selectedDeleteMode === ""
+    ) {
       selectedDeleteModeHtml = html`<div
         class="dashboard-list-item-property"
         style="width: 3%"
@@ -211,7 +237,7 @@ export class failedJobsElement extends UmbLitElement {
   }
 
   render() {
-    var jobCellsHtml = this._failedJobs?.map((job, index) => {
+    var jobCellsHtml = this._filteredFailedJobs?.map((job, index) => {
       return this.renderCellValues(job, index);
     });
 
@@ -253,12 +279,16 @@ export class failedJobsElement extends UmbLitElement {
               </li>
               ${jobCellsHtml}
             </ul>
+            <enterspeed-pagination
+              .pageNumber=${this._pagination.pageNumber}
+              .totalPages=${this._pagination.totalPages}
+              .pageIndex=${this._pagination.pageIndex}
+              @next-page=${() => this.nextPage()}
+              @prev-page=${() => this.prevPage()}
+              @go-to-page=${(e: CustomEvent) => this.goToPage(e.detail)}
+            ></enterspeed-pagination>
 
-            <div class="flex justify-center ">
-              ${this._pagination.pageNumber} ${this._pagination.totalPages}
-            </div>
-
-            ${this._failedJobs.length
+            ${this._allFailedJobs.length
               ? html` <div>
                   <div class="seed-dashboard-text block-form">
                     <h4>Delete failed jobs</h4>
@@ -294,7 +324,7 @@ export class failedJobsElement extends UmbLitElement {
   static styles = css`
     :host {
       display: block;
-      padding: 20px;
+      padding: 15px;
     }
     .dashboard-list {
       display: flex;
