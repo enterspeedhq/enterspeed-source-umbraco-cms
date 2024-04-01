@@ -1,5 +1,5 @@
-import "./seed-modes.element.ts";
-import "./server-message.element.ts";
+import "./enterspeed-seed-modes.element.ts";
+import "./enterspeed-server-message.element.ts";
 import {
   html,
   customElement,
@@ -10,8 +10,8 @@ import { seedResponse } from "../../types.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
 
-@customElement("seed-view")
-export class seedElement extends UmbLitElement {
+@customElement("enterspeed-seed")
+export class enterspeedSeedElement extends UmbLitElement {
   constructor() {
     super();
   }
@@ -45,7 +45,8 @@ export class seedElement extends UmbLitElement {
       <div class="umb-control-group">
         <uui-select
           .options=${this.seedModes}
-          @change=${(e : UUISelectEvent) => (this.selectedSeedMode = e.target.value.toString())}
+          @change=${(e: UUISelectEvent) =>
+            (this.selectedSeedMode = e.target.value.toString())}
           label="Select seed mode"
           placeholder="Select an option"
         ></uui-select>
@@ -58,28 +59,28 @@ export class seedElement extends UmbLitElement {
       <div class="seed-dashboard">
         <uui-load-indicator ng-if="vm.loadingConfiguration">
         </uui-load-indicator>
-        <server-message>
-        </server-message>
+        <enterspeed-server-message> </enterspeed-server-message>
         ${this.renderSeedModeSelects()}
-        <seed-modes
+        <enterspeed-seed-modes
           .selectedSeedMode=${this.selectedSeedMode}
           .seedResponse=${this.seedResponse}
-        ></seed-modes>
+        ></enterspeed-seed-modes>
       </div>
     `;
   }
 
   static styles = css`
-  :host {
-    display: block;
-    padding: 15px;
-  }`
+    :host {
+      display: block;
+      padding: 15px;
+    }
+  `;
 }
 
-export default seedElement;
+export default enterspeedSeedElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "seed-view": seedElement;
+    "enterspeed-seed": enterspeedSeedElement;
   }
 }

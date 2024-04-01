@@ -3,8 +3,8 @@ import { customElement, property } from "lit/decorators.js";
 import { seedResponse } from "../../types";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
-@customElement("seed-response")
-export class seedResponseELement extends UmbLitElement {
+@customElement("enterspeed-seed-response")
+export class enterspeedSeedResponseELement extends UmbLitElement {
   @property({ type: Object })
   seedResponse: seedResponse | undefined | null;
 
@@ -29,10 +29,10 @@ export class seedResponseELement extends UmbLitElement {
   }
 }
 
-export default seedResponseELement;
+export default enterspeedSeedResponseELement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "seed-response": seedResponseELement;
+    "enterspeed-seed-response": enterspeedSeedResponseELement;
   }
 }

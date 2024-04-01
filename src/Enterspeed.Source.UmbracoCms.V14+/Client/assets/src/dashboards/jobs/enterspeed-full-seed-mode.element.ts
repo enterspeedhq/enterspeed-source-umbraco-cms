@@ -1,24 +1,17 @@
-import { css, html } from "lit";
+import { html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
 import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import { customSeedNodes, seedResponse } from "../../types";
-import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
+import { seedResponse } from "../../types";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
-@customElement("custom-seed-mode")
-export class customSeedModeElement extends UmbLitElement {
+@customElement("enterspeed-full-seed-mode")
+export class enterspeedFullSeedModeElement extends UmbLitElement {
   private _enterspeedContext!: EnterspeedContext;
   private _notificationContext!: UmbNotificationContext;
-
-  @property({ type: Array })
-  selectedContentIds!: string[];
-
-  @property({ type: Array })
-  selectedMediaIds!: string[];
 
   @state()
   disableSeedButton?: boolean;
@@ -31,7 +24,6 @@ export class customSeedModeElement extends UmbLitElement {
 
   constructor() {
     super();
-    this.selectedContentIds = [""];
 
     this._enterspeedContext = new EnterspeedContext(this);
     this.consumeContext(
@@ -44,14 +36,7 @@ export class customSeedModeElement extends UmbLitElement {
 
   async seed() {
     this.disableSeedButton = true;
-
-    var customSeed = new customSeedNodes();
-
-    customSeed.contentNodes = this.selectedContentIds;
-    customSeed.mediaNodes = this.selectedMediaIds;
-    customSeed.dictionaryNodes = [];
-
-    this._enterspeedContext!.customSeed(customSeed)
+    this._enterspeedContext!.seed()
       .then((response) => {
         if (response.isSuccess) {
           this.seedResponse = response.data;
@@ -105,64 +90,24 @@ export class customSeedModeElement extends UmbLitElement {
     this.seedResponse = null;
   }
 
-  updateSelectedContentIds(ids: String) {
-    this.selectedContentIds = ids.split(",");
-  }
-
-  updateSelectedMediaIds(ids: String) {
-    this.selectedMediaIds = ids.split(",");
-  }
-
   render() {
     return html`
       <div class="seed-dashboard-text">
-        <div>
-          <h4>Custom seed</h4>
-          <p>
-            With a custom seed you can select the nodes you want to seed for all
-            cultures and publish and preview (if configured). This action can
-            take a while to finish.
-          </p>
-          <p>
-            <i
-              >The job queue length is the queue length on Umbraco before the
-              nodes are ingested into Enterspeed.</i
-            >
-          </p>
+        <h4>Full seed</h4>
+        <p>
+          Seeding will queue jobs for all content, media and dictionary item for
+          all cultures and publish and preview (if configured) within this
+          Umbraco installation. This action can take a while to finish.
+        </p>
+        <p>
+          <i
+            >The job queue length is the queue length on Umbraco before the
+            nodes are ingested into Enterspeed.</i
+          >
+        </p>
+        <div class="seed-dashboard-content">
+          ${this.renderSeedButton()} ${this.renderClearJobQueueButton()}
         </div>
-        <div class="custom-seed-content-type-container">
-          <div class="custom-seed-content-type-box">
-            <h5>Content</h5>
-            <umb-controller-host-provider>
-              <umb-input-tree
-                @change=${(e: UUIBooleanInputEvent) =>
-                  this.updateSelectedContentIds(e.target.value)}
-                type="content"
-              >
-                ></umb-input-tree
-              >
-            </umb-controller-host-provider>
-          </div>
-          <div class="custom-seed-content-type-box">
-            <h5>Media</h5>
-            <umb-controller-host-provider>
-              <umb-input-tree
-                @change=${(e: UUIBooleanInputEvent) =>
-                  this.updateSelectedMediaIds(e.target.value)}
-                type="media"
-              ></umb-input-tree>
-            </umb-controller-host-provider>
-          </div>
-          <div class="custom-seed-content-type-box">
-            <h5>Dictionary</h5>
-            <umb-controller-host-provider>
-              <umb-input-tree type="content"></umb-input-tree>
-            </umb-controller-host-provider>
-          </div>
-        </div>
-      </div>
-      <div class="seed-dashboard-content">
-        ${this.renderSeedButton()} ${this.renderClearJobQueueButton()}
       </div>
     `;
   }
@@ -206,27 +151,12 @@ export class customSeedModeElement extends UmbLitElement {
       ></uui-button>`;
     }
   }
-  static styles = css`
-    .custom-seed-content-type-container {
-      display: flex;
-      margin-bottom: 20px;
-    }
-
-    .custom-seed-content-type-box {
-      flex: 1;
-      margin: 0 5px 0 5px;
-      padding: 0 10px 10px 10px;
-      border: solid #e9e9ec 1px;
-      border-radius: 3px;
-      box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.16);
-    }
-  `;
 }
 
-export default customSeedModeElement;
+export default enterspeedFullSeedModeElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "custom-seed-mode": customSeedModeElement;
+    "enterspeed-full-seed-mode": enterspeedFullSeedModeElement;
   }
 }

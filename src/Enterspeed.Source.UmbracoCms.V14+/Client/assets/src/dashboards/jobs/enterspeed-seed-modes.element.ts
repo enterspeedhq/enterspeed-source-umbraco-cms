@@ -6,13 +6,13 @@ import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import "./seed-response.element.ts";
-import "./custom-seed-mode.element.ts";
-import "./full-seed-mode.element.ts";
+import "./enterspeed-seed-response.element.ts";
+import "./enterspeed-custom-seed-mode.element.ts";
+import "./enterspeed-full-seed-mode.element.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
-@customElement("seed-modes")
-export class seedModesElement extends UmbLitElement {
+@customElement("enterspeed-seed-modes")
+export class enterspeedSeedModesElement extends UmbLitElement {
   private _enterspeedContext!: EnterspeedContext;
   private _notificationContext!: UmbNotificationContext;
 
@@ -77,28 +77,28 @@ export class seedModesElement extends UmbLitElement {
 
   render() {
     return html` ${this.renderSeedModes()}
-      <seed-response .seedResponse=${this.seedResponse}></seed-response>`;
+      <enterspeed-seed-response .seedResponse=${this.seedResponse}></enterspeed-seed-response>`;
   }
 
   renderSeedModes() {
     if (this.selectedSeedMode == "Everything") {
-      return html`<full-seed-mode
+      return html`<enterspeed-full-seed-mode
         .seedResponse=${this.seedResponse}
         .numberOfPendingJobs=${this._numberOfPendingJobs}
-      ></full-seed-mode>`;
+      ></enterspeed-full-seed-mode>`;
     } else {
-      return html`<custom-seed-mode
+      return html`<enterspeed-custom-seed-mode
         .seedResponse=${this.seedResponse}
         .numberOfPendingJobs=${this._numberOfPendingJobs}
-      ></custom-seed-mode>`;
+      ></enterspeed-custom-seed-mode>`;
     }
   }
 }
 
-export default seedModesElement;
+export default enterspeedSeedModesElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "seed-modes": seedModesElement;
+    "enterspeed-seed-modes": enterspeedSeedModesElement;
   }
 }

@@ -13,8 +13,8 @@ import {
 } from "@umbraco-cms/backoffice/external/uui";
 import "./enterspeed-pagination.element";
 
-@customElement("failed-jobs")
-export class failedJobsElement extends UmbLitElement {
+@customElement("enterspeed-failed-jobs")
+export class enterspeedFailedJobsElement extends UmbLitElement {
   private _enterspeedContext!: EnterspeedContext;
 
   constructor() {
@@ -62,6 +62,16 @@ export class failedJobsElement extends UmbLitElement {
     pageSize: 50,
   };
 
+  setDefaultDeleteModes() {
+    this._deleteModes = [
+      <Option>{
+        name: "Everything",
+        value: "Everything",
+      },
+      <Option>{ name: "Selected", value: "Selected" },
+    ];
+  }
+
   nextPage() {
     this._pagination.pageIndex = this._pagination.pageIndex + 1;
     this.setFilteredJobs();
@@ -93,21 +103,21 @@ export class failedJobsElement extends UmbLitElement {
           this._pagination.pageIndex = 1;
         }
 
-        // do pagination logic and assign failed jobs to _filteredFailedJobs
         this.setFilteredJobs();
       }
     });
   }
 
   private setFilteredJobs() {
+    this._filteredFailedJobs = [];
+    this.requestUpdate();
     const startIndex = this._pagination.pageIndex * this._pagination.pageSize;
     const endIndex = startIndex + this._pagination.pageSize;
     this._filteredFailedJobs = this._allFailedJobs.slice(startIndex, endIndex);
+    this.requestUpdate();
   }
 
   getSelectedFailedJobs() {
-    this.requestUpdate();
-
     var selectedJobsToDelete = this._filteredFailedJobs.filter(
       (fj) => fj.selected === true
     );
@@ -124,8 +134,13 @@ export class failedJobsElement extends UmbLitElement {
   }
 
   setDeleteMode(deleteMode: string) {
-    this._deleteModes.filter((dm) => dm.value === deleteMode)[0].selected =
-      true;
+    if (deleteMode === "") {
+      this.setDefaultDeleteModes();
+    } else {
+      this._deleteModes.filter((dm) => dm.value === deleteMode)[0].selected =
+        true;
+    }
+
     this._selectedDeleteMode = deleteMode;
   }
 
@@ -145,20 +160,18 @@ export class failedJobsElement extends UmbLitElement {
 
         await this._enterspeedContext
           .deleteSelectedFailedJobs(idsToDelete)
-          .then((response) => {
-            if (response.isSuccess) {
-              this.getFailedJobs();
-            }
+          .then(async (response) => {
+            await this.getFailedJobs();
           });
       }
     } else {
-      await this._enterspeedContext.deleteFailedJobs().then((response) => {
-        if (response.isSuccess) {
-          this.getFailedJobs();
-        }
-      });
+      await this._enterspeedContext
+        .deleteFailedJobs()
+        .then(async (response) => {
+          await this.getFailedJobs();
+        });
     }
-
+    this.setDeleteMode("");
     this._deletingFailedJobs = false;
   }
 
@@ -246,8 +259,7 @@ export class failedJobsElement extends UmbLitElement {
     } else {
       return html`
         <div class="failedjobs-dashboard">
-          <umb-load-indicator> </umb-load-indicator>
-          <server-message></server-message>
+          <enterspeed-server-message></enterspeed-server-message>
           <div class="failedjobs-dashboard-content">
             <ul class="dashboard-list">
               <li class="dashboard-list-header">
@@ -307,7 +319,8 @@ export class failedJobsElement extends UmbLitElement {
                         label="Delete"
                         type="button"
                         @click=${() => this.deleteFailedJobs()}
-                        .disabled="${this._deletingFailedJobs}"
+                        .disabled="${this._deletingFailedJobs ||
+                        this._selectedDeleteMode === ""}"
                       >
                         Delete ${this._selectedDeleteMode}
                       </uui-button>
@@ -374,10 +387,10 @@ export class failedJobsElement extends UmbLitElement {
   `;
 }
 
-export default failedJobsElement;
+export default enterspeedFailedJobsElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "failed-jobs": failedJobsElement;
+    "enterspeed-failed-jobs": enterspeedFailedJobsElement;
   }
 }

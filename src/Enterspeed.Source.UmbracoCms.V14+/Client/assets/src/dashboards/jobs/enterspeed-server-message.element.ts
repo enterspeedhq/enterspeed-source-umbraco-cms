@@ -1,4 +1,3 @@
-import "./seed-modes.element.ts";
 import {
   html,
   customElement,
@@ -7,8 +6,8 @@ import {
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context.ts";
 
-@customElement("server-message")
-export class serverMessageElement extends UmbLitElement {
+@customElement("enterspeed-server-message")
+export class enterspeedServerMessageElement extends UmbLitElement {
   private _enterspeedContext = new EnterspeedContext(this);
   constructor() {
     super();
@@ -39,10 +38,10 @@ export class serverMessageElement extends UmbLitElement {
   }
 }
 
-export default serverMessageElement;
+export default enterspeedServerMessageElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "server-message": serverMessageElement;
+    "enterspeed-server-message": enterspeedServerMessageElement;
   }
 }
