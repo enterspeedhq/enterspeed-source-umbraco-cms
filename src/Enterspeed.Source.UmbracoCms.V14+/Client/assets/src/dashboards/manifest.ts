@@ -1,18 +1,16 @@
-import type {
-  ManifestDashboard,
-} from "@umbraco-cms/backoffice/extension-registry";
+import type { ManifestDashboard } from "@umbraco-cms/backoffice/extension-registry";
 
 const dashboards: Array<ManifestDashboard> = [
   {
     type: "dashboard",
     name: "Enterspeed Jobs",
-    alias: "enterspeed_dashboard",
-    elementName: "enterspeed_dashboard",
-    js: () => import("./enterspeed-dashboard.js"),
+    alias: "enterspeedDashboard",
+    elementName: "enterspeedDashboard",
+    js: () => import("./jobs/enterspeed-dashboard.js"),
     weight: -10,
     meta: {
       label: "Enterspeed Jobs",
-      pathname: "Enterspeed.Jobs",
+      pathname: "enterspeed-jobs",
     },
     conditions: [
       {
@@ -21,7 +19,24 @@ const dashboards: Array<ManifestDashboard> = [
       },
     ],
   },
+  {
+    type: "dashboard",
+    name: "Enterspeed Settings",
+    alias: "enterspeedSettingsDashboard",
+    elementName: "enterspeedSettingsDashboard",
+    js: () => import("./settings/enterspeed-settings-dashboard.js"),
+    weight: -10,
+    meta: {
+      label: "Enterspeed Settings",
+      pathname: "enterspeed-settings",
+    },
+    conditions: [
+      {
+        alias: "Umb.Condition.SectionAlias",
+        match: "Umb.Section.Settings",
+      },
+    ],
+  },
 ];
-
 
 export const manifests = [...dashboards];

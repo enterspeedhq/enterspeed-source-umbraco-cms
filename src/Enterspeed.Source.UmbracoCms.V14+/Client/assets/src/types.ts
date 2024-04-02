@@ -38,24 +38,19 @@ export enum serverRole {
   SchedulingPublisher = 3,
 }
 
-export interface enterspeedUmbracoConfiguration {
-  apiKey: string;
-  baseUrl: string;
-  connectionTimeout: number;
-  ingestVersion: string;
-  systemInformation: string;
-  mediaDomain: string;
-  isConfigured: boolean;
-  configuredFromSettingsFile: boolean;
-  previewApiKey: string;
-  rootDictionariesDisabled: boolean;
-  runJobsOnAllServerRoles: boolean;
-  enableMasterContent: boolean;
-}
-
 export interface enterspeedUmbracoConfigurationResponse {
   serverRole: serverRole;
   runJobsOnServer: boolean;
+  configuration : configuration
+}
+
+export interface configuration {
+  mediaDomain: string | null;
+  isConfigured: boolean;
+  configuredFromSettingsFile: boolean;
+  previewApiKey: string | null;
+  apiKey: string;
+  baseUrl: string;
 }
 
 enum enterspeedJobType {

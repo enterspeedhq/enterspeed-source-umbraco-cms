@@ -1,18 +1,17 @@
-import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import "./jobs/enterspeed-seed.element.ts";
-import "./jobs/enterspeed-failed-jobs.element.ts";
+import "./enterspeed-seed.element.ts";
+import "./enterspeed-failed-jobs.element.ts";
 
 import {
-  LitElement,
   html,
   customElement,
   property,
   css,
 } from "@umbraco-cms/backoffice/external/lit";
-import { tab } from "../types.ts";
+import { tab } from "../../types.ts";
+import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("enterspeed-dashboard")
-export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
+export class enterspeedDashboard extends UmbLitElement {
   constructor() {
     super();
   }
@@ -27,7 +26,7 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
       alias: "seedsTab",
       label: "Seed",
       active: true,
-    },
+    }, 
   ];
 
   @property()
@@ -97,10 +96,10 @@ export class enterspeed_dashboard extends UmbElementMixin(LitElement) {
   `;
 }
 
-export default enterspeed_dashboard;
+export default enterspeedDashboard;
 
 declare global {
   interface HtmlElementTagNameMap {
-    enterspeed_dashboard: enterspeed_dashboard;
+    "enterspeed-dashboard": enterspeedDashboard;
   }
 }

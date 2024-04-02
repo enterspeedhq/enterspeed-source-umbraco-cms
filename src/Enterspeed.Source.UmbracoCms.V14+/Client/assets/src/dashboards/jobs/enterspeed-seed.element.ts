@@ -1,5 +1,5 @@
 import "./enterspeed-seed-modes.element.ts";
-import "./enterspeed-server-message.element.ts";
+import "../shared/enterspeed-server-message.element";
 import {
   html,
   customElement,

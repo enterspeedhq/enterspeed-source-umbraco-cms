@@ -11,7 +11,8 @@ import {
   UUIBooleanInputEvent,
   UUISelectEvent,
 } from "@umbraco-cms/backoffice/external/uui";
-import "./enterspeed-pagination.element";
+import "../shared/enterspeed-pagination.element";
+import "../shared/enterspeed-server-message.element";
 
 @customElement("enterspeed-failed-jobs")
 export class enterspeedFailedJobsElement extends UmbLitElement {
