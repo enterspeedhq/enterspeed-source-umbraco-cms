@@ -3,6 +3,8 @@ import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import {
   apiResponse,
   apiResponseBase,
+  configuration,
+  connectionResponse,
   customSeedNodes,
   enterspeedJob,
   enterspeedUmbracoConfigurationResponse,
@@ -103,6 +105,26 @@ export class EnterspeedRepository extends UmbControllerBase {
     const response = await tryExecuteAndNotify(this._host, responsePromise);
     const data: apiResponse<enterspeedUmbracoConfigurationResponse> =
       await response.data?.json();
+
+    return data;
+  }
+
+  async saveConfiguration(
+    configuration: configuration
+  ): Promise<connectionResponse> {
+    const request: RequestInit = {
+      method: "post",
+      headers: this.getDefaultPostHeader(),
+      body: JSON.stringify(configuration),
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/saveconfiguration",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: connectionResponse = await response.data?.json();
 
     return data;
   }

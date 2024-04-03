@@ -11,6 +11,8 @@ import {
   enterspeedUmbracoConfigurationResponse,
   enterspeedJob,
   jobIdsToDelete,
+  connectionResponse,
+  configuration,
 } from "./types";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
@@ -45,6 +47,10 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
   > {
     return await this.enterspeedRepository.getEnterspeedConfiguration();
   }
+
+  public async saveConfiguration(configuration: configuration): Promise<connectionResponse> {
+    return await this.enterspeedRepository.saveConfiguration(configuration);
+  };
 
   public async getFailedJobs(): Promise<apiResponse<enterspeedJob[]>> {
     return await this.enterspeedRepository.getFailedJobs();

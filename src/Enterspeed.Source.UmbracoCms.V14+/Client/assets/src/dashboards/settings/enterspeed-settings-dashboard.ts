@@ -9,7 +9,10 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
-import { enterspeedUmbracoConfigurationResponse } from "../../types";
+import {
+  connectionResponse,
+  enterspeedUmbracoConfigurationResponse,
+} from "../../types";
 import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
@@ -31,6 +34,8 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
 
   constructor() {
     super();
+    this._buttonState = "";
+
     this.consumeContext(
       UMB_NOTIFICATION_CONTEXT,
       (instance: UmbNotificationContext) => {
@@ -55,6 +60,37 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
         this._notificationContext?.peek("danger", {
           data: {
             headline: "Error loading configuration",
+            message: error.data.message,
+          },
+        });
+      });
+    this._buttonState = "";
+  }
+
+  async saveConfiguration() {
+    this._enterspeedContext
+      .saveConfiguration(this._enterspeedConfiguration.configuration)
+      .then((response) => {
+        if (response.success) {
+          this._notificationContext?.peek("positive", {
+            data: {
+              headline: "Configuration saved",
+              message: "The configuration has been saved.",
+            },
+          });
+        } else {
+          this._notificationContext?.peek("danger", {
+            data: {
+              headline: "Error saving configuration",
+              message: response.message,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        this._notificationContext?.peek("danger", {
+          data: {
+            headline: "Error saving configuration",
             message: error.data.message,
           },
         });
@@ -162,6 +198,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               look="primary"
               color="positive"
               label="Basic"
+              .disabled=${this._buttonState == "busy" ||
+              !this._enterspeedConfiguration.configuration.apiKey ||
+              !this._enterspeedConfiguration.configuration.baseUrl ||
+              this._enterspeedConfiguration.configuration
+                .configuredFromSettingsFile}
               >Save configuration</uui-button
             >
             <uui-button
@@ -170,6 +211,9 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               look="primary"
               color="default"
               label="Basic"
+              .disabled=${this._buttonState == "busy" ||
+              !this._enterspeedConfiguration.configuration.apiKey ||
+              !this._enterspeedConfiguration.configuration.baseUrl}
               >Test connection</uui-button
             >
           </div>
@@ -201,7 +245,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
       margin-bottom: 5px;
     }
 
-    .configuration-dashboard-property label:hover{
+    .configuration-dashboard-property label:hover {
       cursor: pointer;
     }
 

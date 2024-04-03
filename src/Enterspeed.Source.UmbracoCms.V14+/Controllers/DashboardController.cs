@@ -137,8 +137,8 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
             };
         }
 
-        [HttpPost]
-        public IActionResult SaveConfiguration(EnterspeedUmbracoConfiguration configuration)
+        [HttpPost("SaveConfiguration")]
+        public IActionResult SaveConfiguration([FromBody]EnterspeedUmbracoConfiguration configuration)
         {
             if (string.IsNullOrEmpty(configuration?.ApiKey) || string.IsNullOrEmpty(configuration?.BaseUrl))
             {

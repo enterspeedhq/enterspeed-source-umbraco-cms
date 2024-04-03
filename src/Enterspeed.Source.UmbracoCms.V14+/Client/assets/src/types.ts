@@ -25,6 +25,15 @@ export interface apiResponse<T> extends apiResponseBase {
   data: T;
 }
 
+export interface connectionResponse {
+  success: boolean;
+  message: string;
+  exception: string;
+  errors: { [key: string]: string };
+  errorCode: string;
+  content: string;
+}
+
 export type tab = {
   alias: string;
   label: string;
@@ -41,7 +50,7 @@ export enum serverRole {
 export interface enterspeedUmbracoConfigurationResponse {
   serverRole: serverRole;
   runJobsOnServer: boolean;
-  configuration : configuration
+  configuration: configuration;
 }
 
 export interface configuration {
