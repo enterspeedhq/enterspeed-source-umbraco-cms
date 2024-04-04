@@ -251,7 +251,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   }
 
   render() {
-    var jobCellsHtml = this._filteredFailedJobs?.map((job, index) => {
+    let jobCellsHtml = this._filteredFailedJobs?.map((job, index) => {
       return this.renderCellValues(job, index);
     });
 

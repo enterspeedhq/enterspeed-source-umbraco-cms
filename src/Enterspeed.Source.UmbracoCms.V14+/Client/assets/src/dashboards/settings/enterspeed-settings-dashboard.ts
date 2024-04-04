@@ -27,7 +27,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
   private _loadingConfiguration = true;
 
   @state()
-  private _enterspeedConfiguration: enterspeedUmbracoConfigurationResponse;
+  private _enterspeedConfiguration!: enterspeedUmbracoConfigurationResponse;
 
   @state()
   private _buttonState: string;
@@ -131,6 +131,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .disabled=${this._enterspeedConfiguration.configuration
                 .configuredFromSettingsFile || this._buttonState === "busy"}
               .value=${this._enterspeedConfiguration.configuration.baseUrl}
+              @input="${(e) => {
+                this._enterspeedConfiguration.configuration.baseUrl =
+                  e.target.value;
+              }})}"
+              @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
           <div class="configuration-dashboard-property">
@@ -171,6 +176,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .disabled=${this._enterspeedConfiguration.configuration
                 .configuredFromSettingsFile || this._buttonState === "busy"}
               .value=${this._enterspeedConfiguration.configuration.apiKey ?? ""}
+              @input="${(e) => {
+                this._enterspeedConfiguration.configuration.apiKey =
+                  e.target.value;
+              }}"
+              @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
           <div class="configuration-dashboard-property">
@@ -189,6 +199,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
                 .configuredFromSettingsFile || this._buttonState === "busy"}
               .value=${this._enterspeedConfiguration.configuration
                 .previewApiKey ?? ""}
+              @input="${(e) => {
+                this._enterspeedConfiguration.configuration.previewApiKey =
+                  e.target.value;
+              }}"
+              @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
           <div class="configuration-dashboard-buttons">
@@ -203,6 +218,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               !this._enterspeedConfiguration.configuration.baseUrl ||
               this._enterspeedConfiguration.configuration
                 .configuredFromSettingsFile}
+              @click="${() => this.saveConfiguration()}"
               >Save configuration</uui-button
             >
             <uui-button

@@ -139,8 +139,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
                   this.updateSelectedContentIds(e.target.value)}
                 type="content"
               >
-                ></umb-input-tree
-              >
+              </umb-input-tree>
             </umb-controller-host-provider>
           </div>
           <div class="custom-seed-content-type-box">
