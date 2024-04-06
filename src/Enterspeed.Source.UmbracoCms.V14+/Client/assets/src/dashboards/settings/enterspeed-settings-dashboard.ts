@@ -5,14 +5,10 @@ import {
   customElement,
   css,
   state,
-  property,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
-import {
-  connectionResponse,
-  enterspeedUmbracoConfigurationResponse,
-} from "../../types";
+import { enterspeedUmbracoConfigurationResponse } from "../../types";
 import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
@@ -64,6 +60,51 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
           },
         });
       });
+    this._buttonState = "";
+  }
+
+  async testConfigurationConnection() {
+    if (
+      !this._enterspeedConfiguration.configuration.apiKey ||
+      !this._enterspeedConfiguration.configuration.baseUrl
+    ) {
+      this._notificationContext?.peek("danger", {
+        data: {
+          message: "Missing api key or base url",
+        },
+      });
+      return;
+    }
+
+    this._buttonState = "busy";
+    this._enterspeedContext
+      .testConfigurationConnection(this._enterspeedConfiguration.configuration)
+      .then((response) => {
+        if (response.success) {
+          this._notificationContext?.peek("positive", {
+            data: {
+              headline: "Connection successful",
+              message: "The connection to Enterspeed was successful.",
+            },
+          });
+        } else {
+          this._notificationContext?.peek("danger", {
+            data: {
+              headline: "Connection failed",
+              message: response.message,
+            },
+          });
+        }
+      })
+      .catch((error) => {
+        this._notificationContext?.peek("danger", {
+          data: {
+            headline: "Connection failed",
+            message: error.data.message,
+          },
+        });
+      });
+
     this._buttonState = "";
   }
 
@@ -230,6 +271,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .disabled=${this._buttonState == "busy" ||
               !this._enterspeedConfiguration.configuration.apiKey ||
               !this._enterspeedConfiguration.configuration.baseUrl}
+              @click="${() => this.testConfigurationConnection()}"
               >Test connection</uui-button
             >
           </div>

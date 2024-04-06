@@ -109,6 +109,26 @@ export class EnterspeedRepository extends UmbControllerBase {
     return data;
   }
 
+  async testConfigurationConnection(
+    configuration: configuration
+  ): Promise<connectionResponse> {
+    const request: RequestInit = {
+      method: "post",
+      headers: this.getDefaultPostHeader(),
+      body: JSON.stringify(configuration),
+    };
+
+    const responsePromise = fetch(
+      "/umbraco/enterspeed/api/dashboard/testconfigurationconnection",
+      request
+    );
+
+    const response = await tryExecuteAndNotify(this._host, responsePromise);
+    const data: connectionResponse = await response.data?.json();
+
+    return data;
+  }
+
   async saveConfiguration(
     configuration: configuration
   ): Promise<connectionResponse> {

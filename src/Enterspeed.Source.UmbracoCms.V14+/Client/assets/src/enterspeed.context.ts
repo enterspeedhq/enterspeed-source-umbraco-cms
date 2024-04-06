@@ -48,9 +48,19 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     return await this.enterspeedRepository.getEnterspeedConfiguration();
   }
 
-  public async saveConfiguration(configuration: configuration): Promise<connectionResponse> {
+  public async saveConfiguration(
+    configuration: configuration
+  ): Promise<connectionResponse> {
     return await this.enterspeedRepository.saveConfiguration(configuration);
-  };
+  }
+
+  public async testConfigurationConnection(
+    configuration: configuration
+  ): Promise<connectionResponse> {
+    return await this.enterspeedRepository.testConfigurationConnection(
+      configuration
+    );
+  }
 
   public async getFailedJobs(): Promise<apiResponse<enterspeedJob[]>> {
     return await this.enterspeedRepository.getFailedJobs();
