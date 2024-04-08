@@ -6,13 +6,11 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
-import { enterspeedJob, jobIdsToDelete } from "../../types";
-import {
-  UUIBooleanInputEvent,
-  UUISelectEvent,
-} from "@umbraco-cms/backoffice/external/uui";
+import { jobIdsToDelete } from "../../types";
+import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
 import "../shared/enterspeed-pagination.element";
 import "../shared/enterspeed-server-message.element";
+import { EnterspeedJob } from "../../generated";
 
 @customElement("enterspeed-failed-jobs")
 export class enterspeedFailedJobsElement extends UmbLitElement {
@@ -35,10 +33,10 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   private _loadingFailedJobs: boolean = true;
 
   @state()
-  private _allFailedJobs: enterspeedJob[];
+  private _allFailedJobs: EnterspeedJob[];
 
   @state()
-  private _filteredFailedJobs: enterspeedJob[];
+  private _filteredFailedJobs: EnterspeedJob[];
 
   @state()
   private _activeException: number = -1;
@@ -94,18 +92,18 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   async getFailedJobs(): Promise<void> {
     this._allFailedJobs = [];
     await this._enterspeedContext.getFailedJobs().then((response) => {
-      if (response.isSuccess) {
-        this._loadingFailedJobs = false;
-        this._allFailedJobs = response.data;
-        this._pagination.totalPages = Math.ceil(
-          this._allFailedJobs.length / this._pagination.pageSize
-        );
-        if (this._pagination.pageIndex === 0) {
-          this._pagination.pageIndex = 1;
-        }
+      this._loadingFailedJobs = false;
 
-        this.setFilteredJobs();
+      this._allFailedJobs = response.data?.data ?? [];
+
+      this._pagination.totalPages = Math.ceil(
+        this._allFailedJobs.length / this._pagination.pageSize
+      );
+      if (this._pagination.pageIndex === 0) {
+        this._pagination.pageIndex = 1;
       }
+
+      this.setFilteredJobs();
     });
   }
 
@@ -114,16 +112,19 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
     this.requestUpdate();
     const startIndex = this._pagination.pageIndex * this._pagination.pageSize;
     const endIndex = startIndex + this._pagination.pageSize;
+    console.log(typeof this._allFailedJobs);
+
     this._filteredFailedJobs = this._allFailedJobs.slice(startIndex, endIndex);
     this.requestUpdate();
   }
 
   getSelectedFailedJobs() {
-    var selectedJobsToDelete = this._filteredFailedJobs.filter(
-      (fj) => fj.selected === true
-    );
+    // var selectedJobsToDelete = this._filteredFailedJobs.filter(
+    //   (fj) => fj === true
+    // );
 
-    return selectedJobsToDelete;
+    // return selectedJobsToDelete;
+    return this._filteredFailedJobs;
   }
 
   toggleException(index: number) {
@@ -161,22 +162,20 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
 
         await this._enterspeedContext
           .deleteSelectedFailedJobs(idsToDelete)
-          .then(async (response) => {
+          .then(async () => {
             await this.getFailedJobs();
           });
       }
     } else {
-      await this._enterspeedContext
-        .deleteFailedJobs()
-        .then(async (response) => {
-          await this.getFailedJobs();
-        });
+      await this._enterspeedContext.deleteFailedJobs().then(async () => {
+        await this.getFailedJobs();
+      });
     }
     this.setDeleteMode("");
     this._deletingFailedJobs = false;
   }
 
-  renderCellValues(failedJob: enterspeedJob, index: number) {
+  renderCellValues(failedJob: EnterspeedJob, index: number) {
     let selectedDeleteModeHtml;
     if (
       this._selectedDeleteMode === "Everything" ||
@@ -195,13 +194,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
         class="dashboard-list-item-property "
         style="width: 3%"
       >
-        <uui-checkbox
-          label=" "
-          @change=${(e: UUIBooleanInputEvent) => {
-            failedJob.selected = e.target.value == "on" ? true : false;
-            this.requestUpdate();
-          }}
-        ></uui-checkbox>
+        <uui-checkbox label=" "></uui-checkbox>
       </div>`;
     }
 

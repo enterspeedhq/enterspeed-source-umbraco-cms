@@ -13,9 +13,10 @@ export class enterspeedServerMessageElement extends UmbLitElement {
     super();
 
     this._enterspeedContext.getEnterspeedConfiguration().then((response) => {
-      if (response.isSuccess) {
-        this._runJobsOnServer = response.data.runJobsOnServer;
-        this._serverRole = response.data.serverRole.toString();
+      console.log(response)
+      if (response.data?.isSuccess) {
+        this._runJobsOnServer = response.data?.data?.runJobsOnServer ?? false;
+        this._serverRole = response.data?.data?.serverRole.toString() ?? "";
       }
     });
   }

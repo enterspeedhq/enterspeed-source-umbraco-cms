@@ -3,17 +3,10 @@ import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { EnterspeedRepository } from "./repository/enterspeed.repository";
 import {
-  apiResponse,
-  apiResponseBase,
-  customSeedNodes,
-  getNumberOfPendingJobsResponse,
-  seedResponse,
-  enterspeedUmbracoConfigurationResponse,
-  enterspeedJob,
-  jobIdsToDelete,
-  connectionResponse,
-  configuration,
-} from "./types";
+  CustomSeedModel,
+  EnterspeedUmbracoConfiguration,
+  JobIdsToDelete,
+} from "./generated";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
   protected enterspeedRepository = new EnterspeedRepository(this);
@@ -22,57 +15,51 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     super(host, ENTERSPEED_CONTEXT);
   }
 
-  public async customSeed(
-    customSeedNodes: customSeedNodes
-  ): Promise<apiResponse<seedResponse>> {
-    return await this.enterspeedRepository.customSeed(customSeedNodes);
+  public async customSeed(customSeedModel: CustomSeedModel) {
+    return await this.enterspeedRepository.customSeed(customSeedModel);
   }
 
-  public async seed(): Promise<apiResponse<seedResponse>> {
-    return await this.enterspeedRepository.seed();
+  public async seed() {
+    let response = await this.enterspeedRepository.seed();
+    return response;
   }
 
-  public async clearJobQueue(): Promise<apiResponseBase> {
+  public async clearJobQueue() {
     return await this.enterspeedRepository.clearPendingJobs();
   }
 
-  public async getNumberOfPendingJobs(): Promise<
-    apiResponse<getNumberOfPendingJobsResponse>
-  > {
+  public async getNumberOfPendingJobs() {
     return await this.enterspeedRepository.getNumberOfPendingJobs();
   }
 
-  public async getEnterspeedConfiguration(): Promise<
-    apiResponse<enterspeedUmbracoConfigurationResponse>
-  > {
+  public async getEnterspeedConfiguration() {
     return await this.enterspeedRepository.getEnterspeedConfiguration();
   }
 
   public async saveConfiguration(
-    configuration: configuration
-  ): Promise<connectionResponse> {
+    configuration: EnterspeedUmbracoConfiguration
+  ) {
     return await this.enterspeedRepository.saveConfiguration(configuration);
   }
 
   public async testConfigurationConnection(
-    configuration: configuration
-  ): Promise<connectionResponse> {
+    enterspeedUmbracoConfiguration: EnterspeedUmbracoConfiguration
+  ) {
     return await this.enterspeedRepository.testConfigurationConnection(
-      configuration
+      enterspeedUmbracoConfiguration
     );
   }
 
-  public async getFailedJobs(): Promise<apiResponse<enterspeedJob[]>> {
-    return await this.enterspeedRepository.getFailedJobs();
+  public async getFailedJobs() {
+    let response = await this.enterspeedRepository.getFailedJobs();
+    return response;
   }
 
-  public async deleteSelectedFailedJobs(
-    ids: jobIdsToDelete
-  ): Promise<apiResponseBase> {
+  public async deleteSelectedFailedJobs(ids: JobIdsToDelete) {
     return await this.enterspeedRepository.deleteSelectedFailedJobs(ids);
   }
 
-  public async deleteFailedJobs(): Promise<apiResponseBase> {
+  public async deleteFailedJobs() {
     return await this.enterspeedRepository.deleteFailedJobs();
   }
 }

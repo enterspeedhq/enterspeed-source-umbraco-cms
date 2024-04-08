@@ -38,8 +38,8 @@ export class enterspeedFullSeedModeElement extends UmbLitElement {
     this.disableSeedButton = true;
     this._enterspeedContext!.seed()
       .then((response) => {
-        if (response.isSuccess) {
-          this.seedResponse = response.data;
+        if (response.data?.isSuccess) {
+          this.seedResponse = response.data.data;
           this._notificationContext?.peek("positive", {
             data: {
               headline: "Seed",
@@ -68,7 +68,7 @@ export class enterspeedFullSeedModeElement extends UmbLitElement {
   async clearJobQueue() {
     this._enterspeedContext!.clearJobQueue()
       .then((response) => {
-        if (response.isSuccess) {
+        if (response.data?.isSuccess) {
           this._notificationContext?.peek("positive", {
             data: {
               headline: "Clear job queue",

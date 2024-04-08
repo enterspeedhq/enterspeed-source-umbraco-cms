@@ -14,6 +14,7 @@ namespace Enterspeed.Source.UmbracoCms.V14
         {
             builder.Services.AddTransient<IEnterspeedDictionaryTranslation, EnterspeedDictionaryTranslation>();
             builder.Services.AddSingleton<ISchemaIdSelector, EnterspeedSchemaIdSelector>();
+            builder.Services.AddSingleton<IOperationIdSelector, EnterspeedOperationIdSelector>();
             builder.Services.ConfigureOptions<ConfigureEnterspeedApiSwaggerGenOptions>();
         }
     }

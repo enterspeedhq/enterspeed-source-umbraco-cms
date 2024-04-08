@@ -3,16 +3,16 @@
 /* tslint:disable */
 /* eslint-disable */
 import type { ApiResponse } from '../models/ApiResponse';
+import type { ApiResponse_1 } from '../models/ApiResponse_1';
+import type { ApiResponse_EnterspeedUmbracoConfigurationResponse_ } from '../models/ApiResponse_EnterspeedUmbracoConfigurationResponse_';
+import type { ApiResponse_GetNumberOfPendingJobsResponse_ } from '../models/ApiResponse_GetNumberOfPendingJobsResponse_';
+import type { ApiResponse_List_1_ } from '../models/ApiResponse_List_1_';
+import type { ApiResponse_SeedResponse_ } from '../models/ApiResponse_SeedResponse_';
 import type { CustomSeedModel } from '../models/CustomSeedModel';
-import type { Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1 } from '../models/Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1';
-import type { Enterspeed_Source_UmbracoCms_Models_Api_GetNumberOfPendingJobsResponse } from '../models/Enterspeed_Source_UmbracoCms_Models_Api_GetNumberOfPendingJobsResponse';
-import type { Enterspeed_Source_UmbracoCms_Models_Api_SeedResponse } from '../models/Enterspeed_Source_UmbracoCms_Models_Api_SeedResponse';
-import type { EnterspeedJob } from '../models/EnterspeedJob';
 import type { EnterspeedUmbracoConfiguration } from '../models/EnterspeedUmbracoConfiguration';
 import type { EnterspeedUmbracoConfigurationResponse } from '../models/EnterspeedUmbracoConfigurationResponse';
 import type { JobIdsToDelete } from '../models/JobIdsToDelete';
 import type { Response } from '../models/Response';
-import type { T } from '../models/T';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -24,25 +24,25 @@ export class DashboardResource {
      * @returns any Success
      * @throws ApiError
      */
-    public static postClearPendingJobs(): CancelablePromise<(ApiResponse | Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1)> {
+    public static clearPendingJobs(): CancelablePromise<(ApiResponse | ApiResponse_1)> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/ClearPendingJobs',
+            url: '/umbraco/enterspeed/api/v1/ClearPendingJobs',
         });
     }
 
     /**
-     * @returns Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1<Enterspeed_Source_UmbracoCms_Models_Api_SeedResponse> Success
+     * @returns ApiResponse_SeedResponse_ Success
      * @throws ApiError
      */
-    public static postCustomSeed({
+    public static customSeed({
 requestBody,
 }: {
 requestBody?: CustomSeedModel,
-}): CancelablePromise<Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1> {
+}): CancelablePromise<ApiResponse_SeedResponse_> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/CustomSeed',
+            url: '/umbraco/enterspeed/api/v1/CustomSeed',
             body: requestBody,
             mediaType: 'application/json',
         });
@@ -52,10 +52,10 @@ requestBody?: CustomSeedModel,
      * @returns any Success
      * @throws ApiError
      */
-    public static postDeleteFailedJobs(): CancelablePromise<(ApiResponse | Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1)> {
+    public static deleteFailedJobs(): CancelablePromise<(ApiResponse | ApiResponse_1)> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/DeleteFailedJobs',
+            url: '/umbraco/enterspeed/api/v1/DeleteFailedJobs',
         });
     }
 
@@ -63,38 +63,49 @@ requestBody?: CustomSeedModel,
      * @returns any Success
      * @throws ApiError
      */
-    public static postDeleteJobs({
+    public static deleteJobs({
 requestBody,
 }: {
 requestBody?: JobIdsToDelete,
-}): CancelablePromise<(ApiResponse | Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1)> {
+}): CancelablePromise<(ApiResponse | ApiResponse_1)> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/DeleteJobs',
+            url: '/umbraco/enterspeed/api/v1/DeleteJobs',
             body: requestBody,
             mediaType: 'application/json',
         });
     }
 
     /**
-     * @returns any Success
+     * @returns ApiResponse_EnterspeedUmbracoConfigurationResponse_ Success
      * @throws ApiError
      */
-    public static getGetFailedJobs(): CancelablePromise<Array<EnterspeedJob>> {
+    public static getEnterspeedConfiguration(): CancelablePromise<ApiResponse_EnterspeedUmbracoConfigurationResponse_> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/GetFailedJobs',
+            url: '/umbraco/enterspeed/api/v1/GetEnterspeedConfiguration',
         });
     }
 
     /**
-     * @returns Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1<Enterspeed_Source_UmbracoCms_Models_Api_GetNumberOfPendingJobsResponse> Success
+     * @returns ApiResponse_List_1_ Success
      * @throws ApiError
      */
-    public static getGetNumberOfPendingJobs(): CancelablePromise<Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1> {
+    public static getFailedJobs(): CancelablePromise<ApiResponse_List_1_> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/GetNumberOfPendingJobs',
+            url: '/umbraco/enterspeed/api/v1/GetFailedJobs',
+        });
+    }
+
+    /**
+     * @returns ApiResponse_GetNumberOfPendingJobsResponse_ Success
+     * @throws ApiError
+     */
+    public static getNumberOfPendingJobs(): CancelablePromise<ApiResponse_GetNumberOfPendingJobsResponse_> {
+        return __request(OpenAPI, {
+            method: 'GET',
+            url: '/umbraco/enterspeed/api/v1/GetNumberOfPendingJobs',
         });
     }
 
@@ -102,27 +113,27 @@ requestBody?: JobIdsToDelete,
      * @returns Response Success
      * @throws ApiError
      */
-    public static postSaveConfiguration({
+    public static saveConfiguration({
 requestBody,
 }: {
 requestBody?: (EnterspeedUmbracoConfiguration | EnterspeedUmbracoConfigurationResponse),
 }): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/SaveConfiguration',
+            url: '/umbraco/enterspeed/api/v1/SaveConfiguration',
             body: requestBody,
             mediaType: 'application/json',
         });
     }
 
     /**
-     * @returns Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1<Enterspeed_Source_UmbracoCms_Models_Api_SeedResponse> Success
+     * @returns ApiResponse_SeedResponse_ Success
      * @throws ApiError
      */
-    public static getSeed(): CancelablePromise<Enterspeed_Source_UmbracoCms_Models_Api_ApiResponse_1> {
+    public static seed(): CancelablePromise<ApiResponse_SeedResponse_> {
         return __request(OpenAPI, {
             method: 'GET',
-            url: '/Seed',
+            url: '/umbraco/enterspeed/api/v1/Seed',
         });
     }
 
@@ -130,14 +141,14 @@ requestBody?: (EnterspeedUmbracoConfiguration | EnterspeedUmbracoConfigurationRe
      * @returns Response Success
      * @throws ApiError
      */
-    public static postTestConfigurationConnection({
+    public static testConfigurationConnection({
 requestBody,
 }: {
 requestBody?: (EnterspeedUmbracoConfiguration | EnterspeedUmbracoConfigurationResponse),
 }): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'POST',
-            url: '/TestConfigurationConnection',
+            url: '/umbraco/enterspeed/api/v1/TestConfigurationConnection',
             body: requestBody,
             mediaType: 'application/json',
         });

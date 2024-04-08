@@ -56,8 +56,9 @@ export class enterspeedSeedModesElement extends UmbLitElement {
     enterspeedContext
       .getNumberOfPendingJobs()
       .then((response) => {
-        if (response.isSuccess) {
-          this._numberOfPendingJobs = response.data.numberOfPendingJobs;
+        if (response.data?.isSuccess) {
+          this._numberOfPendingJobs =
+            response.data?.data?.numberOfPendingJobs ?? 0;
           if (this._numberOfPendingJobs === 0) {
             this.seedResponse = null;
           }
@@ -77,7 +78,9 @@ export class enterspeedSeedModesElement extends UmbLitElement {
 
   render() {
     return html` ${this.renderSeedModes()}
-      <enterspeed-seed-response .seedResponse=${this.seedResponse}></enterspeed-seed-response>`;
+      <enterspeed-seed-response
+        .seedResponse=${this.seedResponse}
+      ></enterspeed-seed-response>`;
   }
 
   renderSeedModes() {

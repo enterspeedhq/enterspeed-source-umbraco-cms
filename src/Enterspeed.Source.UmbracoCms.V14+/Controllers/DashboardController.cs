@@ -21,6 +21,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Sync;
+using Umbraco.Cms.Web.Common.Routing;
 
 
 namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
@@ -57,7 +58,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
 
         [HttpGet("GetFailedJobs")]
         [MapToApiVersion("1.0")]
-        [ProducesResponseType(typeof(List<EnterspeedJob>), 200)]
+        [ProducesResponseType(typeof(ApiResponse<List<EnterspeedJob>>), 200)]
         public ApiResponse<List<EnterspeedJob>> GetFailedJobs()
         {
             var result = _enterspeedJobRepository.GetFailedJobs().ToList();
@@ -124,19 +125,19 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                 });
         }
 
-        //[HttpGet("GetEnterspeedConfiguration")]
-        //[MapToApiVersion("1.0")]
-        //[ProducesResponseType(typeof(ApiResponse<EnterspeedUmbracoConfigurationResponse>), 200)]
-        //public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
-        //{
-        //    var config = _enterspeedConfigurationService.GetConfiguration();
-        //    var runJobsOnServer = _enterspeedJobsHandlingService.IsJobsProcessingEnabled();
-        //    return new ApiResponse<EnterspeedUmbracoConfigurationResponse>
-        //    {
-        //        Data = new EnterspeedUmbracoConfigurationResponse(config, _serverRoleAccessor.CurrentServerRole, runJobsOnServer),
-        //        IsSuccess = true
-        //    };
-        //}
+        [HttpGet("GetEnterspeedConfiguration")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse<EnterspeedUmbracoConfigurationResponse>), 200)]
+        public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
+        {
+            var config = _enterspeedConfigurationService.GetConfiguration();
+            var runJobsOnServer = _enterspeedJobsHandlingService.IsJobsProcessingEnabled();
+            return new ApiResponse<EnterspeedUmbracoConfigurationResponse>
+            {
+                Data = new EnterspeedUmbracoConfigurationResponse(config, _serverRoleAccessor.CurrentServerRole, runJobsOnServer),
+                IsSuccess = true
+            };
+        }
 
         [HttpPost("SaveConfiguration")]
         [MapToApiVersion("1.0")]
@@ -223,7 +224,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                 });
         }
 
-        [HttpPost("ClearPendingJobs")]  
+        [HttpPost("ClearPendingJobs")]
         [MapToApiVersion("1.0")]
         [ProducesResponseType(typeof(ApiResponse), 200)]
         public IActionResult ClearPendingJobs()

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Umbraco.Cms.Api.Common.OpenApi;
 
 namespace Enterspeed.Source.UmbracoCms.V14.Configuration
@@ -12,12 +13,13 @@ namespace Enterspeed.Source.UmbracoCms.V14.Configuration
                 return base.SchemaId(type);
             }
 
-            if (!type.IsGenericType)
+            if (!type.IsGenericType || (type.IsGenericType && !type.GenericTypeArguments.Any()))
             {
                 return base.SchemaId(type);
             }
-            
-            return type.ToString().Replace("Enterspeed.Source.UmbracoCms.V14.Models.", "");
+
+            var schemaId = $"{type.Name[..^2]}<{string.Join(",", type.GenericTypeArguments.Select(x => x.Name))}>";
+            return schemaId;
         }
     }
 }
