@@ -1,3 +1,5 @@
+import { EnterspeedJob } from "./generated";
+
 export interface getNumberOfPendingJobsResponse {
   numberOfPendingJobs: number;
 }
@@ -62,27 +64,7 @@ export interface configuration {
   baseUrl: string;
 }
 
-enum enterspeedJobType {
-  Publish = 0,
-  Delete = 1,
-}
-
-enum enterspeedJobEntityType {
-  Content,
-  MasterContent,
-  Media,
-  Dictionary,
-}
-
-export interface enterspeedJob {
-  id: number;
-  entityId: string;
-  culture: string;
-  jobType: enterspeedJobType;
-  exception: string;
-  entityType: enterspeedJobEntityType;
-  createdAt: Date;
-  updatedAt: Date;
+export interface EnterspeedFailedJob extends EnterspeedJob {
   selected: boolean;
 }
 

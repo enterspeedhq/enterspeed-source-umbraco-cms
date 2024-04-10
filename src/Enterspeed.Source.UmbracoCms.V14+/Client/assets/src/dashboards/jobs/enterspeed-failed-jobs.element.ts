@@ -6,8 +6,11 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
-import { jobIdsToDelete } from "../../types";
-import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
+import { EnterspeedFailedJob, jobIdsToDelete } from "../../types";
+import {
+  UUIBooleanInputEvent,
+  UUISelectEvent,
+} from "@umbraco-cms/backoffice/external/uui";
 import "../shared/enterspeed-pagination.element";
 import "../shared/enterspeed-server-message.element";
 import { EnterspeedJob } from "../../generated";
@@ -33,10 +36,10 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   private _loadingFailedJobs: boolean = true;
 
   @state()
-  private _allFailedJobs: EnterspeedJob[];
+  private _allFailedJobs: EnterspeedFailedJob[];
 
   @state()
-  private _filteredFailedJobs: EnterspeedJob[];
+  private _filteredFailedJobs: EnterspeedFailedJob[];
 
   @state()
   private _activeException: number = -1;
@@ -94,7 +97,8 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
     await this._enterspeedContext.getFailedJobs().then((response) => {
       this._loadingFailedJobs = false;
 
-      this._allFailedJobs = response.data?.data ?? [];
+      this._allFailedJobs =
+        (response.data?.data as EnterspeedFailedJob[]) ?? [];
 
       this._pagination.totalPages = Math.ceil(
         this._allFailedJobs.length / this._pagination.pageSize
@@ -112,19 +116,16 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
     this.requestUpdate();
     const startIndex = this._pagination.pageIndex * this._pagination.pageSize;
     const endIndex = startIndex + this._pagination.pageSize;
-    console.log(typeof this._allFailedJobs);
 
     this._filteredFailedJobs = this._allFailedJobs.slice(startIndex, endIndex);
     this.requestUpdate();
   }
 
   getSelectedFailedJobs() {
-    // var selectedJobsToDelete = this._filteredFailedJobs.filter(
-    //   (fj) => fj === true
-    // );
-
-    // return selectedJobsToDelete;
-    return this._filteredFailedJobs;
+    var selectedJobsToDelete = this._filteredFailedJobs.filter(
+      (fj) => fj.selected === true
+    );
+    return selectedJobsToDelete;
   }
 
   toggleException(index: number) {
@@ -175,7 +176,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
     this._deletingFailedJobs = false;
   }
 
-  renderCellValues(failedJob: EnterspeedJob, index: number) {
+  renderCellValues(failedJob: EnterspeedFailedJob, index: number) {
     let selectedDeleteModeHtml;
     if (
       this._selectedDeleteMode === "Everything" ||
@@ -194,7 +195,13 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
         class="dashboard-list-item-property "
         style="width: 3%"
       >
-        <uui-checkbox label=" "></uui-checkbox>
+        <uui-checkbox
+          label=" "
+          @change=${(e: UUIBooleanInputEvent) => {
+            failedJob.selected = e.target.value == "on" ? true : false;
+            this.requestUpdate();
+          }}
+        ></uui-checkbox>
       </div>`;
     }
 
