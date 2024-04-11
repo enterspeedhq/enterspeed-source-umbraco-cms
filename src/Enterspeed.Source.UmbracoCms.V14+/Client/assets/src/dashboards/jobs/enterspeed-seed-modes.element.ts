@@ -88,6 +88,10 @@ export class enterspeedSeedModesElement extends UmbLitElement {
       return html`<enterspeed-full-seed-mode
         .seedResponse=${this.seedResponse}
         .numberOfPendingJobs=${this._numberOfPendingJobs}
+        @seed-response=${(e: CustomEvent) => {
+          this.seedResponse = e.detail;
+          this.requestUpdate();
+        }}
       ></enterspeed-full-seed-mode>`;
     } else {
       return html`<enterspeed-custom-seed-mode

@@ -40,6 +40,14 @@ export class enterspeedFullSeedModeElement extends UmbLitElement {
       .then((response) => {
         if (response.data?.isSuccess) {
           this.seedResponse = response.data.data;
+
+          this.dispatchEvent(
+            new CustomEvent("seed-response", {
+              bubbles: true,
+              detail: this.seedResponse
+            })
+          );
+
           this._notificationContext?.peek("positive", {
             data: {
               headline: "Seed",
