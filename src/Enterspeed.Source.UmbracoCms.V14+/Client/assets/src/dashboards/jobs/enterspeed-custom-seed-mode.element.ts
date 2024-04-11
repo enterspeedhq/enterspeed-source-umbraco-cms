@@ -2,11 +2,11 @@ import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
+import { SeedResponse, CustomSeedModel } from "../../generated";
 import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import { customSeedNodes, seedResponse } from "../../types";
 import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("enterspeed-custom-seed-mode")
@@ -27,7 +27,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   numberOfPendingJobs = 0;
 
   @property({ type: Object })
-  seedResponse: seedResponse | undefined | null;
+  seedResponse: SeedResponse | undefined | null;
 
   constructor() {
     super();
@@ -45,13 +45,12 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   async seed() {
     this.disableSeedButton = true;
 
-    var customSeed = new customSeedNodes();
+    let customSeedModel: CustomSeedModel = {};
+    customSeedModel.contentNodes = this.selectedContentIds;
+    customSeedModel.mediaNodes = this.selectedMediaIds;
+    customSeedModel.dictionaryNodes = [];
 
-    customSeed.contentNodes = this.selectedContentIds;
-    customSeed.mediaNodes = this.selectedMediaIds;
-    customSeed.dictionaryNodes = [];
-
-    this._enterspeedContext!.customSeed(customSeed)
+    this._enterspeedContext!.customSeed(customSeedModel)
       .then((response) => {
         if (response.data?.isSuccess) {
           this.seedResponse = response.data.data;
@@ -116,6 +115,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   render() {
     return html`
       <div class="seed-dashboard-text">
+        ${this.selectedContentIds}
         <div>
           <h4>Custom seed</h4>
           <p>
@@ -135,8 +135,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
             <h5>Content</h5>
             <umb-controller-host-provider>
               <umb-input-tree
-                @change=${(e: UUIBooleanInputEvent) =>
-                  this.updateSelectedContentIds(e.target.value)}
+                @change=${(e: any) => console.log(e.target)}
                 type="content"
               >
               </umb-input-tree>

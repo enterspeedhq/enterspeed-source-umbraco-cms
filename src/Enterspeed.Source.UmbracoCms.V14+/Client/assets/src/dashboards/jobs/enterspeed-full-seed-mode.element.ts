@@ -5,8 +5,8 @@ import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import { seedResponse } from "../../types";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import { SeedResponse } from "../../generated";
 
 @customElement("enterspeed-full-seed-mode")
 export class enterspeedFullSeedModeElement extends UmbLitElement {
@@ -20,7 +20,7 @@ export class enterspeedFullSeedModeElement extends UmbLitElement {
   numberOfPendingJobs = 0;
 
   @property({ type: Object })
-  seedResponse: seedResponse | undefined | null;
+  seedResponse: SeedResponse | undefined | null;
 
   constructor() {
     super();

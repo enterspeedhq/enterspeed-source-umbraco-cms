@@ -6,14 +6,14 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context";
-import { EnterspeedFailedJob, jobIdsToDelete } from "../../types";
+import { EnterspeedFailedJob } from "../../types";
 import {
   UUIBooleanInputEvent,
   UUISelectEvent,
 } from "@umbraco-cms/backoffice/external/uui";
 import "../shared/enterspeed-pagination.element";
 import "../shared/enterspeed-server-message.element";
-import { EnterspeedJob } from "../../generated";
+import { JobIdsToDelete } from "../../generated";
 
 @customElement("enterspeed-failed-jobs")
 export class enterspeedFailedJobsElement extends UmbLitElement {
@@ -157,9 +157,9 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
       let failedJobsToDelete = this.getSelectedFailedJobs();
 
       if (failedJobsToDelete.length) {
-        let idsToDelete = new jobIdsToDelete(
-          failedJobsToDelete.map((fj) => fj.id)
-        );
+        let idsToDelete: JobIdsToDelete = {
+          ids: failedJobsToDelete.map((fj) => fj.id),
+        };
 
         await this._enterspeedContext
           .deleteSelectedFailedJobs(idsToDelete)

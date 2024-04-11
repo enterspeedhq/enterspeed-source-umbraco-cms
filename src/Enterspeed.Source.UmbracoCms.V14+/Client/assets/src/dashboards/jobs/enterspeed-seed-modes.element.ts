@@ -1,7 +1,6 @@
 import { html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { EnterspeedContext } from "../../enterspeed.context.ts";
-import { seedResponse } from "../../types.ts";
 import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
@@ -10,6 +9,7 @@ import "./enterspeed-seed-response.element.ts";
 import "./enterspeed-custom-seed-mode.element.ts";
 import "./enterspeed-full-seed-mode.element.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import { SeedResponse } from "../../generated/index.ts";
 
 @customElement("enterspeed-seed-modes")
 export class enterspeedSeedModesElement extends UmbLitElement {
@@ -23,7 +23,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
   selectedSeedMode?: string;
 
   @property({ type: Object })
-  seedResponse: seedResponse | undefined | null;
+  seedResponse: SeedResponse | undefined | null;
 
   constructor() {
     super();

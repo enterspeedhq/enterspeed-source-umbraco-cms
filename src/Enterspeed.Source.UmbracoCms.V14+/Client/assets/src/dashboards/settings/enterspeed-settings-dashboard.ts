@@ -16,7 +16,6 @@ import {
   EnterspeedUmbracoConfiguration,
   EnterspeedUmbracoConfigurationResponse,
 } from "../../generated";
-import { UmbDataSourceResponse } from "@umbraco-cms/backoffice/repository";
 
 @customElement("enterspeed-settings-dashboard")
 export class enterspeedSettingsDashboard extends UmbLitElement {
@@ -197,7 +196,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .disabled=${this._enterspeedConfiguration
                 ?.configuredFromSettingsFile || this._buttonState === "busy"}
               .value=${this._enterspeedConfiguration?.baseUrl}
-              @input="${(e) => {
+              @input="${(e : any) => {
                 this._enterspeedConfiguration!.baseUrl = e.target.value;
               }})}"
               @change=${() => this.requestUpdate()}
@@ -219,7 +218,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .disabled=${this._enterspeedConfiguration
                 ?.configuredFromSettingsFile || this._buttonState === "busy"}
               .value=${this._enterspeedConfiguration?.mediaDomain ?? ""}
-              @input="${(e) => {
+              @input="${(e : any) => {
                 this._enterspeedConfiguration!.mediaDomain = e.target.value;
               }})}"
               @change=${() => this.requestUpdate()}
@@ -244,7 +243,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .disabled=${this._enterspeedConfiguration
                 ?.configuredFromSettingsFile || this._buttonState === "busy"}
               .value=${this._enterspeedConfiguration?.apiKey ?? ""}
-              @input="${(e) => {
+              @input="${(e : any) => {
                 this._enterspeedConfiguration!.apiKey = e.target.value;
               }}"
               @change=${() => this.requestUpdate()}
@@ -265,7 +264,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .disabled=${this._enterspeedConfiguration
                 ?.configuredFromSettingsFile || this._buttonState === "busy"}
               .value=${this._enterspeedConfiguration?.previewApiKey ?? ""}
-              @input="${(e) => {
+              @input="${(e : any) => {
                 this._enterspeedConfiguration!.previewApiKey = e.target.value;
               }}"
               @change=${() => this.requestUpdate()}

@@ -6,9 +6,9 @@ import {
   property,
   css,
 } from "@umbraco-cms/backoffice/external/lit";
-import { seedResponse } from "../../types.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
+import { SeedResponse } from "../../generated/index.ts";
 
 @customElement("enterspeed-seed")
 export class enterspeedSeedElement extends UmbLitElement {
@@ -37,7 +37,7 @@ export class enterspeedSeedElement extends UmbLitElement {
   ];
 
   @property({ type: Object })
-  seedResponse: seedResponse | undefined | null;
+  seedResponse: SeedResponse | undefined | null;
 
   renderSeedModeSelects() {
     return html` <div class="seed-dashboard-text block-form">

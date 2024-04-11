@@ -1,12 +1,12 @@
 import { html } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { seedResponse } from "../../types";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import { SeedResponse } from "../../generated";
 
 @customElement("enterspeed-seed-response")
 export class enterspeedSeedResponseELement extends UmbLitElement {
   @property({ type: Object })
-  seedResponse: seedResponse | undefined | null;
+  seedResponse: SeedResponse | undefined | null;
 
   constructor() {
     super();
