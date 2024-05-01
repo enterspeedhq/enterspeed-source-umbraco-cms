@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Cms.Api.Common.OpenApi;
 
@@ -6,6 +7,10 @@ namespace Enterspeed.Source.UmbracoCms.V14.Configuration
 {
     public class EnterspeedSchemaIdSelector : SchemaIdSelector
     {
+        public EnterspeedSchemaIdSelector(IEnumerable<ISchemaIdHandler> schemaIdHandlers) : base(schemaIdHandlers)
+        {
+        }
+
         public override string SchemaId(Type type)
         {
             if (type.Namespace?.Contains("Enterspeed") is false)

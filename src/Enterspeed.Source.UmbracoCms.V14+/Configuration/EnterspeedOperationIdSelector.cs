@@ -1,13 +1,18 @@
 ﻿using Asp.Versioning;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
+using System.Collections.Generic;
 using Umbraco.Cms.Api.Common.OpenApi;
 
 namespace Enterspeed.Source.UmbracoCms.V14.Configuration;
 
 public class EnterspeedOperationIdSelector : OperationIdSelector
 {
-    public override string OperationId(ApiDescription apiDescription, ApiVersioningOptions apiVersioningOptions)
+    public EnterspeedOperationIdSelector(IEnumerable<IOperationIdHandler> operationIdHandlers) : base(operationIdHandlers)
+    {
+    }
+
+    public override string OperationId(ApiDescription apiDescription)
     {
         if (apiDescription.ActionDescriptor is ControllerActionDescriptor actionDescriptor)
         {
@@ -17,6 +22,6 @@ public class EnterspeedOperationIdSelector : OperationIdSelector
             }
         }
 
-        return base.OperationId(apiDescription, apiVersioningOptions);
+        return base.OperationId(apiDescription);
     }
 }
