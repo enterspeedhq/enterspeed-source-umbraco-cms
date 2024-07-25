@@ -11,7 +11,14 @@ import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
 import type { MyModalData, MyModalValue } from "./node-picker-modal.token";
 import { UmbModalExtensionElement } from "@umbraco-cms/backoffice/extension-registry";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
-import { UmbTreeSelectionConfiguration } from "@umbraco-cms/backoffice/tree";
+import {
+  UmbTreeSelectionConfiguration,
+} from "@umbraco-cms/backoffice/tree";
+import {
+  UmbDeselectedEvent,
+  UmbSelectedEvent,
+  UmbSelectionChangeEvent,
+} from "@umbraco-cms/backoffice/event";
 
 @customElement("enterspeed-node-picker-modal")
 export default class EnterspeedNodePickerModal
@@ -40,6 +47,18 @@ export default class EnterspeedNodePickerModal
     this.modalContext?.submit();
   }
 
+  #onTreeSelectionChange(event: UmbSelectionChangeEvent) {
+    console.log(event);
+  }
+
+  #onSelected(event: UmbSelectedEvent) {
+    event.stopPropagation();
+  }
+
+  #onDeselected(event: UmbDeselectedEvent) {
+    event.stopPropagation();
+  }
+
   render() {
     return html`
       <umb-body-layout headline="Select content node">
@@ -47,7 +66,6 @@ export default class EnterspeedNodePickerModal
           <umb-property-layout
             label="Include all content nodes"
             orientation="vertical"
-            class="uui-"
             ><div slot="editor">
               <uui-toggle></uui-toggle>
             </div>
@@ -65,7 +83,10 @@ export default class EnterspeedNodePickerModal
               hideTreeItemActions: true,
               selectionConfiguration: this._selectionConfiguration,
             }}
-          ></umb-tree>
+            @selection-change=${this.#onTreeSelectionChange}
+            @selected=${this.#onSelected}
+						@deselected=${this.#onDeselected}></umb-tree>
+          </umb-tree>
         </uui-box>
 
         <div slot="actions">
