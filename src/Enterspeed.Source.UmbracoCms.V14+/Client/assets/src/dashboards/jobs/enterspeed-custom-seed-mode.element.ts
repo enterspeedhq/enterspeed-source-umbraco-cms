@@ -7,12 +7,14 @@ import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
+import { ENTERSPEED_NODEPICKER_MODAL_TOKEN } from "../../components/modals/node-picker/node-picker-modal.token";
+import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 
 @customElement("enterspeed-custom-seed-mode")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
   private _enterspeedContext!: EnterspeedContext;
   private _notificationContext!: UmbNotificationContext;
+  #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
 
   @property({ type: Array })
   selectedContentIds!: string[];
@@ -31,6 +33,9 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
 
   constructor() {
     super();
+    this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
+      this.#modalManagerContext = instance;
+    });
     this.selectedContentIds = [""];
 
     this._enterspeedContext = new EnterspeedContext(this);
@@ -115,7 +120,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   render() {
     return html`
       <div class="seed-dashboard-text">
-        ${this.selectedContentIds}
         <div>
           <h4>Custom seed</h4>
           <p>
@@ -133,31 +137,25 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
         <div class="custom-seed-content-type-container">
           <div class="custom-seed-content-type-box">
             <h5>Content</h5>
-            <umb-controller-host-provider>
-              <umb-input-tree
-                @change=${(e: any) => console.log(e.target)}
-                type="content"
-              >
-              </umb-input-tree>
-            </umb-controller-host-provider>
+            <uui-button
+              look="placeholder"
+              label="Choose"
+              class="full-width-btn"
+              @click=${this._openNodePickerModal}
+            ></uui-button>
           </div>
           <div class="custom-seed-content-type-box">
             <h5>Media</h5>
-            <umb-controller-host-provider>
-              <umb-input-tree
-                @change=${(e: UUIBooleanInputEvent) =>
-                  this.updateSelectedMediaIds(e.target.value)}
-                type="media"
-              ></umb-input-tree>
-            </umb-controller-host-provider>
+              <umb-input-media
+                @change=${(e: any) =>
+                  this.updateSelectedMediaIds(e.target.value)}"
+              ></umb-input-media>
           </div>
           <div class="custom-seed-content-type-box">
             <h5>Dictionary</h5>
-            <umb-controller-host-provider>
-              <umb-input-tree type="content"></umb-input-tree>
-            </umb-controller-host-provider>
+                <umb-input-document></umb-input-document>
+            </div>
           </div>
-        </div>
       </div>
       <div class="seed-dashboard-content">
         ${this.renderSeedButton()} ${this.renderClearJobQueueButton()}
@@ -170,7 +168,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       return html`<uui-button
         disabled
         type="button"
-        style=""
         look="primary"
         color="default"
         label="Seed"
@@ -178,7 +175,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     } else {
       return html`<uui-button
         type="button"
-        style=""
         look="primary"
         color="default"
         label="Seed"
@@ -197,13 +193,21 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       return html` <uui-button
         type="button"
         disabled
-        style=""
         look="secondary"
         color="default"
         label="Clear job queue ${this.numberOfPendingJobs}"
       ></uui-button>`;
     }
   }
+
+  private _openNodePickerModal() {
+    this.#modalManagerContext?.open(this, ENTERSPEED_NODEPICKER_MODAL_TOKEN, {
+      data: {
+        headline: "My modal headline",
+      },
+    });
+  }
+
   static styles = css`
     .custom-seed-content-type-container {
       display: flex;
@@ -217,6 +221,10 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       border: solid #e9e9ec 1px;
       border-radius: 3px;
       box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.16);
+    }
+
+    .full-width-btn {
+      width: 100%;
     }
   `;
 }

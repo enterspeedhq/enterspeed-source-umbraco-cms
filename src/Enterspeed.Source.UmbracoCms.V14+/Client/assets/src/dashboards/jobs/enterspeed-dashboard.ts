@@ -1,6 +1,5 @@
 import "./enterspeed-seed.element.ts";
 import "./enterspeed-failed-jobs.element.ts";
-
 import {
   html,
   customElement,
@@ -26,7 +25,7 @@ export class enterspeedDashboard extends UmbLitElement {
       alias: "seedsTab",
       label: "Seed",
       active: true,
-    }, 
+    },
   ];
 
   @property()
@@ -63,7 +62,7 @@ export class enterspeedDashboard extends UmbLitElement {
     if (this.tabs[0].active) {
       return html`<enterspeed-failed-jobs></enterspeed-failed-jobs>`;
     } else if (this.tabs[1].active) {
-      return html`<enterspeed-seed></enterspeed-seed>`;
+      return html` <enterspeed-seed></enterspeed-seed>`;
     }
   }
 
