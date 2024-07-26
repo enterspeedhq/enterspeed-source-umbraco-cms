@@ -1,5 +1,5 @@
-import "./enterspeed-seed.element.ts";
-import "./enterspeed-failed-jobs.element.ts";
+import "./seed.element.ts";
+import "./failed-jobs.element.ts";
 import {
   html,
   customElement,

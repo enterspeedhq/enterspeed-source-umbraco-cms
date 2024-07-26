@@ -89,9 +89,23 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   }
 
   private _openNodePickerModal(treeAlias: string) {
+    let headline = "";
+
+    switch (treeAlias) {
+      case UMB_DICTIONARY_TREE_ALIAS:
+        headline = "Select dictionary node";
+        break;
+      case UMB_DOCUMENT_TREE_ALIAS:
+        headline = "Select content node";
+        break;
+      case UMB_MEDIA_TREE_ALIAS:
+        headline = "Select media node";
+    }
+
     this.#modalManagerContext?.open(this, ENTERSPEED_NODEPICKER_MODAL_TOKEN, {
       data: {
         treeAlias: treeAlias,
+        headline: headline,
       },
     });
   }
