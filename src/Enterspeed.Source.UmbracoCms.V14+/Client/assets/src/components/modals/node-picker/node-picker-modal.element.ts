@@ -11,9 +11,7 @@ import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
 import type { MyModalData, MyModalValue } from "./node-picker-modal.token";
 import { UmbModalExtensionElement } from "@umbraco-cms/backoffice/extension-registry";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
-import {
-  UmbTreeSelectionConfiguration,
-} from "@umbraco-cms/backoffice/tree";
+import { UmbTreeSelectionConfiguration } from "@umbraco-cms/backoffice/tree";
 import {
   UmbDeselectedEvent,
   UmbSelectedEvent,
@@ -78,7 +76,7 @@ export default class EnterspeedNodePickerModal
             </div>
           </umb-property-layout>
           <umb-tree
-            alias=${UMB_DOCUMENT_TREE_ALIAS}
+            alias=${this.data?.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS}
             .props=${{
               hideTreeItemActions: true,
               selectionConfiguration: this._selectionConfiguration,

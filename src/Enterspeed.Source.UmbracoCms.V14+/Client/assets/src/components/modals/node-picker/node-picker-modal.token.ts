@@ -1,7 +1,7 @@
 import { UmbModalToken } from "@umbraco-cms/backoffice/modal";
 
 export type MyModalData = {
-    headline: string;
+    treeAlias: string;
 }
 
 export type MyModalValue = {
