@@ -1,4 +1,4 @@
-import "../shared/enterspeed-server-message.element";
+import "../shared/server-message.element";
 
 import {
   html,

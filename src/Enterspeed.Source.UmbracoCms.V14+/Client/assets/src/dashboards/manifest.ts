@@ -6,7 +6,7 @@ const dashboards: Array<ManifestDashboard> = [
     name: "Enterspeed Jobs",
     alias: "enterspeedDashboard",
     elementName: "enterspeedDashboard",
-    js: () => import("./jobs/enterspeed-dashboard.js"),
+    js: () => import("./jobs/dashboard.js"),
     weight: -10,
     meta: {
       label: "Enterspeed Jobs",
@@ -24,7 +24,7 @@ const dashboards: Array<ManifestDashboard> = [
     name: "Enterspeed Settings",
     alias: "enterspeedSettingsDashboard",
     elementName: "enterspeedSettingsDashboard",
-    js: () => import("./settings/enterspeed-settings-dashboard.js"),
+    js: () => import("./settings/settings-dashboard.js"),
     weight: -10,
     meta: {
       label: "Enterspeed Settings",

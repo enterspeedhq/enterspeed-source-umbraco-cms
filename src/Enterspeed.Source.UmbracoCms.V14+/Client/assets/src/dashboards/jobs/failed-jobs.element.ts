@@ -11,8 +11,8 @@ import {
   UUIBooleanInputEvent,
   UUISelectEvent,
 } from "@umbraco-cms/backoffice/external/uui";
-import "../../components/pagination/enterspeed-pagination.element";
-import "../shared/enterspeed-server-message.element";
+import "../../components/pagination/pagination.element";
+import "../shared/server-message.element";
 import { JobIdsToDelete } from "../../generated";
 
 @customElement("enterspeed-failed-jobs")

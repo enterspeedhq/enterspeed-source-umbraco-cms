@@ -5,9 +5,9 @@ import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import "./enterspeed-seed-response.element.ts";
-import "./enterspeed-custom-seed-mode.element.ts";
-import "./enterspeed-full-seed-mode.element.ts";
+import "./seed-response.element.ts";
+import "./custom-seed-mode.element.ts";
+import "./full-seed-mode.element.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { SeedResponse } from "../../generated/index.ts";
 
