@@ -6,7 +6,8 @@ export type MyModalData = {
 };
 
 export type MyModalValue = {
-  myData: string;
+  seedNodes: Array<SeedNode>;
+  treeAlias: string;
 };
 
 export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<
@@ -18,3 +19,8 @@ export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<
     size: "small",
   },
 });
+
+export type SeedNode = {
+  id: string;
+  Descendentants: boolean;
+};

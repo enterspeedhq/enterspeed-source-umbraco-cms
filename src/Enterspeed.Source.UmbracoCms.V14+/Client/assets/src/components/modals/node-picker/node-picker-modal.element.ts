@@ -18,6 +18,7 @@ import {
   UmbSelectedEvent,
   UmbSelectionChangeEvent,
 } from "@umbraco-cms/backoffice/event";
+import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("enterspeed-node-picker-modal")
 export default class EnterspeedNodePickerModal
@@ -37,12 +38,15 @@ export default class EnterspeedNodePickerModal
     selection: [],
   };
 
+  @state()
+  private includeDescendants: boolean;
+
   private _handleCancel() {
     this.modalContext?.submit();
   }
 
   private _handleSubmit() {
-    this.modalContext?.updateValue({ myData: "hello world" });
+    this.modalContext?.updateValue({ treeAlias: this.data?.treeAlias });
     this.modalContext?.submit();
   }
 
@@ -58,6 +62,14 @@ export default class EnterspeedNodePickerModal
     event.stopPropagation();
   }
 
+  #onSelectAllContentNodes(event: UUIBooleanInputEvent) {
+    console.log(event.target.checked);
+  }
+
+  #onIncludeDescendants(event: UUIBooleanInputEvent) {
+    console.log(event.target.checked);
+  }
+
   render() {
     return html`
       <umb-body-layout headline=${ifDefined(this.data?.headline)}>
@@ -66,14 +78,18 @@ export default class EnterspeedNodePickerModal
             label="Include all content nodes"
             orientation="vertical"
             ><div slot="editor">
-              <uui-toggle></uui-toggle>
+              <uui-toggle @change=${(e: any) => {
+                this.#onSelectAllContentNodes(e);
+              }} ></uui-toggle>
             </div>
           </umb-property-layout>
           <umb-property-layout
             label="Include descendants"
             orientation="vertical"
             ><div slot="editor">
-              <uui-toggle></uui-toggle>
+              <uui-toggle @change=${(e: UUIBooleanInputEvent) => {
+                this.#onIncludeDescendants(e);
+              }}></uui-toggle>
             </div>
           </umb-property-layout>
           <umb-tree
