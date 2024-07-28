@@ -2,7 +2,7 @@ import { html } from "lit";
 import { customElement } from "lit/decorators.js";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
-@customElement("enterspeed-full-seed-mode")
+@customElement("enterspeed-seed-mode-full")
 export class enterspeedFullSeedModeElement extends UmbLitElement {
   constructor() {
     super();
