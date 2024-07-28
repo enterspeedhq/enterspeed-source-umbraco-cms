@@ -19,7 +19,6 @@ export class seedElement extends UmbLitElement {
   selectedSeedMode?: string;
 
   #onSeedModeUpdated(e: CustomEvent) {
-    console.log(e.detail);
     this.selectedSeedMode = e.detail.toString();
   }
 
