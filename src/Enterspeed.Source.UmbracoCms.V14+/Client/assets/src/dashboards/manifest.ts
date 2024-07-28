@@ -6,7 +6,7 @@ const dashboards: Array<ManifestDashboard> = [
     name: "Enterspeed Jobs",
     alias: "enterspeedDashboard",
     elementName: "enterspeedDashboard",
-    js: () => import("./jobs/dashboard.js"),
+    js: () => import("./jobs/dashboard.element.js"),
     weight: -10,
     meta: {
       label: "Enterspeed Jobs",
