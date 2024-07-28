@@ -13,14 +13,12 @@ import { SeedResponse } from "../../generated/index.ts";
 
 @customElement("enterspeed-seed-modes")
 export class enterspeedSeedModesElement extends UmbLitElement {
-  private _enterspeedContext!: EnterspeedContext;
-  private _notificationContext!: UmbNotificationContext;
+  #enterspeedContext!: EnterspeedContext;
+  #notificationContext!: UmbNotificationContext;
+  #numberOfPendingJobs = 0;
 
   @property({ type: Number })
   numberOfPendingJobs = 0;
-
-  @state()
-  private _numberOfPendingJobs = 0;
 
   @property({ type: String })
   selectedSeedMode?: string;
@@ -28,25 +26,25 @@ export class enterspeedSeedModesElement extends UmbLitElement {
   @property({ type: Object })
   seedResponse: SeedResponse | undefined | null;
 
-  @state()
+  @property({ type: Boolean })
   disableSeedButton?: boolean;
 
   constructor() {
     super();
     this.initGetNumberOfPendingJobs();
 
-    this._enterspeedContext = new EnterspeedContext(this);
+    this.#enterspeedContext = new EnterspeedContext(this);
     this.consumeContext(
       UMB_NOTIFICATION_CONTEXT,
       (instance: UmbNotificationContext) => {
-        this._notificationContext = instance;
+        this.#notificationContext = instance;
       }
     );
   }
 
   async seed() {
     this.disableSeedButton = true;
-    this._enterspeedContext!.seed()
+    this.#enterspeedContext!.seed()
       .then((response) => {
         if (response.data?.isSuccess) {
           this.seedResponse = response.data.data;
@@ -58,7 +56,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
             })
           );
 
-          this._notificationContext?.peek("positive", {
+          this.#notificationContext?.peek("positive", {
             data: {
               headline: "Seed",
               message: "Successfully started seeding to Enterspeed",
@@ -72,7 +70,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
         }
       })
       .catch((error) => {
-        this._notificationContext?.peek("danger", {
+        this.#notificationContext?.peek("danger", {
           data: {
             headline: "Seed",
             message: error.data.message,
@@ -84,10 +82,10 @@ export class enterspeedSeedModesElement extends UmbLitElement {
   }
 
   async clearJobQueue() {
-    this._enterspeedContext!.clearJobQueue()
+    this.#enterspeedContext!.clearJobQueue()
       .then((response) => {
         if (response.data?.isSuccess) {
-          this._notificationContext?.peek("positive", {
+          this.#notificationContext?.peek("positive", {
             data: {
               headline: "Clear job queue",
               message: "Successfully cleared the queue of pending jobs",
@@ -97,7 +95,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
         }
       })
       .catch((error) => {
-        this._notificationContext?.peek("danger", {
+        this.#notificationContext?.peek("danger", {
           data: {
             headline: "Clear job queue",
             message: error.data.message,
@@ -110,7 +108,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
 
   initGetNumberOfPendingJobs() {
     let intervalId = setInterval(
-      () => this.getNumberOfPendingJobs(this._enterspeedContext!),
+      () => this.getNumberOfPendingJobs(this.#enterspeedContext!),
       10 * 1000
     );
     window.addEventListener(
@@ -127,17 +125,17 @@ export class enterspeedSeedModesElement extends UmbLitElement {
       .getNumberOfPendingJobs()
       .then((response) => {
         if (response.data?.isSuccess) {
-          this._numberOfPendingJobs =
+          this.#numberOfPendingJobs =
             response.data?.data?.numberOfPendingJobs ?? 0;
-          if (this._numberOfPendingJobs === 0) {
+          if (this.#numberOfPendingJobs === 0) {
             this.seedResponse = null;
           }
         } else {
-          this._numberOfPendingJobs = 0;
+          this.#numberOfPendingJobs = 0;
         }
       })
       .catch((error) => {
-        this._notificationContext?.peek("danger", {
+        this.#notificationContext?.peek("danger", {
           data: {
             headline: "Failed to check queue length",
             message: error.data.message,
@@ -163,7 +161,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
   renderFullSeed() {
     return html`<enterspeed-full-seed-mode
       .seedResponse=${this.seedResponse}
-      .numberOfPendingJobs=${this._numberOfPendingJobs}
+      .numberOfPendingJobs=${this.#numberOfPendingJobs}
       @seed-response=${(e: CustomEvent) => {
         this.seedResponse = e.detail;
         this.requestUpdate();
@@ -174,7 +172,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
   renderCustomSeed() {
     return html`<enterspeed-custom-seed-mode
       .seedResponse=${this.seedResponse}
-      .numberOfPendingJobs=${this._numberOfPendingJobs}
+      .numberOfPendingJobs=${this.#numberOfPendingJobs}
     ></enterspeed-custom-seed-mode>`;
   }
 
@@ -187,19 +185,11 @@ export class enterspeedSeedModesElement extends UmbLitElement {
   renderSeedButton() {
     if (this.disableSeedButton) {
       return html`<uui-button
-        disabled
+        .disabled=${this.disableSeedButton}
         type="button"
         look="primary"
         color="default"
         label="Seed"
-      ></uui-button>`;
-    } else {
-      return html`<uui-button
-        type="button"
-        look="primary"
-        color="default"
-        label="Seed"
-        @click="${async () => this.seed()}"
       ></uui-button>`;
     }
   }

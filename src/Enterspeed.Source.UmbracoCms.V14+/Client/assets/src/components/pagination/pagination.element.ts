@@ -8,10 +8,6 @@ import { html } from "lit/static-html.js";
 
 @customElement("enterspeed-pagination")
 export class enterspeedPaginationElement extends UmbLitElement {
-  constructor() {
-    super();
-  }
-
   @property({ type: Number })
   pageNumber!: number;
 

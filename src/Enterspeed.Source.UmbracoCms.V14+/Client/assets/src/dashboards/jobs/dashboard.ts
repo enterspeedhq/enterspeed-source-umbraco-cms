@@ -11,10 +11,6 @@ import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("enterspeed-dashboard")
 export class enterspeedDashboard extends UmbLitElement {
-  constructor() {
-    super();
-  }
-
   @property({ type: Array })
   tabs: tab[] = [
     {

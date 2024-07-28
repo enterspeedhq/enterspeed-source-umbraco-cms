@@ -17,35 +17,35 @@ import { JobIdsToDelete } from "../../generated";
 
 @customElement("enterspeed-failed-jobs")
 export class enterspeedFailedJobsElement extends UmbLitElement {
-  private _enterspeedContext!: EnterspeedContext;
+  #enterspeedContext!: EnterspeedContext;
 
   constructor() {
     super();
-    this._enterspeedContext = new EnterspeedContext(this);
-    this._allFailedJobs = [];
-    this._filteredFailedJobs = [];
-    this._selectedDeleteMode = "";
-    this._pagination.pageIndex = 0;
+    this.#enterspeedContext = new EnterspeedContext(this);
+    this.allFailedJobs = [];
+    this.filteredFailedJobs = [];
+    this.selectedDeleteMode = "";
+    this.pagination.pageIndex = 0;
     this.getFailedJobs();
   }
 
   @state()
-  private _deletingFailedJobs: boolean = false;
+  private deletingFailedJobs: boolean = false;
 
   @state()
-  private _loadingFailedJobs: boolean = true;
+  private loadingFailedJobs: boolean = true;
 
   @state()
-  private _allFailedJobs: EnterspeedFailedJob[];
+  private allFailedJobs: EnterspeedFailedJob[];
 
   @state()
-  private _filteredFailedJobs: EnterspeedFailedJob[];
+  private filteredFailedJobs: EnterspeedFailedJob[];
 
   @state()
-  private _activeException: number = -1;
+  private activeException: number = -1;
 
   @state()
-  private _deleteModes = [
+  private deleteModes = [
     <Option>{
       name: "Everything",
       value: "Everything",
@@ -54,18 +54,18 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   ];
 
   @state()
-  private _selectedDeleteMode = this._deleteModes[0].value;
+  private selectedDeleteMode = this.deleteModes[0].value;
 
   @state()
-  private _pagination = {
+  private pagination = {
     pageIndex: 0,
     pageNumber: 1,
     totalPages: 1,
     pageSize: 50,
   };
 
-  setDefaultDeleteModes() {
-    this._deleteModes = [
+  #setDefaultDeleteModes() {
+    this.deleteModes = [
       <Option>{
         name: "Everything",
         value: "Everything",
@@ -75,36 +75,35 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   }
 
   nextPage() {
-    this._pagination.pageIndex = this._pagination.pageIndex + 1;
+    this.pagination.pageIndex = this.pagination.pageIndex + 1;
     this.setFilteredJobs();
     this.requestUpdate();
   }
 
   prevPage() {
-    this._pagination.pageIndex = this._pagination.pageIndex - 1;
+    this.pagination.pageIndex = this.pagination.pageIndex - 1;
     this.setFilteredJobs();
     this.requestUpdate();
   }
 
   goToPage(pageNumber: number) {
-    this._pagination.pageIndex = pageNumber;
+    this.pagination.pageIndex = pageNumber;
     this.setFilteredJobs();
     this.requestUpdate();
   }
 
   async getFailedJobs(): Promise<void> {
-    this._allFailedJobs = [];
-    await this._enterspeedContext.getFailedJobs().then((response) => {
-      this._loadingFailedJobs = false;
+    this.allFailedJobs = [];
+    await this.#enterspeedContext.getFailedJobs().then((response) => {
+      this.loadingFailedJobs = false;
 
-      this._allFailedJobs =
-        (response.data?.data as EnterspeedFailedJob[]) ?? [];
+      this.allFailedJobs = (response.data?.data as EnterspeedFailedJob[]) ?? [];
 
-      this._pagination.totalPages = Math.ceil(
-        this._allFailedJobs.length / this._pagination.pageSize
+      this.pagination.totalPages = Math.ceil(
+        this.allFailedJobs.length / this.pagination.pageSize
       );
-      if (this._pagination.pageIndex === 0) {
-        this._pagination.pageIndex = 1;
+      if (this.pagination.pageIndex === 0) {
+        this.pagination.pageIndex = 1;
       }
 
       this.setFilteredJobs();
@@ -112,48 +111,48 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   }
 
   private setFilteredJobs() {
-    this._filteredFailedJobs = [];
+    this.filteredFailedJobs = [];
     this.requestUpdate();
-    const startIndex = this._pagination.pageIndex * this._pagination.pageSize;
-    const endIndex = startIndex + this._pagination.pageSize;
+    const startIndex = this.pagination.pageIndex * this.pagination.pageSize;
+    const endIndex = startIndex + this.pagination.pageSize;
 
-    this._filteredFailedJobs = this._allFailedJobs.slice(startIndex, endIndex);
+    this.filteredFailedJobs = this.allFailedJobs.slice(startIndex, endIndex);
     this.requestUpdate();
   }
 
   getSelectedFailedJobs() {
-    var selectedJobsToDelete = this._filteredFailedJobs.filter(
+    var selectedJobsToDelete = this.filteredFailedJobs.filter(
       (fj) => fj.selected === true
     );
     return selectedJobsToDelete;
   }
 
   toggleException(index: number) {
-    if (index === this._activeException) {
-      this._activeException = -1;
+    if (index === this.activeException) {
+      this.activeException = -1;
     } else {
-      this._activeException = index;
+      this.activeException = index;
     }
   }
 
-  setDeleteMode(deleteMode: string) {
+  #setDeleteMode(deleteMode: string) {
     if (deleteMode === "") {
-      this.setDefaultDeleteModes();
+      this.#setDefaultDeleteModes();
     } else {
-      this._deleteModes.filter((dm) => dm.value === deleteMode)[0].selected =
+      this.deleteModes.filter((dm) => dm.value === deleteMode)[0].selected =
         true;
     }
 
-    this._selectedDeleteMode = deleteMode;
+    this.selectedDeleteMode = deleteMode;
   }
 
   async deleteFailedJobs() {
     if (!confirm("Are you sure you want to delete the failed job(s)?")) {
       return;
     }
-    this._deletingFailedJobs = true;
+    this.deletingFailedJobs = true;
 
-    if (this._selectedDeleteMode === "Selected") {
+    if (this.selectedDeleteMode === "Selected") {
       let failedJobsToDelete = this.getSelectedFailedJobs();
 
       if (failedJobsToDelete.length) {
@@ -161,32 +160,32 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
           ids: failedJobsToDelete.map((fj) => fj.id),
         };
 
-        await this._enterspeedContext
+        await this.#enterspeedContext
           .deleteSelectedFailedJobs(idsToDelete)
           .then(async () => {
             await this.getFailedJobs();
           });
       }
     } else {
-      await this._enterspeedContext.deleteFailedJobs().then(async () => {
+      await this.#enterspeedContext.deleteFailedJobs().then(async () => {
         await this.getFailedJobs();
       });
     }
-    this.setDeleteMode("");
-    this._deletingFailedJobs = false;
+    this.#setDeleteMode("");
+    this.deletingFailedJobs = false;
   }
 
-  renderCellValues(failedJob: EnterspeedFailedJob, index: number) {
+  #renderCellValues(failedJob: EnterspeedFailedJob, index: number) {
     let selectedDeleteModeHtml;
     if (
-      this._selectedDeleteMode === "Everything" ||
-      this._selectedDeleteMode === ""
+      this.selectedDeleteMode === "Everything" ||
+      this.selectedDeleteMode === ""
     ) {
       selectedDeleteModeHtml = html`<div
         class="dashboard-list-item-property"
         style="width: 3%"
       >
-        ${index !== this._activeException
+        ${index !== this.activeException
           ? html`<uui-icon name="icon-navigation-right"></uui-icon>`
           : html`<uui-icon name="icon-navigation-down"></uui-icon>`}
       </div>`;
@@ -206,7 +205,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
     }
 
     let activeException;
-    if (index === this._activeException) {
+    if (index === this.activeException) {
       activeException = html`<div
         class="dashboard-list-item-exception"
         style="width: 100%"
@@ -251,11 +250,11 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
   }
 
   render() {
-    let jobCellsHtml = this._filteredFailedJobs?.map((job, index) => {
-      return this.renderCellValues(job, index);
+    let jobCellsHtml = this.filteredFailedJobs?.map((job, index) => {
+      return this.#renderCellValues(job, index);
     });
 
-    if (this._loadingFailedJobs) {
+    if (this.loadingFailedJobs) {
       return html`<uui-loader-bar></uui-loader-bar>`;
     } else {
       return html`
@@ -293,23 +292,23 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
               ${jobCellsHtml}
             </ul>
             <enterspeed-pagination
-              .pageNumber=${this._pagination.pageNumber}
-              .totalPages=${this._pagination.totalPages}
-              .pageIndex=${this._pagination.pageIndex}
+              .pageNumber=${this.pagination.pageNumber}
+              .totalPages=${this.pagination.totalPages}
+              .pageIndex=${this.pagination.pageIndex}
               @next-page=${() => this.nextPage()}
               @prev-page=${() => this.prevPage()}
               @go-to-page=${(e: CustomEvent) => this.goToPage(e.detail)}
             ></enterspeed-pagination>
 
-            ${this._allFailedJobs.length
+            ${this.allFailedJobs.length
               ? html` <div>
                   <div class="seed-dashboard-text block-form">
                     <h4>Delete failed jobs</h4>
                     <div class="umb-control-group">
                       <uui-select
-                        .options=${this._deleteModes}
+                        .options=${this.deleteModes}
                         @change=${(e: UUISelectEvent) =>
-                          this.setDeleteMode(e.target.value.toString())}
+                          this.#setDeleteMode(e.target.value.toString())}
                         placeholder="Select an option"
                       ></uui-select>
 
@@ -320,10 +319,10 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
                         label="Delete"
                         type="button"
                         @click=${() => this.deleteFailedJobs()}
-                        .disabled="${this._deletingFailedJobs ||
-                        this._selectedDeleteMode === ""}"
+                        .disabled="${this.deletingFailedJobs ||
+                        this.selectedDeleteMode === ""}"
                       >
-                        Delete ${this._selectedDeleteMode}
+                        Delete ${this.selectedDeleteMode}
                       </uui-button>
                     </div>
                   </div>

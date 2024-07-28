@@ -8,10 +8,6 @@ export class enterspeedSeedResponseELement extends UmbLitElement {
   @property({ type: Object })
   seedResponse: SeedResponse | undefined | null;
 
-  constructor() {
-    super();
-  }
-
   render() {
     if (this.seedResponse != null) {
       return html` <div class="seed-dashboard-response">

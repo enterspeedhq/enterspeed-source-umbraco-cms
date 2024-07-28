@@ -5,6 +5,7 @@ import {
   customElement,
   property,
   css,
+  state,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
@@ -24,7 +25,7 @@ export class enterspeedSeedElement extends UmbLitElement {
   @property({ type: Boolean })
   loadingConfiguration = false;
 
-  @property({ type: Boolean })
+  @state()
   disableSeedButton?: boolean;
 
   @property({ type: String })
@@ -39,14 +40,19 @@ export class enterspeedSeedElement extends UmbLitElement {
   @property({ type: Object })
   seedResponse: SeedResponse | undefined | null;
 
-  renderSeedModeSelects() {
+  #onSeedModeSelected(e: UUISelectEvent) {
+    if (e.target.value.toString() === "Custom") {
+      this.disableSeedButton = true;
+    }
+  }
+
+  #renderSeedModeSelects() {
     return html` <div class="seed-dashboard-text block-form">
       <h2>What to seed</h2>
       <div class="umb-control-group">
         <uui-select
           .options=${this.seedModes}
-          @change=${(e: UUISelectEvent) =>
-            (this.selectedSeedMode = e.target.value.toString())}
+          @change=${this.#onSeedModeSelected}
           label="Select seed mode"
           placeholder="Select an option"
         ></uui-select>
@@ -60,8 +66,9 @@ export class enterspeedSeedElement extends UmbLitElement {
         <uui-load-indicator ng-if="vm.loadingConfiguration">
         </uui-load-indicator>
         <enterspeed-server-message> </enterspeed-server-message>
-        ${this.renderSeedModeSelects()}
+        ${this.#renderSeedModeSelects()}
         <enterspeed-seed-modes
+          .disableSeedButton=${this.disableSeedButton}
           .selectedSeedMode=${this.selectedSeedMode}
           .seedResponse=${this.seedResponse}
         ></enterspeed-seed-modes>

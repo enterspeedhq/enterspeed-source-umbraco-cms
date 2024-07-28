@@ -32,7 +32,7 @@ export default class EnterspeedNodePickerModal
   data?: MyModalData;
 
   @state()
-  private _selectionConfiguration: UmbTreeSelectionConfiguration = {
+  private selectionConfiguration: UmbTreeSelectionConfiguration = {
     multiple: false,
     selectable: true,
     selection: [],
@@ -41,11 +41,11 @@ export default class EnterspeedNodePickerModal
   @state()
   private includeDescendants: boolean;
 
-  private _handleCancel() {
+  #handleCancel() {
     this.modalContext?.submit();
   }
 
-  private _handleSubmit() {
+  #handleSubmit() {
     this.modalContext?.updateValue({ treeAlias: this.data?.treeAlias });
     this.modalContext?.submit();
   }
@@ -96,7 +96,7 @@ export default class EnterspeedNodePickerModal
             alias=${this.data?.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS}
             .props=${{
               hideTreeItemActions: true,
-              selectionConfiguration: this._selectionConfiguration,
+              selectionConfiguration: this.selectionConfiguration,
             }}
             @selection-change=${this.#onTreeSelectionChange}
             @selected=${this.#onSelected}
@@ -105,13 +105,13 @@ export default class EnterspeedNodePickerModal
         </uui-box>
 
         <div slot="actions">
-          <uui-button look="secondary" @click=${this._handleCancel}
+          <uui-button look="secondary" @click=${this.#handleCancel}
             >Cancel</uui-button
           >
           <uui-button
             look="primary"
             color="positive"
-            @click=${this._handleSubmit}
+            @click=${this.#handleSubmit}
             >Submit</uui-button
           >
         </div>
