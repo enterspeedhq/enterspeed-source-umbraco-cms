@@ -41,8 +41,11 @@ export class enterspeedSeedElement extends UmbLitElement {
   seedResponse: SeedResponse | undefined | null;
 
   #onSeedModeSelected(e: UUISelectEvent) {
-    if (e.target.value.toString() === "Custom") {
+    this.disableSeedButton = false;
+
+    if (e.target.value.toString() === this.seedModes[1].value) {
       this.disableSeedButton = true;
+      this.selectedSeedMode = this.seedModes[1].value;
     }
   }
 

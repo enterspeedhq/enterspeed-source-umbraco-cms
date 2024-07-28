@@ -108,7 +108,7 @@ export class enterspeedSeedModesElement extends UmbLitElement {
 
   initGetNumberOfPendingJobs() {
     let intervalId = setInterval(
-      () => this.getNumberOfPendingJobs(this.#enterspeedContext!),
+      () => this.getNumberOfPendingJobs(),
       10 * 1000
     );
     window.addEventListener(
@@ -120,8 +120,8 @@ export class enterspeedSeedModesElement extends UmbLitElement {
     );
   }
 
-  getNumberOfPendingJobs(enterspeedContext: EnterspeedContext) {
-    enterspeedContext
+  getNumberOfPendingJobs() {
+    this.#enterspeedContext
       .getNumberOfPendingJobs()
       .then((response) => {
         if (response.data?.isSuccess) {
