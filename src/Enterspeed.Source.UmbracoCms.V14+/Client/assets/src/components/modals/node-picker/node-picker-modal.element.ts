@@ -9,27 +9,36 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
-import type { MyModalData, MyModalValue } from "./node-picker-modal.token";
+import type {
+  NodePickerData,
+  NodePickerValue,
+  SeedNode,
+} from "./node-picker-modal.token";
 import { UmbModalExtensionElement } from "@umbraco-cms/backoffice/extension-registry";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
-import { UmbTreeSelectionConfiguration } from "@umbraco-cms/backoffice/tree";
+import {
+  UmbTreeElement,
+  UmbTreeSelectionConfiguration,
+} from "@umbraco-cms/backoffice/tree";
 import {
   UmbDeselectedEvent,
   UmbSelectedEvent,
-  UmbSelectionChangeEvent,
 } from "@umbraco-cms/backoffice/event";
 import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
 
 @customElement("enterspeed-node-picker-modal")
 export default class EnterspeedNodePickerModal
   extends UmbElementMixin(LitElement)
-  implements UmbModalExtensionElement<MyModalData, MyModalValue>
+  implements UmbModalExtensionElement<NodePickerData, NodePickerValue>
 {
   @property({ attribute: false })
-  modalContext?: UmbModalContext<MyModalData, MyModalValue>;
+  modalContext?: UmbModalContext<NodePickerData, NodePickerValue>;
 
   @property({ attribute: false })
-  data?: MyModalData;
+  nodePickerData?: NodePickerData;
+
+  @property({ attribute: false })
+  nodePickerValue?: NodePickerValue;
 
   @state()
   private selectionConfiguration: UmbTreeSelectionConfiguration = {
@@ -46,15 +55,17 @@ export default class EnterspeedNodePickerModal
   }
 
   #handleSubmit() {
-    this.modalContext?.updateValue({ treeAlias: this.data?.treeAlias });
+    this.modalContext?.updateValue({
+      treeAlias: "this.nodePickerData?.treeAlias,"
+    });
+    console.log("submitting");
     this.modalContext?.submit();
   }
 
-  #onTreeSelectionChange(event: UmbSelectionChangeEvent) {
-    event.stopPropagation();
-  }
-
   #onSelected(event: UmbSelectedEvent) {
+    console.log(event);
+    const element = event.target as UmbTreeElement;
+    
     event.stopPropagation();
   }
 
@@ -72,7 +83,7 @@ export default class EnterspeedNodePickerModal
 
   render() {
     return html`
-      <umb-body-layout headline=${ifDefined(this.data?.headline)}>
+      <umb-body-layout headline=${ifDefined(this.nodePickerData?.headline)}>
         <uui-box>
           <umb-property-layout
             label="Include all content nodes"
@@ -93,12 +104,11 @@ export default class EnterspeedNodePickerModal
             </div>
           </umb-property-layout>
           <umb-tree
-            alias=${this.data?.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS}
+            alias=${this.nodePickerData?.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS}
             .props=${{
               hideTreeItemActions: true,
               selectionConfiguration: this.selectionConfiguration,
             }}
-            @selection-change=${this.#onTreeSelectionChange}
             @selected=${this.#onSelected}
 						@deselected=${this.#onDeselected}></umb-tree>
           </umb-tree>

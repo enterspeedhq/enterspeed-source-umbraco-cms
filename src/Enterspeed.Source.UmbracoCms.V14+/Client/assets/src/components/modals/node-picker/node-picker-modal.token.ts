@@ -1,18 +1,18 @@
 import { UmbModalToken } from "@umbraco-cms/backoffice/modal";
 
-export type MyModalData = {
+export type NodePickerData = {
   treeAlias: string;
   headline: string;
 };
 
-export type MyModalValue = {
+export type NodePickerValue = {
   seedNodes: Array<SeedNode>;
   treeAlias: string;
 };
 
 export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<
-  MyModalData,
-  MyModalValue
+  NodePickerData,
+  NodePickerValue
 >("Enterspeed.NodePicker.Modal", {
   modal: {
     type: "sidebar",

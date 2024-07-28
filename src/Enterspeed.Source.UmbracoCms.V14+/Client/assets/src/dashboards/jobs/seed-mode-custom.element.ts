@@ -57,30 +57,57 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
         <div class="custom-seed-content-type-container">
           <div class="custom-seed-content-type-box">
             <h5>Content</h5>
+            <uui-ref-list>
+              <uui-ref-node name="test" detail="details">
+                <uui-action-bar slot="actions">
+                  <uui-button
+                    label=${this.localize.term("general_remove")}
+                  ></uui-button>
+                </uui-action-bar>
+              </uui-ref-node>
+            </uui-ref-list>
             <uui-button
               look="placeholder"
               label="Choose"
               class="full-width-btn"
-              @click=${() => this._openNodePickerModal(UMB_DOCUMENT_TREE_ALIAS)}
+              @click=${() => this.openNodePickerModal(UMB_DOCUMENT_TREE_ALIAS)}
             ></uui-button>
           </div>
           <div class="custom-seed-content-type-box">
             <h5>Media</h5>
+            <uui-ref-list>
+              <uui-ref-node name="test" detail="details">
+                <uui-action-bar slot="actions">
+                  <uui-button
+                    label=${this.localize.term("general_remove")}
+                  ></uui-button>
+                </uui-action-bar>
+              </uui-ref-node>
+            </uui-ref-list>
             <uui-button
               look="placeholder"
               label="Choose"
               class="full-width-btn"
-              @click=${() => this._openNodePickerModal(UMB_MEDIA_TREE_ALIAS)}
+              @click=${() => this.openNodePickerModal(UMB_MEDIA_TREE_ALIAS)}
             ></uui-button>
           </div>
           <div class="custom-seed-content-type-box">
             <h5>Dictionary</h5>
+            <uui-ref-list>
+              <uui-ref-node name="test" detail="details">
+                <uui-action-bar slot="actions">
+                  <uui-button
+                    label=${this.localize.term("general_remove")}
+                  ></uui-button>
+                </uui-action-bar>
+              </uui-ref-node>
+            </uui-ref-list>
             <uui-button
               look="placeholder"
               label="Choose"
               class="full-width-btn"
-              @click=${() =>
-                this._openNodePickerModal(UMB_DICTIONARY_TREE_ALIAS)}
+              @click=${async () =>
+                await this.openNodePickerModal(UMB_DICTIONARY_TREE_ALIAS)}
             ></uui-button>
           </div>
         </div>
@@ -88,7 +115,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     `;
   }
 
-  private _openNodePickerModal(treeAlias: string) {
+  async openNodePickerModal(treeAlias: string) {
     let headline = "";
 
     switch (treeAlias) {
@@ -102,11 +129,18 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
         headline = "Select media node";
     }
 
-    this.#modalManagerContext?.open(this, ENTERSPEED_NODEPICKER_MODAL_TOKEN, {
-      data: {
-        treeAlias: treeAlias,
-        headline: headline,
-      },
+    var modal = this.#modalManagerContext?.open(
+      this,
+      ENTERSPEED_NODEPICKER_MODAL_TOKEN,
+      {
+        data: {
+          treeAlias: treeAlias,
+          headline: headline,
+        },
+      }
+    );
+
+    await modal?.onSubmit().then((data) => {
     });
   }
 
