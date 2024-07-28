@@ -1,80 +1,44 @@
 import "./seed-modes.element.ts";
 import "../shared/server-message.element.ts";
+import "./seed-buttons.element.ts";
+import "./seed-mode-select.element.ts";
 import {
   html,
   customElement,
-  property,
   css,
   state,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
-import { SeedResponse } from "../../generated/index.ts";
 
 @customElement("enterspeed-seed")
-export class enterspeedSeedElement extends UmbLitElement {
-  constructor() {
-    super();
-  }
-  @property({ type: Boolean })
-  runJobsOnServer = false;
-
-  @property({ type: String })
-  serverRole = "";
-
-  @property({ type: Boolean })
-  loadingConfiguration = false;
-
+export class seedElement extends UmbLitElement {
   @state()
   disableSeedButton?: boolean;
 
-  @property({ type: String })
-  selectedSeedMode = "Everything";
+  @state()
+  selectedSeedMode?: string;
 
-  @property({ attribute: false })
-  seedModes: Array<Option> = [
-    { name: "Seed mode: Everything", value: "Everything", selected: true },
-    { name: "Seed mode: Custom", value: "Custom" },
-  ];
-
-  @property({ type: Object })
-  seedResponse: SeedResponse | undefined | null;
-
-  #onSeedModeSelected(e: UUISelectEvent) {
-    this.disableSeedButton = false;
-
-    if (e.target.value.toString() === this.seedModes[1].value) {
-      this.disableSeedButton = true;
-      this.selectedSeedMode = this.seedModes[1].value;
-    }
-  }
-
-  #renderSeedModeSelects() {
-    return html` <div class="seed-dashboard-text block-form">
-      <h2>What to seed</h2>
-      <div class="umb-control-group">
-        <uui-select
-          .options=${this.seedModes}
-          @change=${this.#onSeedModeSelected}
-          label="Select seed mode"
-          placeholder="Select an option"
-        ></uui-select>
-      </div>
-    </div>`;
+  #onSeedModeUpdated(e: CustomEvent) {
+    console.log(e.detail);
+    this.selectedSeedMode = e.detail.toString();
   }
 
   render() {
     return html`
       <div class="seed-dashboard">
-        <uui-load-indicator ng-if="vm.loadingConfiguration">
-        </uui-load-indicator>
+        <uui-load-indicator
+          ng-if="vm.loadingConfiguration"
+        ></uui-load-indicator>
         <enterspeed-server-message> </enterspeed-server-message>
-        ${this.#renderSeedModeSelects()}
-        <enterspeed-seed-modes
+        <enterspeed-seed-mode-select
           .disableSeedButton=${this.disableSeedButton}
+          @updated=${(e: CustomEvent) => this.#onSeedModeUpdated(e)}
+        ></enterspeed-seed-mode-select>
+        <enterspeed-seed-modes
           .selectedSeedMode=${this.selectedSeedMode}
-          .seedResponse=${this.seedResponse}
         ></enterspeed-seed-modes>
+        <enterspeed-seed-buttons .disableSeedButton=${this.disableSeedButton}>
+        </enterspeed-seed-buttons>
       </div>
     `;
   }
@@ -87,10 +51,10 @@ export class enterspeedSeedElement extends UmbLitElement {
   `;
 }
 
-export default enterspeedSeedElement;
+export default seedElement;
 
 declare global {
   interface HtmlElementTagNameMap {
-    "enterspeed-seed": enterspeedSeedElement;
+    "enterspeed-seed": seedElement;
   }
 }
