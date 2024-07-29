@@ -9,11 +9,14 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
-import { NodePickerData, NodePickerValue } from "./node-picker-modal.token";
+import {
+  NodePickerData,
+  NodePickerValue,
+  EnterspeedUniqueItemModelImpl,
+} from "./node-picker-modal.token";
 import { UmbModalExtensionElement } from "@umbraco-cms/backoffice/extension-registry";
 import {
   UMB_DOCUMENT_TREE_ALIAS,
-  UmbDocumentItemModel,
   UmbDocumentItemRepository,
 } from "@umbraco-cms/backoffice/document";
 import {
@@ -27,12 +30,10 @@ import {
 import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
 import {
   UMB_MEDIA_TREE_ALIAS,
-  UmbMediaItemModel,
   UmbMediaItemRepository,
 } from "@umbraco-cms/backoffice/media";
 import {
   UMB_DICTIONARY_TREE_ALIAS,
-  UmbDictionaryItemModel,
   UmbDictionaryItemRepository,
 } from "@umbraco-cms/backoffice/dictionary";
 
@@ -60,7 +61,7 @@ export default class EnterspeedNodePickerModal
 
   constructor() {
     super();
-    this.#nodePickerValue =  new NodePickerValue();;
+    this.#nodePickerValue = new NodePickerValue();
   }
 
   #handleCancel() {
@@ -68,6 +69,10 @@ export default class EnterspeedNodePickerModal
   }
 
   #handleSubmit() {
+    console.log(this.modalContext?.data.treeAlias);
+    if (this.#nodePickerValue != null && this.modalContext?.data.treeAlias != null) {
+      this.#nodePickerValue.treeAlias = this.modalContext?.data.treeAlias;
+    }
     if (this.#nodePickerValue != null) {
       this.modalContext?.setValue(this.#nodePickerValue);
     }
@@ -90,7 +95,6 @@ export default class EnterspeedNodePickerModal
         await this.#handleDictionaryNodes(selection);
       }
     }
-
     event.stopPropagation();
   }
 
@@ -99,7 +103,8 @@ export default class EnterspeedNodePickerModal
     if (nodes != null) {
       for (let node of nodes) {
         if (node != null) {
-          this.#nodePickerValue?.documentNodes?.push(node);
+          let casted = new EnterspeedUniqueItemModelImpl(false, node.unique, node.name);
+          this.#nodePickerValue?.documentNodes?.push(casted);
         }
       }
     }
@@ -110,7 +115,8 @@ export default class EnterspeedNodePickerModal
     if (nodes != null) {
       for (let node of nodes) {
         if (node != null) {
-          this.#nodePickerValue?.mediaNodes?.push(node);
+          let casted = new EnterspeedUniqueItemModelImpl(false, node.unique, node.name);
+          this.#nodePickerValue?.mediaNodes?.push(casted);
         }
       }
     }
@@ -121,7 +127,8 @@ export default class EnterspeedNodePickerModal
     if (nodes != null) {
       for (let node of nodes) {
         if (node != null) {
-          this.#nodePickerValue?.dictionaryNodes?.push(node);
+          let casted = new EnterspeedUniqueItemModelImpl(false, node.unique, node.name);
+          this.#nodePickerValue?.dictionaryNodes?.push(casted);
         }
       }
     }

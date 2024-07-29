@@ -1,7 +1,5 @@
-import { UmbDictionaryItemModel } from "@umbraco-cms/backoffice/dictionary";
-import { UmbDocumentItemModel } from "@umbraco-cms/backoffice/document";
-import { UmbMediaItemModel } from "@umbraco-cms/backoffice/media";
 import { UmbModalToken } from "@umbraco-cms/backoffice/modal";
+import { UmbUniqueItemModel } from "@umbraco-cms/backoffice/models";
 
 export type NodePickerData = {
   treeAlias: string;
@@ -9,11 +7,13 @@ export type NodePickerData = {
 };
 
 export class NodePickerValue {
-  documentNodes: Array<UmbDocumentItemModel> = new Array<UmbDocumentItemModel>();
-  mediaNodes: Array<UmbMediaItemModel> = new Array<UmbMediaItemModel>();
-  dictionaryNodes: Array<UmbDictionaryItemModel> = new Array<UmbDictionaryItemModel>();
+  documentNodes: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
+  mediaNodes: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
+  dictionaryNodes: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
   treeAlias: string = "";
-  includeDescendants: boolean = false;
 }
 
 export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<
@@ -25,3 +25,21 @@ export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<
     size: "small",
   },
 });
+
+export class EnterspeedUniqueItemModelImpl
+  implements EnterspeedUniqueItemModel
+{
+  constructor(includeDescendants: boolean, unique: string, name: string) {
+    this.includeDescendants = includeDescendants;
+    this.unique = unique;
+    this.name = name;
+  }
+
+  includeDescendants: boolean;
+  unique: string;
+  name: string;
+  icon?: string | undefined;
+}
+export interface EnterspeedUniqueItemModel extends UmbUniqueItemModel {
+  includeDescendants: boolean;
+}

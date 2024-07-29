@@ -2,15 +2,32 @@ import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { SeedResponse } from "../../generated";
-import { ENTERSPEED_NODEPICKER_MODAL_TOKEN } from "../../components/modals/node-picker/node-picker-modal.token";
+import {
+  ENTERSPEED_NODEPICKER_MODAL_TOKEN,
+  EnterspeedUniqueItemModel,
+} from "../../components/modals/node-picker/node-picker-modal.token";
 import { UMB_MODAL_MANAGER_CONTEXT } from "@umbraco-cms/backoffice/modal";
 import { UMB_DICTIONARY_TREE_ALIAS } from "@umbraco-cms/backoffice/dictionary";
 import { UMB_MEDIA_TREE_ALIAS } from "@umbraco-cms/backoffice/media";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
+import { repeat } from "lit/directives/repeat.js";
 
 @customElement("enterspeed-seed-mode-custom")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
+
+  @state()
+  documentNodes: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
+  @state()
+  mediaNodes: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
+  @state()
+  dictionaryNodes: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
+
+  @state()
+  disableSeedButton?: boolean;
 
   @property({ type: Array })
   selectedContentIds!: string[];
@@ -20,9 +37,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
 
   @property({ type: Array })
   selectedDictionaryIds!: string[];
-
-  @state()
-  disableSeedButton?: boolean;
 
   @property({ type: Number })
   numberOfPendingJobs = 0;
@@ -35,6 +49,8 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
       this.#modalManagerContext = instance;
     });
+
+    this.documentNodes = new Array<EnterspeedUniqueItemModel>();
   }
 
   render() {
@@ -58,13 +74,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           <div class="custom-seed-content-type-box">
             <h5>Content</h5>
             <uui-ref-list>
-              <uui-ref-node name="test" detail="details">
-                <uui-action-bar slot="actions">
-                  <uui-button
-                    label=${this.localize.term("general_remove")}
-                  ></uui-button>
-                </uui-action-bar>
-              </uui-ref-node>
+              ${this.documentNodes != null ? this.#renderDocumentNodes() : ""}
             </uui-ref-list>
             <uui-button
               look="placeholder"
@@ -140,10 +150,80 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     );
 
     await modal?.onSubmit().then((data) => {
-      console.log(data.documentNodes)
-      console.log(data.mediaNodes)
-      console.log(data.dictionaryNodes)
+      console.log(data.treeAlias);
+      switch (data.treeAlias) {
+        case UMB_DOCUMENT_TREE_ALIAS:
+          for (let index = 0; index < data.documentNodes.length; index++) {
+            const documentNode = data.documentNodes[index];
+            let existingIndex = this.documentNodes.findIndex(
+              (e) => e.unique == documentNode.unique
+            );
+
+            if (existingIndex > 0) {
+              this.documentNodes.splice(existingIndex, 1);
+            }
+            this.documentNodes.push(documentNode);
+            super.requestUpdate("documentNodes");
+
+            console.log(this.documentNodes[0].name);
+          }
+          break;
+        case UMB_DICTIONARY_TREE_ALIAS:
+          for (let index = 0; index < data.dictionaryNodes.length; index++) {
+            const dictionaryNode = data.dictionaryNodes[index];
+            let existingIndex = this.dictionaryNodes.findIndex(
+              (e) => e.unique == dictionaryNode.unique
+            );
+
+            if (existingIndex > 0) {
+              this.dictionaryNodes.splice(existingIndex, 1);
+            }
+
+            this.dictionaryNodes.push(dictionaryNode);
+          }
+          break;
+        case UMB_MEDIA_TREE_ALIAS:
+          for (let index = 0; index < data.mediaNodes.length; index++) {
+            const mediaNode = data.mediaNodes[index];
+            let existingIndex = this.mediaNodes.findIndex(
+              (e) => e.unique == mediaNode.unique
+            );
+
+            if (existingIndex > 0) {
+              this.mediaNodes.splice(existingIndex, 1);
+            }
+
+            this.mediaNodes.push(mediaNode);
+          }
+          break;
+      }
     });
+  }
+
+  #renderDocumentNodes() {
+    if (!this.documentNodes) return;
+    return html`
+      <uui-ref-list>
+        ${repeat(
+          this.documentNodes,
+          (item) => item.unique,
+          (item) => this.#renderItem(item)
+        )}
+      </uui-ref-list>
+    `;
+  }
+
+  #renderItem(item: EnterspeedUniqueItemModel) {
+    if (!item.unique) return;
+    return html`
+      <uui-ref-node name=${item.name} id=${item.unique}>
+        <uui-action-bar slot="actions">
+          <uui-button
+            label=${this.localize.term("general_remove")}
+          ></uui-button>
+        </uui-action-bar>
+      </uui-ref-node>
+    `;
   }
 
   static styles = css`
