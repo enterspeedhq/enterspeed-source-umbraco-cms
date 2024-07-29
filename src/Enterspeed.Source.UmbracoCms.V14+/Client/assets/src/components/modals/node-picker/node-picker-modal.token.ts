@@ -1,3 +1,6 @@
+import { UmbDictionaryItemModel } from "@umbraco-cms/backoffice/dictionary";
+import { UmbDocumentItemModel } from "@umbraco-cms/backoffice/document";
+import { UmbMediaItemModel } from "@umbraco-cms/backoffice/media";
 import { UmbModalToken } from "@umbraco-cms/backoffice/modal";
 
 export type NodePickerData = {
@@ -5,10 +8,12 @@ export type NodePickerData = {
   headline: string;
 };
 
-export type NodePickerValue = {
-  seedNodes: Array<SeedNode>;
-  treeAlias: string;
-};
+export class NodePickerValue {
+  documentNodes: Array<UmbDocumentItemModel> | undefined;
+  mediaNodes: Array<UmbMediaItemModel> | undefined;
+  dictionaryNodes: Array<UmbDictionaryItemModel> | undefined;
+  treeAlias: string | undefined;
+}
 
 export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<
   NodePickerData,
@@ -19,8 +24,3 @@ export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<
     size: "small",
   },
 });
-
-export type SeedNode = {
-  id: string;
-  Descendentants: boolean;
-};

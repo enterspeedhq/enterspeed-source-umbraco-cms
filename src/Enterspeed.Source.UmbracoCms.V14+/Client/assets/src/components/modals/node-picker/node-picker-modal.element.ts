@@ -9,13 +9,13 @@ import {
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
-import type {
-  NodePickerData,
-  NodePickerValue,
-  SeedNode,
-} from "./node-picker-modal.token";
+import { NodePickerData, NodePickerValue } from "./node-picker-modal.token";
 import { UmbModalExtensionElement } from "@umbraco-cms/backoffice/extension-registry";
-import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
+import {
+  UMB_DOCUMENT_TREE_ALIAS,
+  UmbDocumentItemModel,
+  UmbDocumentItemRepository,
+} from "@umbraco-cms/backoffice/document";
 import {
   UmbTreeElement,
   UmbTreeSelectionConfiguration,
@@ -25,19 +25,32 @@ import {
   UmbSelectedEvent,
 } from "@umbraco-cms/backoffice/event";
 import { UUIBooleanInputEvent } from "@umbraco-cms/backoffice/external/uui";
+import {
+  UMB_MEDIA_TREE_ALIAS,
+  UmbMediaItemModel,
+  UmbMediaItemRepository,
+} from "@umbraco-cms/backoffice/media";
+import {
+  UMB_DICTIONARY_TREE_ALIAS,
+  UmbDictionaryItemModel,
+  UmbDictionaryItemRepository,
+} from "@umbraco-cms/backoffice/dictionary";
 
 @customElement("enterspeed-node-picker-modal")
 export default class EnterspeedNodePickerModal
   extends UmbElementMixin(LitElement)
   implements UmbModalExtensionElement<NodePickerData, NodePickerValue>
 {
+  #documentRepository = new UmbDocumentItemRepository(this);
+  #mediaItemRepository = new UmbMediaItemRepository(this);
+  #dictionaryRepository = new UmbDictionaryItemRepository(this);
+
   @property({ attribute: false })
   modalContext?: UmbModalContext<NodePickerData, NodePickerValue>;
 
   @property({ attribute: false })
   nodePickerData?: NodePickerData;
 
-  @property({ attribute: false })
   nodePickerValue?: NodePickerValue;
 
   @state()
@@ -47,26 +60,79 @@ export default class EnterspeedNodePickerModal
     selection: [],
   };
 
-  @state()
-  private includeDescendants: boolean;
+  constructor() {
+    super();
+
+    let nodePickerValue = new NodePickerValue();
+    nodePickerValue.dictionaryNodes = new Array<UmbDictionaryItemModel>();
+    nodePickerValue.documentNodes = new Array<UmbDocumentItemModel>();
+    nodePickerValue.mediaNodes = new Array<UmbMediaItemModel>();
+
+    this.nodePickerValue = nodePickerValue;
+  }
 
   #handleCancel() {
     this.modalContext?.submit();
   }
 
   #handleSubmit() {
-    this.modalContext?.updateValue({
-      treeAlias: "this.nodePickerData?.treeAlias,"
-    });
-    console.log("submitting");
+    if (this.nodePickerValue != null) {
+      this.modalContext?.setValue(this.nodePickerValue);
+    }
+
     this.modalContext?.submit();
   }
 
-  #onSelected(event: UmbSelectedEvent) {
-    console.log(event);
-    const element = event.target as UmbTreeElement;
-    
+  async #onSelected(event: UmbSelectedEvent) {
+    const treeElement = event.target as UmbTreeElement;
+
+    let selection = treeElement.getSelection();
+    if (selection.length) {
+      if (this.modalContext?.data.treeAlias === UMB_DOCUMENT_TREE_ALIAS) {
+        await this.#handleDocumentNodes(selection);
+      } else if (this.modalContext?.data.treeAlias === UMB_MEDIA_TREE_ALIAS) {
+        await this.#handleMediaNodes(selection);
+      } else if (
+        this.modalContext?.data.treeAlias === UMB_DICTIONARY_TREE_ALIAS
+      ) {
+        await this.#handleDictionaryNodes(selection);
+      }
+    }
+
     event.stopPropagation();
+  }
+
+  async #handleDocumentNodes(selection: string[]) {
+    let nodes = (await this.#documentRepository.requestItems(selection)).data;
+    if (nodes != null) {
+      for (let node of nodes) {
+        if (node != null) {
+          this.nodePickerValue?.documentNodes?.push(node);
+        }
+      }
+    }
+  }
+
+  async #handleMediaNodes(selection: string[]) {
+    let nodes = (await this.#mediaItemRepository.requestItems(selection)).data;
+    if (nodes != null) {
+      for (let node of nodes) {
+        if (node != null) {
+          this.nodePickerValue?.mediaNodes?.push(node);
+        }
+      }
+    }
+  }
+
+  async #handleDictionaryNodes(selection: string[]) {
+    let nodes = (await this.#dictionaryRepository.requestItems(selection)).data;
+    if (nodes != null) {
+      for (let node of nodes) {
+        if (node != null) {
+          this.nodePickerValue?.dictionaryNodes?.push(node);
+        }
+      }
+    }
   }
 
   #onDeselected(event: UmbDeselectedEvent) {
@@ -104,7 +170,9 @@ export default class EnterspeedNodePickerModal
             </div>
           </umb-property-layout>
           <umb-tree
-            alias=${this.nodePickerData?.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS}
+            alias=${
+              this.modalContext?.data.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS
+            }
             .props=${{
               hideTreeItemActions: true,
               selectionConfiguration: this.selectionConfiguration,

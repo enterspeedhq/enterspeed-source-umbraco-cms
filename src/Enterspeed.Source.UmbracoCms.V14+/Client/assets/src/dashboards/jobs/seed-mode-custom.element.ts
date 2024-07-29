@@ -117,7 +117,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
 
   async openNodePickerModal(treeAlias: string) {
     let headline = "";
-
     switch (treeAlias) {
       case UMB_DICTIONARY_TREE_ALIAS:
         headline = "Select dictionary node";
@@ -141,6 +140,9 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     );
 
     await modal?.onSubmit().then((data) => {
+      console.log(data.documentNodes)
+      console.log(data.mediaNodes)
+      console.log(data.dictionaryNodes)
     });
   }
 
