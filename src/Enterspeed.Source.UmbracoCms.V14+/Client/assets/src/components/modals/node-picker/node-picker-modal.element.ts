@@ -160,7 +160,6 @@ export default class EnterspeedNodePickerModal
           this.#nodePickerValue.documentNodes?.filter(
             (node) => event.unique != node.unique
           );
-        console.log("filter happened");
       } else if (this.modalContext.data.treeAlias === UMB_MEDIA_TREE_ALIAS) {
         this.#nodePickerValue.mediaNodes =
           this.#nodePickerValue.mediaNodes?.filter(
@@ -176,7 +175,6 @@ export default class EnterspeedNodePickerModal
       }
     }
 
-    console.log(this.#nodePickerValue.documentNodes);
     event.stopPropagation();
   }
 
