@@ -9,10 +9,11 @@ export type NodePickerData = {
 };
 
 export class NodePickerValue {
-  documentNodes: Array<UmbDocumentItemModel> | undefined;
-  mediaNodes: Array<UmbMediaItemModel> | undefined;
-  dictionaryNodes: Array<UmbDictionaryItemModel> | undefined;
-  treeAlias: string | undefined;
+  documentNodes: Array<UmbDocumentItemModel> = new Array<UmbDocumentItemModel>();
+  mediaNodes: Array<UmbMediaItemModel> = new Array<UmbMediaItemModel>();
+  dictionaryNodes: Array<UmbDictionaryItemModel> = new Array<UmbDictionaryItemModel>();
+  treeAlias: string = "";
+  includeDescendants: boolean = false;
 }
 
 export const ENTERSPEED_NODEPICKER_MODAL_TOKEN = new UmbModalToken<

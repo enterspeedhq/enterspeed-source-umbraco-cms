@@ -48,10 +48,8 @@ export default class EnterspeedNodePickerModal
   @property({ attribute: false })
   modalContext?: UmbModalContext<NodePickerData, NodePickerValue>;
 
-  @property({ attribute: false })
-  nodePickerData?: NodePickerData;
-
-  nodePickerValue?: NodePickerValue;
+  #nodePickerData?: NodePickerData;
+  #nodePickerValue?: NodePickerValue;
 
   @state()
   private selectionConfiguration: UmbTreeSelectionConfiguration = {
@@ -62,13 +60,7 @@ export default class EnterspeedNodePickerModal
 
   constructor() {
     super();
-
-    let nodePickerValue = new NodePickerValue();
-    nodePickerValue.dictionaryNodes = new Array<UmbDictionaryItemModel>();
-    nodePickerValue.documentNodes = new Array<UmbDocumentItemModel>();
-    nodePickerValue.mediaNodes = new Array<UmbMediaItemModel>();
-
-    this.nodePickerValue = nodePickerValue;
+    this.#nodePickerValue =  new NodePickerValue();;
   }
 
   #handleCancel() {
@@ -76,8 +68,8 @@ export default class EnterspeedNodePickerModal
   }
 
   #handleSubmit() {
-    if (this.nodePickerValue != null) {
-      this.modalContext?.setValue(this.nodePickerValue);
+    if (this.#nodePickerValue != null) {
+      this.modalContext?.setValue(this.#nodePickerValue);
     }
 
     this.modalContext?.submit();
@@ -107,7 +99,7 @@ export default class EnterspeedNodePickerModal
     if (nodes != null) {
       for (let node of nodes) {
         if (node != null) {
-          this.nodePickerValue?.documentNodes?.push(node);
+          this.#nodePickerValue?.documentNodes?.push(node);
         }
       }
     }
@@ -118,7 +110,7 @@ export default class EnterspeedNodePickerModal
     if (nodes != null) {
       for (let node of nodes) {
         if (node != null) {
-          this.nodePickerValue?.mediaNodes?.push(node);
+          this.#nodePickerValue?.mediaNodes?.push(node);
         }
       }
     }
@@ -129,7 +121,7 @@ export default class EnterspeedNodePickerModal
     if (nodes != null) {
       for (let node of nodes) {
         if (node != null) {
-          this.nodePickerValue?.dictionaryNodes?.push(node);
+          this.#nodePickerValue?.dictionaryNodes?.push(node);
         }
       }
     }
@@ -149,7 +141,7 @@ export default class EnterspeedNodePickerModal
 
   render() {
     return html`
-      <umb-body-layout headline=${ifDefined(this.nodePickerData?.headline)}>
+      <umb-body-layout headline=${ifDefined(this.#nodePickerData?.headline)}>
         <uui-box>
           <umb-property-layout
             label="Include all content nodes"
