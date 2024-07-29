@@ -51,6 +51,7 @@ export default class EnterspeedNodePickerModal
 
   #nodePickerData?: NodePickerData;
   #nodePickerValue?: NodePickerValue;
+  #includeDescendants: boolean = false;
 
   @state()
   private selectionConfiguration: UmbTreeSelectionConfiguration = {
@@ -62,88 +63,6 @@ export default class EnterspeedNodePickerModal
   constructor() {
     super();
     this.#nodePickerValue = new NodePickerValue();
-  }
-
-  #handleCancel() {
-    this.modalContext?.submit();
-  }
-
-  #handleSubmit() {
-    console.log(this.modalContext?.data.treeAlias);
-    if (this.#nodePickerValue != null && this.modalContext?.data.treeAlias != null) {
-      this.#nodePickerValue.treeAlias = this.modalContext?.data.treeAlias;
-    }
-    if (this.#nodePickerValue != null) {
-      this.modalContext?.setValue(this.#nodePickerValue);
-    }
-
-    this.modalContext?.submit();
-  }
-
-  async #onSelected(event: UmbSelectedEvent) {
-    const treeElement = event.target as UmbTreeElement;
-
-    let selection = treeElement.getSelection();
-    if (selection.length) {
-      if (this.modalContext?.data.treeAlias === UMB_DOCUMENT_TREE_ALIAS) {
-        await this.#handleDocumentNodes(selection);
-      } else if (this.modalContext?.data.treeAlias === UMB_MEDIA_TREE_ALIAS) {
-        await this.#handleMediaNodes(selection);
-      } else if (
-        this.modalContext?.data.treeAlias === UMB_DICTIONARY_TREE_ALIAS
-      ) {
-        await this.#handleDictionaryNodes(selection);
-      }
-    }
-    event.stopPropagation();
-  }
-
-  async #handleDocumentNodes(selection: string[]) {
-    let nodes = (await this.#documentRepository.requestItems(selection)).data;
-    if (nodes != null) {
-      for (let node of nodes) {
-        if (node != null) {
-          let casted = new EnterspeedUniqueItemModelImpl(false, node.unique, node.name);
-          this.#nodePickerValue?.documentNodes?.push(casted);
-        }
-      }
-    }
-  }
-
-  async #handleMediaNodes(selection: string[]) {
-    let nodes = (await this.#mediaItemRepository.requestItems(selection)).data;
-    if (nodes != null) {
-      for (let node of nodes) {
-        if (node != null) {
-          let casted = new EnterspeedUniqueItemModelImpl(false, node.unique, node.name);
-          this.#nodePickerValue?.mediaNodes?.push(casted);
-        }
-      }
-    }
-  }
-
-  async #handleDictionaryNodes(selection: string[]) {
-    let nodes = (await this.#dictionaryRepository.requestItems(selection)).data;
-    if (nodes != null) {
-      for (let node of nodes) {
-        if (node != null) {
-          let casted = new EnterspeedUniqueItemModelImpl(false, node.unique, node.name);
-          this.#nodePickerValue?.dictionaryNodes?.push(casted);
-        }
-      }
-    }
-  }
-
-  #onDeselected(event: UmbDeselectedEvent) {
-    event.stopPropagation();
-  }
-
-  #onSelectAllContentNodes(event: UUIBooleanInputEvent) {
-    console.log(event.target.checked);
-  }
-
-  #onIncludeDescendants(event: UUIBooleanInputEvent) {
-    console.log(event.target.checked);
   }
 
   render() {
@@ -194,6 +113,127 @@ export default class EnterspeedNodePickerModal
         </div>
       </umb-body-layout>
     `;
+  }
+
+  #handleCancel() {
+    this.modalContext?.submit();
+  }
+
+  #handleSubmit() {
+    if (
+      this.#nodePickerValue != null &&
+      this.modalContext?.data.treeAlias != null
+    ) {
+      this.#nodePickerValue.treeAlias = this.modalContext?.data.treeAlias;
+    }
+    if (this.#nodePickerValue != null) {
+      this.modalContext?.setValue(this.#nodePickerValue);
+    }
+
+    this.modalContext?.submit();
+  }
+
+  async #onSelected(event: UmbSelectedEvent) {
+    const treeElement = event.target as UmbTreeElement;
+
+    let selection = treeElement.getSelection();
+    if (selection.length) {
+      if (this.modalContext?.data.treeAlias === UMB_DOCUMENT_TREE_ALIAS) {
+        await this.#handleDocumentNodes(selection);
+      } else if (this.modalContext?.data.treeAlias === UMB_MEDIA_TREE_ALIAS) {
+        await this.#handleMediaNodes(selection);
+      } else if (
+        this.modalContext?.data.treeAlias === UMB_DICTIONARY_TREE_ALIAS
+      ) {
+        await this.#handleDictionaryNodes(selection);
+      }
+    }
+    event.stopPropagation();
+  }
+
+  #onDeselected(event: UmbDeselectedEvent) {
+    if (this.#nodePickerValue == null || this.modalContext == null) return;
+
+    if (event.unique) {
+      if (this.modalContext.data.treeAlias === UMB_DOCUMENT_TREE_ALIAS) {
+        this.#nodePickerValue.documentNodes =
+          this.#nodePickerValue.documentNodes?.filter(
+            (node) => event.unique != node.unique
+          );
+        console.log("filter happened");
+      } else if (this.modalContext.data.treeAlias === UMB_MEDIA_TREE_ALIAS) {
+        this.#nodePickerValue.mediaNodes =
+          this.#nodePickerValue.mediaNodes?.filter(
+            (node) => event.unique != node.unique
+          );
+      } else if (
+        this.modalContext.data.treeAlias === UMB_DICTIONARY_TREE_ALIAS
+      ) {
+        this.#nodePickerValue.dictionaryNodes =
+          this.#nodePickerValue.dictionaryNodes?.filter(
+            (node) => event.unique != node.unique
+          );
+      }
+    }
+
+    console.log(this.#nodePickerValue.documentNodes);
+    event.stopPropagation();
+  }
+
+  #onSelectAllContentNodes(event: UUIBooleanInputEvent) {
+    console.log(event.target.checked);
+  }
+
+  #onIncludeDescendants(event: UUIBooleanInputEvent) {
+    this.#includeDescendants = event.target.checked;
+  }
+
+  async #handleDocumentNodes(selection: string[]) {
+    let nodes = (await this.#documentRepository.requestItems(selection)).data;
+    if (nodes != null) {
+      for (let node of nodes) {
+        if (node != null) {
+          let mappedNode = new EnterspeedUniqueItemModelImpl(
+            this.#includeDescendants,
+            node.unique,
+            node.name
+          );
+          this.#nodePickerValue?.documentNodes?.push(mappedNode);
+        }
+      }
+    }
+  }
+
+  async #handleMediaNodes(selection: string[]) {
+    let nodes = (await this.#mediaItemRepository.requestItems(selection)).data;
+    if (nodes != null) {
+      for (let node of nodes) {
+        if (node != null) {
+          let mappedNode = new EnterspeedUniqueItemModelImpl(
+            this.#includeDescendants,
+            node.unique,
+            node.name
+          );
+          this.#nodePickerValue?.mediaNodes?.push(mappedNode);
+        }
+      }
+    }
+  }
+
+  async #handleDictionaryNodes(selection: string[]) {
+    let nodes = (await this.#dictionaryRepository.requestItems(selection)).data;
+    if (nodes != null) {
+      for (let node of nodes) {
+        if (node != null) {
+          let mappedNode = new EnterspeedUniqueItemModelImpl(
+            this.#includeDescendants,
+            node.unique,
+            node.name
+          );
+          this.#nodePickerValue?.dictionaryNodes?.push(mappedNode);
+        }
+      }
+    }
   }
 
   static styles = css`
