@@ -1,7 +1,6 @@
 import { css, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { SeedResponse } from "../../generated";
 import {
   ENTERSPEED_NODEPICKER_MODAL_TOKEN,
   EnterspeedUniqueItemModel,
@@ -26,9 +25,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   dictionaryNodes: Array<EnterspeedUniqueItemModel> =
     new Array<EnterspeedUniqueItemModel>();
 
-  @state()
-  disableSeedButton?: boolean;
-
   @property({ type: Array })
   selectedContentIds!: string[];
 
@@ -38,19 +34,11 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   @property({ type: Array })
   selectedDictionaryIds!: string[];
 
-  @property({ type: Number })
-  numberOfPendingJobs = 0;
-
-  @property({ type: Object })
-  seedResponse: SeedResponse | undefined | null;
-
   constructor() {
     super();
     this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
       this.#modalManagerContext = instance;
     });
-
-    this.documentNodes = new Array<EnterspeedUniqueItemModel>();
   }
 
   render() {
@@ -71,61 +59,75 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           </p>
         </div>
         <div class="custom-seed-content-type-container">
-          <div class="custom-seed-content-type-box">
-            <h5>Content</h5>
-            <uui-ref-list>
-              ${this.documentNodes != null ? this.#renderDocumentNodes() : ""}
-            </uui-ref-list>
-            <uui-button
-              look="placeholder"
-              label="Choose"
-              class="full-width-btn"
-              @click=${() => this.openNodePickerModal(UMB_DOCUMENT_TREE_ALIAS)}
-            ></uui-button>
-          </div>
-          <div class="custom-seed-content-type-box">
-            <h5>Media</h5>
-            <uui-ref-list>
-              <uui-ref-node name="test" detail="details">
-                <uui-action-bar slot="actions">
-                  <uui-button
-                    label=${this.localize.term("general_remove")}
-                  ></uui-button>
-                </uui-action-bar>
-              </uui-ref-node>
-            </uui-ref-list>
-            <uui-button
-              look="placeholder"
-              label="Choose"
-              class="full-width-btn"
-              @click=${() => this.openNodePickerModal(UMB_MEDIA_TREE_ALIAS)}
-            ></uui-button>
-          </div>
-          <div class="custom-seed-content-type-box">
-            <h5>Dictionary</h5>
-            <uui-ref-list>
-              <uui-ref-node name="test" detail="details">
-                <uui-action-bar slot="actions">
-                  <uui-button
-                    label=${this.localize.term("general_remove")}
-                  ></uui-button>
-                </uui-action-bar>
-              </uui-ref-node>
-            </uui-ref-list>
-            <uui-button
-              look="placeholder"
-              label="Choose"
-              class="full-width-btn"
-              @click=${async () =>
-                await this.openNodePickerModal(UMB_DICTIONARY_TREE_ALIAS)}
-            ></uui-button>
-          </div>
+          ${this.#renderCustomSeedContentTypeBox(
+            this.documentNodes,
+            "Content",
+            UMB_DOCUMENT_TREE_ALIAS
+          )}
+          ${this.#renderCustomSeedContentTypeBox(
+            this.mediaNodes,
+            "Media",
+            UMB_MEDIA_TREE_ALIAS
+          )}
+          ${this.#renderCustomSeedContentTypeBox(
+            this.dictionaryNodes,
+            "Dictionary",
+            UMB_DICTIONARY_TREE_ALIAS
+          )}
         </div>
       </div>
     `;
   }
 
-  async openNodePickerModal(treeAlias: string) {
+  #renderCustomSeedContentTypeBox(
+    nodes: Array<EnterspeedUniqueItemModel>,
+    contentType: string,
+    alias: string
+  ) {
+    return html`<div class="custom-seed-content-type-box">
+      ${this.#renderNodes(nodes, contentType)}
+      ${this.#renderTreeNodeButtons(alias)}
+    </div>`;
+  }
+
+  #renderTreeNodeButtons(alias: string) {
+    return html`
+      <uui-button
+        look="placeholder"
+        label="Choose"
+        class="full-width-btn"
+        @click=${() => this.#openNodePickerModal(alias)}
+      ></uui-button>
+    `;
+  }
+
+  #renderNodes(nodes: EnterspeedUniqueItemModel[], headline: string) {
+    return html`
+      <h5>${headline}</h5>
+      <uui-ref-list>
+        ${repeat(
+          nodes,
+          (item) => item.unique,
+          (item) => this.#renderItem(item)
+        )}
+      </uui-ref-list>
+    `;
+  }
+
+  #renderItem(item: EnterspeedUniqueItemModel) {
+    if (!item.unique) return;
+    return html`
+      <uui-ref-node name=${item.name} id=${item.unique}>
+        <uui-action-bar slot="actions">
+          <uui-button
+            label=${this.localize.term("general_remove")}
+          ></uui-button>
+        </uui-action-bar>
+      </uui-ref-node>
+    `;
+  }
+
+  async #openNodePickerModal(treeAlias: string) {
     let headline = "";
     switch (treeAlias) {
       case UMB_DICTIONARY_TREE_ALIAS:
@@ -150,80 +152,47 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     );
 
     await modal?.onSubmit().then((data) => {
-      console.log(data.treeAlias);
       switch (data.treeAlias) {
         case UMB_DOCUMENT_TREE_ALIAS:
-          for (let index = 0; index < data.documentNodes.length; index++) {
-            const documentNode = data.documentNodes[index];
-            let existingIndex = this.documentNodes.findIndex(
-              (e) => e.unique == documentNode.unique
-            );
-
-            if (existingIndex > 0) {
-              this.documentNodes.splice(existingIndex, 1);
-            }
-            this.documentNodes.push(documentNode);
-            super.requestUpdate("documentNodes");
-
-            console.log(this.documentNodes[0].name);
-          }
+          this.documentNodes = this.#mapNodes(
+            this.documentNodes,
+            data.documentNodes
+          );
+          super.requestUpdate("documentNodes");
           break;
         case UMB_DICTIONARY_TREE_ALIAS:
-          for (let index = 0; index < data.dictionaryNodes.length; index++) {
-            const dictionaryNode = data.dictionaryNodes[index];
-            let existingIndex = this.dictionaryNodes.findIndex(
-              (e) => e.unique == dictionaryNode.unique
-            );
-
-            if (existingIndex > 0) {
-              this.dictionaryNodes.splice(existingIndex, 1);
-            }
-
-            this.dictionaryNodes.push(dictionaryNode);
-          }
+          this.dictionaryNodes = this.#mapNodes(
+            this.dictionaryNodes,
+            data.dictionaryNodes
+          );
+          super.requestUpdate("dictionaryNodes");
           break;
         case UMB_MEDIA_TREE_ALIAS:
-          for (let index = 0; index < data.mediaNodes.length; index++) {
-            const mediaNode = data.mediaNodes[index];
-            let existingIndex = this.mediaNodes.findIndex(
-              (e) => e.unique == mediaNode.unique
-            );
-
-            if (existingIndex > 0) {
-              this.mediaNodes.splice(existingIndex, 1);
-            }
-
-            this.mediaNodes.push(mediaNode);
-          }
+          this.mediaNodes = this.#mapNodes(this.mediaNodes, data.mediaNodes);
+          super.requestUpdate("mediaNodes");
           break;
       }
     });
   }
 
-  #renderDocumentNodes() {
-    if (!this.documentNodes) return;
-    return html`
-      <uui-ref-list>
-        ${repeat(
-          this.documentNodes,
-          (item) => item.unique,
-          (item) => this.#renderItem(item)
-        )}
-      </uui-ref-list>
-    `;
-  }
+  #mapNodes(
+    existingNodes: EnterspeedUniqueItemModel[],
+    nodesToAdd: EnterspeedUniqueItemModel[]
+  ): Array<EnterspeedUniqueItemModel> {
+    for (let index = 0; index < nodesToAdd.length; index++) {
+      const nodeToAdd = nodesToAdd[index];
+      let existingIndex = existingNodes.findIndex(
+        (e) => e.unique == nodeToAdd.unique
+      );
 
-  #renderItem(item: EnterspeedUniqueItemModel) {
-    if (!item.unique) return;
-    return html`
-      <uui-ref-node name=${item.name} id=${item.unique}>
-        <uui-action-bar slot="actions">
-          <uui-button
-            label=${this.localize.term("general_remove")}
-          ></uui-button>
-        </uui-action-bar>
-      </uui-ref-node>
-    `;
+      if (existingIndex > 0) {
+        existingNodes.splice(existingIndex, 1);
+      }
+
+      existingNodes.push(nodeToAdd);
+    }
+
+    return existingNodes;
   }
 
   static styles = css`
