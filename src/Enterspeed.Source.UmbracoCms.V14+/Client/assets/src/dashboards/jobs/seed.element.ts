@@ -7,9 +7,11 @@ import {
   customElement,
   css,
   state,
+  property,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { CustomSeedModel } from "../../generated/index.ts";
+import { EnterspeedUniqueItemModel } from "../../components/modals/node-picker/node-picker-modal.token.ts";
 
 @customElement("enterspeed-seed")
 export class seedElement extends UmbLitElement {
@@ -21,6 +23,18 @@ export class seedElement extends UmbLitElement {
 
   @state()
   customSeedModel?: CustomSeedModel;
+
+  @property({ type: Array })
+  documentNodes?: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
+
+  @property({ type: Array })
+  mediaNodes?: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
+
+  @property({ type: Array })
+  dictionaryNodes?: Array<EnterspeedUniqueItemModel> =
+    new Array<EnterspeedUniqueItemModel>();
 
   #onSeedModeUpdated(e: CustomEvent) {
     this.selectedSeedMode = e.detail.toString();
@@ -46,6 +60,13 @@ export class seedElement extends UmbLitElement {
     this.customSeedModel = event;
   }
 
+  #onAfterSeed(e: CustomEvent) {
+    this.customSeedModel = undefined;
+    this.documentNodes = new Array<EnterspeedUniqueItemModel>();
+    this.mediaNodes = new Array<EnterspeedUniqueItemModel>();
+    this.dictionaryNodes = new Array<EnterspeedUniqueItemModel>();
+  }
+
   render() {
     return html`
       <div class="seed-dashboard">
@@ -58,11 +79,15 @@ export class seedElement extends UmbLitElement {
           @updated=${(e: CustomEvent) => this.#onSeedModeUpdated(e)}
         ></enterspeed-seed-mode-select>
         <enterspeed-seed-modes
+          .documentNodes=${this.documentNodes}
+          .dictionaryNodes=${this.dictionaryNodes}
+          .mediaNodes=${this.mediaNodes}
           .selectedSeedMode=${this.selectedSeedMode}
           @custom-nodes-selected=${(e: CustomEvent) =>
             this.#onCustomNodesSelected(e)}
         ></enterspeed-seed-modes>
         <enterspeed-seed-buttons
+          @after-seed=${(e: CustomEvent) => this.#onAfterSeed(e)}
           .disableSeedButton=${this.disableSeedButton}
           .customSeedModel=${this.customSeedModel}
         >

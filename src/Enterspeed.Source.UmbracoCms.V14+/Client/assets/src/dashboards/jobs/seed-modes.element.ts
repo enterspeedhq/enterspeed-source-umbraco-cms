@@ -5,6 +5,7 @@ import "./seed-mode-custom.element.ts";
 import "./seed-mode-full.element.ts";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { SeedResponse } from "../../generated/index.ts";
+import { EnterspeedUniqueItemModel } from "../../components/modals/node-picker/node-picker-modal.token.ts";
 
 @customElement("enterspeed-seed-modes")
 export class enterspeedSeedModesElement extends UmbLitElement {
@@ -16,6 +17,18 @@ export class enterspeedSeedModesElement extends UmbLitElement {
 
   @property({ type: Object })
   seedResponse: SeedResponse | undefined | null;
+
+  @property({ type: Boolean })
+  clearSelectedNodes: boolean = false;
+
+  @property({ type: Array })
+  documentNodes!: Array<EnterspeedUniqueItemModel>;
+
+  @property({ type: Array })
+  mediaNodes!: Array<EnterspeedUniqueItemModel>;
+
+  @property({ type: Array })
+  dictionaryNodes!: Array<EnterspeedUniqueItemModel>;
 
   render() {
     return html` ${this.#renderSeedModes()}
@@ -31,7 +44,11 @@ export class enterspeedSeedModesElement extends UmbLitElement {
     ) {
       return html`<enterspeed-seed-mode-full></enterspeed-seed-mode-full>`;
     } else {
-      return html`<enterspeed-seed-mode-custom></enterspeed-seed-mode-custom>`;
+      return html`<enterspeed-seed-mode-custom
+        .documentNodes=${this.documentNodes}
+        .dictionaryNodes=${this.dictionaryNodes}
+        .mediaNodes=${this.mediaNodes}
+      ></enterspeed-seed-mode-custom>`;
     }
   }
 }

@@ -1,5 +1,5 @@
 import { css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import {
   ENTERSPEED_NODEPICKER_MODAL_TOKEN,
@@ -10,36 +10,26 @@ import { UMB_DICTIONARY_TREE_ALIAS } from "@umbraco-cms/backoffice/dictionary";
 import { UMB_MEDIA_TREE_ALIAS } from "@umbraco-cms/backoffice/media";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
 import { repeat } from "lit/directives/repeat.js";
-import { customNodesSelected } from "../../types";
 import { CustomSeedModel, CustomSeedNode } from "../../generated";
 @customElement("enterspeed-seed-mode-custom")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
 
-  @state()
-  documentNodes: Array<EnterspeedUniqueItemModel> =
-    new Array<EnterspeedUniqueItemModel>();
-  @state()
-  mediaNodes: Array<EnterspeedUniqueItemModel> =
-    new Array<EnterspeedUniqueItemModel>();
-  @state()
-  dictionaryNodes: Array<EnterspeedUniqueItemModel> =
-    new Array<EnterspeedUniqueItemModel>();
+  @property({ type: Array })
+  documentNodes!: Array<EnterspeedUniqueItemModel>;
 
   @property({ type: Array })
-  selectedContentIds!: string[];
+  mediaNodes!: Array<EnterspeedUniqueItemModel>;
 
   @property({ type: Array })
-  selectedMediaIds!: string[];
-
-  @property({ type: Array })
-  selectedDictionaryIds!: string[];
+  dictionaryNodes!: Array<EnterspeedUniqueItemModel>;
 
   constructor() {
     super();
     this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
       this.#modalManagerContext = instance;
     });
+    console.log("rendered");
   }
 
   render() {
@@ -213,6 +203,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       })
     );
   }
+
   #mapCustomSeedNode(e: EnterspeedUniqueItemModel): CustomSeedNode {
     let node: CustomSeedNode = {
       includeDescendants: e.includeDescendants,
@@ -221,6 +212,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
 
     return node;
   }
+
   #mapNodes(
     existingNodes: EnterspeedUniqueItemModel[],
     nodesToAdd: EnterspeedUniqueItemModel[]

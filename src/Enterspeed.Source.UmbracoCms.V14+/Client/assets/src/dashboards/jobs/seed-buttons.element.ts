@@ -48,9 +48,10 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
           this.#seedResponse = response.data.data;
 
           this.dispatchEvent(
-            new CustomEvent("seed-response", {
+            new CustomEvent("after-seed", {
               bubbles: true,
               detail: this.#seedResponse,
+              composed: true,
             })
           );
 
