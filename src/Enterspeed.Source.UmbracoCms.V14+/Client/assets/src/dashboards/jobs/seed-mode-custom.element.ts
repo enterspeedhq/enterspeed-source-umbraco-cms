@@ -10,7 +10,7 @@ import { UMB_DICTIONARY_TREE_ALIAS } from "@umbraco-cms/backoffice/dictionary";
 import { UMB_MEDIA_TREE_ALIAS } from "@umbraco-cms/backoffice/media";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
 import { repeat } from "lit/directives/repeat.js";
-import { CustomNodesSelctedEvent } from "../../types";
+import { customNodesSelected } from "../../types";
 @customElement("enterspeed-seed-mode-custom")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
@@ -191,14 +191,15 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           super.requestUpdate("mediaNodes");
           break;
       }
-      this.#onDataUpdated(data.treeAlias);
+      this.#onDataUpdated();
     });
   }
 
-  #onDataUpdated(treeAlias: string) {
-    let customNodesSelected: CustomNodesSelctedEvent = {
-      nodes: this.documentNodes.concat(this.dictionaryNodes, this.mediaNodes),
-      treeAlias: treeAlias,
+  #onDataUpdated() {
+    let customNodesSelected: customNodesSelected = {
+      documentNodes: this.documentNodes,
+      dictionaryNodes : this.dictionaryNodes,
+      mediaNodes: this.mediaNodes
     };
 
     this.dispatchEvent(

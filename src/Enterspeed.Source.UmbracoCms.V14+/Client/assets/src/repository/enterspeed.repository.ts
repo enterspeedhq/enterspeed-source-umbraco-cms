@@ -7,14 +7,17 @@ import {
   EnterspeedUmbracoConfiguration,
   JobIdsToDelete,
 } from "../generated";
+import { customNodesSelected } from "../types";
 
 export class EnterspeedRepository extends UmbControllerBase {
   constructor(host: UmbControllerHost) {
     super(host);
   }
 
-  async seed() {
-    return await tryExecuteAndNotify(this._host, DashboardResource.seed());
+  async seed(nodesSelected: customNodesSelected) {
+    if (nodesSelected == null) {
+      return await tryExecuteAndNotify(this._host, DashboardResource.seed());
+    }
   }
 
   async customSeed(customSeedModel: CustomSeedModel) {

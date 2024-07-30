@@ -7,6 +7,8 @@ import {
   EnterspeedUmbracoConfiguration,
   JobIdsToDelete,
 } from "./generated";
+import { customNodesSelected } from "./types";
+
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
   protected enterspeedRepository = new EnterspeedRepository(this);
@@ -19,7 +21,7 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     return await this.enterspeedRepository.customSeed(customSeedModel);
   }
 
-  public async seed() {
+  public async seed(nodesSelected: customNodesSelected) {
     let response = await this.enterspeedRepository.seed();
     return response;
   }

@@ -11,7 +11,8 @@ export type tab = {
   active?: boolean;
 };
 
-export type CustomNodesSelctedEvent = {
-  nodes: Array<EnterspeedUniqueItemModel>;
-  treeAlias: string;
+export type customNodesSelected = {
+  documentNodes: Array<EnterspeedUniqueItemModel>;
+  dictionaryNodes: Array<EnterspeedUniqueItemModel>;
+  mediaNodes: Array<EnterspeedUniqueItemModel>;
 };

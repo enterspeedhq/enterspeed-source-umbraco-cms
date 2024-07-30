@@ -7,6 +7,7 @@ import {
 import { customElement, property } from "lit/decorators.js";
 import { SeedResponse } from "../../generated";
 import { html } from "lit";
+import { customNodesSelected as customNodesSelected } from "../../types.ts";
 
 @customElement("enterspeed-seed-buttons")
 export class enterspeedSeedButtonsElement extends UmbLitElement {
@@ -17,6 +18,9 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   @property({ type: Boolean })
   disableSeedButton: boolean = true;
+
+  @property({ type: Object })
+  customNodesSelected: customNodesSelected | undefined;
 
   constructor() {
     super();
@@ -39,7 +43,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   async #seed() {
     this.disableSeedButton = true;
-    this.#enterspeedContext!.seed()
+    this.#enterspeedContext!.seed(this.customNodesSelected)
       .then((response) => {
         if (response.data?.isSuccess) {
           this.#seedResponse = response.data.data;
