@@ -7,7 +7,6 @@ import {
   EnterspeedUmbracoConfiguration,
   JobIdsToDelete,
 } from "../generated";
-import { customNodesSelected } from "../types";
 
 export class EnterspeedRepository extends UmbControllerBase {
   constructor(host: UmbControllerHost) {

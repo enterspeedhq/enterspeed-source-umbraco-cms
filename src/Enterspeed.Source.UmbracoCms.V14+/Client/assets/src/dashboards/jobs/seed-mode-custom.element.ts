@@ -11,6 +11,7 @@ import { UMB_MEDIA_TREE_ALIAS } from "@umbraco-cms/backoffice/media";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
 import { repeat } from "lit/directives/repeat.js";
 import { customNodesSelected } from "../../types";
+import { CustomSeedModel, CustomSeedNode } from "../../generated";
 @customElement("enterspeed-seed-mode-custom")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
@@ -196,10 +197,12 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   }
 
   #onDataUpdated() {
-    let customNodesSelected: customNodesSelected = {
-      documentNodes: this.documentNodes,
-      dictionaryNodes : this.dictionaryNodes,
-      mediaNodes: this.mediaNodes
+    let customNodesSelected: CustomSeedModel = {
+      contentNodes: this.documentNodes.map((n) => this.#mapCustomSeedNode(n)),
+      dictionaryNodes: this.dictionaryNodes.map((n) =>
+        this.#mapCustomSeedNode(n)
+      ),
+      mediaNodes: this.mediaNodes.map((n) => this.#mapCustomSeedNode(n)),
     };
 
     this.dispatchEvent(
@@ -210,7 +213,14 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       })
     );
   }
+  #mapCustomSeedNode(e: EnterspeedUniqueItemModel): CustomSeedNode {
+    let node: CustomSeedNode = {
+      includeDescendants: e.includeDescendants,
+      id: e.unique,
+    };
 
+    return node;
+  }
   #mapNodes(
     existingNodes: EnterspeedUniqueItemModel[],
     nodesToAdd: EnterspeedUniqueItemModel[]

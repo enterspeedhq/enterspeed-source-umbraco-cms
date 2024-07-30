@@ -5,9 +5,8 @@ import {
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
 import { customElement, property } from "lit/decorators.js";
-import { SeedResponse } from "../../generated";
+import { CustomSeedModel, SeedResponse } from "../../generated";
 import { html } from "lit";
-import { customNodesSelected as customNodesSelected } from "../../types.ts";
 
 @customElement("enterspeed-seed-buttons")
 export class enterspeedSeedButtonsElement extends UmbLitElement {
@@ -20,7 +19,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
   disableSeedButton: boolean = true;
 
   @property({ type: Object })
-  customNodesSelected: customNodesSelected | undefined;
+  customSeedModel: CustomSeedModel | undefined;
 
   constructor() {
     super();
@@ -43,7 +42,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   async #seed() {
     this.disableSeedButton = true;
-    this.#enterspeedContext!.seed()
+    this.#enterspeedContext!.seed(this.customSeedModel)
       .then((response) => {
         if (response.data?.isSuccess) {
           this.#seedResponse = response.data.data;
