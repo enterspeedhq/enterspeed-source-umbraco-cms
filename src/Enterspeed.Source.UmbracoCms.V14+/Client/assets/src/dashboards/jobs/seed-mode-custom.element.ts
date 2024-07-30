@@ -218,11 +218,15 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     for (let index = 0; index < nodesToAdd.length; index++) {
       const nodeToAdd = nodesToAdd[index];
       let existingIndex = existingNodes.findIndex(
-        (e) => e.unique == nodeToAdd.unique
+        (e) => e.name == nodeToAdd.name
       );
 
       if (existingIndex > 0) {
         existingNodes.splice(existingIndex, 1);
+      }
+      
+      if(nodeToAdd.name === "Everything") {
+        existingNodes = [];
       }
 
       existingNodes.push(nodeToAdd);
