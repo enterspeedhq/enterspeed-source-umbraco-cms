@@ -15,9 +15,9 @@ import type { Type } from './Type';
 export type MethodBase = {
     memberType: MemberTypes;
     readonly name: string;
-    declaringType: Type;
-    reflectedType: Type;
-    module: Module;
+    readonly declaringType?: Type | null;
+    readonly reflectedType?: Type | null;
+    readonly module: Module;
     readonly customAttributes: Array<CustomAttributeData>;
     readonly isCollectible: boolean;
     readonly metadataToken: number;
@@ -41,8 +41,9 @@ export type MethodBase = {
     readonly isGenericMethod: boolean;
     readonly isGenericMethodDefinition: boolean;
     readonly containsGenericParameters: boolean;
-    methodHandle: RuntimeMethodHandle;
+    readonly methodHandle: RuntimeMethodHandle;
     readonly isSecurityCritical: boolean;
     readonly isSecuritySafeCritical: boolean;
     readonly isSecurityTransparent: boolean;
 };
+

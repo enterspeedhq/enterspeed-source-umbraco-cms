@@ -10,3 +10,4 @@ export type ApiResponse_GetNumberOfPendingJobsResponse_ = {
     errorCode?: string | null;
     data?: GetNumberOfPendingJobsResponse | null;
 };
+

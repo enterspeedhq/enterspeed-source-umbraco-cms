@@ -17,7 +17,7 @@ export type Assembly = {
      * @deprecated
      */
     readonly codeBase?: string | null;
-    entryPoint: MethodInfo;
+    readonly entryPoint?: MethodInfo | null;
     readonly fullName?: string | null;
     readonly imageRuntimeVersion: string;
     readonly isDynamic: boolean;
@@ -30,7 +30,7 @@ export type Assembly = {
      * @deprecated
      */
     readonly escapedCodeBase: string;
-    manifestModule: Module;
+    readonly manifestModule: Module;
     readonly modules: Array<Module>;
     /**
      * @deprecated
@@ -39,3 +39,4 @@ export type Assembly = {
     readonly hostContext: number;
     securityRuleSet: SecurityRuleSet;
 };
+

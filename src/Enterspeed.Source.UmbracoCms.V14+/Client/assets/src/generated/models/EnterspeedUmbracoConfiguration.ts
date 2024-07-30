@@ -3,14 +3,18 @@
 /* tslint:disable */
 /* eslint-disable */
 
-import type { EnterspeedConfiguration } from './EnterspeedConfiguration';
+export type EnterspeedUmbracoConfiguration = {
+    apiKey?: string | null;
+    baseUrl?: string | null;
+    connectionTimeout: number;
+    readonly ingestVersion?: string | null;
+    systemInformation?: string | null;
+    mediaDomain?: string | null;
+    isConfigured: boolean;
+    configuredFromSettingsFile: boolean;
+    previewApiKey?: string | null;
+    rootDictionariesDisabled: boolean;
+    runJobsOnAllServerRoles: boolean;
+    enableMasterContent: boolean;
+};
 
-export type EnterspeedUmbracoConfiguration = (EnterspeedConfiguration & {
-mediaDomain?: string | null;
-isConfigured: boolean;
-configuredFromSettingsFile: boolean;
-previewApiKey?: string | null;
-rootDictionariesDisabled: boolean;
-runJobsOnAllServerRoles: boolean;
-enableMasterContent: boolean;
-});

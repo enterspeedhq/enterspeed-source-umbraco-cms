@@ -6,5 +6,6 @@
 import type { IntPtr } from './IntPtr';
 
 export type RuntimeTypeHandle = {
-    value: IntPtr;
+    readonly value: IntPtr;
 };
+

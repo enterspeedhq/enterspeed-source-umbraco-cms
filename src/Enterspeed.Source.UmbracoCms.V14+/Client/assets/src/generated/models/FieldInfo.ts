@@ -12,15 +12,15 @@ import type { Type } from './Type';
 
 export type FieldInfo = {
     readonly name: string;
-    declaringType: Type;
-    reflectedType: Type;
-    module: Module;
+    readonly declaringType?: Type | null;
+    readonly reflectedType?: Type | null;
+    readonly module: Module;
     readonly customAttributes: Array<CustomAttributeData>;
     readonly isCollectible: boolean;
     readonly metadataToken: number;
     memberType: MemberTypes;
     attributes: FieldAttributes;
-    fieldType: Type;
+    readonly fieldType: Type;
     readonly isInitOnly: boolean;
     readonly isLiteral: boolean;
     /**
@@ -39,5 +39,6 @@ export type FieldInfo = {
     readonly isSecurityCritical: boolean;
     readonly isSecuritySafeCritical: boolean;
     readonly isSecurityTransparent: boolean;
-    fieldHandle: RuntimeFieldHandle;
+    readonly fieldHandle: RuntimeFieldHandle;
 };
+

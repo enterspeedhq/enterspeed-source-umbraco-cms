@@ -10,9 +10,9 @@ import type { Type } from './Type';
 
 export type ParameterInfo = {
     attributes: ParameterAttributes;
-    member: MemberInfo;
+    readonly member: MemberInfo;
     readonly name?: string | null;
-    parameterType: Type;
+    readonly parameterType: Type;
     readonly position: number;
     readonly isIn: boolean;
     readonly isLcid: boolean;
@@ -25,3 +25,4 @@ export type ParameterInfo = {
     readonly customAttributes: Array<CustomAttributeData>;
     readonly metadataToken: number;
 };
+

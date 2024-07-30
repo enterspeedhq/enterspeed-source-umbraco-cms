@@ -10,3 +10,4 @@ export type ApiResponse_SeedResponse_ = {
     errorCode?: string | null;
     data?: SeedResponse | null;
 };
+

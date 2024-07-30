@@ -9,8 +9,9 @@ import type { CustomAttributeTypedArgument } from './CustomAttributeTypedArgumen
 import type { Type } from './Type';
 
 export type CustomAttributeData = {
-    attributeType: Type;
-    constructor: ConstructorInfo;
+    readonly attributeType: Type;
+    readonly constructor: ConstructorInfo;
     readonly constructorArguments: Array<CustomAttributeTypedArgument>;
     readonly namedArguments: Array<CustomAttributeNamedArgument>;
 };
+

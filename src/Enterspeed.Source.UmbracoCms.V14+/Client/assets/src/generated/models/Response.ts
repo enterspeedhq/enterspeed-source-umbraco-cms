@@ -10,9 +10,10 @@ export type Response = {
     status: HttpStatusCode;
     readonly statusCode: number;
     message?: string | null;
-    exception: Exception;
+    exception?: Exception | null;
     success: boolean;
     errors?: Record<string, string | null> | null;
     errorCode?: string | null;
     content?: string | null;
 };
+

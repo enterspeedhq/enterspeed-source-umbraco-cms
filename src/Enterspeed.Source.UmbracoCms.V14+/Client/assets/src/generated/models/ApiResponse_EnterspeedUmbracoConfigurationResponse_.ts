@@ -10,3 +10,4 @@ export type ApiResponse_EnterspeedUmbracoConfigurationResponse_ = {
     errorCode?: string | null;
     data?: EnterspeedUmbracoConfigurationResponse | null;
 };
+

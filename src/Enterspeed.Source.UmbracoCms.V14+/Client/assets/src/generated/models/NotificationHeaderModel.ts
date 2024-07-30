@@ -10,3 +10,4 @@ export type NotificationHeaderModel = {
     category: string;
     type: EventMessageTypeModel;
 };
+

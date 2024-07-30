@@ -8,7 +8,8 @@ import type { MemberInfo } from './MemberInfo';
 
 export type CustomAttributeNamedArgument = {
     memberInfo: MemberInfo;
-    typedValue: CustomAttributeTypedArgument;
+    readonly typedValue: CustomAttributeTypedArgument;
     readonly memberName: string;
     readonly isField: boolean;
 };
+

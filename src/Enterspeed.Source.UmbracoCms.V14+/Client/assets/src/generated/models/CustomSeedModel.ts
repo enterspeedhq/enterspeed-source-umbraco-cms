@@ -3,8 +3,11 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { CustomSeedNode } from './CustomSeedNode';
+
 export type CustomSeedModel = {
-    contentNodes?: Array<string> | null;
-    mediaNodes?: Array<string> | null;
-    dictionaryNodes?: Array<string> | null;
+    contentNodes?: Array<CustomSeedNode> | null;
+    mediaNodes?: Array<CustomSeedNode> | null;
+    dictionaryNodes?: Array<CustomSeedNode> | null;
 };
+

@@ -3,4 +3,8 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type T = Record<string, any>;
+export type CustomSeedNode = {
+    id?: string | null;
+    includeDescendants: boolean;
+};
+

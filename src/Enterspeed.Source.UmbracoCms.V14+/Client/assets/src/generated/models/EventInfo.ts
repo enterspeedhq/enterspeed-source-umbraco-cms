@@ -12,18 +12,19 @@ import type { Type } from './Type';
 
 export type EventInfo = {
     readonly name: string;
-    declaringType: Type;
-    reflectedType: Type;
-    module: Module;
+    readonly declaringType?: Type | null;
+    readonly reflectedType?: Type | null;
+    readonly module: Module;
     readonly customAttributes: Array<CustomAttributeData>;
     readonly isCollectible: boolean;
     readonly metadataToken: number;
     memberType: MemberTypes;
     attributes: EventAttributes;
     readonly isSpecialName: boolean;
-    addMethod: MethodInfo;
-    removeMethod: MethodInfo;
-    raiseMethod: MethodInfo;
+    readonly addMethod?: MethodInfo | null;
+    readonly removeMethod?: MethodInfo | null;
+    readonly raiseMethod?: MethodInfo | null;
     readonly isMulticast: boolean;
-    eventHandlerType: Type;
+    readonly eventHandlerType?: Type | null;
 };
+

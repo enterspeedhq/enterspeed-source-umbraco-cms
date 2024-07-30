@@ -30,13 +30,13 @@ export type TypeInfo = {
     readonly namespace?: string | null;
     readonly assemblyQualifiedName?: string | null;
     readonly fullName?: string | null;
-    assembly: Assembly;
-    module: Module;
+    readonly assembly: Assembly;
+    readonly module: Module;
     readonly isNested: boolean;
-    declaringType: Type;
-    declaringMethod: MethodBase;
-    reflectedType: Type;
-    underlyingSystemType: Type;
+    readonly declaringType?: Type | null;
+    readonly declaringMethod?: MethodBase | null;
+    readonly reflectedType?: Type | null;
+    readonly underlyingSystemType: Type;
     readonly isTypeDefinition: boolean;
     readonly isArray: boolean;
     readonly isByRef: boolean;
@@ -86,11 +86,11 @@ export type TypeInfo = {
     readonly isSecurityCritical: boolean;
     readonly isSecuritySafeCritical: boolean;
     readonly isSecurityTransparent: boolean;
-    structLayoutAttribute: StructLayoutAttribute;
-    typeInitializer: ConstructorInfo;
-    typeHandle: RuntimeTypeHandle;
+    readonly structLayoutAttribute?: StructLayoutAttribute | null;
+    readonly typeInitializer?: ConstructorInfo | null;
+    readonly typeHandle: RuntimeTypeHandle;
     readonly guid: string;
-    baseType: Type;
+    readonly baseType?: Type | null;
     /**
      * @deprecated
      */
@@ -107,3 +107,4 @@ export type TypeInfo = {
     readonly declaredProperties: Array<PropertyInfo>;
     readonly implementedInterfaces: Array<Type>;
 };
+
