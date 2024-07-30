@@ -43,7 +43,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   async #seed() {
     this.disableSeedButton = true;
-    this.#enterspeedContext!.seed(this.customNodesSelected)
+    this.#enterspeedContext!.seed()
       .then((response) => {
         if (response.data?.isSuccess) {
           this.#seedResponse = response.data.data;

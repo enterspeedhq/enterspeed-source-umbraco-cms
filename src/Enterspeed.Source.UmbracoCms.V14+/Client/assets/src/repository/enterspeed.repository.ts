@@ -14,10 +14,8 @@ export class EnterspeedRepository extends UmbControllerBase {
     super(host);
   }
 
-  async seed(nodesSelected: customNodesSelected) {
-    if (nodesSelected == null) {
-      return await tryExecuteAndNotify(this._host, DashboardResource.seed());
-    }
+  async seed() {
+    return await tryExecuteAndNotify(this._host, DashboardResource.seed());
   }
 
   async customSeed(customSeedModel: CustomSeedModel) {

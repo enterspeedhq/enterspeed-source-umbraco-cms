@@ -4,11 +4,12 @@ import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { EnterspeedRepository } from "./repository/enterspeed.repository";
 import {
   CustomSeedModel,
+  CustomSeedNode,
   EnterspeedUmbracoConfiguration,
   JobIdsToDelete,
 } from "./generated";
 import { customNodesSelected } from "./types";
-
+import { EnterspeedUniqueItemModel } from "./components/modals/node-picker/node-picker-modal.token";
 
 export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
   protected enterspeedRepository = new EnterspeedRepository(this);
@@ -21,9 +22,35 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     return await this.enterspeedRepository.customSeed(customSeedModel);
   }
 
-  public async seed(nodesSelected: customNodesSelected) {
-    let response = await this.enterspeedRepository.seed();
-    return response;
+  public async seed(customNodesSelected: customNodesSelected | undefined) {
+    if (customNodesSelected != null) {
+      let nodes: CustomSeedModel = {
+        contentNodes: customNodesSelected.documentNodes.map((n) =>
+          mapCustomSeedNode(n)
+        ),
+        dictionaryNodes: customNodesSelected.dictionaryNodes.map((n) =>
+          mapCustomSeedNode(n)
+        ),
+        mediaNodes: customNodesSelected.mediaNodes.map((n) =>
+          mapCustomSeedNode(n)
+        ),
+      };
+
+      let response = await this.enterspeedRepository.customSeed(nodes);
+      return response;
+    } else {
+      let response = await this.enterspeedRepository.seed();
+      return response;
+    }
+
+    function mapCustomSeedNode(e: EnterspeedUniqueItemModel): CustomSeedNode {
+      let node: CustomSeedNode = {
+        includeDescendants: e.includeDescendants,
+        id: e.unique,
+      };
+
+      return node;
+    }
   }
 
   public async clearJobQueue() {
