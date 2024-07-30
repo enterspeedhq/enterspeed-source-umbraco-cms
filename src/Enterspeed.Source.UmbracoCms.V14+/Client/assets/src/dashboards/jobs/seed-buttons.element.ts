@@ -16,7 +16,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
   #seedResponse: SeedResponse | undefined | null;
 
   @property({ type: Boolean })
-  disableSeedButton?: boolean;
+  disableSeedButton: boolean = true;
 
   constructor() {
     super();
@@ -141,7 +141,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   #renderSeedButton() {
     return html`<uui-button
-      .disabled=${this.disableSeedButton ?? false}
+      .disabled=${this.disableSeedButton}
       type="button"
       look="primary"
       color="default"

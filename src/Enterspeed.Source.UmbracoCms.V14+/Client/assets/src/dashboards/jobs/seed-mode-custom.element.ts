@@ -120,11 +120,33 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       <uui-ref-node name=${item.name} id=${item.unique}>
         <uui-action-bar slot="actions">
           <uui-button
+            @click=${() => this.#removeNode(item)}
             label=${this.localize.term("general_remove")}
           ></uui-button>
         </uui-action-bar>
       </uui-ref-node>
     `;
+  }
+  #removeNode(item: EnterspeedUniqueItemModel) {
+    let index = this.documentNodes.findIndex((n) => n.unique == item.unique);
+    if (index > -1) {
+      this.documentNodes.splice(index, 1);
+      super.requestUpdate("documentNodes");
+    }
+
+    index = this.dictionaryNodes.findIndex((n) => n.unique == item.unique);
+    if (index > -1) {
+      this.dictionaryNodes.splice(index, 1);
+      super.requestUpdate("dictionaryNodes");
+    }
+
+    index = this.mediaNodes.findIndex((n) => n.unique == item.unique);
+    if (index > -1) {
+      this.mediaNodes.splice(index, 1);
+      super.requestUpdate("mediaNodes");
+    }
+
+    this.#onDataUpdated();
   }
 
   async #openNodePickerModal(treeAlias: string) {
@@ -156,23 +178,37 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
         case UMB_DOCUMENT_TREE_ALIAS:
           this.documentNodes = this.#mapNodes(
             this.documentNodes,
-            data.documentNodes
+            data.nodes
           );
           super.requestUpdate("documentNodes");
           break;
         case UMB_DICTIONARY_TREE_ALIAS:
           this.dictionaryNodes = this.#mapNodes(
             this.dictionaryNodes,
-            data.dictionaryNodes
+            data.nodes
           );
           super.requestUpdate("dictionaryNodes");
           break;
         case UMB_MEDIA_TREE_ALIAS:
-          this.mediaNodes = this.#mapNodes(this.mediaNodes, data.mediaNodes);
+          this.mediaNodes = this.#mapNodes(this.mediaNodes, data.nodes);
           super.requestUpdate("mediaNodes");
           break;
       }
+      this.#onDataUpdated();
     });
+  }
+
+  #onDataUpdated() {
+    this.dispatchEvent(
+      new CustomEvent("custom-nodes-selected", {
+        bubbles: true,
+        composed: true,
+        detail:
+          this.mediaNodes.length ||
+          this.documentNodes.length ||
+          this.dictionaryNodes.length,
+      })
+    );
   }
 
   #mapNodes(

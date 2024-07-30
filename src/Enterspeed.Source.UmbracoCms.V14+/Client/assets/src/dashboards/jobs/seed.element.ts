@@ -13,13 +13,22 @@ import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 @customElement("enterspeed-seed")
 export class seedElement extends UmbLitElement {
   @state()
-  disableSeedButton?: boolean;
+  disableSeedButton: boolean = false;
 
   @state()
   selectedSeedMode?: string;
 
   #onSeedModeUpdated(e: CustomEvent) {
     this.selectedSeedMode = e.detail.toString();
+    if (this.selectedSeedMode === "Everything") {
+      this.disableSeedButton = false;
+    } else {
+      this.disableSeedButton = true;
+    }
+  }
+
+  #onCustomNodesSelected(e: CustomEvent) {
+    this.disableSeedButton = e.detail !== 1;
   }
 
   render() {
@@ -35,6 +44,8 @@ export class seedElement extends UmbLitElement {
         ></enterspeed-seed-mode-select>
         <enterspeed-seed-modes
           .selectedSeedMode=${this.selectedSeedMode}
+          @custom-nodes-selected=${(e: CustomEvent) =>
+            this.#onCustomNodesSelected(e)}
         ></enterspeed-seed-modes>
         <enterspeed-seed-buttons .disableSeedButton=${this.disableSeedButton}>
         </enterspeed-seed-buttons>

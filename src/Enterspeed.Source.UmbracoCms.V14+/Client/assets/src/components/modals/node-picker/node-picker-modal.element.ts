@@ -47,7 +47,7 @@ export default class EnterspeedNodePickerModal
   #dictionaryRepository = new UmbDictionaryItemRepository(this);
 
   @property({ attribute: false })
-  modalContext?: UmbModalContext<NodePickerData, NodePickerValue>;
+  modalContext!: UmbModalContext<NodePickerData, NodePickerValue>;
 
   #nodePickerData?: NodePickerData;
   #nodePickerValue?: NodePickerValue;
@@ -55,10 +55,13 @@ export default class EnterspeedNodePickerModal
 
   @state()
   private selectionConfiguration: UmbTreeSelectionConfiguration = {
-    multiple: false,
+    multiple: true,
     selectable: true,
     selection: [],
   };
+
+  @state()
+  includeAllContentNodes: boolean = false;
 
   constructor() {
     super();
@@ -78,26 +81,29 @@ export default class EnterspeedNodePickerModal
               }} ></uui-toggle>
             </div>
           </umb-property-layout>
-          <umb-property-layout
-            label="Include descendants"
-            orientation="vertical"
-            ><div slot="editor">
-              <uui-toggle @change=${(e: UUIBooleanInputEvent) => {
-                this.#onIncludeDescendants(e);
-              }}></uui-toggle>
-            </div>
-          </umb-property-layout>
-          <umb-tree
-            alias=${
-              this.modalContext?.data.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS
-            }
-            .props=${{
-              hideTreeItemActions: true,
-              selectionConfiguration: this.selectionConfiguration,
-            }}
-            @selected=${this.#onSelected}
-						@deselected=${this.#onDeselected}></umb-tree>
-          </umb-tree>
+          <div .hidden=${this.includeAllContentNodes}>
+              <umb-property-layout 
+              label="Include descendants"
+              orientation="vertical"
+              ><div slot="editor">
+                <uui-toggle 
+                @change=${(e: UUIBooleanInputEvent) => {
+                  this.#onIncludeDescendants(e);
+                }}></uui-toggle>
+              </div>
+            </umb-property-layout>
+            <umb-tree
+              alias=${
+                this.modalContext?.data.treeAlias ?? UMB_DOCUMENT_TREE_ALIAS
+              }
+              .props=${{
+                hideTreeItemActions: true,
+                selectionConfiguration: this.selectionConfiguration,
+              }}
+              @selected=${this.#onSelected}
+              @deselected=${this.#onDeselected}></umb-tree>
+            </umb-tree>
+          </div>
         </uui-box>
 
         <div slot="actions">
@@ -138,15 +144,7 @@ export default class EnterspeedNodePickerModal
 
     let selection = treeElement.getSelection();
     if (selection.length) {
-      if (this.modalContext?.data.treeAlias === UMB_DOCUMENT_TREE_ALIAS) {
-        await this.#handleDocumentNodes(selection);
-      } else if (this.modalContext?.data.treeAlias === UMB_MEDIA_TREE_ALIAS) {
-        await this.#handleMediaNodes(selection);
-      } else if (
-        this.modalContext?.data.treeAlias === UMB_DICTIONARY_TREE_ALIAS
-      ) {
-        await this.#handleDictionaryNodes(selection);
-      }
+      await this.#handleNodes(selection);
     }
     event.stopPropagation();
   }
@@ -155,80 +153,72 @@ export default class EnterspeedNodePickerModal
     if (this.#nodePickerValue == null || this.modalContext == null) return;
 
     if (event.unique) {
-      if (this.modalContext.data.treeAlias === UMB_DOCUMENT_TREE_ALIAS) {
-        this.#nodePickerValue.documentNodes =
-          this.#nodePickerValue.documentNodes?.filter(
-            (node) => event.unique != node.unique
-          );
-      } else if (this.modalContext.data.treeAlias === UMB_MEDIA_TREE_ALIAS) {
-        this.#nodePickerValue.mediaNodes =
-          this.#nodePickerValue.mediaNodes?.filter(
-            (node) => event.unique != node.unique
-          );
-      } else if (
-        this.modalContext.data.treeAlias === UMB_DICTIONARY_TREE_ALIAS
-      ) {
-        this.#nodePickerValue.dictionaryNodes =
-          this.#nodePickerValue.dictionaryNodes?.filter(
-            (node) => event.unique != node.unique
-          );
-      }
+      this.#nodePickerValue.nodes = this.#nodePickerValue.nodes?.filter(
+        (node) => event.unique != node.unique
+      );
     }
 
     event.stopPropagation();
   }
 
   #onSelectAllContentNodes(event: UUIBooleanInputEvent) {
-    console.log(event.target.checked);
+    this.#nodePickerValue!.includeAllContentNodes = event.target.checked;
+    this.includeAllContentNodes = event.target.checked;
+    this.#nodePickerValue!.nodes = [];
+    if (this.#nodePickerValue!.includeAllContentNodes) {
+      this.#nodePickerValue?.nodes.push(
+        new EnterspeedUniqueItemModelImpl(false, "Everything", "Everything")
+      );
+    }
   }
 
   #onIncludeDescendants(event: UUIBooleanInputEvent) {
     this.#includeDescendants = event.target.checked;
   }
 
-  async #handleDocumentNodes(selection: string[]) {
-    let nodes = (await this.#documentRepository.requestItems(selection)).data;
-    if (nodes != null) {
-      for (let node of nodes) {
-        if (node != null) {
-          let mappedNode = new EnterspeedUniqueItemModelImpl(
-            this.#includeDescendants,
-            node.unique,
-            node.name
-          );
-          this.#nodePickerValue?.documentNodes?.push(mappedNode);
+  async #handleNodes(selection: string[]) {
+    if (this.modalContext?.data.treeAlias == UMB_DOCUMENT_TREE_ALIAS) {
+      let nodes = (await this.#documentRepository.requestItems(selection)).data;
+      if (nodes != null) {
+        for (let node of nodes) {
+          if (node != null) {
+            let mappedNode = new EnterspeedUniqueItemModelImpl(
+              this.#includeDescendants,
+              node.unique,
+              node.name
+            );
+            this.#nodePickerValue?.nodes?.push(mappedNode);
+          }
         }
       }
-    }
-  }
-
-  async #handleMediaNodes(selection: string[]) {
-    let nodes = (await this.#mediaItemRepository.requestItems(selection)).data;
-    if (nodes != null) {
-      for (let node of nodes) {
-        if (node != null) {
-          let mappedNode = new EnterspeedUniqueItemModelImpl(
-            this.#includeDescendants,
-            node.unique,
-            node.name
-          );
-          this.#nodePickerValue?.mediaNodes?.push(mappedNode);
+    } else if (this.modalContext?.data.treeAlias == UMB_MEDIA_TREE_ALIAS) {
+      let nodes = (await this.#mediaItemRepository.requestItems(selection))
+        .data;
+      if (nodes != null) {
+        for (let node of nodes) {
+          if (node != null) {
+            let mappedNode = new EnterspeedUniqueItemModelImpl(
+              this.#includeDescendants,
+              node.unique,
+              node.name
+            );
+            this.#nodePickerValue?.nodes?.push(mappedNode);
+          }
         }
       }
-    }
-  }
-
-  async #handleDictionaryNodes(selection: string[]) {
-    let nodes = (await this.#dictionaryRepository.requestItems(selection)).data;
-    if (nodes != null) {
-      for (let node of nodes) {
-        if (node != null) {
-          let mappedNode = new EnterspeedUniqueItemModelImpl(
-            this.#includeDescendants,
-            node.unique,
-            node.name
-          );
-          this.#nodePickerValue?.dictionaryNodes?.push(mappedNode);
+    } else if (this.modalContext?.data.treeAlias == UMB_DICTIONARY_TREE_ALIAS) {
+      let nodes = (await this.#dictionaryRepository.requestItems(selection))
+        .data;
+      if (nodes != null) {
+        for (let node of nodes) {
+          if (node != null) {
+            let mappedNode = new EnterspeedUniqueItemModelImpl(
+              this.#includeDescendants,
+              node.unique,
+              node.name
+            );
+            this.#nodePickerValue?.nodes?.push(mappedNode);
+          }
         }
       }
     }
