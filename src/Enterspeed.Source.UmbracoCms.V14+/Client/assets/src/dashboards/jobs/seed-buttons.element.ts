@@ -152,7 +152,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   #renderClearJobQueueButton() {
     return html` <uui-button
-      .disabled=${this.#numberOfPendingJobs > 0}
+      .disabled=${this.#numberOfPendingJobs <= 0}
       type="button"
       look="secondary"
       color="default"

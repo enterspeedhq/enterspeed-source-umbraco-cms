@@ -9,6 +9,7 @@ import {
   state,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
+import { CustomNodesSelctedEvent } from "../../types.ts";
 
 @customElement("enterspeed-seed")
 export class seedElement extends UmbLitElement {
@@ -28,7 +29,12 @@ export class seedElement extends UmbLitElement {
   }
 
   #onCustomNodesSelected(e: CustomEvent) {
-    this.disableSeedButton = e.detail !== 1;
+    let event = e.detail as CustomNodesSelctedEvent;
+    if (event.nodes.length > 0) {
+      this.disableSeedButton = false;
+    } else {
+      this.disableSeedButton = true;
+    }
   }
 
   render() {

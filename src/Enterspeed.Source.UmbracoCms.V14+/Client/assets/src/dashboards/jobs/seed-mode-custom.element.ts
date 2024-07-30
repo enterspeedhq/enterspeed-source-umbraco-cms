@@ -10,7 +10,7 @@ import { UMB_DICTIONARY_TREE_ALIAS } from "@umbraco-cms/backoffice/dictionary";
 import { UMB_MEDIA_TREE_ALIAS } from "@umbraco-cms/backoffice/media";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
 import { repeat } from "lit/directives/repeat.js";
-
+import { CustomNodesSelctedEvent } from "../../types";
 @customElement("enterspeed-seed-mode-custom")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
@@ -176,10 +176,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     await modal?.onSubmit().then((data) => {
       switch (data.treeAlias) {
         case UMB_DOCUMENT_TREE_ALIAS:
-          this.documentNodes = this.#mapNodes(
-            this.documentNodes,
-            data.nodes
-          );
+          this.documentNodes = this.#mapNodes(this.documentNodes, data.nodes);
           super.requestUpdate("documentNodes");
           break;
         case UMB_DICTIONARY_TREE_ALIAS:
@@ -194,19 +191,21 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           super.requestUpdate("mediaNodes");
           break;
       }
-      this.#onDataUpdated();
+      this.#onDataUpdated(data.treeAlias);
     });
   }
 
-  #onDataUpdated() {
+  #onDataUpdated(treeAlias: string) {
+    let customNodesSelected: CustomNodesSelctedEvent = {
+      nodes: this.documentNodes.concat(this.dictionaryNodes, this.mediaNodes),
+      treeAlias: treeAlias,
+    };
+
     this.dispatchEvent(
       new CustomEvent("custom-nodes-selected", {
         bubbles: true,
         composed: true,
-        detail:
-          this.mediaNodes.length ||
-          this.documentNodes.length ||
-          this.dictionaryNodes.length,
+        detail: customNodesSelected,
       })
     );
   }
@@ -215,17 +214,22 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     existingNodes: EnterspeedUniqueItemModel[],
     nodesToAdd: EnterspeedUniqueItemModel[]
   ): Array<EnterspeedUniqueItemModel> {
+    nodesToAdd = nodesToAdd.filter(
+      (node, index, self) =>
+        self.findIndex((n) => n.unique === node.unique) === index
+    );
+
     for (let index = 0; index < nodesToAdd.length; index++) {
       const nodeToAdd = nodesToAdd[index];
       let existingIndex = existingNodes.findIndex(
-        (e) => e.name == nodeToAdd.name
+        (e) => e.unique == nodeToAdd.unique
       );
 
       if (existingIndex > 0) {
         existingNodes.splice(existingIndex, 1);
       }
-      
-      if(nodeToAdd.name === "Everything") {
+
+      if (nodeToAdd.unique === "Everything") {
         existingNodes = [];
       }
 
