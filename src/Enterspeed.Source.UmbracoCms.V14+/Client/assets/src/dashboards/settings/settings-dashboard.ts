@@ -21,13 +21,15 @@ import {
 export class enterspeedSettingsDashboard extends UmbLitElement {
   #enterspeedContext: EnterspeedContext;
   #notificationContext!: UmbNotificationContext;
-  #loadingConfiguration = true;
   #enterspeedConfiguration:
     | EnterspeedUmbracoConfiguration
     | EnterspeedUmbracoConfigurationResponse
     | null
     | undefined;
   #buttonState: string;
+
+  @state()
+  loadingConfiguration = true;
 
   constructor() {
     super();
@@ -50,7 +52,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
       .getEnterspeedConfiguration()
       .then((response) => {
         this.#enterspeedConfiguration = response.data?.data?.configuration;
-        this.#loadingConfiguration = false;
+        this.loadingConfiguration = false;
       })
       .catch((error) => {
         this.#notificationContext?.peek("danger", {
@@ -156,7 +158,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
   }
 
   render() {
-    if (!this.#loadingConfiguration) {
+    if (!this.loadingConfiguration) {
       let configuredFromSettingsFile = this.#enterspeedConfiguration
         ?.configuredFromSettingsFile
         ? html` <div class="info-box">
@@ -187,11 +189,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Enterspeed base url"
               label="enterspeed base url"
               .disabled=${this.#enterspeedConfiguration
-                ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.baseUrl}
               @input="${(e: any) => {
-                this.#enterspeedConfiguration!.baseUrl = e.target.value;
-              }})}"
+          this.#enterspeedConfiguration!.baseUrl = e.target.value;
+        }})}"
               @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
@@ -209,11 +211,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Media domain (optional)"
               label="Media domain (optional)"
               .disabled=${this.#enterspeedConfiguration
-                ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.mediaDomain ?? ""}
               @input="${(e: any) => {
-                this.#enterspeedConfiguration!.mediaDomain = e.target.value;
-              }})}"
+          this.#enterspeedConfiguration!.mediaDomain = e.target.value;
+        }})}"
               @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
@@ -234,11 +236,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Enterspeed API Key"
               label="Enterspeed API Key"
               .disabled=${this.#enterspeedConfiguration
-                ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.apiKey ?? ""}
               @input="${(e: any) => {
-                this.#enterspeedConfiguration!.apiKey = e.target.value;
-              }}"
+          this.#enterspeedConfiguration!.apiKey = e.target.value;
+        }}"
               @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
@@ -255,11 +257,11 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Enterspeed preview API Key (optional)"
               label="Enterspeed preview API Key (optional)"
               .disabled=${this.#enterspeedConfiguration
-                ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.previewApiKey ?? ""}
               @input="${(e: any) => {
-                this.#enterspeedConfiguration!.previewApiKey = e.target.value;
-              }}"
+          this.#enterspeedConfiguration!.previewApiKey = e.target.value;
+        }}"
               @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
@@ -271,9 +273,9 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               color="positive"
               label="Basic"
               .disabled=${this.#buttonState == "busy" ||
-              !this.#enterspeedConfiguration?.apiKey ||
-              !this.#enterspeedConfiguration?.baseUrl ||
-              this.#enterspeedConfiguration?.configuredFromSettingsFile}
+        !this.#enterspeedConfiguration?.apiKey ||
+        !this.#enterspeedConfiguration?.baseUrl ||
+        this.#enterspeedConfiguration?.configuredFromSettingsFile}
               @click="${() => this.saveConfiguration()}"
               >Save configuration</uui-button
             >
@@ -284,8 +286,8 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               color="default"
               label="Basic"
               .disabled=${this.#buttonState == "busy" ||
-              !this.#enterspeedConfiguration?.apiKey ||
-              !this.#enterspeedConfiguration?.baseUrl}
+        !this.#enterspeedConfiguration?.apiKey ||
+        !this.#enterspeedConfiguration?.baseUrl}
               @click="${() => this.testConfigurationConnection()}"
               >Test connection</uui-button
             >
