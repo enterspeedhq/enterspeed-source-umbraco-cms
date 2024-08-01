@@ -174,6 +174,9 @@ export default class EnterspeedNodePickerModal
 
   #onIncludeDescendants(event: UUIBooleanInputEvent) {
     this.#includeDescendants = event.target.checked;
+    this.#nodePickerValue?.nodes.forEach((element) => {
+      element.includeDescendants = event.target.checked;
+    });
   }
 
   async #handleNodes(selection: string[]) {
