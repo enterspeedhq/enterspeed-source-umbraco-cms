@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Asp.Versioning;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Configuration;
@@ -17,6 +18,7 @@ using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.V14.Controllers;
 using Enterspeed.Source.UmbracoCms.V14.Models;
+using Enterspeed.Source.UmbracoCms.V14.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -31,14 +33,14 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
         private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        private readonly IEnterspeedJobService _enterspeedJobService;
+        private readonly IEnterspeedU14JobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
         private readonly IEnterspeedConnection _enterspeedConnection;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public DashboardController(
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobService enterspeedJobService,
+            IEnterspeedU14JobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
             IHttpContextAccessor httpContextAccessor,
@@ -98,7 +100,7 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
         [HttpPost("CustomSeed")]
         [MapToApiVersion("1.0")]
         [ProducesResponseType(typeof(ApiResponse<SeedResponse>), 200)]
-        public IActionResult CustomSeed([FromBody] CustomSeedModel customSeed)
+        public async Task<IActionResult> CustomSeed([FromBody] U14CustomSeedModel customSeed)
         {
             var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();
             var previewConfigured = _enterspeedConfigurationService.IsPreviewConfigured();
@@ -114,11 +116,12 @@ namespace Enterspeed.Source.UmbracoCms14.Controllers.Api
                     });
             }
 
-            //var response = _enterspeedJobService.CustomSeed(publishConfigured, previewConfigured, customSeed);
+            var response = await _enterspeedJobService.CustomSeed(customSeed, publishConfigured, previewConfigured);
+
             return Ok(
                 new ApiResponse<SeedResponse>
                 {
-                    //Data = response,
+                    Data = response,
                     IsSuccess = true
                 });
         }

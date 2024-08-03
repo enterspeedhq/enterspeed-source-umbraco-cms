@@ -6,7 +6,7 @@ export default defineConfig({
             entry: "src/index.ts", // your web component source file
             formats: ["es"],
         },
-        outDir: "../../../../../enterspeed-test-sites/U14/U14.Website/wwwroot/App_Plugins/Enterspeed.Source.UmbracoCms", 
+        outDir: "../../wwwroot/App_Plugins/Enterspeed.Source.UmbracoCms", 
         emptyOutDir: true,
         sourcemap: true,
         rollupOptions: {

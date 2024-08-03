@@ -3,7 +3,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export type CustomSeedNode = {
+export type U14CustomSeedNode = {
     id?: string | null;
     includeDescendants: boolean;
 };

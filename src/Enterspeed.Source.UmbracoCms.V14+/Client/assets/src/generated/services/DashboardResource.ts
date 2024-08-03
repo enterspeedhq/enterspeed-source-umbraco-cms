@@ -7,10 +7,10 @@ import type { ApiResponse_EnterspeedUmbracoConfigurationResponse_ } from '../mod
 import type { ApiResponse_GetNumberOfPendingJobsResponse_ } from '../models/ApiResponse_GetNumberOfPendingJobsResponse_';
 import type { ApiResponse_List_1_ } from '../models/ApiResponse_List_1_';
 import type { ApiResponse_SeedResponse_ } from '../models/ApiResponse_SeedResponse_';
-import type { CustomSeedModel } from '../models/CustomSeedModel';
 import type { EnterspeedUmbracoConfiguration } from '../models/EnterspeedUmbracoConfiguration';
 import type { JobIdsToDelete } from '../models/JobIdsToDelete';
 import type { Response } from '../models/Response';
+import type { U14CustomSeedModel } from '../models/U14CustomSeedModel';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -36,7 +36,7 @@ export class DashboardResource {
     public static customSeed({
         requestBody,
     }: {
-        requestBody?: CustomSeedModel,
+        requestBody?: U14CustomSeedModel,
     }): CancelablePromise<ApiResponse_SeedResponse_> {
         return __request(OpenAPI, {
             method: 'POST',

@@ -11,6 +11,7 @@ import { UMB_MEDIA_TREE_ALIAS } from "@umbraco-cms/backoffice/media";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
 import { repeat } from "lit/directives/repeat.js";
 import { CustomSeedModel, CustomSeedNode } from "../../generated";
+
 @customElement("enterspeed-seed-mode-custom")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #modalManagerContext?: typeof UMB_MODAL_MANAGER_CONTEXT.TYPE;
@@ -29,7 +30,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     this.consumeContext(UMB_MODAL_MANAGER_CONTEXT, (instance) => {
       this.#modalManagerContext = instance;
     });
-    console.log("rendered");
   }
 
   render() {
@@ -118,6 +118,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       </uui-ref-node>
     `;
   }
+
   #removeNode(item: EnterspeedUniqueItemModel) {
     let index = this.documentNodes.findIndex((n) => n.unique == item.unique);
     if (index > -1) {
