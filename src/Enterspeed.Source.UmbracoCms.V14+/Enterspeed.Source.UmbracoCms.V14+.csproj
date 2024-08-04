@@ -9,17 +9,16 @@
 		<ContentTargetFolders>.</ContentTargetFolders>
 		<Description>Enterspeed integration for Umbraco</Description>
 		<PackageTags>Enterspeed, Umbraco 9+, umbraco-marketplace</PackageTags>
-
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
 		<PackageProjectUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
+		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
 	</PropertyGroup>
 
 	<ItemGroup>
-
 		<PackageReference Include="Enterspeed.Source.Sdk" Version="2.0.1" />
 	</ItemGroup>
 
@@ -31,7 +30,8 @@
 
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>
-			<Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
+			<Analyzer Remove="@(Analyzer)"
+				Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'" />
 		</ItemGroup>
 	</Target>
 
@@ -58,28 +58,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Remove="App_Plugins\Enterspeed.Dashboard\dashboard.html" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Resources\enterspeed-dashboard.resources.js" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\enterspeed-configuration.controller.js" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\enterspeed-failedjobs.controller.js" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Controllers\enterspeed-seed.controller.js" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\configuration.view.html" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\failedjobs.view.html" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\Dashboard.Sub.Views\seed.view.html" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\enterspeed-dashboard.controller.js" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\enterspeed-settings-dashboard.controller.js" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\lang\en-US.xml" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\package.manifest" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
-		<None Remove="App_Plugins\Enterspeed.Dashboard\styles.css" />
+		<ProjectReference
+			Include="..\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="wwwroot\App_Plugins\" />
+		<Folder Include="wwwroot\App_Plugins\" />
 	</ItemGroup>
 
 </Project>
