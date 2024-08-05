@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 *.orig
 .idea/
+src/Enterspeed.Source.UmbracoCms.V14+/wwwroot/App_Plugins/Enterspeed.Source.UmbracoCms

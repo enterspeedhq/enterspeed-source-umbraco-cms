@@ -148,7 +148,6 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
                     customSeedNode.Id = content.Id;
                 }
 
-
                 contentNodes.Add(customSeedNode);
             }
         }

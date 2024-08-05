@@ -4,22 +4,24 @@ import {
   UMB_NOTIFICATION_CONTEXT,
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
-import { customElement, property } from "lit/decorators.js";
-import { CustomSeedModel, SeedResponse } from "../../generated";
+import { customElement, property, state } from "lit/decorators.js";
+import { U14CustomSeedModel, SeedResponse } from "../../generated";
 import { html } from "lit";
 
 @customElement("enterspeed-seed-buttons")
 export class enterspeedSeedButtonsElement extends UmbLitElement {
   #enterspeedContext!: EnterspeedContext;
   #notificationContext!: UmbNotificationContext;
-  #numberOfPendingJobs = 0;
   #seedResponse: SeedResponse | undefined | null;
+
+  @state()
+  private numberOfPendingJobs = 0;
 
   @property({ type: Boolean })
   disableSeedButton: boolean = true;
 
   @property({ type: Object })
-  customSeedModel: CustomSeedModel | undefined;
+  customSeedModel: U14CustomSeedModel | undefined;
 
   constructor() {
     super();
@@ -62,7 +64,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
             },
           });
 
-          this.#numberOfPendingJobs =
+          this.numberOfPendingJobs =
             this.#seedResponse?.numberOfPendingJobs || 0;
         } else {
           this.#seedResponse = null;
@@ -75,6 +77,9 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
             message: error.data.message,
           },
         });
+      })
+      .finally(() => {
+        super.requestUpdate("numberOfPendingJobs");
       });
 
     this.disableSeedButton = false;
@@ -90,7 +95,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
               message: "Successfully cleared the queue of pending jobs",
             },
           });
-          this.#numberOfPendingJobs = 0;
+          this.numberOfPendingJobs = 0;
         }
       })
       .catch((error) => {
@@ -106,17 +111,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
   }
 
   #initGetNumberOfPendingJobs() {
-    let intervalId = setInterval(
-      () => this.#getNumberOfPendingJobs(),
-      10 * 1000
-    );
-    window.addEventListener(
-      "hashchange",
-      () => {
-        clearInterval(intervalId);
-      },
-      false
-    );
+    setInterval(() => this.#getNumberOfPendingJobs(), 10 * 1000);
   }
 
   #getNumberOfPendingJobs() {
@@ -124,13 +119,13 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
       .getNumberOfPendingJobs()
       .then((response) => {
         if (response.data?.isSuccess) {
-          this.#numberOfPendingJobs =
+          this.numberOfPendingJobs =
             response.data?.data?.numberOfPendingJobs ?? 0;
-          if (this.#numberOfPendingJobs === 0) {
+          if (this.numberOfPendingJobs === 0) {
             this.#seedResponse = null;
           }
         } else {
-          this.#numberOfPendingJobs = 0;
+          this.numberOfPendingJobs = 0;
         }
       })
       .catch((error) => {
@@ -156,11 +151,11 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   #renderClearJobQueueButton() {
     return html` <uui-button
-      .disabled=${this.#numberOfPendingJobs <= 0}
+      .disabled=${this.numberOfPendingJobs <= 0}
       type="button"
       look="secondary"
       color="default"
-      label="Clear job queue ${this.#numberOfPendingJobs}"
+      label="Clear job queue ${this.numberOfPendingJobs}"
       @click="${async () => this.#clearJobQueue()}"
     ></uui-button>`;
   }

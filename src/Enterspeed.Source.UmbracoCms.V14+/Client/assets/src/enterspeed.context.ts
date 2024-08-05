@@ -3,7 +3,7 @@ import { UmbContextToken } from "@umbraco-cms/backoffice/context-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { EnterspeedRepository } from "./repository/enterspeed.repository";
 import {
-  CustomSeedModel,
+  U14CustomSeedModel,
   EnterspeedUmbracoConfiguration,
   JobIdsToDelete,
 } from "./generated";
@@ -15,7 +15,7 @@ export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
     super(host, ENTERSPEED_CONTEXT);
   }
 
-  public async seed(customSeedModel: CustomSeedModel | undefined) {
+  public async seed(customSeedModel: U14CustomSeedModel | undefined) {
     if (customSeedModel != null) {
       let response = await this.enterspeedRepository.customSeed(
         customSeedModel
