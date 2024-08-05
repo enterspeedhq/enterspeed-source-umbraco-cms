@@ -1,10 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.V14.Models;
 using Umbraco.Cms.Core.Services;
-using Umbraco.Extensions;
 
 namespace Enterspeed.Source.UmbracoCms.V14.Services;
 
@@ -44,9 +44,9 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
 
         return _enterspeedJobService.CustomSeed(publish, preview, new CustomSeed()
         {
-            ContentNodes = contentNodes.ToArray(),
-            DictionaryNodes = dictionaryNodes.ToArray(),
-            MediaNodes = mediaNodes.ToArray()
+            ContentNodes = [.. contentNodes],
+            DictionaryNodes = [.. dictionaryNodes],
+            MediaNodes = [.. mediaNodes]
         });
     }
 
@@ -66,14 +66,20 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
             }
             else
             {
-                var dictionaryItem = await _dictionaryItemService.GetAsync(dictionaryNode.Id.AsGuid());
-                if (dictionaryItem == null) continue;
 
                 var customSeedNode = new CustomSeedNode()
                 {
-                    Id = dictionaryItem.Id,
                     IncludeDescendants = dictionaryNode.IncludeDescendants
                 };
+
+
+                if (Guid.TryParse(dictionaryNode.Id, out var parsedGuid))
+                {
+                    var dictionaryItem = await _dictionaryItemService.GetAsync(parsedGuid);
+                    if (dictionaryItem == null) continue;
+
+                    customSeedNode.Id = dictionaryItem.Id;
+                }
 
                 dictionaryNodes.Add(customSeedNode);
             }
@@ -96,14 +102,17 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
             }
             else
             {
-                var media = _mediaService.GetById(mediaNode.Id.AsGuid());
-                if (media == null) continue;
-
                 var customSeedNode = new CustomSeedNode()
                 {
-                    Id = media.Id,
                     IncludeDescendants = mediaNode.IncludeDescendants
                 };
+
+                if (Guid.TryParse(mediaNode.Id, out var parsedGuid))
+                {
+                    var media = _mediaService.GetById(parsedGuid);
+                    if (media == null) continue;
+                    customSeedNode.Id = media.Id;
+                }
 
                 mediaNodes.Add(customSeedNode);
             }
@@ -126,14 +135,19 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
             }
             else
             {
-                var content = _contentService.GetById(contentNode.Id.AsGuid());
-                if (content == null) continue;
-
                 var customSeedNode = new CustomSeedNode()
                 {
-                    Id = content.Id,
                     IncludeDescendants = contentNode.IncludeDescendants
                 };
+
+                if (Guid.TryParse(contentNode.Id, out var parsedGuid))
+                {
+                    var content = _contentService.GetById(parsedGuid);
+                    if (content == null) continue;
+
+                    customSeedNode.Id = content.Id;
+                }
+
 
                 contentNodes.Add(customSeedNode);
             }
