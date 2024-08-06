@@ -72,19 +72,6 @@ export class enterspeedDashboard extends UmbLitElement {
       padding: 5px 0 20px 5px;
     }
 
-    .info-box {
-      width: 750px;
-      border-radius: 3px;
-      background-color: #2152a3;
-      font-size: 15px;
-      line-height: 20px;
-      margin-bottom: 0;
-      padding: 6px 14px;
-      vertical-align: middle;
-      color: white;
-      margin-bottom: 10px;
-    }
-
     .seed-dashboard-text {
       padding: 0 0 20px 5px;
     }

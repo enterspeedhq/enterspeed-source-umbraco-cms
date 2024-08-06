@@ -2,6 +2,7 @@ import {
   html,
   customElement,
   state,
+  css,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import { EnterspeedContext } from "../../enterspeed.context.ts";
@@ -37,6 +38,21 @@ export class enterspeedServerMessageElement extends UmbLitElement {
       </div>`;
     }
   }
+
+  static styles = css`
+    .info-box {
+      width: 750px;
+      border-radius: 3px;
+      background-color: #2152a3;
+      font-size: 15px;
+      line-height: 20px;
+      margin-bottom: 0;
+      padding: 6px 14px;
+      vertical-align: middle;
+      color: white;
+      margin-bottom: 10px;
+    }
+  `;
 }
 
 export default enterspeedServerMessageElement;

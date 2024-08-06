@@ -10,7 +10,7 @@ import {
   property,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { CustomSeedModel } from "../../generated/index.ts";
+import { U14CustomSeedModel } from "../../generated/index.ts";
 import { EnterspeedUniqueItemModel } from "../../components/modals/node-picker/node-picker-modal.token.ts";
 
 @customElement("enterspeed-seed")
@@ -22,7 +22,7 @@ export class seedElement extends UmbLitElement {
   selectedSeedMode?: string;
 
   @state()
-  customSeedModel?: CustomSeedModel;
+  customSeedModel?: U14CustomSeedModel;
 
   @property({ type: Array })
   documentNodes: Array<EnterspeedUniqueItemModel> =
@@ -46,7 +46,7 @@ export class seedElement extends UmbLitElement {
   }
 
   #onCustomNodesSelected(e: CustomEvent) {
-    let event = e.detail as CustomSeedModel;
+    let event = e.detail as U14CustomSeedModel;
     if (
       event!.contentNodes!.length > 0 ||
       event!.mediaNodes!.length > 0 ||
