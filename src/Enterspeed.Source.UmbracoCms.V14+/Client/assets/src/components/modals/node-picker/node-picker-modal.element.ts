@@ -99,6 +99,7 @@ export default class EnterspeedNodePickerModal
               .props=${{
                 hideTreeItemActions: true,
                 selectionConfiguration: this.selectionConfiguration,
+                hideTreeRoot: true
               }}
               @selected=${this.#onSelected}
               @deselected=${this.#onDeselected}></umb-tree>
