@@ -25,15 +25,15 @@ export class seedElement extends UmbLitElement {
   customSeedModel?: CustomSeedModel;
 
   @property({ type: Array })
-  documentNodes?: Array<EnterspeedUniqueItemModel> =
+  documentNodes: Array<EnterspeedUniqueItemModel> =
     new Array<EnterspeedUniqueItemModel>();
 
   @property({ type: Array })
-  mediaNodes?: Array<EnterspeedUniqueItemModel> =
+  mediaNodes: Array<EnterspeedUniqueItemModel> =
     new Array<EnterspeedUniqueItemModel>();
 
   @property({ type: Array })
-  dictionaryNodes?: Array<EnterspeedUniqueItemModel> =
+  dictionaryNodes: Array<EnterspeedUniqueItemModel> =
     new Array<EnterspeedUniqueItemModel>();
 
   #onSeedModeUpdated(e: CustomEvent) {
