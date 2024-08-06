@@ -14,6 +14,8 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
   #notificationContext!: UmbNotificationContext;
   #seedResponse: SeedResponse | undefined | null;
 
+  private interval: any;
+
   @state()
   private numberOfPendingJobs = 0;
 
@@ -40,6 +42,17 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
     return html` <div class="seed-dashboard-content">
       ${this.#renderSeedButton()} ${this.#renderClearJobQueueButton()}
     </div>`;
+  }
+
+  disconnectedCallback(): void {
+    clearInterval(this.interval);
+  }
+
+  #initGetNumberOfPendingJobs() {
+    this.interval = setInterval(
+      () => this.#getNumberOfPendingJobs(),
+      10 * 1000
+    );
   }
 
   async #seed() {
@@ -108,10 +121,6 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
       });
 
     this.#seedResponse = null;
-  }
-
-  #initGetNumberOfPendingJobs() {
-    setInterval(() => this.#getNumberOfPendingJobs(), 10 * 1000);
   }
 
   #getNumberOfPendingJobs() {
