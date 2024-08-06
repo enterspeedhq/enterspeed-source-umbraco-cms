@@ -229,7 +229,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
         (e) => e.unique == nodeToAdd.unique
       );
 
-      if (existingIndex > 0) {
+      if (existingIndex > -1) {
         existingNodes.splice(existingIndex, 1);
       }
 
