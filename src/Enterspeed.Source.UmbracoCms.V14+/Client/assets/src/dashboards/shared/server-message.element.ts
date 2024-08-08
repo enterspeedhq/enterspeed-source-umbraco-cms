@@ -15,7 +15,7 @@ export class enterspeedServerMessageElement extends UmbLitElement {
   serverRole = "";
 
   @state()
-  runJobsOnServer = false;
+  runJobsOnServer = true;
 
   constructor() {
     super();
