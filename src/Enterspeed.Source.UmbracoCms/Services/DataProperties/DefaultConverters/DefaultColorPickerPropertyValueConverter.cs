@@ -30,7 +30,7 @@ namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
             var colorValue = string.Empty;
             var colorLabel = string.Empty;
 
-            if (_enterspeedConfigurationEditorProvider.UseLabel(property.PropertyType))
+            if (_enterspeedConfigurationEditorProvider.UseColorPickerLabel(property.PropertyType))
             {
                 var colorPickerValue = property.GetValue<ColorPickerValueConverter.PickedColor>(culture);
                 if (colorPickerValue is not null)

@@ -4,6 +4,6 @@ namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public interface IEnterspeedConfigurationEditorProvider
     {
-        bool UseLabel(IPublishedPropertyType propertyType);
+        bool UseColorPickerLabel(IPublishedPropertyType propertyType);
     }
 }
