@@ -61,6 +61,7 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
             builder.Services.AddSingleton<IEnterspeedValidationService, EnterspeedValidationService>();
             builder.Services.AddTransient<IUmbracoCultureProvider, UmbracoCultureProvider>();
 
+            builder.Services.AddSingleton<IEnterspeedConfigurationEditorProvider, EnterspeedConfigurationEditorProvider>();
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationService, EnterspeedConfigurationService>();
             builder.Services.AddSingleton<IEnterspeedConfigurationProvider, EnterspeedUmbracoConfigurationProvider>();
@@ -144,7 +145,7 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
                 // Content
                 .Append<EnterspeedContentPublishJobHandler>()
                 .Append<EnterspeedContentDeleteJobHandler>()
-                
+
                 // Master Content
                 .Append<EnterspeedMasterContentPublishJobHandler>()
                 .Append<EnterspeedMasterContentDeleteJobHandler>()
