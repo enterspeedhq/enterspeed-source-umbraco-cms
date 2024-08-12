@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Sync;
+using IEnterspeedJobService = Enterspeed.Source.UmbracoCms.V14Plus.Services.IEnterspeedJobService;
 
 namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
 {
@@ -32,14 +33,14 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
         private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        private readonly IEnterspeedU14JobService _enterspeedJobService;
+        private readonly IEnterspeedJobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
         private readonly IEnterspeedConnection _enterspeedConnection;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
         public DashboardController(
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedU14JobService enterspeedJobService,
+            IEnterspeedJobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
             IHttpContextAccessor httpContextAccessor,
@@ -99,7 +100,7 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
         [HttpPost("CustomSeed")]
         [MapToApiVersion("1.0")]
         [ProducesResponseType(typeof(ApiResponse<SeedResponse>), 200)]
-        public async Task<IActionResult> CustomSeed([FromBody] U14CustomSeedModel customSeed)
+        public async Task<IActionResult> CustomSeed([FromBody] CustomSeedModel customSeed)
         {
             var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();
             var previewConfigured = _enterspeedConfigurationService.IsPreviewConfigured();

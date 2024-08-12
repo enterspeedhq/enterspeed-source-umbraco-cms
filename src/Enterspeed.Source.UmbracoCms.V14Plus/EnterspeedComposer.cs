@@ -20,7 +20,7 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus
             builder.Services.AddSingleton<IOperationIdSelector, EnterspeedOperationIdSelector>();
             builder.Services.Replace(ServiceDescriptor.Singleton<IEnterspeedConfigurationEditorProvider, EnterspeedConfigurationEditorProvider>());
 
-            builder.Services.AddTransient<IEnterspeedU14JobService, EnterspeedU14JobService>();
+            builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.ConfigureOptions<ConfigureEnterspeedApiSwaggerGenOptions>();
         }
     }

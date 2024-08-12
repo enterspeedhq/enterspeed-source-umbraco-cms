@@ -2,21 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Models.Api;
-using Enterspeed.Source.UmbracoCms.Services;
 using Enterspeed.Source.UmbracoCms.V14Plus.Models;
 using Umbraco.Cms.Core.Services;
+using CustomSeedNode = Enterspeed.Source.UmbracoCms.Models.Api.CustomSeedNode;
 
 namespace Enterspeed.Source.UmbracoCms.V14Plus.Services;
 
-public class EnterspeedU14JobService : IEnterspeedU14JobService
+public class EnterspeedJobService : IEnterspeedJobService
 {
-    private readonly IEnterspeedJobService _enterspeedJobService;
+    private readonly UmbracoCms.Services.IEnterspeedJobService _enterspeedJobService;
     private readonly IContentService _contentService;
     private readonly IMediaService _mediaService;
     private readonly IDictionaryItemService _dictionaryItemService;
 
-    public EnterspeedU14JobService(
-        IEnterspeedJobService enterspeedJobService,
+    public EnterspeedJobService(
+        UmbracoCms.Services.IEnterspeedJobService enterspeedJobService,
         IContentService contentService,
         IMediaService mediaService,
         IDictionaryItemService dictionaryItemService)
@@ -32,7 +32,7 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
         return _enterspeedJobService.Seed(publish, preview);
     }
 
-    public async Task<SeedResponse> CustomSeed(U14CustomSeedModel customSeedModel, bool publish, bool preview)
+    public async Task<SeedResponse> CustomSeed(CustomSeedModel customSeedModel, bool publish, bool preview)
     {
         var contentNodes = new List<CustomSeedNode>();
         var mediaNodes = new List<CustomSeedNode>();
@@ -50,7 +50,7 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
         });
     }
 
-    private async Task MapDictionaryNodes(U14CustomSeedModel customSeedModel, List<CustomSeedNode> dictionaryNodes)
+    private async Task MapDictionaryNodes(CustomSeedModel customSeedModel, List<CustomSeedNode> dictionaryNodes)
     {
         foreach (var dictionaryNode in customSeedModel.DictionaryNodes)
         {
@@ -86,7 +86,7 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
         }
     }
 
-    private void MapMediaNodes(U14CustomSeedModel customSeedModel, List<CustomSeedNode> mediaNodes)
+    private void MapMediaNodes(CustomSeedModel customSeedModel, List<CustomSeedNode> mediaNodes)
     {
         foreach (var mediaNode in customSeedModel.MediaNodes)
         {
@@ -119,7 +119,7 @@ public class EnterspeedU14JobService : IEnterspeedU14JobService
         }
     }
 
-    private void MapContentNodes(U14CustomSeedModel customSeedModel, List<CustomSeedNode> contentNodes)
+    private void MapContentNodes(CustomSeedModel customSeedModel, List<CustomSeedNode> contentNodes)
     {
         foreach (var contentNode in customSeedModel.ContentNodes)
         {
