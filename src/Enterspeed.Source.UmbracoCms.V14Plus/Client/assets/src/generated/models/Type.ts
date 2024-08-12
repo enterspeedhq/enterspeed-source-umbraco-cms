@@ -92,4 +92,3 @@ export type Type = {
     readonly containsGenericParameters: boolean;
     readonly isVisible: boolean;
 };
-

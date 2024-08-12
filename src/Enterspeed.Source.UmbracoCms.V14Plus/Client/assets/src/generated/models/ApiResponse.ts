@@ -7,4 +7,3 @@ export type ApiResponse = {
     isSuccess: boolean;
     errorCode?: string | null;
 };
-

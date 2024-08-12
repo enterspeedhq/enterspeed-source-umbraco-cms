@@ -8,4 +8,3 @@ import type { IntPtr } from './IntPtr';
 export type RuntimeFieldHandle = {
     readonly value: IntPtr;
 };
-

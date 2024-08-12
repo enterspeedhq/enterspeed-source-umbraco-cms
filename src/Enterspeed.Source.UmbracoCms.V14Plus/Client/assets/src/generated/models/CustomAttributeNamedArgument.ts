@@ -12,4 +12,3 @@ export type CustomAttributeNamedArgument = {
     readonly memberName: string;
     readonly isField: boolean;
 };
-

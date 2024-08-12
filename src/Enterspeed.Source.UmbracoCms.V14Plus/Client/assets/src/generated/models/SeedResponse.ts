@@ -10,4 +10,3 @@ export type SeedResponse = {
     dictionaryCount: number;
     mediaCount: number;
 };
-

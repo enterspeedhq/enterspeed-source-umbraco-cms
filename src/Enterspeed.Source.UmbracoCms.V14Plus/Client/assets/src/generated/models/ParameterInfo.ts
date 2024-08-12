@@ -25,4 +25,3 @@ export type ParameterInfo = {
     readonly customAttributes: Array<CustomAttributeData>;
     readonly metadataToken: number;
 };
-

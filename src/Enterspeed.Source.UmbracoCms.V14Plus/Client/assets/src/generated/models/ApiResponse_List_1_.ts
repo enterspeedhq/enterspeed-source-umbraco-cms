@@ -10,4 +10,3 @@ export type ApiResponse_List_1_ = {
     errorCode?: string | null;
     data?: Array<EnterspeedJob> | null;
 };
-

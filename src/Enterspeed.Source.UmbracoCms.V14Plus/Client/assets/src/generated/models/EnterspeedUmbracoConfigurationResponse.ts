@@ -23,4 +23,3 @@ export type EnterspeedUmbracoConfigurationResponse = {
     runJobsOnServer: boolean;
     readonly configuration?: EnterspeedUmbracoConfiguration | null;
 };
-

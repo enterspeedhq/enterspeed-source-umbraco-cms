@@ -10,7 +10,7 @@ import {
   property,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { U14CustomSeedModel } from "../../generated/index.ts";
+import { CustomSeedModel } from "../../generated/index.ts";
 import { EnterspeedUniqueItemModel } from "../../components/modals/node-picker/node-picker-modal.token.ts";
 
 @customElement("enterspeed-seed")
@@ -22,7 +22,7 @@ export class seedElement extends UmbLitElement {
   selectedSeedMode?: string;
 
   @state()
-  customSeedModel?: U14CustomSeedModel;
+  customSeedModel?: CustomSeedModel;
 
   @property({ type: Array })
   documentNodes: Array<EnterspeedUniqueItemModel> =
@@ -46,7 +46,7 @@ export class seedElement extends UmbLitElement {
   }
 
   #onCustomNodesSelected(e: CustomEvent) {
-    let event = e.detail as U14CustomSeedModel;
+    let event = e.detail as CustomSeedModel;
     if (
       event!.contentNodes!.length > 0 ||
       event!.mediaNodes!.length > 0 ||
@@ -60,7 +60,7 @@ export class seedElement extends UmbLitElement {
     this.customSeedModel = event;
   }
 
-  #onAfterSeed(e: CustomEvent) {
+  #onAfterSeed() {
     this.customSeedModel = undefined;
     this.documentNodes = new Array<EnterspeedUniqueItemModel>();
     this.mediaNodes = new Array<EnterspeedUniqueItemModel>();
@@ -87,7 +87,7 @@ export class seedElement extends UmbLitElement {
             this.#onCustomNodesSelected(e)}
         ></enterspeed-seed-modes>
         <enterspeed-seed-buttons
-          @after-seed=${(e: CustomEvent) => this.#onAfterSeed(e)}
+          @after-seed=${() => this.#onAfterSeed()}
           .disableSeedButton=${this.disableSeedButton}
           .customSeedModel=${this.customSeedModel}
         >

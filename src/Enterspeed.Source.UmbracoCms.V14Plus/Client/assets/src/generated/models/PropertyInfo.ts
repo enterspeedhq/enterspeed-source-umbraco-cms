@@ -27,4 +27,3 @@ export type PropertyInfo = {
     readonly getMethod?: MethodInfo | null;
     readonly setMethod?: MethodInfo | null;
 };
-

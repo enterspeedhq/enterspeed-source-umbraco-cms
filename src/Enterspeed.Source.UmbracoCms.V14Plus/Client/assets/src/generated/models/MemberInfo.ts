@@ -18,4 +18,3 @@ export type MemberInfo = {
     readonly isCollectible: boolean;
     readonly metadataToken: number;
 };
-

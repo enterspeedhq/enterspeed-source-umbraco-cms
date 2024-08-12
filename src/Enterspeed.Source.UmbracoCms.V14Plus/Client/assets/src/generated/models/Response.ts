@@ -16,4 +16,3 @@ export type Response = {
     errorCode?: string | null;
     content?: string | null;
 };
-

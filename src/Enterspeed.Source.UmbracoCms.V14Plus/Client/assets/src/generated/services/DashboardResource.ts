@@ -7,10 +7,10 @@ import type { ApiResponse_EnterspeedUmbracoConfigurationResponse_ } from '../mod
 import type { ApiResponse_GetNumberOfPendingJobsResponse_ } from '../models/ApiResponse_GetNumberOfPendingJobsResponse_';
 import type { ApiResponse_List_1_ } from '../models/ApiResponse_List_1_';
 import type { ApiResponse_SeedResponse_ } from '../models/ApiResponse_SeedResponse_';
+import type { CustomSeedModel } from '../models/CustomSeedModel';
 import type { EnterspeedUmbracoConfiguration } from '../models/EnterspeedUmbracoConfiguration';
 import type { JobIdsToDelete } from '../models/JobIdsToDelete';
 import type { Response } from '../models/Response';
-import type { U14CustomSeedModel } from '../models/U14CustomSeedModel';
 
 import type { CancelablePromise } from '../core/CancelablePromise';
 import { OpenAPI } from '../core/OpenAPI';
@@ -34,10 +34,10 @@ export class DashboardResource {
      * @throws ApiError
      */
     public static customSeed({
-        requestBody,
-    }: {
-        requestBody?: U14CustomSeedModel,
-    }): CancelablePromise<ApiResponse_SeedResponse_> {
+requestBody,
+}: {
+requestBody?: CustomSeedModel,
+}): CancelablePromise<ApiResponse_SeedResponse_> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/umbraco/enterspeed/api/v1/CustomSeed',
@@ -62,10 +62,10 @@ export class DashboardResource {
      * @throws ApiError
      */
     public static deleteJobs({
-        requestBody,
-    }: {
-        requestBody?: JobIdsToDelete,
-    }): CancelablePromise<ApiResponse> {
+requestBody,
+}: {
+requestBody?: JobIdsToDelete,
+}): CancelablePromise<ApiResponse> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/umbraco/enterspeed/api/v1/DeleteJobs',
@@ -112,10 +112,10 @@ export class DashboardResource {
      * @throws ApiError
      */
     public static saveConfiguration({
-        requestBody,
-    }: {
-        requestBody?: EnterspeedUmbracoConfiguration,
-    }): CancelablePromise<Response> {
+requestBody,
+}: {
+requestBody?: EnterspeedUmbracoConfiguration,
+}): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/umbraco/enterspeed/api/v1/SaveConfiguration',
@@ -140,10 +140,10 @@ export class DashboardResource {
      * @throws ApiError
      */
     public static testConfigurationConnection({
-        requestBody,
-    }: {
-        requestBody?: EnterspeedUmbracoConfiguration,
-    }): CancelablePromise<Response> {
+requestBody,
+}: {
+requestBody?: EnterspeedUmbracoConfiguration,
+}): CancelablePromise<Response> {
         return __request(OpenAPI, {
             method: 'POST',
             url: '/umbraco/enterspeed/api/v1/TestConfigurationConnection',

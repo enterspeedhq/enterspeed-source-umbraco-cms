@@ -18,6 +18,8 @@ export type { ConstructorInfo } from './models/ConstructorInfo';
 export type { CustomAttributeData } from './models/CustomAttributeData';
 export type { CustomAttributeNamedArgument } from './models/CustomAttributeNamedArgument';
 export type { CustomAttributeTypedArgument } from './models/CustomAttributeTypedArgument';
+export type { CustomSeedModel } from './models/CustomSeedModel';
+export type { CustomSeedNode } from './models/CustomSeedNode';
 export { EnterspeedContentState } from './models/EnterspeedContentState';
 export type { EnterspeedJob } from './models/EnterspeedJob';
 export { EnterspeedJobEntityType } from './models/EnterspeedJobEntityType';
@@ -62,7 +64,5 @@ export type { StructLayoutAttribute } from './models/StructLayoutAttribute';
 export type { Type } from './models/Type';
 export { TypeAttributes } from './models/TypeAttributes';
 export type { TypeInfo } from './models/TypeInfo';
-export type { U14CustomSeedModel } from './models/U14CustomSeedModel';
-export type { U14CustomSeedNode } from './models/U14CustomSeedNode';
 
 export { DashboardResource } from './services/DashboardResource';

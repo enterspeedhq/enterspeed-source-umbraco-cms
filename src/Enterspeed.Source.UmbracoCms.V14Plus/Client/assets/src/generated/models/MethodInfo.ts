@@ -51,4 +51,3 @@ export type MethodInfo = {
     readonly returnType: Type;
     returnTypeCustomAttributes: ICustomAttributeProvider;
 };
-

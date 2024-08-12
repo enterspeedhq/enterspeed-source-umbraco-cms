@@ -20,4 +20,3 @@ export type EnterspeedJob = {
     entityType: EnterspeedJobEntityType;
     contentState: EnterspeedContentState;
 };
-

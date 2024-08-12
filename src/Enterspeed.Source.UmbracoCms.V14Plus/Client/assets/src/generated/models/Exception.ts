@@ -15,4 +15,3 @@ export type Exception = {
     hResult: number;
     readonly stackTrace?: string | null;
 };
-

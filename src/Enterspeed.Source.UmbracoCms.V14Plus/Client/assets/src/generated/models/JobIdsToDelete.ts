@@ -6,4 +6,3 @@
 export type JobIdsToDelete = {
     ids?: Array<number> | null;
 };
-

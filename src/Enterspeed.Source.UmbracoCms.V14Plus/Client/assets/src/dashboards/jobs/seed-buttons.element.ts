@@ -5,7 +5,7 @@ import {
   UmbNotificationContext,
 } from "@umbraco-cms/backoffice/notification";
 import { customElement, property, state } from "lit/decorators.js";
-import { U14CustomSeedModel, SeedResponse } from "../../generated";
+import { CustomSeedModel, SeedResponse } from "../../generated";
 import { html } from "lit";
 
 @customElement("enterspeed-seed-buttons")
@@ -23,7 +23,7 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
   disableSeedButton: boolean = true;
 
   @property({ type: Object })
-  customSeedModel: U14CustomSeedModel | undefined;
+  customSeedModel: CustomSeedModel | undefined;
 
   constructor() {
     super();

@@ -41,4 +41,3 @@ export type FieldInfo = {
     readonly isSecurityTransparent: boolean;
     readonly fieldHandle: RuntimeFieldHandle;
 };
-

@@ -6,4 +6,3 @@
 export type ModuleHandle = {
     readonly mdStreamVersion: number;
 };
-

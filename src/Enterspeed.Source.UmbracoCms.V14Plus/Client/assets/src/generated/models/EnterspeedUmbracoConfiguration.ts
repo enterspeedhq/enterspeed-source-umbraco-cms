@@ -17,4 +17,3 @@ export type EnterspeedUmbracoConfiguration = {
     runJobsOnAllServerRoles: boolean;
     enableMasterContent: boolean;
 };
-

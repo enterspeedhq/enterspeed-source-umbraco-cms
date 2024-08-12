@@ -46,4 +46,3 @@ export type MethodBase = {
     readonly isSecuritySafeCritical: boolean;
     readonly isSecurityTransparent: boolean;
 };
-

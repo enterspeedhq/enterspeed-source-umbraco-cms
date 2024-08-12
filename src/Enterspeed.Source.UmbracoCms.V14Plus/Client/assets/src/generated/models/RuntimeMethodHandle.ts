@@ -8,4 +8,3 @@ import type { IntPtr } from './IntPtr';
 export type RuntimeMethodHandle = {
     readonly value: IntPtr;
 };
-

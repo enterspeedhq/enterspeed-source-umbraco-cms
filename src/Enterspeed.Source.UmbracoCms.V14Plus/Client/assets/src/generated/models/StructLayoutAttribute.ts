@@ -9,4 +9,3 @@ export type StructLayoutAttribute = {
     readonly typeId: any;
     value: LayoutKind;
 };
-

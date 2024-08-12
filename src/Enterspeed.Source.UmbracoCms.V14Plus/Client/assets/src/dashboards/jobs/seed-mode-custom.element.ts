@@ -10,7 +10,7 @@ import { UMB_DICTIONARY_TREE_ALIAS } from "@umbraco-cms/backoffice/dictionary";
 import { UMB_MEDIA_TREE_ALIAS } from "@umbraco-cms/backoffice/media";
 import { UMB_DOCUMENT_TREE_ALIAS } from "@umbraco-cms/backoffice/document";
 import { repeat } from "lit/directives/repeat.js";
-import { U14CustomSeedModel, U14CustomSeedNode } from "../../generated";
+import { CustomSeedModel, CustomSeedNode } from "../../generated";
 
 @customElement("enterspeed-seed-mode-custom")
 export class enterspeedCustomSeedModeElement extends UmbLitElement {
@@ -188,7 +188,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   }
 
   #onDataUpdated() {
-    let customNodesSelected: U14CustomSeedModel = {
+    let customNodesSelected: CustomSeedModel = {
       contentNodes: this.documentNodes.map((n) => this.#mapCustomSeedNode(n)),
       dictionaryNodes: this.dictionaryNodes.map((n) =>
         this.#mapCustomSeedNode(n)
@@ -205,8 +205,8 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     );
   }
 
-  #mapCustomSeedNode(e: EnterspeedUniqueItemModel): U14CustomSeedNode {
-    let node: U14CustomSeedNode = {
+  #mapCustomSeedNode(e: EnterspeedUniqueItemModel): CustomSeedNode {
+    let node: CustomSeedNode = {
       includeDescendants: e.includeDescendants,
       id: e.unique,
     };

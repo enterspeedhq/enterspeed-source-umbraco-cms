@@ -2,7 +2,7 @@ import { UmbControllerBase } from "@umbraco-cms/backoffice/class-api";
 import { UmbControllerHost } from "@umbraco-cms/backoffice/controller-api";
 import { tryExecuteAndNotify } from "@umbraco-cms/backoffice/resources";
 import {
-  U14CustomSeedModel,
+  CustomSeedModel,
   DashboardResource,
   EnterspeedUmbracoConfiguration,
   JobIdsToDelete,
@@ -17,7 +17,7 @@ export class EnterspeedRepository extends UmbControllerBase {
     return await tryExecuteAndNotify(this._host, DashboardResource.seed());
   }
 
-  async customSeed(customSeedModel: U14CustomSeedModel) {
+  async customSeed(customSeedModel: CustomSeedModel) {
     return await tryExecuteAndNotify(
       this._host,
       DashboardResource.customSeed({ requestBody: customSeedModel })
