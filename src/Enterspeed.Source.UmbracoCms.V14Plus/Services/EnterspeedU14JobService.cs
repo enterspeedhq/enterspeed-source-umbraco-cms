@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Models.Api;
 using Enterspeed.Source.UmbracoCms.Services;
-using Enterspeed.Source.UmbracoCms.V14.Models;
+using Enterspeed.Source.UmbracoCms.V14Plus.Models;
 using Umbraco.Cms.Core.Services;
 
-namespace Enterspeed.Source.UmbracoCms.V14.Services;
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Services;
 
 public class EnterspeedU14JobService : IEnterspeedU14JobService
 {

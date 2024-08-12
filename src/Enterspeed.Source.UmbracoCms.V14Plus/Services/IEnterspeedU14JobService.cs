@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Models.Api;
-using Enterspeed.Source.UmbracoCms.V14.Models;
+using Enterspeed.Source.UmbracoCms.V14Plus.Models;
 
-namespace Enterspeed.Source.UmbracoCms.V14.Services;
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Services;
 
 public interface IEnterspeedU14JobService
 {

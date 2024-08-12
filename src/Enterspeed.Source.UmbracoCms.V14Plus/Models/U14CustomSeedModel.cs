@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Enterspeed.Source.UmbracoCms.V14.Models
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Models
 {
     public class U14CustomSeedModel
     {

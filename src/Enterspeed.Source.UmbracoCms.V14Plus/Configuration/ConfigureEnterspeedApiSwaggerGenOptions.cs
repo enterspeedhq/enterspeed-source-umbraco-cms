@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.Options;
-using Microsoft.Extensions.DependencyInjection;
-using Swashbuckle.AspNetCore.SwaggerGen;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Enterspeed.Source.UmbracoCms.V14.Configuration
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Configuration
 {
     public class ConfigureEnterspeedApiSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
     {

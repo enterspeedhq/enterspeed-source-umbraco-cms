@@ -2,46 +2,44 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
+using Asp.Versioning;
 using Enterspeed.Source.Sdk.Api.Connection;
 using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Models.Api;
+using Enterspeed.Source.UmbracoCms.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.V14Plus.Models;
+using Enterspeed.Source.UmbracoCms.V14Plus.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using Umbraco.Cms.Web.BackOffice.Controllers;
-using Umbraco.Cms.Web.BackOffice.Filters;
-using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Models.Configuration;
-using Enterspeed.Source.UmbracoCms.Models.Api;
-using Enterspeed.Source.UmbracoCms.Services;
-using Enterspeed.Source.UmbracoCms.Extensions;
 using Umbraco.Cms.Core.Sync;
-#if NET5_0
 
-#else
-using Umbraco.Cms.Infrastructure.Scoping;
-#endif
-
-namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
 {
-    [JsonCamelCaseFormatter]
-    public class DashboardApiController : UmbracoAuthorizedApiController
+    [ApiVersion("1.0")]
+    [ApiExplorerSettings(GroupName = "Dashboard")]
+    public class DashboardController : EnterspeedBaseController
     {
         private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
-        private readonly IEnterspeedJobService _enterspeedJobService;
+        private readonly IEnterspeedU14JobService _enterspeedJobService;
         private readonly IEnterspeedConfigurationService _enterspeedConfigurationService;
         private readonly IEnterspeedConnection _enterspeedConnection;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DashboardApiController(
+        public DashboardController(
             IEnterspeedJobRepository enterspeedJobRepository,
-            IEnterspeedJobService enterspeedJobService,
+            IEnterspeedU14JobService enterspeedJobService,
             IEnterspeedConfigurationService enterspeedConfigurationService,
             IEnterspeedConnection enterspeedConnection,
             IHttpContextAccessor httpContextAccessor,
@@ -57,7 +55,9 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
             _enterspeedJobsHandlingService = enterspeedJobsHandlingService;
         }
 
-        [HttpGet]
+        [HttpGet("GetFailedJobs")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse<List<EnterspeedJob>>), 200)]
         public ApiResponse<List<EnterspeedJob>> GetFailedJobs()
         {
             var result = _enterspeedJobRepository.GetFailedJobs().ToList();
@@ -68,7 +68,9 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
             };
         }
 
-        [HttpGet]
+        [HttpGet("Seed")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse<SeedResponse>), 200)]
         public IActionResult Seed()
         {
             var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();
@@ -94,8 +96,10 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
                 });
         }
 
-        [HttpPost]
-        public IActionResult CustomSeed(CustomSeed customSeed)
+        [HttpPost("CustomSeed")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse<SeedResponse>), 200)]
+        public async Task<IActionResult> CustomSeed([FromBody] U14CustomSeedModel customSeed)
         {
             var publishConfigured = _enterspeedConfigurationService.IsPublishConfigured();
             var previewConfigured = _enterspeedConfigurationService.IsPreviewConfigured();
@@ -111,7 +115,8 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
                     });
             }
 
-            var response = _enterspeedJobService.CustomSeed(publishConfigured, previewConfigured, customSeed);
+            var response = await _enterspeedJobService.CustomSeed(customSeed, publishConfigured, previewConfigured);
+
             return Ok(
                 new ApiResponse<SeedResponse>
                 {
@@ -120,7 +125,9 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
                 });
         }
 
-        [HttpGet]
+        [HttpGet("GetEnterspeedConfiguration")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse<EnterspeedUmbracoConfigurationResponse>), 200)]
         public ApiResponse<EnterspeedUmbracoConfigurationResponse> GetEnterspeedConfiguration()
         {
             var config = _enterspeedConfigurationService.GetConfiguration();
@@ -132,8 +139,10 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
             };
         }
 
-        [HttpPost]
-        public IActionResult SaveConfiguration(EnterspeedUmbracoConfiguration configuration)
+        [HttpPost("SaveConfiguration")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(Response), 200)]
+        public IActionResult SaveConfiguration([FromBody] EnterspeedUmbracoConfiguration configuration)
         {
             if (string.IsNullOrEmpty(configuration?.ApiKey) || string.IsNullOrEmpty(configuration?.BaseUrl))
             {
@@ -185,7 +194,9 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
                 });
         }
 
-        [HttpGet]
+        [HttpGet("GetNumberOfPendingJobs")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse<GetNumberOfPendingJobsResponse>), 200)]
         public IActionResult GetNumberOfPendingJobs()
         {
             int numberOfPendingJobs;
@@ -213,7 +224,9 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
                 });
         }
 
-        [HttpPost]
+        [HttpPost("ClearPendingJobs")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
         public IActionResult ClearPendingJobs()
         {
             _enterspeedJobRepository.ClearPendingJobs();
@@ -225,7 +238,9 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
                 });
         }
 
-        [HttpPost]
+        [HttpPost("DeleteFailedJobs")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
         public ActionResult DeleteFailedJobs()
         {
             var failedJobs = _enterspeedJobRepository.GetFailedJobs();
@@ -240,8 +255,10 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
             });
         }
 
-        [HttpPost]
-        public ActionResult DeleteJobs(JobIdsToDelete jobIdsToDelete)
+        [HttpPost("DeleteJobs")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(ApiResponse), 200)]
+        public ActionResult DeleteJobs([FromBody] JobIdsToDelete jobIdsToDelete)
         {
             if (jobIdsToDelete != null && jobIdsToDelete.Ids.Any())
             {
@@ -254,7 +271,9 @@ namespace Enterspeed.Source.UmbracoCms9.Controllers.Api
             });
         }
 
-        [HttpPost]
+        [HttpPost("TestConfigurationConnection")]
+        [MapToApiVersion("1.0")]
+        [ProducesResponseType(typeof(Response), 200)]
         public IActionResult TestConfigurationConnection(EnterspeedUmbracoConfiguration configuration)
         {
             return Ok(TestConnections(configuration));

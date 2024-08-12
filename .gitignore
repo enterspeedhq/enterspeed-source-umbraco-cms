@@ -351,3 +351,4 @@ MigrationBackup/
 *.orig
 .idea/
 src/Enterspeed.Source.UmbracoCms.V14+/wwwroot/App_Plugins/Enterspeed.Source.UmbracoCms
+src/Enterspeed.Source.UmbracoCms.V14Plus/wwwroot/App_Plugins/Enterspeed.Source.UmbracoCms
