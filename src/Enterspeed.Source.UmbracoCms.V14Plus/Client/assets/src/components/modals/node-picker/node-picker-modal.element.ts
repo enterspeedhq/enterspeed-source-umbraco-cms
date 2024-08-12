@@ -5,7 +5,6 @@ import {
   customElement,
   state,
   css,
-  ifDefined,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
 import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
@@ -49,7 +48,6 @@ export default class EnterspeedNodePickerModal
   @property({ attribute: false })
   modalContext!: UmbModalContext<NodePickerData, NodePickerValue>;
 
-  #nodePickerData?: NodePickerData;
   #nodePickerValue?: NodePickerValue;
   #includeDescendants: boolean = false;
 
@@ -70,7 +68,7 @@ export default class EnterspeedNodePickerModal
 
   render() {
     return html`
-      <umb-body-layout headline=${ifDefined(this.#nodePickerData?.headline)}>
+      <umb-body-layout headline=${this.modalContext.data.headline}>
         <uui-box>
           <umb-property-layout
             label="Include all content nodes"
@@ -99,7 +97,7 @@ export default class EnterspeedNodePickerModal
               .props=${{
                 hideTreeItemActions: true,
                 selectionConfiguration: this.selectionConfiguration,
-                hideTreeRoot: true
+                hideTreeRoot: true,
               }}
               @selected=${this.#onSelected}
               @deselected=${this.#onDeselected}></umb-tree>
