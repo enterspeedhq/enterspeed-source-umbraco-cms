@@ -41,6 +41,24 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     });
   }
 
+  willUpdate(changedProperties: any) {
+    if (changedProperties.has("documentNodes")) {
+      if (this.documentNodes.length == 0) {
+        this.everythingSelectedDocumentNodes = false;
+      }
+    }
+    if (changedProperties.has("mediaNodes")) {
+      if (this.mediaNodes.length == 0) {
+        this.everythingSelectedMediaNodes = false;
+      }
+    }
+    if (changedProperties.has("dictionaryNodes")) {
+      if (this.dictionaryNodes.length == 0) {
+        this.everythingSelectedDictionaryNodes = false;
+      }
+    }
+  }
+
   render() {
     return html`
       <div class="seed-dashboard-text">
@@ -151,11 +169,8 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           this.mediaNodes.findIndex((n) => n.unique == item.unique),
           1
         );
-        super.requestUpdate("mediaNodes");
-
         if (isEverything) {
           this.everythingSelectedMediaNodes = false;
-          super.requestUpdate("everythingSelectedMediaNodes");
         }
         break;
       case "dictionary":
@@ -163,11 +178,8 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           this.dictionaryNodes.findIndex((n) => n.unique == item.unique),
           1
         );
-        super.requestUpdate("dictionaryNodes");
-
         if (isEverything) {
           this.everythingSelectedDictionaryNodes = false;
-          super.requestUpdate("everythingSelectedDictionaryNodes");
         }
         break;
       case "document":
@@ -175,11 +187,8 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           this.documentNodes.findIndex((n) => n.unique == item.unique),
           1
         );
-        super.requestUpdate("documentNodes");
-
         if (isEverything) {
           this.everythingSelectedDocumentNodes = false;
-          super.requestUpdate("everythingSelectedDocumentNodes");
         }
         break;
     }
@@ -220,9 +229,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
             this.documentNodes.findIndex(
               (n) => n.unique.toLowerCase() === "everything"
             ) >= 0;
-
-          super.requestUpdate("everythingSelectedDocumentNodes");
-          super.requestUpdate("documentNodes");
           break;
         case UMB_DICTIONARY_TREE_ALIAS:
           this.dictionaryNodes = this.#mapNodes(
@@ -234,9 +240,6 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
             this.dictionaryNodes.findIndex(
               (n) => n.unique.toLowerCase() === "everything"
             ) >= 0;
-
-          super.requestUpdate("everythingSelectedDictionaryNodes");
-          super.requestUpdate("dictionaryNodes");
           break;
         case UMB_MEDIA_TREE_ALIAS:
           this.mediaNodes = this.#mapNodes(this.mediaNodes, data.nodes);
@@ -245,16 +248,21 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
             this.mediaNodes.findIndex(
               (n) => n.unique.toLowerCase() === "everything"
             ) >= 0;
-
-          super.requestUpdate("everythingSelectedMediaNodes");
-          super.requestUpdate("mediaNodes");
           break;
       }
+
       this.#onDataUpdated();
     });
   }
 
   #onDataUpdated() {
+    super.requestUpdate("everythingSelectedMediaNodes");
+    super.requestUpdate("mediaNodes");
+    super.requestUpdate("everythingSelectedDictionaryNodes");
+    super.requestUpdate("dictionaryNodes");
+    super.requestUpdate("everythingSelectedDocumentNodes");
+    super.requestUpdate("documentNodes");
+
     let customNodesSelected: CustomSeedModel = {
       contentNodes: this.documentNodes.map((n) => this.#mapCustomSeedNode(n)),
       dictionaryNodes: this.dictionaryNodes.map((n) =>
