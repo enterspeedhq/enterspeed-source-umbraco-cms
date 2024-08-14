@@ -44,6 +44,7 @@ export default class EnterspeedNodePickerModal
   #documentRepository = new UmbDocumentItemRepository(this);
   #mediaItemRepository = new UmbMediaItemRepository(this);
   #dictionaryRepository = new UmbDictionaryItemRepository(this);
+  #documentType = "";
 
   @property({ attribute: false })
   modalContext!: UmbModalContext<NodePickerData, NodePickerValue>;
@@ -67,6 +68,18 @@ export default class EnterspeedNodePickerModal
   }
 
   render() {
+    switch (this.modalContext.data.treeAlias) {
+      case UMB_MEDIA_TREE_ALIAS:
+        this.#documentType = "media";
+        break;
+      case UMB_DICTIONARY_TREE_ALIAS:
+        this.#documentType = "dictionary";
+        break;
+      case UMB_DOCUMENT_TREE_ALIAS:
+        this.#documentType = "document";
+        break;
+    }
+    
     return html`
       <umb-body-layout headline=${this.modalContext.data.headline}>
         <uui-box>
@@ -164,9 +177,16 @@ export default class EnterspeedNodePickerModal
     this.#nodePickerValue!.includeAllContentNodes = event.target.checked;
     this.includeAllContentNodes = event.target.checked;
     this.#nodePickerValue!.nodes = [];
+
     if (this.#nodePickerValue!.includeAllContentNodes) {
       this.#nodePickerValue?.nodes.push(
-        new EnterspeedUniqueItemModelImpl(false, "Everything", "Everything")
+        new EnterspeedUniqueItemModelImpl(
+          false,
+          "Everything",
+          "Everything",
+          "icon-thumbnail-list",
+          this.#documentType
+        )
       );
     }
   }
@@ -181,13 +201,16 @@ export default class EnterspeedNodePickerModal
   async #handleNodes(selection: string[]) {
     if (this.modalContext?.data.treeAlias == UMB_DOCUMENT_TREE_ALIAS) {
       let nodes = (await this.#documentRepository.requestItems(selection)).data;
+
       if (nodes != null) {
         for (let node of nodes) {
           if (node != null) {
             let mappedNode = new EnterspeedUniqueItemModelImpl(
               this.#includeDescendants,
               node.unique,
-              node.name
+              node.name,
+              node.documentType.icon,
+              this.#documentType
             );
             this.#nodePickerValue?.nodes?.push(mappedNode);
           }
@@ -196,13 +219,16 @@ export default class EnterspeedNodePickerModal
     } else if (this.modalContext?.data.treeAlias == UMB_MEDIA_TREE_ALIAS) {
       let nodes = (await this.#mediaItemRepository.requestItems(selection))
         .data;
+
       if (nodes != null) {
         for (let node of nodes) {
           if (node != null) {
             let mappedNode = new EnterspeedUniqueItemModelImpl(
               this.#includeDescendants,
               node.unique,
-              node.name
+              node.name,
+              node.mediaType.icon,
+              this.#documentType
             );
             this.#nodePickerValue?.nodes?.push(mappedNode);
           }
@@ -211,13 +237,16 @@ export default class EnterspeedNodePickerModal
     } else if (this.modalContext?.data.treeAlias == UMB_DICTIONARY_TREE_ALIAS) {
       let nodes = (await this.#dictionaryRepository.requestItems(selection))
         .data;
+
       if (nodes != null) {
         for (let node of nodes) {
           if (node != null) {
             let mappedNode = new EnterspeedUniqueItemModelImpl(
               this.#includeDescendants,
               node.unique,
-              node.name
+              node.name,
+              "icon-book-alt",
+              this.#documentType
             );
             this.#nodePickerValue?.nodes?.push(mappedNode);
           }

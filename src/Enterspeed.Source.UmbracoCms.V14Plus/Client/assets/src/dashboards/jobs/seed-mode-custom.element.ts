@@ -1,5 +1,5 @@
 import { css, html } from "lit";
-import { customElement, property, state } from "lit/decorators.js";
+import { customElement, property } from "lit/decorators.js";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import {
   ENTERSPEED_NODEPICKER_MODAL_TOKEN,
@@ -19,19 +19,19 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   @property({ type: Array })
   documentNodes!: Array<EnterspeedUniqueItemModel>;
 
-  @state()
+  @property({ type: Boolean })
   everythingSelectedDocumentNodes = false;
 
   @property({ type: Array })
   mediaNodes!: Array<EnterspeedUniqueItemModel>;
 
-  @state()
+  @property({ type: Boolean })
   everythingSelectedMediaNodes = false;
 
   @property({ type: Array })
   dictionaryNodes!: Array<EnterspeedUniqueItemModel>;
 
-  @state()
+  @property({ type: Boolean })
   everythingSelectedDictionaryNodes = false;
 
   constructor() {
@@ -122,12 +122,16 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #renderItem(item: EnterspeedUniqueItemModel) {
     if (!item.unique) return;
 
-    let detailText = item.includeDescendants
-      ? "Including descendants"
-      : "Excluding descendants";
+    let detailText = "";
+    if (item.unique.toLowerCase() != "everything") {
+      detailText = item.includeDescendants
+        ? "Including descendants"
+        : "Excluding descendants";
+    }
 
     return html`
       <uui-ref-node name=${item.name} id=${item.unique} detail=${detailText}>
+        <umb-icon slot="icon" name=${item.icon ?? "icon-document"}></umb-icon>
         <uui-action-bar slot="actions">
           <uui-button
             @click=${() => this.#removeNode(item)}
@@ -139,37 +143,45 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   }
 
   #removeNode(item: EnterspeedUniqueItemModel) {
-    let index = this.documentNodes.findIndex((n) => n.unique == item.unique);
-    if (index > -1) {
-      this.documentNodes.splice(index, 1);
-      super.requestUpdate("documentNodes");
+    let isEverything = item.unique.toLowerCase() === "everything";
 
-      if (item.unique.toLowerCase() === "everything") {
-        this.everythingSelectedDocumentNodes = false;
-        super.requestUpdate("everythingSelectedDocumentNodes");
-      }
-    }
+    switch (item.documentType) {
+      case "media":
+        this.mediaNodes.splice(
+          this.mediaNodes.findIndex((n) => n.unique == item.unique),
+          1
+        );
+        super.requestUpdate("mediaNodes");
 
-    index = this.dictionaryNodes.findIndex((n) => n.unique == item.unique);
-    if (index > -1) {
-      this.dictionaryNodes.splice(index, 1);
-      super.requestUpdate("dictionaryNodes");
+        if (isEverything) {
+          this.everythingSelectedMediaNodes = false;
+          super.requestUpdate("everythingSelectedMediaNodes");
+        }
+        break;
+      case "dictionary":
+        this.dictionaryNodes.splice(
+          this.dictionaryNodes.findIndex((n) => n.unique == item.unique),
+          1
+        );
+        super.requestUpdate("dictionaryNodes");
 
-      if (item.unique.toLowerCase() === "everything") {
-        this.everythingSelectedDictionaryNodes = false;
-        super.requestUpdate("everythingSelectedDictionaryNodes");
-      }
-    }
+        if (isEverything) {
+          this.everythingSelectedDictionaryNodes = false;
+          super.requestUpdate("everythingSelectedDictionaryNodes");
+        }
+        break;
+      case "document":
+        this.documentNodes.splice(
+          this.documentNodes.findIndex((n) => n.unique == item.unique),
+          1
+        );
+        super.requestUpdate("documentNodes");
 
-    index = this.mediaNodes.findIndex((n) => n.unique == item.unique);
-    if (index > -1) {
-      this.mediaNodes.splice(index, 1);
-      super.requestUpdate("mediaNodes");
-
-      if (item.unique.toLowerCase() === "everything") {
-        this.everythingSelectedMediaNodes = false;
-        super.requestUpdate("everythingSelectedMediaNodes");
-      }
+        if (isEverything) {
+          this.everythingSelectedDocumentNodes = false;
+          super.requestUpdate("everythingSelectedDocumentNodes");
+        }
+        break;
     }
 
     this.#onDataUpdated();

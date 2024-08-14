@@ -30,18 +30,24 @@ export class EnterspeedUniqueItemModelImpl
     includeDescendants: boolean,
     unique: string,
     name: string,
+    icon: string,
+    documentType: string
   ) {
     this.includeDescendants = includeDescendants;
     this.unique = unique;
     this.name = name;
+    this.icon = icon;
+    this.documentType = documentType;
   }
 
   includeDescendants: boolean;
   unique: string;
   name: string;
-  icon?: string | undefined;
+  icon: string;
+  documentType: string;
 }
 
 export interface EnterspeedUniqueItemModel extends UmbUniqueItemModel {
   includeDescendants: boolean;
+  documentType: string;
 }
