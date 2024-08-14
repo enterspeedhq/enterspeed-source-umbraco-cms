@@ -79,7 +79,7 @@ export default class EnterspeedNodePickerModal
         this.#documentType = "document";
         break;
     }
-    
+
     return html`
       <umb-body-layout headline=${this.modalContext.data.headline}>
         <uui-box>

@@ -221,6 +221,7 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     );
 
     await modal?.onSubmit().then((data) => {
+      if (data == null) return;
       switch (data.treeAlias) {
         case UMB_DOCUMENT_TREE_ALIAS:
           this.documentNodes = this.#mapNodes(this.documentNodes, data.nodes);
