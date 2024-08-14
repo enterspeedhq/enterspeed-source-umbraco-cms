@@ -1,5 +1,5 @@
 import { css, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, state } from "lit/decorators.js";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 import {
   ENTERSPEED_NODEPICKER_MODAL_TOKEN,
@@ -19,11 +19,20 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   @property({ type: Array })
   documentNodes!: Array<EnterspeedUniqueItemModel>;
 
+  @state()
+  everythingSelectedDocumentNodes = false;
+
   @property({ type: Array })
   mediaNodes!: Array<EnterspeedUniqueItemModel>;
 
+  @state()
+  everythingSelectedMediaNodes = false;
+
   @property({ type: Array })
   dictionaryNodes!: Array<EnterspeedUniqueItemModel>;
+
+  @state()
+  everythingSelectedDictionaryNodes = false;
 
   constructor() {
     super();
@@ -53,17 +62,20 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
           ${this.#renderCustomSeedContentTypeBox(
             this.documentNodes,
             "Content",
-            UMB_DOCUMENT_TREE_ALIAS
+            UMB_DOCUMENT_TREE_ALIAS,
+            this.everythingSelectedDocumentNodes
           )}
           ${this.#renderCustomSeedContentTypeBox(
             this.mediaNodes,
             "Media",
-            UMB_MEDIA_TREE_ALIAS
+            UMB_MEDIA_TREE_ALIAS,
+            this.everythingSelectedMediaNodes
           )}
           ${this.#renderCustomSeedContentTypeBox(
             this.dictionaryNodes,
             "Dictionary",
-            UMB_DICTIONARY_TREE_ALIAS
+            UMB_DICTIONARY_TREE_ALIAS,
+            this.everythingSelectedDictionaryNodes
           )}
         </div>
       </div>
@@ -73,20 +85,22 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
   #renderCustomSeedContentTypeBox(
     nodes: Array<EnterspeedUniqueItemModel>,
     contentType: string,
-    alias: string
+    alias: string,
+    everythingSelected: boolean
   ) {
     return html`<div class="custom-seed-content-type-box">
       ${this.#renderNodes(nodes, contentType)}
-      ${this.#renderTreeNodeButtons(alias)}
+      ${this.#renderTreeNodeButton(alias, everythingSelected)}
     </div>`;
   }
 
-  #renderTreeNodeButtons(alias: string) {
+  #renderTreeNodeButton(alias: string, everythingSelected: boolean) {
     return html`
       <uui-button
         look="placeholder"
         label="Choose"
         class="full-width-btn"
+        .disabled=${everythingSelected}
         @click=${() => this.#openNodePickerModal(alias)}
       ></uui-button>
     `;
@@ -111,15 +125,14 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     let detailText = item.includeDescendants
       ? "Including descendants"
       : "Excluding descendants";
-    
+
     return html`
       <uui-ref-node name=${item.name} id=${item.unique} detail=${detailText}>
         <uui-action-bar slot="actions">
           <uui-button
             @click=${() => this.#removeNode(item)}
             label=${this.localize.term("general_remove")}
-          >
-          </uui-button>
+          ></uui-button>
         </uui-action-bar>
       </uui-ref-node>
     `;
@@ -130,18 +143,33 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
     if (index > -1) {
       this.documentNodes.splice(index, 1);
       super.requestUpdate("documentNodes");
+
+      if (item.unique.toLowerCase() === "everything") {
+        this.everythingSelectedDocumentNodes = false;
+        super.requestUpdate("everythingSelectedDocumentNodes");
+      }
     }
 
     index = this.dictionaryNodes.findIndex((n) => n.unique == item.unique);
     if (index > -1) {
       this.dictionaryNodes.splice(index, 1);
       super.requestUpdate("dictionaryNodes");
+
+      if (item.unique.toLowerCase() === "everything") {
+        this.everythingSelectedDictionaryNodes = false;
+        super.requestUpdate("everythingSelectedDictionaryNodes");
+      }
     }
 
     index = this.mediaNodes.findIndex((n) => n.unique == item.unique);
     if (index > -1) {
       this.mediaNodes.splice(index, 1);
       super.requestUpdate("mediaNodes");
+
+      if (item.unique.toLowerCase() === "everything") {
+        this.everythingSelectedMediaNodes = false;
+        super.requestUpdate("everythingSelectedMediaNodes");
+      }
     }
 
     this.#onDataUpdated();
@@ -175,6 +203,13 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
       switch (data.treeAlias) {
         case UMB_DOCUMENT_TREE_ALIAS:
           this.documentNodes = this.#mapNodes(this.documentNodes, data.nodes);
+
+          this.everythingSelectedDocumentNodes =
+            this.documentNodes.findIndex(
+              (n) => n.unique.toLowerCase() === "everything"
+            ) >= 0;
+
+          super.requestUpdate("everythingSelectedDocumentNodes");
           super.requestUpdate("documentNodes");
           break;
         case UMB_DICTIONARY_TREE_ALIAS:
@@ -182,10 +217,24 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
             this.dictionaryNodes,
             data.nodes
           );
+
+          this.everythingSelectedDictionaryNodes =
+            this.dictionaryNodes.findIndex(
+              (n) => n.unique.toLowerCase() === "everything"
+            ) >= 0;
+
+          super.requestUpdate("everythingSelectedDictionaryNodes");
           super.requestUpdate("dictionaryNodes");
           break;
         case UMB_MEDIA_TREE_ALIAS:
           this.mediaNodes = this.#mapNodes(this.mediaNodes, data.nodes);
+
+          this.everythingSelectedMediaNodes =
+            this.mediaNodes.findIndex(
+              (n) => n.unique.toLowerCase() === "everything"
+            ) >= 0;
+
+          super.requestUpdate("everythingSelectedMediaNodes");
           super.requestUpdate("mediaNodes");
           break;
       }
