@@ -107,13 +107,19 @@ export class enterspeedCustomSeedModeElement extends UmbLitElement {
 
   #renderItem(item: EnterspeedUniqueItemModel) {
     if (!item.unique) return;
+
+    let detailText = item.includeDescendants
+      ? "Including descendants"
+      : "Excluding descendants";
+    
     return html`
-      <uui-ref-node name=${item.name} id=${item.unique}>
+      <uui-ref-node name=${item.name} id=${item.unique} detail=${detailText}>
         <uui-action-bar slot="actions">
           <uui-button
             @click=${() => this.#removeNode(item)}
             label=${this.localize.term("general_remove")}
-          ></uui-button>
+          >
+          </uui-button>
         </uui-action-bar>
       </uui-ref-node>
     `;
