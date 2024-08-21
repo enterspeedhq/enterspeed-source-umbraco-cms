@@ -14,8 +14,8 @@
 		<PackageLicenseUrl>http://opensource.org/licenses/MIT</PackageLicenseUrl>
 		<PackageProjectUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
-		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
+		<PackageIcon>icon.png</PackageIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -79,6 +79,17 @@
 	  <None Remove="App_Plugins\Enterspeed.Dashboard\package.manifest" />
 	  <None Remove="App_Plugins\Enterspeed.Dashboard\settings-dashboard.html" />
 	  <None Remove="App_Plugins\Enterspeed.Dashboard\styles.css" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="..\Enterspeed.Source.UmbracoCms\icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Include="..\Enterspeed.Source.UmbracoCms\README-NUGET.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 	<ItemGroup>
