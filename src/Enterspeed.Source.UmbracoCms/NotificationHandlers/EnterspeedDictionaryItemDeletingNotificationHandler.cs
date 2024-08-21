@@ -36,7 +36,8 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
             IServerRoleAccessor serverRoleAccessor,
-            ILogger<EnterspeedDictionaryItemDeletingNotificationHandler> logger)
+            ILogger<EnterspeedDictionaryItemDeletingNotificationHandler> logger,
+            IEnterspeedDictionaryTranslation enterspeedDictionaryTranslation)
             : base(
                   configurationService,
                   enterspeedJobRepository,
@@ -49,6 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
         {
             _localizationService = localizationService;
             _enterspeedJobFactory = enterspeedJobFactory;
+            _enterspeedDictionaryTranslation = enterspeedDictionaryTranslation;
         }
 
         public void Handle(DictionaryItemDeletingNotification notification)
