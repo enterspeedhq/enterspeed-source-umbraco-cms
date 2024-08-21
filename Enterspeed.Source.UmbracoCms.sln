@@ -22,6 +22,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Enterspeed.Source.UmbracoCms.V14Plus", "Enterspeed.Source.UmbracoCms.V14Plus", "{F11EA876-AAEC-4F8B-A452-E54BCB82C922}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{61FE07EA-49BA-4B07-87C7-8CCB295DE826}"
+	ProjectSection(SolutionItems) = preProject
+		azure-pipelines-u14+.yml = azure-pipelines-u14+.yml
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{26E12C0B-E242-40F2-AD73-441A7F701209}"
 	ProjectSection(SolutionItems) = preProject
