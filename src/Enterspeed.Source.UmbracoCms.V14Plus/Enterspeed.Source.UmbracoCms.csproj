@@ -66,11 +66,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\Enterspeed.Source.UmbracoCms\icon.png">
+	  <None Include="..\Enterspeed.Source.UmbracoCms.Base\icon.png">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
-	  <None Include="..\Enterspeed.Source.UmbracoCms\README-NUGET.md">
+	  <None Include="..\Enterspeed.Source.UmbracoCms.Base\README-NUGET.md">
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
