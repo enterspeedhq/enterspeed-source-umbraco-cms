@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Umbraco.Cms.Api.Common.OpenApi;
 
-namespace Enterspeed.Source.UmbracoCms.V14Plus.Configuration;
+namespace Enterspeed.Source.UmbracoCms.Configuration;
 
 public class EnterspeedOperationIdSelector : OperationIdSelector
 {

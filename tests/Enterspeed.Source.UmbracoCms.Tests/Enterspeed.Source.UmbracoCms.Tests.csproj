@@ -14,7 +14,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj" />
+	  <ProjectReference Include="..\..\src\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.Base.csproj" />
 	</ItemGroup>
 
 </Project>

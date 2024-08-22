@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using AutoFixture;
 using AutoFixture.AutoNSubstitute;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.Options;
 using NSubstitute;
 using Umbraco.Cms.Core.Configuration.Models;

@@ -3,7 +3,7 @@ using System.IO;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Dashboards;
 
-namespace Enterspeed.Source.UmbracoCms.V9Plus.Dashboard
+namespace Enterspeed.Source.UmbracoCms.Dashboard
 {
     [Weight(30)]
     public class EnterspeedSettingsDashboard : IDashboard

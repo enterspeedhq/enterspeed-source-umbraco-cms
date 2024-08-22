@@ -9,22 +9,21 @@ using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
-using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Extensions;
-using Enterspeed.Source.UmbracoCms.Models.Api;
-using Enterspeed.Source.UmbracoCms.Models.Configuration;
-using Enterspeed.Source.UmbracoCms.Providers;
-using Enterspeed.Source.UmbracoCms.Services;
-using Enterspeed.Source.UmbracoCms.V14Plus.Models;
-using Enterspeed.Source.UmbracoCms.V14Plus.Services;
+using Enterspeed.Source.UmbracoCms.Base.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Base.Extensions;
+using Enterspeed.Source.UmbracoCms.Base.Models.Api;
+using Enterspeed.Source.UmbracoCms.Base.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
+using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Sync;
-using IEnterspeedJobService = Enterspeed.Source.UmbracoCms.V14Plus.Services.IEnterspeedJobService;
+using IEnterspeedJobService = Enterspeed.Source.UmbracoCms.Services.IEnterspeedJobService;
 
-namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
+namespace Enterspeed.Source.UmbracoCms.Controllers
 {
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "Dashboard")]

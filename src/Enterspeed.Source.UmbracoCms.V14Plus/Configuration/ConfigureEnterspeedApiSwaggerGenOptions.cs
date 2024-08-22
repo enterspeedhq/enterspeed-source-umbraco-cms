@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
-namespace Enterspeed.Source.UmbracoCms.V14Plus.Configuration
+namespace Enterspeed.Source.UmbracoCms.Configuration
 {
     public class ConfigureEnterspeedApiSwaggerGenOptions : IConfigureOptions<SwaggerGenOptions>
     {

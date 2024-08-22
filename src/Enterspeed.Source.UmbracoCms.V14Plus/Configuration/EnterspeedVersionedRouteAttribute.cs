@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Web.Common.Routing;
 
-namespace Enterspeed.Source.UmbracoCms.V14Plus.Configuration
+namespace Enterspeed.Source.UmbracoCms.Configuration
 {
     public class EnterspeedVersionedRouteAttribute : BackOfficeRouteAttribute
     {

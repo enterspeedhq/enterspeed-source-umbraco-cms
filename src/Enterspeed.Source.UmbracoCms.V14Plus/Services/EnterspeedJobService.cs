@@ -1,22 +1,22 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Enterspeed.Source.UmbracoCms.Models.Api;
-using Enterspeed.Source.UmbracoCms.V14Plus.Models;
+using Enterspeed.Source.UmbracoCms.Base.Models.Api;
+using Enterspeed.Source.UmbracoCms.Models;
 using Umbraco.Cms.Core.Services;
-using CustomSeedNode = Enterspeed.Source.UmbracoCms.Models.Api.CustomSeedNode;
+using CustomSeedNode = Enterspeed.Source.UmbracoCms.Base.Models.Api.CustomSeedNode;
 
-namespace Enterspeed.Source.UmbracoCms.V14Plus.Services;
+namespace Enterspeed.Source.UmbracoCms.Services;
 
 public class EnterspeedJobService : IEnterspeedJobService
 {
-    private readonly UmbracoCms.Services.IEnterspeedJobService _enterspeedJobService;
+    private readonly UmbracoCms.Base.Services.IEnterspeedJobService _enterspeedJobService;
     private readonly IContentService _contentService;
     private readonly IMediaService _mediaService;
     private readonly IDictionaryItemService _dictionaryItemService;
 
     public EnterspeedJobService(
-        UmbracoCms.Services.IEnterspeedJobService enterspeedJobService,
+        Base.Services.IEnterspeedJobService enterspeedJobService,
         IContentService contentService,
         IMediaService mediaService,
         IDictionaryItemService dictionaryItemService)
