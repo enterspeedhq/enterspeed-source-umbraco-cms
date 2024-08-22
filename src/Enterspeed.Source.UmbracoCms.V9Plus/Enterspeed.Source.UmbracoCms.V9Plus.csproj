@@ -16,6 +16,7 @@
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
+		<Product>Enterspeed.Source.UmbracoCms</Product>
 	</PropertyGroup>
 
 	<ItemGroup>
