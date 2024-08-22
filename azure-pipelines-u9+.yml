@@ -72,7 +72,9 @@ trigger:
       - src/Enterspeed.Source.UmbracoCms.V7/*
       - src/Enterspeed.Source.UmbracoCms.V8/*
       - src/Enterspeed.Source.UmbracoCms.V14Plus/*
-
+      - azure-pipelines-u7-u8.yml
+      - azure-pipelines-u14+.yml
+      
 pr:
   branches:
     include:
