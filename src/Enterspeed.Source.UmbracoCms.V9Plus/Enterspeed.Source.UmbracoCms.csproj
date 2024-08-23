@@ -83,18 +83,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\Enterspeed.Source.UmbracoCms.Base\icon.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
-	  <None Include="..\Enterspeed.Source.UmbracoCms.Base\README-NUGET.md">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj" />
+	  <None Update="icon.png">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	  <None Update="README-NUGET.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>
