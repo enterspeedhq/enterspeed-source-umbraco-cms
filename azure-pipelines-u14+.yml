@@ -103,6 +103,21 @@ stages:
         pool:
           vmImage: ubuntu-latest
         steps:
+          - task: NodeTool@0
+            inputs:
+              versionSource: 'spec'
+              versionSpec: '18.x'
+          
+          - task: Npm@1
+            inputs:
+              command: 'install'
+              workingDir: './src/Enterspeed.Source.UmbracoCms.V14Plus/Client/assets'
+          - task: Npm@1
+            inputs:
+              command: 'custom'
+              workingDir: './src/Enterspeed.Source.UmbracoCms.V14Plus/Client/assets'
+              customCommand: 'run build'
+            
           # Restore packages
           - task: DotNetCoreCLI@2
             displayName: Dotnet restore
