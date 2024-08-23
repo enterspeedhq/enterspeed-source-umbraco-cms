@@ -10,7 +10,7 @@ import {
   property,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
-import { CustomSeedModel } from "../../generated/index.ts";
+import { CustomSeedModel, SeedResponse } from "../../generated/index.ts";
 import { EnterspeedUniqueItemModel } from "../../components/modals/node-picker/node-picker-modal.token.ts";
 
 @customElement("enterspeed-seed")
@@ -23,6 +23,9 @@ export class seedElement extends UmbLitElement {
 
   @state()
   customSeedModel?: CustomSeedModel;
+
+  @state()
+  seedResponse?: SeedResponse;
 
   @property({ type: Array })
   documentNodes: Array<EnterspeedUniqueItemModel> =
@@ -60,11 +63,16 @@ export class seedElement extends UmbLitElement {
     this.customSeedModel = event;
   }
 
-  #onAfterSeed() {
+  #onAfterSeed(e: CustomEvent) {
     this.customSeedModel = undefined;
     this.documentNodes = new Array<EnterspeedUniqueItemModel>();
     this.mediaNodes = new Array<EnterspeedUniqueItemModel>();
     this.dictionaryNodes = new Array<EnterspeedUniqueItemModel>();
+    this.seedResponse = e.detail as SeedResponse;
+  }
+
+  #onIngestFinshed() {
+    this.seedResponse = undefined;
   }
 
   render() {
@@ -83,11 +91,13 @@ export class seedElement extends UmbLitElement {
           .dictionaryNodes=${this.dictionaryNodes}
           .mediaNodes=${this.mediaNodes}
           .selectedSeedMode=${this.selectedSeedMode}
+          .seedResponse=${this.seedResponse}
           @custom-nodes-selected=${(e: CustomEvent) =>
             this.#onCustomNodesSelected(e)}
         ></enterspeed-seed-modes>
         <enterspeed-seed-buttons
-          @after-seed=${() => this.#onAfterSeed()}
+          @after-seed=${(e: CustomEvent) => this.#onAfterSeed(e)}
+          @ingest-finished=${() => this.#onIngestFinshed()}
           .disableSeedButton=${this.disableSeedButton}
           .customSeedModel=${this.customSeedModel}
         >

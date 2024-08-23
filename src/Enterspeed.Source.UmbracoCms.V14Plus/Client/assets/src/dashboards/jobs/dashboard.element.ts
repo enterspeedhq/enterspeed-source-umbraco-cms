@@ -68,10 +68,6 @@ export class enterspeedDashboard extends UmbLitElement {
       padding: 20px;
     }
 
-    .seed-dashboard-response {
-      padding: 5px 0 20px 5px;
-    }
-
     .seed-dashboard-text {
       padding: 0 0 20px 5px;
     }

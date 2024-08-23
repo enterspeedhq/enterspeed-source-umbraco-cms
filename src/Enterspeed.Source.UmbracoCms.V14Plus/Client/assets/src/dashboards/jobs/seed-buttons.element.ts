@@ -132,6 +132,14 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
             response.data?.data?.numberOfPendingJobs ?? 0;
           if (this.numberOfPendingJobs === 0) {
             this.#seedResponse = null;
+
+            this.dispatchEvent(
+              new CustomEvent("ingest-finished", {
+                bubbles: true,
+                composed: true,
+                detail: true,
+              })
+            );
           }
         } else {
           this.numberOfPendingJobs = 0;
