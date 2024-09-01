@@ -38,8 +38,8 @@ namespace Enterspeed.Source.UmbracoCms.Services
         public bool IsJobsProcessingEnabled()
         {
             var configuration = _enterspeedConfigurationService.GetConfiguration();
-            return configuration.RunJobsOnAllServerRoles 
-                   || _serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher 
+            return configuration.RunJobsOnAllServerRoles
+                   || _serverRoleAccessor.CurrentServerRole == ServerRole.SchedulingPublisher
                    || _serverRoleAccessor.CurrentServerRole == ServerRole.Single;
         }
 
@@ -49,6 +49,25 @@ namespace Enterspeed.Source.UmbracoCms.Services
             do
             {
                 var jobs = _enterspeedJobRepository.GetPendingJobs(batchSize).ToList();
+                jobCount = jobs.Count;
+
+                try
+                {
+                    HandleJobs(jobs);
+                }
+                catch (Exception e)
+                {
+                    _logger.LogError(e, "Error has happened");
+                }
+            } while (jobCount > 0);
+        }
+
+        public virtual void HandlePendingFailedJobs(int batchSize)
+        {
+            int jobCount;
+            do
+            {
+                var jobs = _enterspeedJobRepository.GetFailedJobs(batchSize).ToList();
                 jobCount = jobs.Count;
 
                 try

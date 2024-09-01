@@ -68,6 +68,23 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
             }
         }
 
+        public IList<EnterspeedJob> GetFailedJobs(int count)
+        {
+            var result = new List<EnterspeedJob>();
+
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var failedJobs = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                    .OrderBy(x => x.CreatedAt)
+                    .Limit(count)
+                    .ToList();
+
+                result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(failedJobs));
+                return result;
+            }
+        }
+
         public IList<EnterspeedJob> GetPendingJobs(int count)
         {
             var result = new List<EnterspeedJob>();

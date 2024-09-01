@@ -11,5 +11,6 @@ namespace Enterspeed.Source.UmbracoCms.Models.Configuration
         public bool RootDictionariesDisabled { get; set; }
         public bool RunJobsOnAllServerRoles { get; set; }
         public bool EnableMasterContent { get; set; }
+        public bool EnabledFailedJobsProcessing { get; set; }
     }
 }
