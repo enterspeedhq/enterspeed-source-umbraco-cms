@@ -54,7 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.Services
                 try
                 {
                     HandleJobs(jobs);
-                }
+                }   
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Error has happened");
@@ -62,23 +62,18 @@ namespace Enterspeed.Source.UmbracoCms.Services
             } while (jobCount > 0);
         }
 
-        public virtual void HandlePendingFailedJobs(int batchSize)
+        public virtual void HandleFailedJobs(int batchSize)
         {
-            int jobCount;
-            do
-            {
-                var jobs = _enterspeedJobRepository.GetFailedJobs(batchSize).ToList();
-                jobCount = jobs.Count;
+            var jobs = _enterspeedJobRepository.GetFailedJobs(batchSize).ToList();
 
-                try
-                {
-                    HandleJobs(jobs);
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Error has happened");
-                }
-            } while (jobCount > 0);
+            try
+            {
+                HandleJobs(jobs);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Error has happened");
+            }
         }
 
         public virtual void HandleJobs(IList<EnterspeedJob> jobs)

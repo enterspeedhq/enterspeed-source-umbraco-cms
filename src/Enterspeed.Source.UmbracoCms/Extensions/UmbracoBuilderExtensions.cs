@@ -144,7 +144,7 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
                 // Content
                 .Append<EnterspeedContentPublishJobHandler>()
                 .Append<EnterspeedContentDeleteJobHandler>()
-                
+
                 // Master Content
                 .Append<EnterspeedMasterContentPublishJobHandler>()
                 .Append<EnterspeedMasterContentDeleteJobHandler>()
@@ -197,6 +197,7 @@ namespace Enterspeed.Source.UmbracoCms.Extensions
             // Hosted Services
             builder.Services.AddHostedService<HandleEnterspeedJobsHostedService>();
             builder.Services.AddHostedService<InvalidateEnterspeedJobsHostedService>();
+            builder.Services.AddHostedService<HandleEnterspeedFailedJobsHostedService>();
 
             return builder;
         }
