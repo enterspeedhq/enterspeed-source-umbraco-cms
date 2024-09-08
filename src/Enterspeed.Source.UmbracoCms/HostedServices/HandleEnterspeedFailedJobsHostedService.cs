@@ -54,7 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
 
                 if (enterspeedJobsHandlingService.IsJobsProcessingEnabled() && configuration.EnabledFailedJobsProcessing)
                 {
-                    enterspeedJobsHandlingService.HandlePendingFailedJobs(50);
+                    enterspeedJobsHandlingService.HandleFailedJobs(50);
                 }
                 else
                 {
