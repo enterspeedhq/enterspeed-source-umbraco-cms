@@ -41,5 +41,8 @@ namespace Enterspeed.Source.UmbracoCms.Data.Schemas
 
         [Column("ContentState")]
         public int ContentState { get; set; }
+
+        [Column("FailedCount")]
+        public int FailedCount { get; set; }
     }
 }

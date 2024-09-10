@@ -28,5 +28,6 @@ namespace Enterspeed.Source.UmbracoCms.Data.Models
 
         [JsonConverter(typeof(StringEnumConverter))]
         public EnterspeedContentState ContentState { get; set; }
+        public int FailedCount { get; set; }
     }
 }

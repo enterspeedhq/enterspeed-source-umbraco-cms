@@ -41,7 +41,8 @@ namespace Enterspeed.Source.UmbracoCms.Components
             migrationPlan.From(string.Empty)
                 .To<EnterspeedJobsTableMigration>("enterspeedjobs-db")
                 .To<AddEntityTypeToJobsTable>("enterspeedjobs-db-v2")
-                .To<AddContentStateToJobsTable>("enterspeedjobs-db-v3");
+                .To<AddContentStateToJobsTable>("enterspeedjobs-db-v3")
+                .To<AddFailedCountToJobsTable>("enterspeedjobs-db-v4");
 
             var upgrader = new Upgrader(migrationPlan);
             upgrader.Execute(_migrationPlanExecutor, _scopeProvider, _keyValueService);
