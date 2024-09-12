@@ -24,7 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.Data.Migration
                 Create
                     .Column(entityTypeColumnName)
                     .OnTable(jobsTableName)
-                    .AsInt32().WithDefaultValue(0)
+                    .AsInt32()
                     .Do();
             }
         }

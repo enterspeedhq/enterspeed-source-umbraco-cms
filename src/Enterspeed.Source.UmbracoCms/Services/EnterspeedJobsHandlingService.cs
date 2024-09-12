@@ -62,12 +62,12 @@ namespace Enterspeed.Source.UmbracoCms.Services
             } while (jobCount > 0);
         }
 
-        public virtual void HandleFailedJobs(int batchSize)
+        public virtual void HandleFailedJobs(int batchSize, int maxFailedCount)
         {
             int jobCount;
             do
             {
-                var jobs = _enterspeedJobRepository.GetFailedJobs(batchSize).Where(j => j.FailedCount <= 5).ToList();
+                var jobs = _enterspeedJobRepository.GetFailedJobs(batchSize, maxFailedCount).ToList();
                 jobCount = jobs.Count;
 
                 try

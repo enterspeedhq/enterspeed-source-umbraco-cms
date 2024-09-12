@@ -23,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
         public HandleEnterspeedFailedJobsHostedService(
             ILogger<HandleEnterspeedFailedJobsHostedService> logger,
             IServiceProvider serviceProvider)
-                : base(logger, TimeSpan.FromMinutes(5), TimeSpan.FromSeconds(1))
+                : base(logger, TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(1))
         {
             _serviceProvider = serviceProvider;
         }
@@ -54,7 +54,7 @@ namespace Enterspeed.Source.UmbracoCms.HostedServices
 
                 if (enterspeedJobsHandlingService.IsJobsProcessingEnabled() && configuration.EnabledFailedJobsProcessing)
                 {
-                    enterspeedJobsHandlingService.HandleFailedJobs(50);
+                    enterspeedJobsHandlingService.HandleFailedJobs(50, 5);
                 }
                 else
                 {

@@ -68,6 +68,23 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
             }
         }
 
+        public IList<EnterspeedJob> GetFailedJobs(int count, int maxFailedCount)
+        {
+            var result = new List<EnterspeedJob>();
+
+            using (_scopeProvider.CreateScope(autoComplete: true))
+            {
+                var failedJobs = Database.Query<EnterspeedJobSchema>()
+                    .Where(x => x.JobState == EnterspeedJobState.Failed.GetHashCode() && x.FailedCount < maxFailedCount)
+                    .OrderBy(x => x.CreatedAt)
+                    .Limit(count)
+                    .ToList();
+
+                result.AddRange(_mapper.MapEnumerable<EnterspeedJobSchema, EnterspeedJob>(failedJobs));
+                return result;
+            }
+        }
+
         public IList<EnterspeedJob> GetFailedJobs(int count)
         {
             var result = new List<EnterspeedJob>();
@@ -153,13 +170,25 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
         {
             using (_scopeProvider.CreateScope(autoComplete: true))
             {
-                var schema = Database.Query<EnterspeedJobSchema>()
-                    .Where(x => x.EntityId.Contains(entityId)
-                                && x.Culture.Equals(culture)
-                                && x.JobState == EnterspeedJobState.Failed.GetHashCode())
-                    .FirstOrDefault();
+                if (!string.IsNullOrEmpty(culture))
+                {
+                    var schema = Database.Query<EnterspeedJobSchema>()
+                        .Where(x => x.EntityId.Contains(entityId)
+                                    && x.Culture.Equals(culture)
+                                    && x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                        .FirstOrDefault();
 
-                return _mapper.Map<EnterspeedJob>(schema);
+                    return _mapper.Map<EnterspeedJob>(schema);
+                }
+                else
+                {
+                    var schema = Database.Query<EnterspeedJobSchema>()
+                        .Where(x => x.EntityId.Contains(entityId)
+                                    && x.JobState == EnterspeedJobState.Failed.GetHashCode())
+                        .FirstOrDefault();
+
+                    return _mapper.Map<EnterspeedJob>(schema);
+                }
             }
         }
 

@@ -24,6 +24,7 @@ namespace Enterspeed.Source.UmbracoCms.Data.MappingDefinitions
             target.Culture = source.Culture;
             target.EntityType = (EnterspeedJobEntityType)source.EntityType;
             target.ContentState = (EnterspeedContentState)source.ContentState;
+            target.FailedCount = source.FailedCount;
         }
 
         private void MapFrom(EnterspeedJob source, EnterspeedJobSchema target, MapperContext context)
@@ -38,6 +39,7 @@ namespace Enterspeed.Source.UmbracoCms.Data.MappingDefinitions
             target.Culture = source.Culture;
             target.EntityType = source.EntityType.GetHashCode();
             target.ContentState = source.ContentState.GetHashCode();
+            target.FailedCount = source.FailedCount;
         }
     }
 }

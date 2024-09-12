@@ -16,5 +16,6 @@ namespace Enterspeed.Source.UmbracoCms.Data.Repositories
         void ClearPendingJobs();
         int GetNumberOfPendingJobs();
         IList<EnterspeedJob> GetFailedJobs(int count);
+        IList<EnterspeedJob> GetFailedJobs(int count, int maxFailedCount);
     }
 }
