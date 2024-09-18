@@ -79,6 +79,8 @@
 	<!--Workaround to include references in nuget package-->
 	<PropertyGroup>
 		<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+		<PackageId>Enterspeed.Source.UmbracoCms</PackageId>
+		<Title>Enterspeed.Source.UmbracoCms</Title>
 	</PropertyGroup>
   
 	<Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
