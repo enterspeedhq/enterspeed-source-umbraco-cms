@@ -1,10 +1,10 @@
 ﻿using System;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Models;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Factories
+namespace Enterspeed.Source.UmbracoCms.Factories
 {
     public class EnterspeedJobFactory : IEnterspeedJobFactory
     {

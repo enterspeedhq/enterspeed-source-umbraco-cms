@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Core.Web;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class UmbracoContextProvider : IUmbracoContextProvider
     {

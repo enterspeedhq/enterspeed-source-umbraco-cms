@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Umbraco.Cms.Core.Composing;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Handlers
+namespace Enterspeed.Source.UmbracoCms.Handlers
 {
     public class EnterspeedJobHandlerCollection : BuilderCollectionBase<IEnterspeedJobHandler>
     {

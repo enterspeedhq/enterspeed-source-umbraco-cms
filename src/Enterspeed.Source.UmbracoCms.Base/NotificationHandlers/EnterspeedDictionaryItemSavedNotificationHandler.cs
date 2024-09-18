@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Base.Factories;
-using Enterspeed.Source.UmbracoCms.Base.Models;
-using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Notifications;
@@ -17,7 +17,7 @@ using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
+namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
 {
     public class EnterspeedDictionaryItemSavedNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemSavedNotification>
     {

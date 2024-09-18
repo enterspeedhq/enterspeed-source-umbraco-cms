@@ -1,7 +1,7 @@
-﻿using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties;
+﻿using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core.Composing;
 
-namespace Enterspeed.Source.UmbracoCms.Base.DataPropertyValueConverters
+namespace Enterspeed.Source.UmbracoCms.DataPropertyValueConverters
 {
     public class EnterspeedPropertyValueConverterCollectionBuilder
         : OrderedCollectionBuilderBase<EnterspeedPropertyValueConverterCollectionBuilder, EnterspeedPropertyValueConverterCollection, IEnterspeedPropertyValueConverter>

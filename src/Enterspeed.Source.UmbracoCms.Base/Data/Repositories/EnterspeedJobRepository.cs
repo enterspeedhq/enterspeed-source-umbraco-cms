@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Schemas;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Infrastructure.Persistence;
 #if NET5_0
@@ -12,7 +12,7 @@ using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
 
-namespace Enterspeed.Source.UmbracoCms.Base.Data.Repositories
+namespace Enterspeed.Source.UmbracoCms.Data.Repositories
 {
     public class EnterspeedJobRepository : IEnterspeedJobRepository
     {

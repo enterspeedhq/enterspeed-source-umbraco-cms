@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Base.Handlers;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Handlers;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Sync;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class EnterspeedJobsHandlingService : IEnterspeedJobsHandlingService
     {

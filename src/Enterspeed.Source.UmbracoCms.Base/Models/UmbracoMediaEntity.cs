@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.Base.Extensions;
-using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Models;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Models
+namespace Enterspeed.Source.UmbracoCms.Models
 {
     public class UmbracoMediaEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {

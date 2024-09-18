@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.Base.Extensions;
+using Enterspeed.Source.UmbracoCms.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Models.Blocks;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 {
     public class DefaultBlockGridPropertyValueConverter : IEnterspeedPropertyValueConverter
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Extensions
+namespace Enterspeed.Source.UmbracoCms.Extensions
 {
     public static class EnumerableTimeExtensions
     {

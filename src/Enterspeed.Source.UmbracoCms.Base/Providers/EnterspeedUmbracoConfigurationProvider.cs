@@ -1,8 +1,8 @@
 ﻿using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.Sdk.Configuration;
-using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Services;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Providers
+namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public class EnterspeedUmbracoConfigurationProvider : IEnterspeedConfigurationProvider
     {

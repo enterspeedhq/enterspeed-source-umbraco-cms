@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Extensions
+namespace Enterspeed.Source.UmbracoCms.Extensions
 {
     public static class DateTimeExtensions
     {

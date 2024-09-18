@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Domain.Connection;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Models.Api
+namespace Enterspeed.Source.UmbracoCms.Models.Api
 {
     public class ErrorResponse
     {

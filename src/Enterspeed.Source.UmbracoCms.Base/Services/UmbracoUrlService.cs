@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Options;
 using Umbraco.Cms.Core.Configuration.Models;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class UmbracoUrlService : IUmbracoUrlService
     {

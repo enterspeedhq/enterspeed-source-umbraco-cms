@@ -5,32 +5,32 @@ using Enterspeed.Source.Sdk.Configuration;
 using Enterspeed.Source.Sdk.Domain.Connection;
 using Enterspeed.Source.Sdk.Domain.Services;
 using Enterspeed.Source.Sdk.Domain.SystemTextJson;
-using Enterspeed.Source.UmbracoCms.Base.Components;
-using Enterspeed.Source.UmbracoCms.Base.Data.MappingDefinitions;
-using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Base.DataPropertyValueConverters;
-using Enterspeed.Source.UmbracoCms.Base.Factories;
-using Enterspeed.Source.UmbracoCms.Base.Guards;
-using Enterspeed.Source.UmbracoCms.Base.Handlers;
-using Enterspeed.Source.UmbracoCms.Base.Handlers.Content;
-using Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries;
-using Enterspeed.Source.UmbracoCms.Base.Handlers.Media;
-using Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewContent;
-using Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewDictionaries;
-using Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewMedia;
-using Enterspeed.Source.UmbracoCms.Base.HostedServices;
-using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers;
-using Enterspeed.Source.UmbracoCms.Base.Providers;
-using Enterspeed.Source.UmbracoCms.Base.Services;
-using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties;
-using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters;
-using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultGridConverters;
+using Enterspeed.Source.UmbracoCms.Components;
+using Enterspeed.Source.UmbracoCms.Data.MappingDefinitions;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.DataPropertyValueConverters;
+using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Guards;
+using Enterspeed.Source.UmbracoCms.Handlers;
+using Enterspeed.Source.UmbracoCms.Handlers.Content;
+using Enterspeed.Source.UmbracoCms.Handlers.Dictionaries;
+using Enterspeed.Source.UmbracoCms.Handlers.Media;
+using Enterspeed.Source.UmbracoCms.Handlers.PreviewContent;
+using Enterspeed.Source.UmbracoCms.Handlers.PreviewDictionaries;
+using Enterspeed.Source.UmbracoCms.Handlers.PreviewMedia;
+using Enterspeed.Source.UmbracoCms.HostedServices;
+using Enterspeed.Source.UmbracoCms.NotificationHandlers;
+using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultGridConverters;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Notifications;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Extensions
+namespace Enterspeed.Source.UmbracoCms.Extensions
 {
     public static class UmbracoBuilderExtensions
     {

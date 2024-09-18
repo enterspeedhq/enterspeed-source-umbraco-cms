@@ -1,5 +1,5 @@
-﻿using Enterspeed.Source.UmbracoCms.Base.Models;
-using Enterspeed.Source.UmbracoCms.Base.Providers;
+﻿using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Providers;
 using Enterspeed.Source.UmbracoCms.V14Plus.Configuration;
 using Enterspeed.Source.UmbracoCms.V14Plus.Models;
 using Enterspeed.Source.UmbracoCms.V14Plus.Services;

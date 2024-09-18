@@ -1,10 +1,10 @@
 ﻿using System;
-using Enterspeed.Source.UmbracoCms.Base.Extensions;
-using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Services;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Providers
+namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public class UmbracoMediaUrlProvider : IUmbracoMediaUrlProvider
     {

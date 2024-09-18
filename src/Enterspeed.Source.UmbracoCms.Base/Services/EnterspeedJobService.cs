@@ -1,19 +1,19 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Base.Factories;
-using Enterspeed.Source.UmbracoCms.Base.Models;
-using Enterspeed.Source.UmbracoCms.Base.Models.Api;
-using Enterspeed.Source.UmbracoCms.Base.Providers;
-using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Factories;
+using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Models.Api;
+using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services.DataProperties;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class EnterspeedJobService : IEnterspeedJobService
     {

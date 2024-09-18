@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Services;
 using Umbraco.Cms.Core.Composing;
 
-namespace Enterspeed.Source.UmbracoCms.Base.DataPropertyValueConverters
+namespace Enterspeed.Source.UmbracoCms.DataPropertyValueConverters
 {
     public sealed class EnterspeedPropertyDataMapperCollection : BuilderCollectionBase<IEnterspeedPropertyDataMapper>
     {

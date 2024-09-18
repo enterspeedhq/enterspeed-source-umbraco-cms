@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Models.Api
+namespace Enterspeed.Source.UmbracoCms.Models.Api
 {
     public class JobIdsToDelete
     {

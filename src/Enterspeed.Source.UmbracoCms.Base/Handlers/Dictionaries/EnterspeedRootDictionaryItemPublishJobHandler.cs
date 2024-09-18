@@ -4,14 +4,14 @@ using System.Text.Json;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.Sdk.Api.Services;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Exceptions;
-using Enterspeed.Source.UmbracoCms.Base.Models;
-using Enterspeed.Source.UmbracoCms.Base.Models.Api;
-using Enterspeed.Source.UmbracoCms.Base.Providers;
-using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Exceptions;
+using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.Models.Api;
+using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Services;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
+namespace Enterspeed.Source.UmbracoCms.Handlers.Dictionaries
 {
     public class EnterspeedRootDictionaryItemPublishJobHandler : IEnterspeedJobHandler
     {

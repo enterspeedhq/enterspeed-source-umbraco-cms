@@ -1,10 +1,10 @@
 ﻿using System;
-using Enterspeed.Source.UmbracoCms.Base.Providers;
+using Enterspeed.Source.UmbracoCms.Providers;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services
+namespace Enterspeed.Source.UmbracoCms.Services
 {
     public class UmbracoEntityIdentityService : IEntityIdentityService
     {

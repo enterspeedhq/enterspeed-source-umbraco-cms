@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Extensions;
-using Enterspeed.Source.UmbracoCms.Base.Factories;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Factories;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
 {
     public class EnterspeedMasterContentService : IEnterspeedMasterContentService
     {

@@ -1,7 +1,7 @@
 ﻿using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Providers
+namespace Enterspeed.Source.UmbracoCms.Providers
 {
     public class EnterspeedConfigurationEditorProvider : IEnterspeedConfigurationEditorProvider
     {

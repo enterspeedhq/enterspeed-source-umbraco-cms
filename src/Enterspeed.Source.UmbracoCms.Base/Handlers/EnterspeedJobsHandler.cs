@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.Base.Data.Models;
-using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Base.Factories;
+using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Factories;
 using Lucene.Net.Util;
 using Microsoft.Extensions.Logging;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Handlers
+namespace Enterspeed.Source.UmbracoCms.Handlers
 {
     public class EnterspeedJobsHandler : IEnterspeedJobsHandler
     {

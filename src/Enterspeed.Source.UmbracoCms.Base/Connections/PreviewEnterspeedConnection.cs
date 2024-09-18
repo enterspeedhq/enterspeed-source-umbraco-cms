@@ -2,11 +2,11 @@
 using System.Net.Http;
 using System.Reflection;
 using Enterspeed.Source.Sdk.Api.Connection;
-using Enterspeed.Source.UmbracoCms.Base.Extensions;
-using Enterspeed.Source.UmbracoCms.Base.Models.Configuration;
-using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Extensions;
+using Enterspeed.Source.UmbracoCms.Models.Configuration;
+using Enterspeed.Source.UmbracoCms.Services;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Connections
+namespace Enterspeed.Source.UmbracoCms.Connections
 {
     public class PreviewEnterspeedConnection : IEnterspeedConnection
     {

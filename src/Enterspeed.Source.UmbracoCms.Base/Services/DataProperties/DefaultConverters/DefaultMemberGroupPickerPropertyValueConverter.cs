@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.Base.Extensions;
+using Enterspeed.Source.UmbracoCms.Extensions;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Services;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters
+namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultConverters
 {
     public class DefaultMemberGroupPickerPropertyValueConverter : IEnterspeedPropertyValueConverter
     {
