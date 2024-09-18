@@ -6,14 +6,13 @@ using Enterspeed.Source.UmbracoCms.V14Plus.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Umbraco.Cms.Api.Common.OpenApi;
-using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Enterspeed.Source.UmbracoCms.V14Plus
 {
-    public class EnterspeedComposer : IComposer
+    public class EnterspeedComposer : Composers.EnterspeedBaseComposer
     {
-        public void Compose(IUmbracoBuilder builder)
+        public override void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddTransient<IEnterspeedDictionaryTranslation, EnterspeedDictionaryTranslation>();
             builder.Services.AddSingleton<ISchemaIdSelector, EnterspeedSchemaIdSelector>();
@@ -22,6 +21,7 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus
 
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.ConfigureOptions<ConfigureEnterspeedApiSwaggerGenOptions>();
+            base.Compose(builder);
         }
     }
 }

@@ -83,7 +83,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj" PrivateAssets="all" />
+	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.csproj" PrivateAssets="all" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -4,9 +4,9 @@ using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Enterspeed.Source.UmbracoCms.Composers
 {
-    public class EnterspeedComposer : IComposer
+    public abstract class EnterspeedBaseComposer : IComposer
     {
-        public void Compose(IUmbracoBuilder builder)
+        public virtual void Compose(IUmbracoBuilder builder)
         {
             builder.AddEnterspeed();
         }

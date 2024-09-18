@@ -1,17 +1,17 @@
-﻿using Enterspeed.Source.UmbracoCms.Base.Models;
+﻿using Enterspeed.Source.UmbracoCms.Composers;
+using Enterspeed.Source.UmbracoCms.Models;
 using Enterspeed.Source.UmbracoCms.V9Plus.Models;
 using Microsoft.Extensions.DependencyInjection;
-using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Enterspeed.Source.UmbracoCms.V9Plus
 {
-    public class EnterspeedComposer : IComposer
+    public class EnterspeedComposer : EnterspeedBaseComposer
     {
-        public void Compose(IUmbracoBuilder builder)
+        public override void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddTransient<IEnterspeedDictionaryTranslation, EnterspeedDictionaryTranslation>();
+            base.Compose(builder);
         }
     }
 }
-    
