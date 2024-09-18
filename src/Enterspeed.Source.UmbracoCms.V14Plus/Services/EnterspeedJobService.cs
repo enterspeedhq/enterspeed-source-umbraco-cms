@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Base.Models.Api;
-using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.V14Plus.Models;
 using Umbraco.Cms.Core.Services;
 using CustomSeedNode = Enterspeed.Source.UmbracoCms.Base.Models.Api.CustomSeedNode;
 
-namespace Enterspeed.Source.UmbracoCms.Services;
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Services;
 
 public class EnterspeedJobService : IEnterspeedJobService
 {

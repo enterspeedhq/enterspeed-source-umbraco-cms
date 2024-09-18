@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms", "src\Enterspeed.Source.UmbracoCms.V9Plus\Enterspeed.Source.UmbracoCms.csproj", "{4FB19962-FB18-49D3-B3CF-291651BB1497}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V9Plus", "src\Enterspeed.Source.UmbracoCms.V9Plus\Enterspeed.Source.UmbracoCms.V9Plus.csproj", "{B158C022-5FD5-43F9-9E92-AEF82AAB9D93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,10 +27,10 @@ Global
 		{06A72344-07FC-4724-A7C1-8C90DFEE7DEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{06A72344-07FC-4724-A7C1-8C90DFEE7DEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{06A72344-07FC-4724-A7C1-8C90DFEE7DEB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4FB19962-FB18-49D3-B3CF-291651BB1497}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4FB19962-FB18-49D3-B3CF-291651BB1497}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4FB19962-FB18-49D3-B3CF-291651BB1497}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4FB19962-FB18-49D3-B3CF-291651BB1497}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B158C022-5FD5-43F9-9E92-AEF82AAB9D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B158C022-5FD5-43F9-9E92-AEF82AAB9D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B158C022-5FD5-43F9-9E92-AEF82AAB9D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B158C022-5FD5-43F9-9E92-AEF82AAB9D93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

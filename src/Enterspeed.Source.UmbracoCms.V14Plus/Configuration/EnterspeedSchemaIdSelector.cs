@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Cms.Api.Common.OpenApi;
 
-namespace Enterspeed.Source.UmbracoCms.Configuration
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Configuration
 {
     public class EnterspeedSchemaIdSelector : SchemaIdSelector
     {

@@ -25,7 +25,7 @@ using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.BackOffice.Filters;
 
-namespace Enterspeed.Source.UmbracoCms.Controllers.Api
+namespace Enterspeed.Source.UmbracoCms.V9Plus.Controllers.Api
 {
     [JsonCamelCaseFormatter]
     public class DashboardApiController : UmbracoAuthorizedApiController

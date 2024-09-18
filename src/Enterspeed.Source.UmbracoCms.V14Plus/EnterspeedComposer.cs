@@ -1,15 +1,15 @@
 ﻿using Enterspeed.Source.UmbracoCms.Base.Models;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
-using Enterspeed.Source.UmbracoCms.Configuration;
-using Enterspeed.Source.UmbracoCms.Models;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.V14Plus.Configuration;
+using Enterspeed.Source.UmbracoCms.V14Plus.Models;
+using Enterspeed.Source.UmbracoCms.V14Plus.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
-namespace Enterspeed.Source.UmbracoCms
+namespace Enterspeed.Source.UmbracoCms.V14Plus
 {
     public class EnterspeedComposer : IComposer
     {

@@ -16,14 +16,14 @@ using Enterspeed.Source.UmbracoCms.Base.Models.Api;
 using Enterspeed.Source.UmbracoCms.Base.Models.Configuration;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
-using Enterspeed.Source.UmbracoCms.Models;
+using Enterspeed.Source.UmbracoCms.V14Plus.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Sync;
-using IEnterspeedJobService = Enterspeed.Source.UmbracoCms.Services.IEnterspeedJobService;
+using IEnterspeedJobService = Enterspeed.Source.UmbracoCms.V14Plus.Services.IEnterspeedJobService;
 
-namespace Enterspeed.Source.UmbracoCms.Controllers
+namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
 {
     [ApiVersion("1.0")]
     [ApiExplorerSettings(GroupName = "Dashboard")]
