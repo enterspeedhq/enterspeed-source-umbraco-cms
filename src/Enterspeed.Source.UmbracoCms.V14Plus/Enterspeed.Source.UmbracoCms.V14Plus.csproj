@@ -58,10 +58,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Enterspeed.Source.UmbracoCms\Enterspeed.Source.UmbracoCms.Base.csproj" PrivateAssets="all" />
-	</ItemGroup>
-
-	<ItemGroup>
 		<Folder Include="wwwroot\App_Plugins\" />
 	</ItemGroup>
 
@@ -74,6 +70,10 @@
 	    <Pack>True</Pack>
 	    <PackagePath>\</PackagePath>
 	  </None>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj" />
 	</ItemGroup>
 
 	<!--Workaround to include references in nuget package-->
