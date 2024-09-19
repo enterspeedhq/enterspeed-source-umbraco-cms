@@ -1,8 +1,8 @@
-﻿using Enterspeed.Source.UmbracoCms.Guards;
-using Enterspeed.Source.UmbracoCms.Handlers;
+﻿using Enterspeed.Source.UmbracoCms.Base.Guards;
+using Enterspeed.Source.UmbracoCms.Base.Handlers;
 using Umbraco.Cms.Core.DependencyInjection;
 
-namespace Enterspeed.Source.UmbracoCms.DataPropertyValueConverters
+namespace Enterspeed.Source.UmbracoCms.Base.DataPropertyValueConverters
 {
     public static class CompositionExtensions
     {

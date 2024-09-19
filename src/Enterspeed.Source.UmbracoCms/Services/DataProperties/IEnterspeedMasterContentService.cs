@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 
-namespace Enterspeed.Source.UmbracoCms.Services.DataProperties
+namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties
 {
     public interface IEnterspeedMasterContentService
     {

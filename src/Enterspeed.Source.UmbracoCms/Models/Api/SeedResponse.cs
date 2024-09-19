@@ -1,4 +1,4 @@
-﻿namespace Enterspeed.Source.UmbracoCms.Models.Api
+﻿namespace Enterspeed.Source.UmbracoCms.Base.Models.Api
 {
     public class SeedResponse
     {

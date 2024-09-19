@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Base.Services;
 
-namespace Enterspeed.Source.UmbracoCms.Models
+namespace Enterspeed.Source.UmbracoCms.Base.Models
 {
     public class UmbracoDictionariesRootEntity : IEnterspeedEntity<IDictionary<string, IEnterspeedProperty>>
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Data.Repositories;
-using Enterspeed.Source.UmbracoCms.Factories;
-using Enterspeed.Source.UmbracoCms.Providers;
-using Enterspeed.Source.UmbracoCms.Services;
-using Enterspeed.Source.UmbracoCms.Services.DataProperties;
+using Enterspeed.Source.UmbracoCms.Base.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
+using Enterspeed.Source.UmbracoCms.Base.Factories;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
+using Enterspeed.Source.UmbracoCms.Base.Services;
+using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Events;
 using Umbraco.Cms.Core.Models;
@@ -20,7 +20,7 @@ using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.NotificationHandlers
+namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 {
     public class EnterspeedContentUnpublishingNotificationHandler
         : BaseEnterspeedNotificationHandler,

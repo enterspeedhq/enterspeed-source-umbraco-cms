@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Base.Services;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.Providers
+namespace Enterspeed.Source.UmbracoCms.Base.Providers
 {
     public class UmbracoCultureProvider : IUmbracoCultureProvider
     {

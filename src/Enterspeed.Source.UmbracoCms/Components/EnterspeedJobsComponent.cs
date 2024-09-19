@@ -1,4 +1,4 @@
-﻿using Enterspeed.Source.UmbracoCms.Data.Migration;
+﻿using Enterspeed.Source.UmbracoCms.Base.Data.Migration;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Migrations;
@@ -11,7 +11,7 @@ using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.Components
+namespace Enterspeed.Source.UmbracoCms.Base.Components
 {
     public class EnterspeedJobsComponent : IComponent
     {

@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.DataPropertyValueConverters;
-using Enterspeed.Source.UmbracoCms.Models.Grid;
+using Enterspeed.Source.UmbracoCms.Base.DataPropertyValueConverters;
+using Enterspeed.Source.UmbracoCms.Base.Models.Grid;
 
-namespace Enterspeed.Source.UmbracoCms.Services
+namespace Enterspeed.Source.UmbracoCms.Base.Services
 {
     public class EnterspeedGridEditorService : IEnterspeedGridEditorService
     {

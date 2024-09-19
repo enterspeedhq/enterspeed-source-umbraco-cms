@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Core.Models;
 
-namespace Enterspeed.Source.UmbracoCms.Models
+namespace Enterspeed.Source.UmbracoCms.Base.Models
 {
     public interface IEnterspeedDictionaryTranslation
     {

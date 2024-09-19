@@ -3,7 +3,7 @@ using System.Linq;
 using HtmlAgilityPack;
 using Umbraco.Cms.Core.Templates;
 
-namespace Enterspeed.Source.UmbracoCms.Services
+namespace Enterspeed.Source.UmbracoCms.Base.Services
 {
     public class UmbracoRichTextParser : IUmbracoRichTextParser
     {

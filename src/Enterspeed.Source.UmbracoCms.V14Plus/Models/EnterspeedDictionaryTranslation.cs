@@ -1,4 +1,4 @@
-﻿using Enterspeed.Source.UmbracoCms.Models;
+﻿using Enterspeed.Source.UmbracoCms.Base.Models;
 using Umbraco.Cms.Core.Models;
 
 namespace Enterspeed.Source.UmbracoCms.V14Plus.Models

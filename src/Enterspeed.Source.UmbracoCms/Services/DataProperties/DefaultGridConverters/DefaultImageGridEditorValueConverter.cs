@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.Models.Grid;
-using Enterspeed.Source.UmbracoCms.Providers;
+using Enterspeed.Source.UmbracoCms.Base.Models.Grid;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Newtonsoft.Json.Linq;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Web.Common;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.Services.DataProperties.DefaultGridConverters
+namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultGridConverters
 {
     public class DefaultImageGridEditorValueConverter : IEnterspeedGridEditorValueConverter
     {

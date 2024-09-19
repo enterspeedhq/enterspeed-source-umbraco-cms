@@ -2,7 +2,7 @@
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Services
+namespace Enterspeed.Source.UmbracoCms.Base.Services
 {
     public interface IEnterspeedPropertyDataMapper
     {

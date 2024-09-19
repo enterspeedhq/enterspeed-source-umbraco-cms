@@ -1,7 +1,7 @@
-﻿using Enterspeed.Source.UmbracoCms.Data.Schemas;
+﻿using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
 using Umbraco.Cms.Infrastructure.Migrations;
 
-namespace Enterspeed.Source.UmbracoCms.Data.Migration
+namespace Enterspeed.Source.UmbracoCms.Base.Data.Migration
 {
     public class AddEntityTypeToJobsTable : MigrationBase
     {

@@ -1,4 +1,4 @@
-﻿namespace Enterspeed.Source.UmbracoCms.Data.Models
+﻿namespace Enterspeed.Source.UmbracoCms.Base.Data.Models
 {
     public enum EnterspeedContentState
     {

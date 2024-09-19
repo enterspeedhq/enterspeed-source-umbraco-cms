@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 
-namespace Enterspeed.Source.UmbracoCms.Models
+namespace Enterspeed.Source.UmbracoCms.Base.Models
 {
     public class EnterspeedJobHandlerResponse
     {

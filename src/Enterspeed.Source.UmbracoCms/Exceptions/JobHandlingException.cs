@@ -1,6 +1,6 @@
 using System;
 
-namespace Enterspeed.Source.UmbracoCms.Exceptions
+namespace Enterspeed.Source.UmbracoCms.Base.Exceptions
 {
     public class JobHandlingException : Exception
     {

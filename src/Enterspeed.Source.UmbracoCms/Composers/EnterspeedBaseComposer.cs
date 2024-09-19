@@ -1,8 +1,8 @@
-﻿using Enterspeed.Source.UmbracoCms.Extensions;
+﻿using Enterspeed.Source.UmbracoCms.Base.Extensions;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 
-namespace Enterspeed.Source.UmbracoCms.Composers
+namespace Enterspeed.Source.UmbracoCms.Base.Composers
 {
     public abstract class EnterspeedBaseComposer : IComposer
     {

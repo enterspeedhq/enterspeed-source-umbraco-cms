@@ -1,6 +1,6 @@
-﻿using Enterspeed.Source.UmbracoCms.Models.Configuration;
+﻿using Enterspeed.Source.UmbracoCms.Base.Models.Configuration;
 
-namespace Enterspeed.Source.UmbracoCms.Extensions
+namespace Enterspeed.Source.UmbracoCms.Base.Extensions
 {
     public static class EnterspeedConfigurationExtensions
     {

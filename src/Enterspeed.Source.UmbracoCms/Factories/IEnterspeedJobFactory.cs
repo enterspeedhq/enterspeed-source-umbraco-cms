@@ -1,8 +1,8 @@
-﻿using Enterspeed.Source.UmbracoCms.Data.Models;
+﻿using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Factories
+namespace Enterspeed.Source.UmbracoCms.Base.Factories
 {
     public interface IEnterspeedJobFactory
     {

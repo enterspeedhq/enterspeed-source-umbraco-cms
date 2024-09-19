@@ -1,7 +1,7 @@
-﻿using Enterspeed.Source.UmbracoCms.Models.Configuration;
+﻿using Enterspeed.Source.UmbracoCms.Base.Models.Configuration;
 using Umbraco.Cms.Core.Sync;
 
-namespace Enterspeed.Source.UmbracoCms.Models.Api
+namespace Enterspeed.Source.UmbracoCms.Base.Models.Api
 {
     public class EnterspeedUmbracoConfigurationResponse : EnterspeedUmbracoConfiguration
     {

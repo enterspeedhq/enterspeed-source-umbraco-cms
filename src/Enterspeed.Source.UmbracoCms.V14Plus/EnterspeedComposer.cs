@@ -1,5 +1,6 @@
-﻿using Enterspeed.Source.UmbracoCms.Models;
-using Enterspeed.Source.UmbracoCms.Providers;
+﻿using Enterspeed.Source.UmbracoCms.Base.Composers;
+using Enterspeed.Source.UmbracoCms.Base.Models;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.V14Plus.Configuration;
 using Enterspeed.Source.UmbracoCms.V14Plus.Models;
 using Enterspeed.Source.UmbracoCms.V14Plus.Services;
@@ -10,7 +11,7 @@ using Umbraco.Cms.Core.DependencyInjection;
 
 namespace Enterspeed.Source.UmbracoCms.V14Plus
 {
-    public class EnterspeedComposer : Composers.EnterspeedBaseComposer
+    public class EnterspeedComposer : EnterspeedBaseComposer
     {
         public override void Compose(IUmbracoBuilder builder)
         {

@@ -2,7 +2,7 @@
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Microsoft.Extensions.Logging;
 
-namespace Enterspeed.Source.UmbracoCms.Services
+namespace Enterspeed.Source.UmbracoCms.Base.Services
 {
     public class EnterspeedValidationService : IEnterspeedValidationService
     {

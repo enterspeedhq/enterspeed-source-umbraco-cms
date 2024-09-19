@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using Enterspeed.Source.Sdk.Api.Services;
-using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Exceptions;
-using Enterspeed.Source.UmbracoCms.Models;
-using Enterspeed.Source.UmbracoCms.Providers;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Base.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Exceptions;
+using Enterspeed.Source.UmbracoCms.Base.Models;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
+using Enterspeed.Source.UmbracoCms.Base.Services;
 
-namespace Enterspeed.Source.UmbracoCms.Handlers.Content
+namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Content
 {
     public class EnterspeedContentDeleteJobHandler : IEnterspeedJobHandler
     {

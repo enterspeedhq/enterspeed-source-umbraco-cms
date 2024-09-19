@@ -1,6 +1,6 @@
-using Enterspeed.Source.UmbracoCms.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 
-namespace Enterspeed.Source.UmbracoCms.Handlers
+namespace Enterspeed.Source.UmbracoCms.Base.Handlers
 {
     public interface IEnterspeedJobHandler
     {

@@ -1,6 +1,6 @@
 ﻿using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Factories
+namespace Enterspeed.Source.UmbracoCms.Base.Factories
 {
     public interface IUrlFactory
     {

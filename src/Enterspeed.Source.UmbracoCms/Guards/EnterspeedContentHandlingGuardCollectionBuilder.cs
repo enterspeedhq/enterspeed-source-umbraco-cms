@@ -1,6 +1,6 @@
 using Umbraco.Cms.Core.Composing;
 
-namespace Enterspeed.Source.UmbracoCms.Guards
+namespace Enterspeed.Source.UmbracoCms.Base.Guards
 {
     public class EnterspeedContentHandlingGuardCollectionBuilder
         : OrderedCollectionBuilderBase<EnterspeedContentHandlingGuardCollectionBuilder, EnterspeedContentHandlingGuardCollection,

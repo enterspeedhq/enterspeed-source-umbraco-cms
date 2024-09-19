@@ -1,8 +1,8 @@
-﻿using Enterspeed.Source.UmbracoCms.Data.Models;
-using Enterspeed.Source.UmbracoCms.Data.Schemas;
+﻿using Enterspeed.Source.UmbracoCms.Base.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
 using Umbraco.Cms.Core.Mapping;
 
-namespace Enterspeed.Source.UmbracoCms.Data.MappingDefinitions
+namespace Enterspeed.Source.UmbracoCms.Base.Data.MappingDefinitions
 {
     public class EnterspeedJobMappingDefinition : IMapDefinition
     {

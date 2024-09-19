@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.Extensions
+namespace Enterspeed.Source.UmbracoCms.Base.Extensions
 {
     public static class PublishedContentExtensions
     {

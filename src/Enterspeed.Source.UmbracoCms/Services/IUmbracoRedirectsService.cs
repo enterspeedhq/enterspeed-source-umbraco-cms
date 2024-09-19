@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Enterspeed.Source.UmbracoCms.Services
+namespace Enterspeed.Source.UmbracoCms.Base.Services
 {
     public interface IUmbracoRedirectsService
     {

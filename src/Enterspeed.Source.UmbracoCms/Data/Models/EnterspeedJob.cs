@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Enterspeed.Source.UmbracoCms.Data.Models
+namespace Enterspeed.Source.UmbracoCms.Base.Data.Models
 {
     public class EnterspeedJob
     {

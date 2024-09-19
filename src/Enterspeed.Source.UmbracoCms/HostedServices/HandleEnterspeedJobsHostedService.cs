@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.HostedServices;
+
 #if NET5_0
 
 #else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.HostedServices
+namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
 {
     public class HandleEnterspeedJobsHostedService : RecurringHostedServiceBase
     {

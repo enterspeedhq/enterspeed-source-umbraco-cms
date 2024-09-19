@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
@@ -13,7 +13,7 @@ using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.HostedServices
+namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
 {
     public class InvalidateEnterspeedJobsHostedService : RecurringHostedServiceBase
     {
