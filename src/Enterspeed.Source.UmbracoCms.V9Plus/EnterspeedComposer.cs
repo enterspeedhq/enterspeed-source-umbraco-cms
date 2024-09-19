@@ -1,5 +1,5 @@
-﻿using Enterspeed.Source.UmbracoCms.Composers;
-using Enterspeed.Source.UmbracoCms.Models;
+﻿using Enterspeed.Source.UmbracoCms.Base.Composers;
+using Enterspeed.Source.UmbracoCms.Base.Models;
 using Enterspeed.Source.UmbracoCms.V9Plus.Models;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
