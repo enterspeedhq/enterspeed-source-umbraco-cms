@@ -73,7 +73,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj" />
+	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj" PrivateAssets="all" />
 	</ItemGroup>
 
 	<!--Workaround to include references in nuget package-->
