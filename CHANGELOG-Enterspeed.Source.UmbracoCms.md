@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.0 - 2024-10-03]
+### Added
+- Added Umbraco 14 support.
+
+### Breaking
+- Umbraco.Source.Cms namespace has been updated to Umbraco.Source.Cms.Base.
+- EnterspeedComposer must now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer` and `Enterspeed.Source.UmbracoCms.V9Plus.EnterspeedComposer`.
+
 ## [4.2.1 - 2024-01-31]
 ### Fixed
 - Repeatable textstrings (Umbraco.MultipleTextstring) courses error when the list is empty
