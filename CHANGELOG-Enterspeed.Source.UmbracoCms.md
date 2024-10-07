@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Breaking
 - Umbraco.Source.Cms namespace has been updated to Umbraco.Source.Cms.Base.
-- EnterspeedComposer must now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer` and `Enterspeed.Source.UmbracoCms.V9Plus.EnterspeedComposer`.
+- EnterspeedComposezzzmust now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer`.
 
 ## [4.2.1 - 2024-01-31]
 ### Fixed
