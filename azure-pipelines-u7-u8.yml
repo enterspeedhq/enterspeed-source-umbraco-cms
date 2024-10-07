@@ -71,7 +71,9 @@ trigger:
       - documentation/*
       - Enterspeed.Source.UmbracoCms.sln
       - azure-pipelines-u9+.yml
-      - src/Enterspeed.Source.UmbracoCms/*
+      - azure-pipelines-u14+.yml
+      - src/Enterspeed.Source.UmbracoCms.V9Plus/*
+      - src/Enterspeed.Source.UmbracoCms.V14Plus/*
 
 pr:
   branches:
@@ -84,7 +86,8 @@ pr:
       - README.md
       - CHANGELOG.md
       - documentation/*
-      - src/Enterspeed.Source.UmbracoCms/*
+      - src/Enterspeed.Source.UmbracoCms.V9Plus/*
+      - src/Enterspeed.Source.UmbracoCms.V14Plus/*
 
 stages:
  
