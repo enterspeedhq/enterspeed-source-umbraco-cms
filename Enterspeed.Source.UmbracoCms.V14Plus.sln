@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{9D059E9C-7C92-468C-A590-2B6245C99DF9}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		azure-pipelines-u14+.yml = azure-pipelines-u14+.yml
+		NuGet.Config = NuGet.Config
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Base", "Base", "{49783919-70DD-4CEE-A21C-BF72690865C3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.V14Plus", "src\Enterspeed.Source.UmbracoCms.V14Plus\Enterspeed.Source.UmbracoCms.V14Plus.csproj", "{3E20B3D9-4D9A-48EA-A7FD-9F3F7335D5BD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Enterspeed.Source.UmbracoCms.Base", "src\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj", "{134FF263-A9AA-45BA-97AC-856732E0072E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E20B3D9-4D9A-48EA-A7FD-9F3F7335D5BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E20B3D9-4D9A-48EA-A7FD-9F3F7335D5BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E20B3D9-4D9A-48EA-A7FD-9F3F7335D5BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E20B3D9-4D9A-48EA-A7FD-9F3F7335D5BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{134FF263-A9AA-45BA-97AC-856732E0072E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{134FF263-A9AA-45BA-97AC-856732E0072E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{134FF263-A9AA-45BA-97AC-856732E0072E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{134FF263-A9AA-45BA-97AC-856732E0072E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{134FF263-A9AA-45BA-97AC-856732E0072E} = {49783919-70DD-4CEE-A21C-BF72690865C3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {97476C10-5374-4BF9-AF36-39927C035955}
+	EndGlobalSection
+EndGlobal
