@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
-using Enterspeed.Source.UmbracoCms.Base.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Models.Blocks;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -25,42 +24,45 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
 
         public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
-            var value = property.GetValue<BlockListModel>(culture);
-            var arrayItems = new List<IEnterspeedProperty>();
+            var value = property.GetValue(culture);
+            var dataPropertyService = _serviceProvider.GetRequiredService<IEnterspeedPropertyService>();
 
-            if (value != null)
+            switch (value)
             {
-                // NOTE: This needs to be resolved manually, since it would cause a circular dependency if injected through constructor
-                var dataPropertyService = _serviceProvider.GetRequiredService<IEnterspeedPropertyService>();
+                case BlockListModel blockListModel:
+                    return new ArrayEnterspeedProperty(property.Alias, blockListModel.Select(blockListItem => MapBlockListItem(blockListItem, culture, dataPropertyService)).ToArray());
 
-                foreach (var item in value)
-                {
-                    var properties = new Dictionary<string, IEnterspeedProperty>();
-                    if (item.Content?.Properties != null)
-                    {
-                        var contentProperties = dataPropertyService.ConvertProperties(item.Content.Properties, culture);
-                        properties.Add("content", new ObjectEnterspeedProperty(contentProperties));
-                    }
+                case BlockListItem blockListItem:
+                    return MapBlockListItem(blockListItem, culture, dataPropertyService);
 
-                    if (item.Settings?.Properties != null)
-                    {
-                        var settingsProperties = dataPropertyService.ConvertProperties(item.Settings.Properties, culture);
-                        properties.Add("settings", new ObjectEnterspeedProperty(settingsProperties));
-                    }
+                default:
+                    return new ArrayEnterspeedProperty(property.Alias, Array.Empty<IEnterspeedProperty>());
+            }
+        }
 
-                    if (item.Content?.ContentType != null)
-                    {
-                        properties.Add("contentType", new StringEnterspeedProperty(item.Content.ContentType.Alias));
-                    }
-
-                    if (properties.Any())
-                    {
-                        arrayItems.Add(new ObjectEnterspeedProperty(properties));
-                    }
-                }
+        protected IEnterspeedProperty MapBlockListItem(BlockListItem blockListItem, string culture, IEnterspeedPropertyService dataPropertyService)
+        {
+            var properties = new Dictionary<string, IEnterspeedProperty>();
+            if (blockListItem.Content?.Properties != null)
+            {
+                var contentProperties = dataPropertyService.ConvertProperties(blockListItem.Content.Properties, culture);
+                properties.Add("content", new ObjectEnterspeedProperty(contentProperties));
             }
 
-            return new ArrayEnterspeedProperty(property.Alias, arrayItems.ToArray());
+            if (blockListItem.Settings?.Properties != null)
+            {
+                var settingsProperties = dataPropertyService.ConvertProperties(blockListItem.Settings.Properties, culture);
+                properties.Add("settings", new ObjectEnterspeedProperty(settingsProperties));
+            }
+
+            if (blockListItem.Content?.ContentType != null)
+            {
+                properties.Add("contentType", new StringEnterspeedProperty(blockListItem.Content.ContentType.Alias));
+            }
+
+            return properties.Any()
+                ? new ObjectEnterspeedProperty(properties)
+                : null;
         }
     }
 }
