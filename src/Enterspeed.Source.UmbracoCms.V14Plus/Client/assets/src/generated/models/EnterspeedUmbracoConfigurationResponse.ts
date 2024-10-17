@@ -19,6 +19,7 @@ export type EnterspeedUmbracoConfigurationResponse = {
     rootDictionariesDisabled: boolean;
     runJobsOnAllServerRoles: boolean;
     enableMasterContent: boolean;
+    enabledFailedJobsProcessing: boolean;
     serverRole: ServerRoleModel;
     runJobsOnServer: boolean;
     readonly configuration?: EnterspeedUmbracoConfiguration | null;

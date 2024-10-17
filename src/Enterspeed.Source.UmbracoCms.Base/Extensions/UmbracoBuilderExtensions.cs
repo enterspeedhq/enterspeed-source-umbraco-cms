@@ -198,6 +198,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             // Hosted Services
             builder.Services.AddHostedService<HandleEnterspeedJobsHostedService>();
             builder.Services.AddHostedService<InvalidateEnterspeedJobsHostedService>();
+            builder.Services.AddHostedService<HandleEnterspeedFailedJobsHostedService>();
 
             return builder;
         }
