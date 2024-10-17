@@ -14,7 +14,7 @@ using Umbraco.Cms.Core.Scoping;
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
 
-namespace Enterspeed.Source.UmbracoCms.HostedServices
+namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
 {
     public class HandleEnterspeedFailedJobsHostedService : RecurringHostedServiceBase
     {

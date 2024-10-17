@@ -1,5 +1,4 @@
 ﻿using Enterspeed.Source.UmbracoCms.Base.Data.Migration;
-using Enterspeed.Source.UmbracoCms.Data.Migration;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.Migrations;
