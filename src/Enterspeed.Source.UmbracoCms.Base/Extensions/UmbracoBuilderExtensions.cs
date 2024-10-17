@@ -25,6 +25,7 @@ using Enterspeed.Source.UmbracoCms.Base.Services;
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties;
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters;
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultGridConverters;
+using Enterspeed.Source.UmbracoCms.HostedServices;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Mapping;

@@ -1,5 +1,4 @@
-﻿using Enterspeed.Source.UmbracoCms.Data.Schemas;
-using Microsoft.Extensions.Logging;
+﻿using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Enterspeed.Source.UmbracoCms.Data.Migration

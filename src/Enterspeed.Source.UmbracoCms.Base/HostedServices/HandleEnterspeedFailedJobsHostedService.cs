@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Enterspeed.Source.UmbracoCms.Services;
+using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
