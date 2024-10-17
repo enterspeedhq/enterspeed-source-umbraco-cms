@@ -19,4 +19,5 @@ export type EnterspeedJob = {
     updatedAt: string;
     entityType: EnterspeedJobEntityType;
     contentState: EnterspeedContentState;
+    failedCount: number;
 };

@@ -102,9 +102,6 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
       this.pagination.totalPages = Math.ceil(
         this.allFailedJobs.length / this.pagination.pageSize
       );
-      if (this.pagination.pageIndex === 0) {
-        this.pagination.pageIndex = 1;
-      }
 
       this.setFilteredJobs();
     });
@@ -223,7 +220,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
         @click=${() => this.toggleException(index)}
       >
         ${selectedDeleteModeHtml}
-        <div class="dashboard-list-item-property" style="width:12%">
+        <div class="dashboard-list-item-property" style="width:10%">
           ${failedJob.id}
         </div>
         <div class="dashboard-list-item-property" style="width:10%">
@@ -235,7 +232,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
         <div class="dashboard-list-item-property" style="width:10%">
           ${failedJob.culture}
         </div>
-        <div class="dashboard-list-item-property" style="width:15%">
+        <div class="dashboard-list-item-property" style="width:10%">
           ${failedJob.jobType}
         </div>
         <div class="dashboard-list-item-property" style="width:20%">
@@ -243,6 +240,9 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
         </div>
         <div class="dashboard-list-item-property" style="width:20%">
           ${failedJob.updatedAt}
+        </div>
+        <div class="dashboard-list-item-property" style="width:10%">
+          ${failedJob.failedCount}
         </div>
       </div>
       <div class="dashboard-list-item">${activeException}</div>
@@ -267,7 +267,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
                   class="dashboard-list-item-property"
                   style="width:3%"
                 ></div>
-                <div class="dashboard-list-item-property" style="width:12%">
+                <div class="dashboard-list-item-property" style="width:10%">
                   ID
                 </div>
                 <div class="dashboard-list-item-property" style="width:10%">
@@ -276,10 +276,11 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
                 <div class="dashboard-list-item-property" style="width:10%">
                   Type
                 </div>
+                
                 <div class="dashboard-list-item-property" style="width:10%">
                   Culture
                 </div>
-                <div class="dashboard-list-item-property" style="width:15%">
+                <div class="dashboard-list-item-property" style="width:10%">
                   Job type
                 </div>
                 <div class="dashboard-list-item-property" style="width:20%">
@@ -287,6 +288,9 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
                 </div>
                 <div class="dashboard-list-item-property" style="width:20%">
                   Updated at
+                </div>
+                <div class="dashboard-list-item-property" style="width:10%">
+                  Failed count
                 </div>
               </li>
               ${jobCellsHtml}

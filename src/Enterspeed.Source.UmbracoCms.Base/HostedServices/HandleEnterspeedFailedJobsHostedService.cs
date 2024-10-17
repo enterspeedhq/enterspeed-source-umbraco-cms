@@ -23,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
         public HandleEnterspeedFailedJobsHostedService(
             ILogger<HandleEnterspeedFailedJobsHostedService> logger,
             IServiceProvider serviceProvider)
-                : base(logger, TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(1))
+                : base(logger, TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(10))
         {
             _serviceProvider = serviceProvider;
         }
