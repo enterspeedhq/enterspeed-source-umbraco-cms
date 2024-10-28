@@ -17,13 +17,13 @@ namespace Enterspeed.Source.UmbracoCms.Base.Data.Migration
 
             const string entityTypeColumnName = "FailedCount";
 
-            // If column doesnt exist, create it
+            // If column doesn't exist, create it
             if (!ColumnExists(jobsTableName, entityTypeColumnName))
             {
                 Create
                     .Column(entityTypeColumnName)
                     .OnTable(jobsTableName)
-                    .AsInt32()
+                    .AsInt32().NotNullable().WithDefaultValue(0)
                     .Do();
             }
         }
