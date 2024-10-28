@@ -15,5 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Data.Repositories
         void Delete(IList<int> ids);
         void ClearPendingJobs();
         int GetNumberOfPendingJobs();
+        IList<EnterspeedJob> GetFailedJobs(int count);
+        IList<EnterspeedJob> GetFailedJobs(int count, int maxFailedCount);
     }
 }

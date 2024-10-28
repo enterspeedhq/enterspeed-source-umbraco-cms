@@ -16,4 +16,5 @@ export type EnterspeedUmbracoConfiguration = {
     rootDictionariesDisabled: boolean;
     runJobsOnAllServerRoles: boolean;
     enableMasterContent: boolean;
+    enabledFailedJobsProcessing: boolean;
 };

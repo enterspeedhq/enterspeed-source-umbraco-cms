@@ -1,6 +1,6 @@
 ## Installation
 
-1. Open your terminal and navigate to the `Client` folder.
+1. Open your terminal and navigate to the `Client\assets` folder.
 2. Execute the command `npm install` to install all necessary dependencies.
 
 ## Development

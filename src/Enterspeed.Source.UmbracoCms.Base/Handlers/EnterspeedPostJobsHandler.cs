@@ -144,10 +144,12 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
                     existingJob.Exception = failedJob.Exception;
                     existingJob.CreatedAt = failedJob.CreatedAt;
                     existingJob.UpdatedAt = failedJob.CreatedAt;
+                    existingJob.FailedCount += 1;
                     _enterspeedJobRepository.Update(existingJob);
                 }
                 else
                 {
+                    failedJob.FailedCount += 1;
                     failedJobsToSave.Add(failedJob);
                 }
             }

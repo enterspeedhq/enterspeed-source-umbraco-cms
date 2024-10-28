@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc && vite build",
     "watch": "vite build --watch",
-    "generate": "openapi --input http://localhost:46983/umbraco/swagger/enterspeed/swagger.json --output src/generated --postfixServices Resource --useOptions"
+    "generate": "openapi --input http://localhost:21142/umbraco/swagger/enterspeed/swagger.json --output src/generated --postfixServices Resource --useOptions"
   },
   "dependencies": {
     "lit": "^3.1.3"
