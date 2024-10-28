@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [5.1.0 - UNRELEASED]
+## [5.1.0 - 2024-10-28]
 ### Added
 - Added support for Single block mode for Block Lists
 - Added retry logic for failed jobs. Must be enabled in the `appsettings.json` file by setting `EnabledFailedJobsProcessing` to `true`
