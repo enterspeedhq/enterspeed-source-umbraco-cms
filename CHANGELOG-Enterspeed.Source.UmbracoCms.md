@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [5.1.0 - UNRELEASED]
 ### Added
 - Added support for Single block mode for Block Lists
+- Added retry logic for failed jobs. Must be enabled in the `appsettings.json` file by setting `EnabledFailedJobsProcessing` to `true`
 
 ## [5.0.0 - 2024-10-03]
 ### Added
@@ -19,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [4.3.0 - UNRELEASED]
 ### Added
 - Added support for Single block mode for Block Lists
+- Added retry logic for failed jobs. Must be enabled in the `appsettings.json` file by setting `EnabledFailedJobsProcessing` to `true`
 
 ### Breaking
 - `Umbraco.Source.Cms` namespace has been updated to `Umbraco.Source.Cms.Base`

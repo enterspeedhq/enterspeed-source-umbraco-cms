@@ -9,5 +9,6 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
         void HandleJobs(IList<EnterspeedJob> jobs);
         void HandlePendingJobs(int batchSize);
         void InvalidateOldProcessingJobs();
+        void HandleFailedJobs(int batchSize, int maxFailedCount);
     }
 }

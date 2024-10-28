@@ -100,7 +100,8 @@ namespace Enterspeed.Source.UmbracoCms.Base.Factories
                 JobType = job.JobType,
                 State = EnterspeedJobState.Failed,
                 ContentState = job.ContentState,
-                Exception = exception
+                Exception = exception,
+                FailedCount = job.FailedCount
             };
         }
 

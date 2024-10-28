@@ -113,6 +113,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("RootDictionariesDisabled");
             configuration.RunJobsOnAllServerRoles = enterspeedSection.GetValue<bool>("RunJobsOnAllServerRoles");
             configuration.EnableMasterContent = enterspeedSection.GetValue<bool>("EnableMasterContent");
+            configuration.EnabledFailedJobsProcessing = enterspeedSection.GetValue<bool>("EnabledFailedJobsProcessing");
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()

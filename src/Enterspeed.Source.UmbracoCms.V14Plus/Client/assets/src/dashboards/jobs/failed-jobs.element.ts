@@ -102,9 +102,6 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
       this.pagination.totalPages = Math.ceil(
         this.allFailedJobs.length / this.pagination.pageSize
       );
-      if (this.pagination.pageIndex === 0) {
-        this.pagination.pageIndex = 1;
-      }
 
       this.setFilteredJobs();
     });
@@ -183,7 +180,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
     ) {
       selectedDeleteModeHtml = html`<div
         class="dashboard-list-item-property"
-        style="width: 3%"
+        style="width:3%"
       >
         ${index !== this.activeException
           ? html`<uui-icon name="icon-navigation-right"></uui-icon>`
@@ -192,7 +189,7 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
     } else {
       selectedDeleteModeHtml = html`<div
         class="dashboard-list-item-property "
-        style="width: 3%"
+        style="width:3%"
       >
         <uui-checkbox
           label=" "
@@ -223,26 +220,29 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
         @click=${() => this.toggleException(index)}
       >
         ${selectedDeleteModeHtml}
-        <div class="dashboard-list-item-property" style="width:12%">
+        <div class="dashboard-list-item-property" style="width:10%">
           ${failedJob.id}
         </div>
         <div class="dashboard-list-item-property" style="width:10%">
           ${failedJob.entityId}
         </div>
-        <div class="dashboard-list-item-property" style="width:10%">
+        <div class="dashboard-list-item-property" style="width:9%">
           ${failedJob.entityType}
         </div>
         <div class="dashboard-list-item-property" style="width:10%">
           ${failedJob.culture}
         </div>
-        <div class="dashboard-list-item-property" style="width:15%">
+        <div class="dashboard-list-item-property" style="width:10%">
           ${failedJob.jobType}
         </div>
-        <div class="dashboard-list-item-property" style="width:20%">
-          ${failedJob.createdAt}
+        <div class="dashboard-list-item-property" style="width:18%">
+          ${ new Date(failedJob.createdAt).toLocaleString()}
         </div>
-        <div class="dashboard-list-item-property" style="width:20%">
-          ${failedJob.updatedAt}
+        <div class="dashboard-list-item-property" style="width:18%">
+        ${ new Date(failedJob.updatedAt).toLocaleString()}
+        </div>
+        <div class="dashboard-list-item-property" style="width:12%">
+          ${failedJob.failedCount}
         </div>
       </div>
       <div class="dashboard-list-item">${activeException}</div>
@@ -267,26 +267,30 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
                   class="dashboard-list-item-property"
                   style="width:3%"
                 ></div>
-                <div class="dashboard-list-item-property" style="width:12%">
+                <div class="dashboard-list-item-property" style="width:10%">
                   ID
                 </div>
                 <div class="dashboard-list-item-property" style="width:10%">
                   Entity ID
                 </div>
-                <div class="dashboard-list-item-property" style="width:10%">
+                <div class="dashboard-list-item-property" style="width:9%">
                   Type
                 </div>
+
                 <div class="dashboard-list-item-property" style="width:10%">
                   Culture
                 </div>
-                <div class="dashboard-list-item-property" style="width:15%">
+                <div class="dashboard-list-item-property" style="width:10%">
                   Job type
                 </div>
-                <div class="dashboard-list-item-property" style="width:20%">
+                <div class="dashboard-list-item-property" style="width:18%">
                   Created at
                 </div>
-                <div class="dashboard-list-item-property" style="width:20%">
+                <div class="dashboard-list-item-property" style="width:18%">
                   Updated at
+                </div>
+                <div class="dashboard-list-item-property" style="width:12%">
+                  Failed count
                 </div>
               </li>
               ${jobCellsHtml}
