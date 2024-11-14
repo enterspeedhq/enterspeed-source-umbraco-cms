@@ -3,11 +3,13 @@ using Enterspeed.Source.UmbracoCms.Base.Models;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.V14Plus.Configuration;
 using Enterspeed.Source.UmbracoCms.V14Plus.Models;
+using Enterspeed.Source.UmbracoCms.V14Plus.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.V14Plus.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Umbraco.Cms.Api.Common.OpenApi;
 using Umbraco.Cms.Core.DependencyInjection;
+using Umbraco.Cms.Core.Notifications;
 
 namespace Enterspeed.Source.UmbracoCms.V14Plus
 {
@@ -22,6 +24,9 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus
 
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.ConfigureOptions<ConfigureEnterspeedApiSwaggerGenOptions>();
+
+            builder.AddNotificationHandler<ContentMovedToRecycleBinNotification, EnterspeedContentUnpublishingNotificationHandlerV14>();
+
             base.Compose(builder);
         }
     }
