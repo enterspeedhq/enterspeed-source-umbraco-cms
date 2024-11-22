@@ -1,5 +1,6 @@
 ﻿using Enterspeed.Source.UmbracoCms.Base.Composers;
 using Enterspeed.Source.UmbracoCms.Base.Models;
+using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.V14Plus.Configuration;
 using Enterspeed.Source.UmbracoCms.V14Plus.Models;
@@ -26,6 +27,7 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus
             builder.Services.ConfigureOptions<ConfigureEnterspeedApiSwaggerGenOptions>();
 
             builder.AddNotificationHandler<ContentMovedToRecycleBinNotification, EnterspeedContentUnpublishingNotificationHandlerV14>();
+            builder.AddNotificationHandler<ContentUnpublishingNotification, EnterspeedContentUnpublishingNotificationHandlerV14>();
 
             base.Compose(builder);
         }
