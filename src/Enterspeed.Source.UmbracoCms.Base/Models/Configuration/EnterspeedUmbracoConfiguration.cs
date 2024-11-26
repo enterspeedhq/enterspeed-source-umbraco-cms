@@ -12,5 +12,6 @@ namespace Enterspeed.Source.UmbracoCms.Base.Models.Configuration
         public bool RunJobsOnAllServerRoles { get; set; }
         public bool EnableMasterContent { get; set; }
         public bool EnabledFailedJobsProcessing { get; set; }
+        public bool RemoveTrailingSlash { get; set; }
     }
 }

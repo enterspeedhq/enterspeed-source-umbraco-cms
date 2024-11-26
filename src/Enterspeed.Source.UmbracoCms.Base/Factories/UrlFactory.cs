@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Enterspeed.Source.Sdk.Api.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.Options;
 using StackExchange.Profiling.Internal;
 using Umbraco.Cms.Core.Configuration.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.Routing;
+using Umbraco.Cms.Infrastructure.Persistence;
 using Umbraco.Extensions;
 
 namespace Enterspeed.Source.UmbracoCms.Base.Factories
@@ -14,13 +16,16 @@ namespace Enterspeed.Source.UmbracoCms.Base.Factories
     public class UrlFactory : IUrlFactory
     {
         private readonly IUmbracoContextProvider _umbracoContextProvider;
+        private readonly IEnterspeedConfigurationService _configurationService;
         private readonly GlobalSettings _globalSettings;
 
         public UrlFactory(
             IUmbracoContextProvider umbracoContextProvider,
-            IOptions<GlobalSettings> globalSettings)
+            IOptions<GlobalSettings> globalSettings,
+            IEnterspeedConfigurationService configurationService)
         {
             _umbracoContextProvider = umbracoContextProvider;
+            _configurationService = configurationService;
             _globalSettings = globalSettings.Value;
         }
 
@@ -45,7 +50,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Factories
 
             var domains = umb.Domains.GetAll(false).ToList();
             var urlSegments = new List<string>();
-            
+
             foreach (var ancestor in ancestorsAndSelf)
             {
                 var urlSegment = GetUrlSegment(culture, domains, ancestor, content.Path, out var isAssignedDomain);
@@ -80,6 +85,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Factories
             if (Uri.IsWellFormedUriString(url, UriKind.Relative))
             {
                 url = $"/{url.TrimStart('/')}";
+            }
+
+            if (_configurationService.GetConfiguration().RemoveTrailingSlash)
+            {
+                return url.TrimEnd('/');
             }
 
             return url.EnsureTrailingSlash();
