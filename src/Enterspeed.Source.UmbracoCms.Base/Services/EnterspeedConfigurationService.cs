@@ -114,6 +114,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             configuration.RunJobsOnAllServerRoles = enterspeedSection.GetValue<bool>("RunJobsOnAllServerRoles");
             configuration.EnableMasterContent = enterspeedSection.GetValue<bool>("EnableMasterContent");
             configuration.EnabledFailedJobsProcessing = enterspeedSection.GetValue<bool>("EnabledFailedJobsProcessing");
+            configuration.RemoveTrailingSlash = enterspeedSection.GetValue<bool>("RemoveTrailingSlash");
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()
