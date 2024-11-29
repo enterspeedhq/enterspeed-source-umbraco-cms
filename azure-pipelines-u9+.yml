@@ -103,6 +103,13 @@ stages:
         pool:
           vmImage: ubuntu-latest
         steps:
+          - task: UseDotNet@2
+            displayName: 'Use .NET Core sdk'
+            inputs:
+              packageType: sdk
+              version: 9.x
+              installationPath: $(Agent.ToolsDirectory)/dotnet
+              
           # Restore packages
           - task: DotNetCoreCLI@2
             displayName: Dotnet restore

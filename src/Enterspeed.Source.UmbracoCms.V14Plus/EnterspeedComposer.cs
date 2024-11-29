@@ -22,10 +22,8 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus
             builder.Services.AddSingleton<ISchemaIdSelector, EnterspeedSchemaIdSelector>();
             builder.Services.AddSingleton<IOperationIdSelector, EnterspeedOperationIdSelector>();
             builder.Services.Replace(ServiceDescriptor.Singleton<IEnterspeedConfigurationEditorProvider, EnterspeedConfigurationEditorProvider>());
-
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.ConfigureOptions<ConfigureEnterspeedApiSwaggerGenOptions>();
-
             builder.AddNotificationHandler<ContentMovedToRecycleBinNotification, EnterspeedContentUnpublishingNotificationHandlerV14>();
             builder.AddNotificationHandler<ContentUnpublishingNotification, EnterspeedContentUnpublishingNotificationHandlerV14>();
 

@@ -309,7 +309,7 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
             var testConfigurationService = new InMemoryEnterspeedUmbracoConfigurationProvider(configuration);
             var testConnection = new EnterspeedConnection(testConfigurationService);
             var enterspeedIngestService = new EnterspeedIngestService(
-                testConnection, new SystemTextJsonSerializer(), testConfigurationService);
+                testConnection, new SystemTextJsonSerializer());
 
             var response = enterspeedIngestService.Test();
 

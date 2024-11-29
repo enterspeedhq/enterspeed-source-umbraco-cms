@@ -100,7 +100,10 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
                 .Append<DefaultImageCropperPropertyValueConverter>()
                 .Append<DefaultMarkdownEditorPropertyValueConverter>()
                 .Append<DefaultMediaPickerPropertyValueConverter>()
+#if NET9_0_OR_GREATER
+#else
                 .Append<DefaultLegacyMediaPickerPropertyValueConverter>()
+#endif
                 .Append<DefaultMemberGroupPickerPropertyValueConverter>()
                 .Append<DefaultMemberPickerPropertyValueConverter>()
                 .Append<DefaultMultiUrlPickerPropertyValueConverter>()
@@ -190,6 +193,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             builder.AddNotificationHandler<MediaMovedNotification, EnterspeedMediaMovedEventHandler>();
             builder.AddNotificationHandler<MediaMovedToRecycleBinNotification, EnterspeedMediaTrashedNotificationHandler>();
             builder.AddNotificationHandler<ContentSavingNotification, EnterspeedContentSavingNotificationHandler>();
+         
             // Components
             builder.Components().Append<EnterspeedJobsComponent>();
 
