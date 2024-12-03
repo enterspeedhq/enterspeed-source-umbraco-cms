@@ -5,6 +5,16 @@
 To get started with Enterspeed for Umbraco, please see:  
 [Umbraco documentation - Getting started](https://docs.enterspeed.com/integrations/umbraco/getting-started/)
 
+## Versions
+
+Version 5.x: Use this if your Umbraco version is 14 or higher.  
+Version 4.x: Use this if your Umbraco version is 9 to 13.
+
+For Umbraco 7 & 8 use the following packages:
+
+- https://www.nuget.org/packages/Enterspeed.Source.UmbracoCms.V7
+- https://www.nuget.org/packages/Enterspeed.Source.UmbracoCms.V8
+
 ## Changelog
 
 See new features, fixes and breaking changes in the changelog.

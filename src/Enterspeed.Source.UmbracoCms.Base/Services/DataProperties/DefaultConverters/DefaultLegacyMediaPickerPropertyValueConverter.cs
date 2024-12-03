@@ -5,6 +5,8 @@ using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
 
+#if NET9_0_OR_GREATER
+#else 
 namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters
 {
     public class DefaultLegacyMediaPickerPropertyValueConverter : IEnterspeedPropertyValueConverter
@@ -65,3 +67,4 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
         }
     }
 }
+#endif

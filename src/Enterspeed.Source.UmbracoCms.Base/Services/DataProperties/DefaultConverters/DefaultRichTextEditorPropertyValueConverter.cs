@@ -17,7 +17,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
 
         public bool IsConverter(IPublishedPropertyType propertyType)
         {
-            return propertyType.EditorAlias.Equals("Umbraco.TinyMCE");
+            return propertyType.EditorAlias.Equals("Umbraco.TinyMCE") || propertyType.EditorAlias.Equals("Umbraco.RichText");
         }
 
         public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
