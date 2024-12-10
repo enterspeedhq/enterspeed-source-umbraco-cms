@@ -24,10 +24,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - `Umbraco.Source.Cms namespace` has been updated to `Umbraco.Source.Cms.Base`
 - `EnterspeedComposer` must now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer`
 
-## [4.3.0 - UNRELEASED]
+## [4.3.0 - 2024-12-10]
 ### Added
 - Added support for Single block mode for Block Lists
 - Added retry logic for failed jobs. Must be enabled in the `appsettings.json` file by setting `EnabledFailedJobsProcessing` to `true`
+- Added option to remove trailing slash
 
 ### Breaking
 - `Umbraco.Source.Cms` namespace has been updated to `Umbraco.Source.Cms.Base`
