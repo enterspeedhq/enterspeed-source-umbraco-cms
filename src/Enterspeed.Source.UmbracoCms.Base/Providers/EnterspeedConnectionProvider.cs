@@ -44,7 +44,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Providers
 
             if (publishConfiguration != null)
             {
-                _connections.Add(ConnectionType.Publish, new EnterspeedConnection(_configurationProvider));
+                _connections.Add(ConnectionType.Publish, new PublishedEnterspeedConnection(_configurationService));
             }
 
             if (previewConfiguration != null)

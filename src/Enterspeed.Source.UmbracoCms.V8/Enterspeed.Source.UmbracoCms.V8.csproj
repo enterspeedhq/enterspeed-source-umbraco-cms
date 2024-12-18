@@ -281,6 +281,7 @@
     <Compile Include="Components\Tasks\HandleEnterspeedJobsTask.cs" />
     <Compile Include="Components\Tasks\InvalidateEnterspeedJobsTask.cs" />
     <Compile Include="Connections\PreviewEnterspeedConnection.cs" />
+    <Compile Include="Connections\PublishedEnterspeedConnection.cs" />
     <Compile Include="Controllers\Api\DashboardApiController.cs" />
     <Compile Include="Dashboard\EnterspeedContentDashboard.cs" />
     <Compile Include="Dashboard\EnterspeedSettingsDashboard.cs" />
