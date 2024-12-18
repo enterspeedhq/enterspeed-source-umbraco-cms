@@ -15,8 +15,8 @@
 		<RepositoryUrl>https://github.com/enterspeedhq/enterspeed-source-umbraco-cms</RepositoryUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
-		<StaticWebAssetBasePath>/</StaticWebAssetBasePath>
 		<Product>Enterspeed.Source.UmbracoCms</Product>
+		<EnableDefaultContentItems>False</EnableDefaultContentItems>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -48,8 +48,27 @@
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
+		<None Update="build\README-NUGET.md">
+		  <Pack>True</Pack>
+		  <PackagePath>\</PackagePath>
+		</None>
+
+	
+	</ItemGroup>
+	<ItemGroup>
+		<!-- Copy the JSON file to the output directory -->
+		<None Update="appsettings-schema.enterspeed.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
+	<ItemGroup>
+		<!-- Include the JSON file in the NuGet package -->
+		<Content Include="appsettings-schema.enterspeed.json">
+			<Pack>true</Pack>
+			<PackagePath>appsettings-schema.enterspeed.json</PackagePath>
+		</Content>
+	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Client\obj\**" />
 		<Compile Remove="Properties\**" />
@@ -75,7 +94,7 @@
 	    <PackagePath>\</PackagePath>
 	  </None>
 	</ItemGroup>
-
+	
 	<ItemGroup>
 	  <ProjectReference Include="..\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj" PrivateAssets="all" />
 	</ItemGroup>
