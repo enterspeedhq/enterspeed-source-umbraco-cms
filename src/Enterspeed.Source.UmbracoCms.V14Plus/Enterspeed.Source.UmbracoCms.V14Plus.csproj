@@ -47,6 +47,10 @@
             <Pack>True</Pack>
             <PackagePath>buildTransitive</PackagePath>
         </None>
+        <None Include="JsonSchema\**\*.*">
+            <Pack>True</Pack>
+            <PackagePath>\</PackagePath>
+        </None>
         <None Update="build\README-NUGET.md">
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>

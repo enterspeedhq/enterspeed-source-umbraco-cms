@@ -99,6 +99,10 @@
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
+		<None Include="JsonSchema\**\*.*">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 	<!--Workaround to include references in nuget package-->
