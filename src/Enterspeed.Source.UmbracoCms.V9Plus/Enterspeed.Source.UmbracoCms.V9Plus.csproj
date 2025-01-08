@@ -17,6 +17,7 @@
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
 		<Product>Enterspeed.Source.UmbracoCms</Product>
+		<EnableDefaultContentItems>False</EnableDefaultContentItems>
 	</PropertyGroup>
 
 	<ItemGroup>
