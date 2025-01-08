@@ -8,7 +8,7 @@
         <ItemGroup>
             <EnterspeedContentFiles Include="$(EnterspeedContentFilesPath)" />
         </ItemGroup>
-        <Message Text="Copying Enterspeed files: $(EnterspeedContentFilesPath) - #@(EnterspeedContentFiles->Count()) files"  Importance="high" />
+        <Message Text="Copying Enterspeed files: $(EnterspeedContentFilesPath) - #@(EnterspeedContentFiles->Count()) files" Importance="high" />
         <Copy
             SourceFiles="@(EnterspeedContentFiles)"
             DestinationFiles="@(EnterspeedContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\%(RecursiveDir)%(Filename)%(Extension)')"
@@ -20,8 +20,10 @@
         <ItemGroup>
             <EnterspeedDir Include="$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\" />
         </ItemGroup>
-        <Message Text="Clear old Enterspeed data"  Importance="high" />
+        <Message Text="Clear old Enterspeed data" Importance="high" />
         <RemoveDir Directories="@(EnterspeedDir)"  />
     </Target>
-
+    <ItemGroup>
+        <UmbracoJsonSchemaFiles Include="$(MSBuildThisFileDirectory)..\appsettings-schema.enterspeed.json" />
+    </ItemGroup>
 </Project>
