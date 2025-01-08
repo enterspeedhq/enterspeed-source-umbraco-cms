@@ -17,7 +17,6 @@
 		<PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
 		<PackageIcon>icon.png</PackageIcon>
 		<Product>Enterspeed.Source.UmbracoCms</Product>
-		<EnableDefaultContentItems>False</EnableDefaultContentItems>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -100,8 +99,6 @@
 			<Pack>True</Pack>
 			<PackagePath>buildTransitive</PackagePath>
 		</None>
-		<Content Include="appsettings-schema.enterspeed.json">
-		</Content>
 	</ItemGroup>
 
 	<!--Workaround to include references in nuget package-->

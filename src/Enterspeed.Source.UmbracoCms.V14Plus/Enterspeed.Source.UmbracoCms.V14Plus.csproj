@@ -16,7 +16,6 @@
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
         <Product>Enterspeed.Source.UmbracoCms</Product>
-        <EnableDefaultContentItems>False</EnableDefaultContentItems>
     </PropertyGroup>
 
     <ItemGroup>
@@ -52,8 +51,6 @@
             <Pack>True</Pack>
             <PackagePath>\</PackagePath>
         </None>
-        <Content Include="appsettings-schema.enterspeed.json">
-        </Content>
     </ItemGroup>
 
     <ItemGroup>
