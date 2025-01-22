@@ -1,6 +1,6 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
-        <EnterspeedContentFilesPath>$(MSBuildThisFileDirectory)..\App_Plugins\Enterspeed.Dashboard\**\*.*</EnterspeedContentFilesPath>
+        <EnterspeedContentFilesPath>$(MSBuildThisFileDirectory)..\staticwebassets\App_Plugins\Enterspeed.Source.UmbracoCms\**\*.*</EnterspeedContentFilesPath>
     </PropertyGroup>
 
     <Target Name="CopyEnterspeedAssets" BeforeTargets="Build">
@@ -10,14 +10,14 @@
         <Message Text="Copying Enterspeed files: $(EnterspeedContentFilesPath) - #@(EnterspeedContentFiles->Count()) files" Importance="high"/>
         <Copy
                 SourceFiles="@(EnterspeedContentFiles)"
-                DestinationFiles="@(EnterspeedContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\%(RecursiveDir)%(Filename)%(Extension)')"
+                DestinationFiles="@(EnterspeedContentFiles->'$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Source.UmbracoCms\%(RecursiveDir)%(Filename)%(Extension)')"
                 SkipUnchangedFiles="true"/>
 
     </Target>
 
     <Target Name="ClearEnterspeedAssets" BeforeTargets="Clean">
         <ItemGroup>
-            <EnterspeedDir Include="$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Dashboard\"/>
+            <EnterspeedDir Include="$(MSBuildProjectDirectory)\App_Plugins\Enterspeed.Source.UmbracoCms"/>
         </ItemGroup>
         <Message Text="Clear old Enterspeed data" Importance="high"/>
         <RemoveDir Directories="@(EnterspeedDir)"/>
