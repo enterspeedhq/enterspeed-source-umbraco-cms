@@ -107,35 +107,41 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             connectionProvider.Initialize();
         }
 
-        private void SetOptionalSettings(EnterspeedUmbracoConfiguration configuration)
-        {
-            var enterspeedSection = _configuration.GetSection("Enterspeed");
-            configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("RootDictionariesDisabled");
-            configuration.RunJobsOnAllServerRoles = enterspeedSection.GetValue<bool>("RunJobsOnAllServerRoles");
-            configuration.EnableMasterContent = enterspeedSection.GetValue<bool>("EnableMasterContent");
-            configuration.EnabledFailedJobsProcessing = enterspeedSection.GetValue<bool>("EnabledFailedJobsProcessing");
-            configuration.RemoveTrailingSlash = enterspeedSection.GetValue<bool>("RemoveTrailingSlash");
-        }
-
         private EnterspeedUmbracoConfiguration GetConfigurationFromSettingsFile()
         {
-            var endpoint = _configuration[
-                "Enterspeed:Endpoint"]; // The naming for endpoint does not match the baseUrl property so this property is mapped manually
             var configuration = _configuration.GetSection("Enterspeed").Get<EnterspeedUmbracoConfiguration>();
 
-            if (configuration == null || string.IsNullOrWhiteSpace(endpoint) || string.IsNullOrWhiteSpace(configuration.ApiKey))
+            if (configuration == null || string.IsNullOrWhiteSpace(configuration.ApiKey))
             {
                 return null;
             }
 
-            configuration.BaseUrl = endpoint;
+            configuration.BaseUrl = GetBaseUrlFromSettingsFile(configuration);
             configuration.IsConfigured = true;
             configuration.ConfiguredFromSettingsFile = true;
             configuration.SystemInformation = GetUmbracoVersion();
-            
-            SetOptionalSettings(configuration);
 
             return configuration;
+        }
+
+        private string GetBaseUrlFromSettingsFile(EnterspeedUmbracoConfiguration configuration)
+        {
+            // Start checking for a custom BaseUrl
+            var baseUrl = _configuration["Enterspeed:BaseUrl"];
+            if (!string.IsNullOrWhiteSpace(baseUrl))
+            {
+                return baseUrl;
+            }
+
+            // Secondly check for a custom Endpoint for backwards compatibility
+            var endpoint = _configuration["Enterspeed:Endpoint"];
+            if (!string.IsNullOrWhiteSpace(endpoint))
+            {
+                return endpoint;
+            }
+
+            // If no custom values are provided then you the default one
+            return configuration.BaseUrl;
         }
 
         private EnterspeedUmbracoConfiguration GetConfigurationFromDatabase()
@@ -171,6 +177,16 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             SetOptionalSettings(configuration);
 
             return configuration;
+        }
+
+        private void SetOptionalSettings(EnterspeedUmbracoConfiguration configuration)
+        {
+            var enterspeedSection = _configuration.GetSection("Enterspeed");
+            configuration.RootDictionariesDisabled = enterspeedSection.GetValue<bool>("RootDictionariesDisabled");
+            configuration.RunJobsOnAllServerRoles = enterspeedSection.GetValue<bool>("RunJobsOnAllServerRoles");
+            configuration.EnableMasterContent = enterspeedSection.GetValue<bool>("EnableMasterContent");
+            configuration.EnabledFailedJobsProcessing = enterspeedSection.GetValue<bool>("EnabledFailedJobsProcessing");
+            configuration.RemoveTrailingSlash = enterspeedSection.GetValue<bool>("RemoveTrailingSlash");
         }
 
         private string GetUmbracoVersion()
