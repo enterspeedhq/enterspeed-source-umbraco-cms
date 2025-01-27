@@ -1,6 +1,5 @@
 ﻿using Enterspeed.Source.UmbracoCms.Base.Composers;
 using Enterspeed.Source.UmbracoCms.Base.Models;
-using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.V14Plus.Configuration;
 using Enterspeed.Source.UmbracoCms.V14Plus.Models;
