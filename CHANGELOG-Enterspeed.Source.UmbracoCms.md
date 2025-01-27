@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [5.3.0 - xxxx-xx-xx]
 ### Added
 - Added JSON schema file to provide IntelliSense in appsettings.json for Enterspeed settings
+- Introduced `BaseUrl` as a replacement for `Endpoint` to align configuration between this package and `Enterspeed.Source.Sdk`
 
 ## [5.2.0 - 2024-12-03]
 ### Added
@@ -31,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## [4.4.0 - xxxx-xx-xx]
 ### Added
 - Added JSON schema file to provide IntelliSense in appsettings.json for Enterspeed settings
+- Introduced `BaseUrl` as a replacement for `Endpoint` to align configuration between this package and `Enterspeed.Source.Sdk`
 
 ## [4.3.0 - 2024-12-10]
 ### Added
