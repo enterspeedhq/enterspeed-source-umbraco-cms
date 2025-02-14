@@ -76,7 +76,10 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
                 foreach (var content in entities)
                 {
                     HandleUnpublishedVariants(content, isPublishConfigured, jobs, isPreviewConfigured);
-                    HandleParentNameChange(context, content, isPublishConfigured, jobs, isPreviewConfigured);
+                    if (isPublishConfigured)
+                    {
+                        HandleParentNameChange(context, content, jobs);
+                    }
                 }
             }
 
@@ -92,30 +95,33 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
         /// </summary>
         /// <param name="context"></param>
         /// <param name="content"></param>
-        /// <param name="isPublishConfigured"></param>
         /// <param name="jobs"></param>
-        /// <param name="isPreviewConfigured"></param>
-        private void HandleParentNameChange(UmbracoContextReference context, IContent content, bool isPublishConfigured, ICollection<EnterspeedJob> jobs, bool isPreviewConfigured)
+        private void HandleParentNameChange(UmbracoContextReference context, IContent content, ICollection<EnterspeedJob> jobs)
         {
-            if (context.UmbracoContext.Content != null)
+            if (context.UmbracoContext.Content == null)
             {
-                var currentlyPublishedContent = context.UmbracoContext.Content.GetById(content.Id);
-                var nameHasChanged = !currentlyPublishedContent?.Name?.Equals(content.Name);
-                if (nameHasChanged is not true) return;
+                return;
+            }
 
-                foreach (var descendant in currentlyPublishedContent.Descendants("*").ToList())
+            var currentlyPublishedContent = context.UmbracoContext.Content.GetById(content.Id);
+            var variesByCulture = content.ContentType.VariesByCulture();
+
+            var cultures = variesByCulture
+                ? content.AvailableCultures 
+                : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(content) };
+
+            foreach (var culture in cultures)
+            {
+                var currentName = currentlyPublishedContent?.Name(culture);
+                var newName = variesByCulture ? content.GetCultureName(culture) : content.Name;
+
+                var nameHasChanged = !currentName?.Equals(newName);
+                if (nameHasChanged is not true)
+                    continue;
+
+                foreach (var descendant in currentlyPublishedContent.Descendants(culture).ToList())
                 {
-                    var descendantCultures = descendant.ContentType.VariesByCulture()
-                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
-                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
-
-                    foreach (var descendantCulture in descendantCultures)
-                    {
-                        if (isPublishConfigured)
-                        {
-                            jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Publish));
-                        }
-                    }
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, culture, EnterspeedContentState.Publish));
                 }
             }
         }
