@@ -84,7 +84,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
         /// <summary>
         /// This seeds all descendants of a parent, when parent has been renamed and saved.
         /// The logic is different in a publishing scenario. Check HandleParentNameChange of EnterspeedContentPublishingNotificationHandler.
-        /// We are not able to detect the name change with IsPropertyDirty in the publish or content cache refresher notification, that is why the solutions for this problem are different
+        /// We are not able to detect the name change with IsPropertyDirty in the published or content cache refresher notification, that is why the solutions for this problem are different
         /// depending on the event.
         /// </summary>
         /// <param name="context"></param>
@@ -92,21 +92,23 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
         /// <param name="jobs"></param>
         private void HandleParentNameChange(UmbracoContextReference context, IContent content, ICollection<EnterspeedJob> jobs)
         {
-            if (context.UmbracoContext.Content != null)
+            if (context.UmbracoContext.Content == null)
             {
-                var isDirty = content.IsPropertyDirty("Name");
-                if (isDirty is not true) return;
+                return;
+            }
+            
+            var isDirty = content.IsPropertyDirty("Name");
+            if (isDirty is not true) return;
 
-                foreach (var descendant in _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out _).ToList())
+            foreach (var descendant in _contentService.GetPagedDescendants(content.Id, 0, int.MaxValue, out _).ToList())
+            {
+                var descendantCultures = descendant.ContentType.VariesByCulture()
+                    ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
+                    : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
+
+                foreach (var descendantCulture in descendantCultures)
                 {
-                    var descendantCultures = descendant.ContentType.VariesByCulture()
-                        ? _umbracoCultureProvider.GetCulturesForCultureVariant(descendant)
-                        : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(descendant) };
-
-                    foreach (var descendantCulture in descendantCultures)
-                    {
-                        jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Preview));
-                    }
+                    jobs.Add(_enterspeedJobFactory.GetPublishJob(descendant, descendantCulture, EnterspeedContentState.Preview));
                 }
             }
         }
