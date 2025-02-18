@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [5.3.1 - 2025-02-17]
 ### Fixed
-- Fixed culture handling when rename of node should update urls on all descendants in Enterspeed sources.
+- Fixed culture handling when rename of node should update urls on all descendants in Enterspeed sources. (contribution by [Joao Diogo Vicente Henrques](https://github.com/JoaoDiogoVicenteHenrques))
 
 ## [5.3.0 - 2025-01-27]
 ### Added
@@ -35,7 +35,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [4.4.1 - 2025-02-17]
 ### Fixed
-- Fixed culture handling when rename of node should update urls on all descendants in Enterspeed sources.
+- Fixed culture handling when rename of node should update urls on all descendants in Enterspeed sources. (contribution by [Joao Diogo Vicente Henrques](https://github.com/JoaoDiogoVicenteHenrques))
 
 ## [4.4.0 - 2025-01-27]
 ### Added
