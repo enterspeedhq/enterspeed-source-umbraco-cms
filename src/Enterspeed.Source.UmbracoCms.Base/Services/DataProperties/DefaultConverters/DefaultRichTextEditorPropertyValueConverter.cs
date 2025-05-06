@@ -16,11 +16,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
         private readonly IEnterspeedHttpContextProvider _enterspeedHttpContextProvider;
 
         public DefaultRichTextEditorPropertyValueConverter(
-           IHttpContextAccessor httpContextAccessor,
-           IUmbracoContextFactory umbracoContextAccessor,
-           IUmbracoRichTextParser umbracoRichTextParser,
-           IEnterspeedConfigurationService enterspeedConfigurationService,
-           IEnterspeedHttpContextProvider enterspeedHttpContextProvider)
+            IHttpContextAccessor httpContextAccessor,
+            IUmbracoContextFactory umbracoContextAccessor,
+            IUmbracoRichTextParser umbracoRichTextParser,
+            IEnterspeedConfigurationService enterspeedConfigurationService,
+            IEnterspeedHttpContextProvider enterspeedHttpContextProvider)
         {
             _httpContextAccessor = httpContextAccessor;
             _umbracoContextAccessor = umbracoContextAccessor;
@@ -31,29 +31,24 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
 
         public bool IsConverter(IPublishedPropertyType propertyType)
         {
-            return propertyType.EditorAlias.Equals("Umbraco.TinyMCE") || propertyType.EditorAlias.Equals("Umbraco.RichText");
+            return propertyType.EditorAlias.Equals("Umbraco.TinyMCE") ||
+                   propertyType.EditorAlias.Equals("Umbraco.RichText");
         }
 
         public virtual IEnterspeedProperty Convert(IPublishedProperty property, string culture)
         {
-            if (_httpContextAccessor.HttpContext == null)
-            {
-                using (_enterspeedHttpContextProvider.CreateFakeHttpContext())
-                {
-                    using (_umbracoContextAccessor.EnsureUmbracoContext())
-                    {
-                        return ConvertWithContext(property, culture);
-                    }
-                }
-            }
-
-            return ConvertWithContext(property, culture);
+            if (_httpContextAccessor.HttpContext != null) return ConvertWithContext(property, culture);
+            
+            using (_enterspeedHttpContextProvider.CreateFakeHttpContext())
+            using (_umbracoContextAccessor.EnsureUmbracoContext())
+                return ConvertWithContext(property, culture);
         }
 
         private IEnterspeedProperty ConvertWithContext(IPublishedProperty property, string culture)
         {
             var value = property.GetValue<Umbraco.Cms.Core.Strings.HtmlEncodedString>(culture).ToString();
-            value = _umbracoRichTextParser.PrefixRelativeImagesWithDomain(value, _enterspeedConfigurationService.GetConfiguration().MediaDomain);
+            value = _umbracoRichTextParser.PrefixRelativeImagesWithDomain(value,
+                _enterspeedConfigurationService.GetConfiguration().MediaDomain);
             return new StringEnterspeedProperty(property.Alias, value);
         }
     }
