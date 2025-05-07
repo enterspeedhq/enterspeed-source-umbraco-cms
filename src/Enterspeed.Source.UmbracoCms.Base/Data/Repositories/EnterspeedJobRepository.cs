@@ -205,6 +205,8 @@ namespace Enterspeed.Source.UmbracoCms.Base.Data.Repositories
 
         public void Delete(IList<int> ids)
         {
+            // The maximum number of parameters allowed in a single database query is 2000.
+            // This limit is based on typical database constraints (e.g., SQL Server's parameter limit).
             const int maxParams = 2000;
             using var scope = _scopeProvider.CreateScope();
             foreach (var batch in EnumerableExtensions.Chunk(ids, maxParams))
