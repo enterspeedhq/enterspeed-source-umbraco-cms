@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
+using Enterspeed.Source.UmbracoCms.Base.Extensions;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Infrastructure.Persistence;
 #if NET5_0
@@ -206,9 +207,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Data.Repositories
         {
             const int maxParams = 2000;
             using var scope = _scopeProvider.CreateScope();
-            foreach (var batch in ids.Select((id, idx) => new { id, idx })
-                         .GroupBy(x => x.idx / maxParams)
-                         .Select(g => g.Select(x => x.id).ToList()))
+            foreach (var batch in EnumerableExtensions.Chunk(ids, maxParams))
             {
                 Database.DeleteMany<EnterspeedJobSchema>()
                     .Where(x => batch.Contains(x.Id))
