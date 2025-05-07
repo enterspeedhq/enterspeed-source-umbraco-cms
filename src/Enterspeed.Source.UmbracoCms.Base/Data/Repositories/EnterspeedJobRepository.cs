@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
+using Enterspeed.Source.UmbracoCms.Base.Extensions;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Infrastructure.Persistence;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
+
 #else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
@@ -203,13 +205,18 @@ namespace Enterspeed.Source.UmbracoCms.Base.Data.Repositories
 
         public void Delete(IList<int> ids)
         {
-            using (var scope = _scopeProvider.CreateScope())
+            // The maximum number of parameters allowed in a single database query is 2000.
+            // This limit is based on typical database constraints (e.g., SQL Server's parameter limit).
+            const int maxParams = 2000;
+            using var scope = _scopeProvider.CreateScope();
+            foreach (var batch in EnumerableExtensions.Chunk(ids, maxParams))
             {
                 Database.DeleteMany<EnterspeedJobSchema>()
-                    .Where(x => ids.Contains(x.Id))
+                    .Where(x => batch.Contains(x.Id))
                     .Execute();
-                scope.Complete();
             }
+
+            scope.Complete();
         }
 
         public void ClearPendingJobs()
