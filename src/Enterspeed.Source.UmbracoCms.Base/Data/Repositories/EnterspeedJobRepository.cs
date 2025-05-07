@@ -7,6 +7,7 @@ using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Infrastructure.Persistence;
 #if NET5_0
 using Umbraco.Cms.Core.Scoping;
+
 #else
 using Umbraco.Cms.Infrastructure.Scoping;
 #endif
@@ -203,13 +204,18 @@ namespace Enterspeed.Source.UmbracoCms.Base.Data.Repositories
 
         public void Delete(IList<int> ids)
         {
-            using (var scope = _scopeProvider.CreateScope())
+            const int maxParams = 2000;
+            using var scope = _scopeProvider.CreateScope();
+            foreach (var batch in ids.Select((id, idx) => new { id, idx })
+                         .GroupBy(x => x.idx / maxParams)
+                         .Select(g => g.Select(x => x.id).ToList()))
             {
                 Database.DeleteMany<EnterspeedJobSchema>()
-                    .Where(x => ids.Contains(x.Id))
+                    .Where(x => batch.Contains(x.Id))
                     .Execute();
-                scope.Complete();
             }
+
+            scope.Complete();
         }
 
         public void ClearPendingJobs()
