@@ -49,6 +49,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             builder.Services.AddTransient<IUmbracoContextProvider, UmbracoContextProvider>();
             builder.Services.AddTransient<IUmbracoMediaUrlProvider, UmbracoMediaUrlProvider>();
             builder.Services.AddTransient<IEnterspeedJobRepository, EnterspeedJobRepository>();
+            builder.Services.AddTransient<IEnterspeedHttpContextProvider, EnterspeedHttpContextProvider>();
             builder.Services.AddTransient<IUmbracoUrlService, UmbracoUrlService>();
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
             builder.Services.AddTransient<IUmbracoRedirectsService, UmbracoRedirectsService>();
@@ -193,7 +194,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             builder.AddNotificationHandler<MediaMovedNotification, EnterspeedMediaMovedEventHandler>();
             builder.AddNotificationHandler<MediaMovedToRecycleBinNotification, EnterspeedMediaTrashedNotificationHandler>();
             builder.AddNotificationHandler<ContentSavingNotification, EnterspeedContentSavingNotificationHandler>();
-         
+
             // Components
             builder.Components().Append<EnterspeedJobsComponent>();
 
