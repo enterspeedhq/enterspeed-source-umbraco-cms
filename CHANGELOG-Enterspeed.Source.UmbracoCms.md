@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.2 - 2025-05-07]
+### Fixed
+- Deleting more than 2,100 failed jobs caused an error.
+- The RTE field converter threw a null exception when run as a background job.
+
 ## [5.3.1 - 2025-02-17]
 ### Fixed
 - Fixed culture handling when rename of node should update urls on all descendants in Enterspeed sources. (contribution by [Joao Diogo Vicente Henrques](https://github.com/JoaoDiogoVicenteHenrques))
@@ -32,6 +37,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Breaking
 - `Umbraco.Source.Cms namespace` has been updated to `Umbraco.Source.Cms.Base`
 - `EnterspeedComposer` must now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer`
+
+## [4.4.2 - 2025-05-07]
+### Fixed
+- Deleting more than 2,100 failed jobs caused an error.
+- The RTE field converter threw a null exception when run as a background job.
 
 ## [4.4.1 - 2025-02-17]
 ### Fixed
