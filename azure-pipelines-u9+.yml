@@ -101,7 +101,7 @@ stages:
       - job: Build
         displayName: Build
         pool:
-          vmImage: ubuntu-latest
+          vmImage: 'ubuntu-22.04'
         steps:
           - task: UseDotNet@2
             displayName: 'Use .NET Core sdk'
@@ -152,7 +152,7 @@ stages:
         displayName: Release on NuGet.org
         environment: NuGetOrg
         pool:
-          vmImage: ubuntu-latest
+          vmImage: 'ubuntu-22.04'
         strategy:
           runOnce:
             deploy:
