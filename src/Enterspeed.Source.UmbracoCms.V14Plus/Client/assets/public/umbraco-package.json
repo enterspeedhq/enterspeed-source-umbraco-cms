@@ -8,7 +8,7 @@
         {
             "name": "Enterspeed.Source.UmbracoCms.entrypoint",
             "alias": "Enterspeed.Source.UmbracoCms.EntryPoint",
-            "type": "entryPoint",
+            "type": "backofficeEntryPoint",
             "js": "/app_plugins/Enterspeed.Source.UmbracoCms/assets.js"
         }
     ]
