@@ -57,102 +57,123 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
 
   async #seed() {
     this.disableSeedButton = true;
-    this.#enterspeedContext!.seed(this.customSeedModel)
-      .then((response) => {
-        if (response.data?.isSuccess) {
-          this.#seedResponse = response.data.data;
+    try {
+      const response = await this.#enterspeedContext!.seed(this.customSeedModel);
 
-          this.dispatchEvent(
-            new CustomEvent("after-seed", {
-              bubbles: true,
-              detail: this.#seedResponse,
-              composed: true,
-            })
-          );
-
-          this.#notificationContext?.peek("positive", {
-            data: {
-              headline: "Seed",
-              message: "Successfully started seeding to Enterspeed",
-            },
-          });
-
-          this.numberOfPendingJobs =
-            this.#seedResponse?.numberOfPendingJobs || 0;
-        } else {
-          this.#seedResponse = null;
-        }
-      })
-      .catch((error) => {
+      if (response.error) {
+        console.error("Enterspeed seed error:", response.error);
         this.#notificationContext?.peek("danger", {
           data: {
             headline: "Seed",
-            message: error.data.message,
+            message: response.error?.message ?? "An error occurred while seeding",
           },
         });
-      })
-      .finally(() => {
-        super.requestUpdate("numberOfPendingJobs");
-      });
+        return;
+      }
 
-    this.disableSeedButton = false;
+      if (response.data?.isSuccess) {
+        this.#seedResponse = response.data.data;
+
+        this.dispatchEvent(
+          new CustomEvent("after-seed", {
+            bubbles: true,
+            detail: this.#seedResponse,
+            composed: true,
+          })
+        );
+
+        this.#notificationContext?.peek("positive", {
+          data: {
+            headline: "Seed",
+            message: "Successfully started seeding to Enterspeed",
+          },
+        });
+
+        this.numberOfPendingJobs =
+          this.#seedResponse?.numberOfPendingJobs || 0;
+      } else {
+        this.#seedResponse = null;
+      }
+    } catch (error: any) {
+      console.error("Enterspeed seed exception:", error);
+      this.#notificationContext?.peek("danger", {
+        data: {
+          headline: "Seed",
+          message: error?.message ?? error?.data?.message ?? "An unexpected error occurred",
+        },
+      });
+    } finally {
+      this.disableSeedButton = false;
+      super.requestUpdate("numberOfPendingJobs");
+    }
   }
 
   async #clearJobQueue() {
-    this.#enterspeedContext!.clearJobQueue()
-      .then((response) => {
-        if (response.data?.isSuccess) {
-          this.#notificationContext?.peek("positive", {
-            data: {
-              headline: "Clear job queue",
-              message: "Successfully cleared the queue of pending jobs",
-            },
-          });
-          this.numberOfPendingJobs = 0;
-        }
-      })
-      .catch((error) => {
+    try {
+      const response = await this.#enterspeedContext!.clearJobQueue();
+
+      if (response.error) {
+        console.error("Enterspeed clear job queue error:", response.error);
         this.#notificationContext?.peek("danger", {
           data: {
             headline: "Clear job queue",
-            message: error.data.message,
+            message: response.error?.message ?? "An error occurred while clearing the job queue",
           },
         });
+        return;
+      }
+
+      if (response.data?.isSuccess) {
+        this.#notificationContext?.peek("positive", {
+          data: {
+            headline: "Clear job queue",
+            message: "Successfully cleared the queue of pending jobs",
+          },
+        });
+        this.numberOfPendingJobs = 0;
+      }
+    } catch (error: any) {
+      console.error("Enterspeed clear job queue exception:", error);
+      this.#notificationContext?.peek("danger", {
+        data: {
+          headline: "Clear job queue",
+          message: error?.message ?? error?.data?.message ?? "An unexpected error occurred",
+        },
       });
+    }
 
     this.#seedResponse = null;
   }
 
-  #getNumberOfPendingJobs() {
-    this.#enterspeedContext
-      .getNumberOfPendingJobs()
-      .then((response) => {
-        if (response.data?.isSuccess) {
-          this.numberOfPendingJobs =
-            response.data?.data?.numberOfPendingJobs ?? 0;
-          if (this.numberOfPendingJobs === 0) {
-            this.#seedResponse = null;
+  async #getNumberOfPendingJobs() {
+    try {
+      const response = await this.#enterspeedContext.getNumberOfPendingJobs();
 
-            this.dispatchEvent(
-              new CustomEvent("ingest-finished", {
-                bubbles: true,
-                composed: true,
-                detail: true,
-              })
-            );
-          }
-        } else {
-          this.numberOfPendingJobs = 0;
+      if (response.error) {
+        console.error("Enterspeed pending jobs error:", response.error);
+        return;
+      }
+
+      if (response.data?.isSuccess) {
+        this.numberOfPendingJobs =
+          response.data?.data?.numberOfPendingJobs ?? 0;
+        if (this.numberOfPendingJobs === 0) {
+          this.#seedResponse = null;
+
+          this.dispatchEvent(
+            new CustomEvent("ingest-finished", {
+              bubbles: true,
+              composed: true,
+              detail: true,
+            })
+          );
         }
-      })
-      .catch((error) => {
-        this.#notificationContext?.peek("danger", {
-          data: {
-            headline: "Failed to check queue length",
-            message: error.data.message,
-          },
-        });
-      });
+      } else {
+        this.numberOfPendingJobs = 0;
+      }
+    } catch (error: any) {
+      console.error("Enterspeed pending jobs exception:", error);
+    }
   }
 
   #renderSeedButton() {
