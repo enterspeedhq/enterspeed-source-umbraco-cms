@@ -13,78 +13,109 @@ export class EnterspeedRepository extends UmbControllerBase {
     super(host);
   }
 
+  // Normalizes the response from tryExecuteAndNotify which differs between Umbraco versions.
+  // Umbraco 14-16 (UmbDataSourceResponse<T>): wraps result as { data: T, error? }
+  // Umbraco 17+  (UmbApiResponse<T> = T & { error? }): returns T directly with error intersected
+  // We normalize to the { data, error } shape so all callers work across versions.
+  private normalizeResponse(result: any): any {
+    if (result != null && 'isSuccess' in result) {
+      return { data: result, error: result.error };
+    }
+    return result;
+  }
+
   async seed() {
-    return await tryExecuteAndNotify(this._host, DashboardResource.seed());
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(this._host, DashboardResource.seed())
+    );
   }
 
   async customSeed(customSeedModel: CustomSeedModel) {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.customSeed({ requestBody: customSeedModel })
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.customSeed({ requestBody: customSeedModel })
+      )
     );
   }
 
   async clearPendingJobs() {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.clearPendingJobs()
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.clearPendingJobs()
+      )
     );
   }
 
   async getNumberOfPendingJobs() {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.getNumberOfPendingJobs()
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.getNumberOfPendingJobs()
+      )
     );
   }
 
   async getEnterspeedConfiguration() {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.getEnterspeedConfiguration()
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.getEnterspeedConfiguration()
+      )
     );
   }
 
   async testConfigurationConnection(
     enterspeedUmbracoConfiguration: EnterspeedUmbracoConfiguration
   ) {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.testConfigurationConnection({
-        requestBody: enterspeedUmbracoConfiguration,
-      })
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.testConfigurationConnection({
+          requestBody: enterspeedUmbracoConfiguration,
+        })
+      )
     );
   }
 
   async saveConfiguration(
     enterspeedUmbracoConfiguration: EnterspeedUmbracoConfiguration
   ) {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.saveConfiguration({
-        requestBody: enterspeedUmbracoConfiguration,
-      })
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.saveConfiguration({
+          requestBody: enterspeedUmbracoConfiguration,
+        })
+      )
     );
   }
 
   async getFailedJobs() {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.getFailedJobs()
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.getFailedJobs()
+      )
     );
   }
 
   public async deleteSelectedFailedJobs(ids: JobIdsToDelete) {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.deleteJobs({ requestBody: ids })
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.deleteJobs({ requestBody: ids })
+      )
     );
   }
 
   public async deleteFailedJobs() {
-    return await tryExecuteAndNotify(
-      this._host,
-      DashboardResource.deleteFailedJobs()
+    return this.normalizeResponse(
+      await tryExecuteAndNotify(
+        this._host,
+        DashboardResource.deleteFailedJobs()
+      )
     );
   }
 }
