@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Base.Extensions;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
+using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Core.PropertyEditors;
@@ -86,6 +87,28 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
             var idProperty = new StringEnterspeedProperty(string.Empty);
             if (link.Udi != null)
             {
+#if NET10_0_OR_GREATER
+                if (link.Udi is GuidUdi guidUdi)
+                {
+                    if (guidUdi.EntityType == "document")
+                    {
+                        var content = context.Content.GetById(guidUdi.Guid);
+                        if (content != null)
+                        {
+                            idProperty = new StringEnterspeedProperty(_entityIdentityService.GetId(content, culture));
+                        }
+                    }
+                    else if (guidUdi.EntityType == "media")
+                    {
+                        var media = context.Media.GetById(guidUdi.Guid);
+                        if (media != null)
+                        {
+                            idProperty = new StringEnterspeedProperty(_entityIdentityService.GetId(media, culture));
+                            url = _mediaUrlProvider.GetUrl(media);
+                        }
+                    }
+                }
+#else
                 if (link.Udi.EntityType == "document")
                 {
                     var content = context.Content.GetById(link.Udi);
@@ -103,6 +126,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
                         url = _mediaUrlProvider.GetUrl(media);
                     }
                 }
+#endif
             }
 
             properties.Add("id", idProperty);

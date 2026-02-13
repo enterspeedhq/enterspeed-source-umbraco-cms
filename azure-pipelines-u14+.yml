@@ -2,7 +2,7 @@ variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
   majorVersion: 5
   minorVersion: 3
-  patchVersion: 1
+  patchVersion: 3
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
 
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
@@ -104,10 +104,17 @@ stages:
           vmImage: 'ubuntu-22.04'
         steps:
           - task: UseDotNet@2
-            displayName: 'Use .NET Core sdk'
+            displayName: 'Use .NET 9 SDK'
             inputs:
               packageType: sdk
               version: 9.x
+              installationPath: $(Agent.ToolsDirectory)/dotnet
+
+          - task: UseDotNet@2
+            displayName: 'Use .NET 10 SDK'
+            inputs:
+              packageType: sdk
+              version: 10.x
               installationPath: $(Agent.ToolsDirectory)/dotnet
           
           - task: NodeTool@0
