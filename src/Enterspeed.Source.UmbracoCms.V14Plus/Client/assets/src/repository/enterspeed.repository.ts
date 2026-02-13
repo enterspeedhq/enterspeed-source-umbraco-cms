@@ -14,8 +14,8 @@ export class EnterspeedRepository extends UmbControllerBase {
   }
 
   // Normalizes the response from tryExecuteAndNotify which differs between Umbraco versions.
-  // Umbraco 14-16 (UmbDataSourceResponse<T>): wraps result as { data: T, error? }
-  // Umbraco 17+  (UmbApiResponse<T> = T & { error? }): returns T directly with error intersected
+  // Umbraco 14-15 (UmbDataSourceResponse<T>): wraps result as { data: T, error? }
+  // Umbraco 16+   (UmbApiResponse<T> = T & { error? }): returns T directly with error intersected
   // We normalize to the { data, error } shape so all callers work across versions.
   private normalizeResponse(result: any): any {
     if (result != null && 'isSuccess' in result) {
