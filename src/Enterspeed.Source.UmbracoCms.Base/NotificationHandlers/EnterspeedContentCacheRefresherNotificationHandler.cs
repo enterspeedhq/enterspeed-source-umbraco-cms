@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Base.Factories;
@@ -27,6 +28,13 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 {
     public class EnterspeedContentCacheRefresherNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<ContentCacheRefresherNotification>
     {
+        // PublishedCultures/UnpublishedCultures were added to JsonPayload in a later Umbraco patch.
+        // Use reflection so the package compiles against older minimum versions.
+        private static readonly PropertyInfo _publishedCulturesProperty =
+            typeof(ContentCacheRefresher.JsonPayload).GetProperty("PublishedCultures");
+        private static readonly PropertyInfo _unpublishedCulturesProperty =
+            typeof(ContentCacheRefresher.JsonPayload).GetProperty("UnpublishedCultures");
+
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IUmbracoCultureProvider _umbracoCultureProvider;
         private readonly IEnterspeedMasterContentService _enterspeedMasterContentService;
@@ -111,15 +119,12 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 
                             foreach (var culture in cultures)
                             {
-                                var publishedUpdateDate = publishedNode.CultureDate(culture);
-                                var savedUpdateDate = savedNode.CultureDate(culture);
-
-                                if (savedUpdateDate > publishedUpdateDate)
+                                if (IsSavedButNotPublished(publishedNode, savedNode, culture))
                                 {
                                     // This means that the nodes was only saved, so we skip creating any jobs for this node and culture
                                     continue;
                                 }
-                                
+
                                 jobs.Add(_enterspeedJobFactory.GetPublishJob(publishedNode, culture, EnterspeedContentState.Publish));
 
                                 if (payload.ChangeTypes == TreeChangeTypes.RefreshBranch)
@@ -141,6 +146,52 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
                                         }
                                     }
                                 }
+                            }
+                        }
+                        else if (audit.AuditType == AuditType.SaveVariant)
+                        {
+                            // Umbraco Deploy fires SaveVariant instead of the normal publish notifications.
+                            if (_publishedCulturesProperty != null)
+                            {
+                                // Umbraco 13.6+: payload carries explicit PublishedCultures/UnpublishedCultures,
+                                // so we know exactly what changed without comparing node states.
+                                var publishedCultures = GetPayloadCultures(_publishedCulturesProperty, payload);
+                                foreach (var culture in publishedCultures)
+                                {
+                                    if (IsSavedButNotPublished(publishedNode, savedNode, culture))
+                                    {
+                                        continue;
+                                    }
+
+                                    jobs.Add(_enterspeedJobFactory.GetPublishJob(publishedNode, culture, EnterspeedContentState.Publish));
+                                }
+
+                                var unpublishedCultures = GetPayloadCultures(_unpublishedCulturesProperty, payload);
+                                foreach (var culture in unpublishedCultures)
+                                {
+                                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(publishedNode, culture, EnterspeedContentState.Publish));
+                                }
+                            }
+                            else
+                            {
+                                // Fallback for Umbraco < 13.6: payload has no culture change info,
+                                // so publish all currently published cultures and delete any that
+                                // are in the draft but no longer published.
+                                var cultures = publishedNode.ContentType.VariesByCulture()
+                                    ? _umbracoCultureProvider.GetCulturesForCultureVariant(publishedNode)
+                                    : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(publishedNode) };
+
+                                foreach (var culture in cultures)
+                                {
+                                    if (IsSavedButNotPublished(publishedNode, savedNode, culture))
+                                    {
+                                        continue;
+                                    }
+
+                                    jobs.Add(_enterspeedJobFactory.GetPublishJob(publishedNode, culture, EnterspeedContentState.Publish));
+                                }
+
+                                AddDeleteJobsForUnpublishedCultures(publishedNode, savedNode, isPublishConfigured, isPreviewConfigured, jobs);
                             }
                         }
                         else if (audit.AuditType.Equals(AuditType.UnpublishVariant))
@@ -199,6 +250,57 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
             }
 
             EnqueueJobs(jobs);
+        }
+
+        private static IEnumerable<string> GetPayloadCultures(PropertyInfo property, ContentCacheRefresher.JsonPayload payload)
+            => property?.GetValue(payload) as IEnumerable<string> ?? Enumerable.Empty<string>();
+
+        /// <summary>
+        /// Returns true if the draft was saved more recently than the published version for the given culture,
+        /// indicating the culture was saved but not yet published.
+        /// </summary>
+        private static bool IsSavedButNotPublished(IPublishedContent publishedNode, IPublishedContent savedNode, string culture)
+            => savedNode?.CultureDate(culture) > publishedNode.CultureDate(culture);
+
+        /// <summary>
+        /// Creates delete jobs for culture variants that exist as drafts on the saved node
+        /// but are no longer present in the published node. This handles cases where
+        /// Umbraco Deploy transfers content with a mix of published and unpublished variants,
+        /// bypassing the normal ContentPublishingNotification unpublish flow.
+        /// Enterspeed delete operations are idempotent, so deleting a culture that was never
+        /// synced is harmless.
+        /// </summary>
+        private void AddDeleteJobsForUnpublishedCultures(
+            IPublishedContent publishedNode,
+            IPublishedContent savedNode,
+            bool isPublishConfigured,
+            bool isPreviewConfigured,
+            List<EnterspeedJob> jobs)
+        {
+            if (!publishedNode.ContentType.VariesByCulture() || savedNode == null)
+            {
+                return;
+            }
+
+            var publishedCultures = _umbracoCultureProvider.GetCulturesForCultureVariant(publishedNode).ToHashSet();
+
+            foreach (var culture in _umbracoCultureProvider.GetCulturesForCultureVariant(savedNode))
+            {
+                if (publishedCultures.Contains(culture))
+                {
+                    continue;
+                }
+
+                if (isPublishConfigured)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(publishedNode, culture, EnterspeedContentState.Publish));
+                }
+
+                if (isPreviewConfigured)
+                {
+                    jobs.Add(_enterspeedJobFactory.GetDeleteJob(savedNode, culture, EnterspeedContentState.Preview));
+                }
+            }
         }
     }
 }
