@@ -56,6 +56,22 @@ namespace Enterspeed.Source.UmbracoCms.Base.Factories
             };
         }
 
+        public EnterspeedJob GetDeleteJob(IPublishedContent content, string culture, EnterspeedContentState state)
+        {
+            var now = DateTime.UtcNow;
+            return new EnterspeedJob
+            {
+                EntityId = content.Id.ToString(),
+                EntityType = EnterspeedJobEntityType.Content,
+                Culture = culture,
+                JobType = EnterspeedJobType.Delete,
+                State = EnterspeedJobState.Pending,
+                CreatedAt = now,
+                UpdatedAt = now,
+                ContentState = state
+            };
+        }
+
         public EnterspeedJob GetPublishJob(IDictionaryItem dictionaryItem, string culture, EnterspeedContentState state)
         {
             var now = DateTime.UtcNow;
