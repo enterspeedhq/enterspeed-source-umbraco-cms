@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.5 - 2026-03-24]
+### Fixed
+- Fixed missing Enterspeed sync when using Umbraco Deploy to transfer culture-variant content nodes with a mix of published and unpublished variants
+
 ## [5.3.4 - 2025-02-18]
 ### Updated
 - Updated package reference for Enterspeed.Source.Sdk to 2.0.7
@@ -45,6 +49,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Breaking
 - `Umbraco.Source.Cms namespace` has been updated to `Umbraco.Source.Cms.Base`
 - `EnterspeedComposer` must now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer`
+
+## [4.4.3 - 2026-03-24]
+### Fixed
+- Fixed missing Enterspeed sync when using Umbraco Deploy to transfer culture-variant content nodes with a mix of published and unpublished variants
 
 ## [4.4.2 - 2025-05-07]
 ### Fixed
