@@ -58,7 +58,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
         this.#notificationContext?.peek("danger", {
           data: {
             headline: "Error loading configuration",
-            message: error.data.message,
+            message: error?.data?.message ?? error?.message ?? "An unexpected error occurred",
           },
         });
       });
@@ -97,7 +97,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
         this.#notificationContext?.peek("danger", {
           data: {
             headline: "Connection failed",
-            message: error.data.message,
+            message: error?.data?.message ?? error?.message ?? "An unexpected error occurred",
           },
         });
       });
@@ -125,7 +125,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
           this.#notificationContext?.peek("danger", {
             data: {
               headline: "Error saving configuration",
-              message: error.data.message,
+              message: error?.data?.message ?? error?.message ?? "An unexpected error occurred",
             },
           });
         });
