@@ -7,7 +7,8 @@ To get started with Enterspeed for Umbraco, please see:
 
 ## Versions
 
-Version 5.x: Use this if your Umbraco version is 14 or higher.  
+Version 6.x: Use this if your Umbraco version is 18 or higher.  
+Version 5.x: Use this if your Umbraco version is 14 to 17.  
 Version 4.x: Use this if your Umbraco version is 9 to 13.
 
 For Umbraco 7 & 8 use the following packages:

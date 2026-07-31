@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [6.0.0 - 2026-07-31]
+### Added
+- Added Umbraco 18 support as a new 6.x package line (net10.0 only, Umbraco 18.0.2+). The 5.x line continues to serve Umbraco 14-17
+- Added a property value converter for the new `Umbraco.ElementPicker` editor - referenced library elements are resolved by value into the page payload
+- Added a property value converter for the new `Umbraco.SingleBlock` editor. The Umbraco 18 upgrade automatically migrates single-mode Block List data types to this editor
+- Added reingest fan-out for library element changes: when an element is published, unpublished or deleted, all pages referencing it (via the automatic `umbElement` relations) are reingested
+
+### Changed
+- The Enterspeed OpenAPI document on Umbraco 18 is served by Microsoft.AspNetCore.OpenApi at `/umbraco/openapi/enterspeed.json` (Swashbuckle was removed in Umbraco 18); note OpenAPI documents are disabled in production mode by default in Umbraco 18
+
 ## [5.3.6 - 2026-04-24]
 ### Fixed
 - Fixed missing save confirmation in the settings dashboard after saving the Enterspeed configuration
