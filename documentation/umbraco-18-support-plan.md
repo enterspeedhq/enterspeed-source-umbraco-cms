@@ -332,7 +332,7 @@ Follow-up (out of scope for this story, worth its own): resurrect an automated t
 | Phase 4 client: generator switch + regeneration + type-check | 0.5–1 day |
 | Phase 5 CI/CD | 0.5–1 day |
 | Phases 6–7 schemas, docs, manual verification on 17 + 18 | 1–1.5 days |
-| **Total** | **~7–10 days** (story sc-10222 includes the Elements scope; consider splitting baseline compatibility from Elements support, as the story's INVEST notes suggest) |
+| **Total** | **~7–10 days** (decision: the Elements scope, §4.6, ships in the **same PR** as baseline compatibility — no story split) |
 
 ---
 
