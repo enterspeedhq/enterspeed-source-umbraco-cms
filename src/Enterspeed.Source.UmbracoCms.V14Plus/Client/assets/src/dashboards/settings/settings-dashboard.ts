@@ -20,7 +20,7 @@ import {
 @customElement("enterspeed-settings-dashboard")
 export class enterspeedSettingsDashboard extends UmbLitElement {
   #enterspeedContext: EnterspeedContext;
-  #notificationContext!: UmbNotificationContext;
+  #notificationContext?: UmbNotificationContext;
   #enterspeedConfiguration:
     | EnterspeedUmbracoConfiguration
     | EnterspeedUmbracoConfigurationResponse
@@ -35,12 +35,9 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
     super();
     this.#buttonState = "";
 
-    this.consumeContext(
-      UMB_NOTIFICATION_CONTEXT,
-      (instance: UmbNotificationContext) => {
-        this.#notificationContext = instance;
-      }
-    );
+    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (instance) => {
+      this.#notificationContext = instance;
+    });
 
     this.#enterspeedContext = new EnterspeedContext(this);
     this.getConfiguration();

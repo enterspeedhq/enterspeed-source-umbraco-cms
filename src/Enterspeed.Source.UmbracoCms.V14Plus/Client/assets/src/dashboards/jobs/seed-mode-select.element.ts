@@ -4,7 +4,10 @@ import {
   property,
   state,
 } from "@umbraco-cms/backoffice/external/lit";
-import { UUISelectEvent } from "@umbraco-cms/backoffice/external/uui";
+import {
+  UUISelectEvent,
+  UUISelectOption,
+} from "@umbraco-cms/backoffice/external/uui";
 import { UmbLitElement } from "@umbraco-cms/backoffice/lit-element";
 
 @customElement("enterspeed-seed-mode-select")
@@ -16,7 +19,7 @@ export class seedModeSelect extends UmbLitElement {
   selectedSeedMode = "Everything";
 
   @state()
-  seedModes: Array<Option> = [
+  seedModes: Array<UUISelectOption> = [
     { name: "Seed mode: Everything", value: "Everything", selected: true },
     { name: "Seed mode: Custom", value: "Custom" },
   ];

@@ -8,7 +8,7 @@ import {
   JobIdsToDelete,
 } from "./generated";
 
-export class EnterspeedContext extends UmbContextBase<EnterspeedContext> {
+export class EnterspeedContext extends UmbContextBase {
   protected enterspeedRepository = new EnterspeedRepository(this);
 
   constructor(host: UmbControllerHost) {
