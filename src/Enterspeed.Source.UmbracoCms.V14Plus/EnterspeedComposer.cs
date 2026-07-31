@@ -7,7 +7,11 @@ using Enterspeed.Source.UmbracoCms.V14Plus.NotificationHandlers;
 using Enterspeed.Source.UmbracoCms.V14Plus.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+#if UMBRACO_18_OR_GREATER
+using Enterspeed.Source.UmbracoCms.V14Plus.Configuration.Umbraco18;
+#else
 using Umbraco.Cms.Api.Common.OpenApi;
+#endif
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Notifications;
 
@@ -18,11 +22,17 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus
         public override void Compose(IUmbracoBuilder builder)
         {
             builder.Services.AddTransient<IEnterspeedDictionaryTranslation, EnterspeedDictionaryTranslation>();
+#if UMBRACO_18_OR_GREATER
+            builder.AddEnterspeedOpenApiDocument();
+#else
             builder.Services.AddSingleton<ISchemaIdSelector, EnterspeedSchemaIdSelector>();
             builder.Services.AddSingleton<IOperationIdSelector, EnterspeedOperationIdSelector>();
+#endif
             builder.Services.Replace(ServiceDescriptor.Singleton<IEnterspeedConfigurationEditorProvider, EnterspeedConfigurationEditorProvider>());
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();
+#if !UMBRACO_18_OR_GREATER
             builder.Services.ConfigureOptions<ConfigureEnterspeedApiSwaggerGenOptions>();
+#endif
             builder.AddNotificationHandler<ContentMovedToRecycleBinNotification, EnterspeedContentUnpublishingNotificationHandlerV14>();
             builder.AddNotificationHandler<ContentUnpublishingNotification, EnterspeedContentUnpublishingNotificationHandlerV14>();
 

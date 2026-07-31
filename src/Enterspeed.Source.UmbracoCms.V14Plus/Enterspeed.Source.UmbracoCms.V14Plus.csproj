@@ -59,6 +59,14 @@
              documents silently disappear -->
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7"/>
     </ItemGroup>
+    <!-- Swashbuckle is removed in Umbraco 18; these files are replaced by
+         Configuration\Umbraco18\EnterspeedOpenApiConfiguration.cs -->
+    <ItemGroup Condition="'$(UmbracoMajor)' == '18'">
+        <Compile Remove="Configuration\ConfigureEnterspeedApiSwaggerGenOptions.cs"/>
+        <Compile Remove="Configuration\EnterspeedSchemaIdSelector.cs"/>
+        <Compile Remove="Configuration\EnterspeedOperationIdSelector.cs"/>
+    </ItemGroup>
+
     <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
         <ItemGroup>
             <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'"/>
