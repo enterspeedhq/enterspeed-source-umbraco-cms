@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Umbraco.Cms.Api.Common.OpenApi;
@@ -23,8 +23,21 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Configuration
                 return base.SchemaId(type);
             }
 
-            var schemaId = $"{type.Name[..^2]}<{string.Join(",", type.GenericTypeArguments.Select(x => x.Name))}>";
-            return schemaId;
+            // Match the schema id format Umbraco 18's UmbracoSchemaIdGenerator produces
+            // (e.g. ApiResponseOfListOfEnterspeedJob), so the 17 and 18 documents
+            // generate identical clients
+            return FriendlyName(type);
+        }
+
+        private static string FriendlyName(Type type)
+        {
+            if (!type.IsGenericType)
+            {
+                return type.Name;
+            }
+
+            var name = type.Name[..type.Name.IndexOf('`')];
+            return $"{name}Of{string.Join(string.Empty, type.GenericTypeArguments.Select(FriendlyName))}";
         }
     }
 }

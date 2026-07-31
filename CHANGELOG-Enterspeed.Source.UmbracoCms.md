@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.3.7 - 2026-07-31]
+### Fixed
+- Fixed the Enterspeed swagger document returning a 500 on newer Umbraco patches (observed on 17.5.x): the custom schema/operation-id selectors could lose the DI registration race against Umbraco's own and are now applied deterministically via post-configuration
+### Changed
+- The Enterspeed swagger document's schema and operation ids now match the naming Umbraco 18 produces (e.g. `ApiResponseOfSeedResponse`, `PostClearPendingJobs`), so the 5.x and 6.x documents generate identical TypeScript clients. Dev-time only - runtime API routes are unchanged
+
 ## [6.0.0 - 2026-07-31]
 ### Added
 - Added Umbraco 18 support as a new 6.x package line (net10.0 only, Umbraco 18.0.2+). The 5.x line continues to serve Umbraco 14-17

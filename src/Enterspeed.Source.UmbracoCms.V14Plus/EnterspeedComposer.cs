@@ -25,8 +25,10 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus
 #if UMBRACO_18_OR_GREATER
             builder.AddEnterspeedOpenApiDocument();
 #else
-            builder.Services.AddSingleton<ISchemaIdSelector, EnterspeedSchemaIdSelector>();
-            builder.Services.AddSingleton<IOperationIdSelector, EnterspeedOperationIdSelector>();
+            builder.Services.AddSingleton<EnterspeedSchemaIdSelector>();
+            builder.Services.AddSingleton<EnterspeedOperationIdSelector>();
+            builder.Services.AddSingleton<ISchemaIdSelector>(provider => provider.GetRequiredService<EnterspeedSchemaIdSelector>());
+            builder.Services.AddSingleton<IOperationIdSelector>(provider => provider.GetRequiredService<EnterspeedOperationIdSelector>());
 #endif
             builder.Services.Replace(ServiceDescriptor.Singleton<IEnterspeedConfigurationEditorProvider, EnterspeedConfigurationEditorProvider>());
             builder.Services.AddTransient<IEnterspeedJobService, EnterspeedJobService>();

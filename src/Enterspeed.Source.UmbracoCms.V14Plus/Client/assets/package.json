@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc && vite build",
     "watch": "vite build --watch",
-    "generate": "openapi-ts -i http://localhost:21142/umbraco/openapi/enterspeed.json -o src/generated"
+    "generate": "openapi-ts -i http://localhost:21142/umbraco/openapi/enterspeed.json -o src/generated",
+    "generate:u17": "openapi-ts -i http://localhost:21143/umbraco/swagger/enterspeed/swagger.json -o src/generated"
   },
   "dependencies": {
     "lit": "^3.1.3"
