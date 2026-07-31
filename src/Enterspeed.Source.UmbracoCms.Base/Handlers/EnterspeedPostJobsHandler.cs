@@ -15,7 +15,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
     {
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedConfigurationService _configuration;
+#if NET10_0_OR_GREATER
+        private readonly ILanguageService _languageService;
+#else
         private readonly ILocalizationService _localizationService;
+#endif
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly EnterspeedJobHandlerCollection _enterspeedJobHandlerCollection;
         private readonly ILogger<EnterspeedPostJobsHandler> _logger;
@@ -25,7 +29,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
         public EnterspeedPostJobsHandler(IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobFactory enterspeedJobFactory,
             IEnterspeedConfigurationService configuration,
+#if NET10_0_OR_GREATER
+            ILanguageService languageService,
+#else
             ILocalizationService localizationService,
+#endif
             EnterspeedJobHandlerCollection enterspeedJobHandlerCollection,
             ILogger<EnterspeedPostJobsHandler> logger,
             IEnterspeedConfigurationService enterspeedConfigurationService)
@@ -33,7 +41,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobFactory = enterspeedJobFactory;
             _configuration = configuration;
+#if NET10_0_OR_GREATER
+            _languageService = languageService;
+#else
             _localizationService = localizationService;
+#endif
             _enterspeedJobHandlerCollection = enterspeedJobHandlerCollection;
             _logger = logger;
             _enterspeedConfigurationService = enterspeedConfigurationService;
@@ -84,9 +96,15 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
                     j.EntityType == EnterspeedJobEntityType.Dictionary &&
                     !j.EntityId.Equals(UmbracoDictionariesRootEntity.EntityId))) return;
 
+#if NET10_0_OR_GREATER
+            var languageIsoCodes = _languageService.GetAllAsync().GetAwaiter().GetResult()
+                .Select(s => s.IsoCode)
+                .ToList();
+#else
             var languageIsoCodes = _localizationService.GetAllLanguages()
                 .Select(s => s.IsoCode)
                 .ToList();
+#endif
 
             // Per configured destination, process separate jobs
             var stateConfigurations = new Dictionary<EnterspeedContentState, bool>()

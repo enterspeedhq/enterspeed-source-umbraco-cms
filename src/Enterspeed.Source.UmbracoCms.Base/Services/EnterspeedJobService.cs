@@ -18,7 +18,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
     public class EnterspeedJobService : IEnterspeedJobService
     {
         private readonly IContentService _contentService;
+#if NET10_0_OR_GREATER
+        private readonly IDictionaryItemService _dictionaryItemService;
+#else
         private readonly ILocalizationService _localizationService;
+#endif
         private readonly IEnterspeedDictionaryTranslation _enterspeedDictionaryTranslation;
         private readonly IMediaService _mediaService;
         private readonly IUmbracoCultureProvider _umbracoCultureProvider;
@@ -31,7 +35,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             IContentService contentService,
             IEnterspeedJobRepository enterspeedJobRepository,
             IUmbracoContextFactory umbracoContextFactory,
+#if NET10_0_OR_GREATER
+            IDictionaryItemService dictionaryItemService,
+#else
             ILocalizationService localizationService,
+#endif
             IEnterspeedJobFactory enterspeedJobFactory,
             IEnterspeedMasterContentService enterspeedMasterContentService,
             IMediaService mediaService,
@@ -41,7 +49,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             _contentService = contentService;
             _enterspeedJobRepository = enterspeedJobRepository;
             _umbracoContextFactory = umbracoContextFactory;
+#if NET10_0_OR_GREATER
+            _dictionaryItemService = dictionaryItemService;
+#else
             _localizationService = localizationService;
+#endif
             _enterspeedJobFactory = enterspeedJobFactory;
             _enterspeedMasterContentService = enterspeedMasterContentService;
             _mediaService = mediaService;
@@ -274,7 +286,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
                 return jobs;
             }
 
+#if NET10_0_OR_GREATER
+            var allDictionaryItems = _dictionaryItemService.GetDescendantsAsync(null).GetAwaiter().GetResult().ToList();
+#else
             var allDictionaryItems = _localizationService.GetDictionaryItemDescendants(null).ToList();
+#endif
 
             foreach (var dictionaryItem in allDictionaryItems)
             {
@@ -310,13 +326,27 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             var allDictionaryItems = new List<IDictionaryItem>();
             foreach (var dictionarySeedNode in customSeed.DictionaryNodes)
             {
+#if NET10_0_OR_GREATER
+                var dictionaryItem = dictionarySeedNode.Key.HasValue
+                    ? _dictionaryItemService.GetAsync(dictionarySeedNode.Key.Value).GetAwaiter().GetResult()
+                    : null;
+                if (dictionaryItem == null)
+                {
+                    continue;
+                }
+#else
                 var dictionaryItem = _localizationService.GetDictionaryItemById(dictionarySeedNode.Id);
+#endif
 
                 allDictionaryItems.Add(dictionaryItem);
 
                 if (dictionarySeedNode.IncludeDescendants)
                 {
+#if NET10_0_OR_GREATER
+                    var descendants = _dictionaryItemService.GetDescendantsAsync(dictionaryItem.Key).GetAwaiter().GetResult().ToList();
+#else
                     var descendants = _localizationService.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
+#endif
 
                     allDictionaryItems.AddRange(descendants);
                 }

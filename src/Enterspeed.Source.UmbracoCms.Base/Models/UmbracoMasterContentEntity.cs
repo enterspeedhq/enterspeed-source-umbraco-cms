@@ -3,6 +3,9 @@ using Enterspeed.Source.Sdk.Api.Models;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
+#if NET10_0_OR_GREATER
+using Umbraco.Extensions;
+#endif
 
 namespace Enterspeed.Source.UmbracoCms.Base.Models
 {
@@ -25,7 +28,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Models
         public string Type => $"{_content.ContentType.Alias}-master";
         public string Url { get; }
         public string[] Redirects { get; }
+#if NET10_0_OR_GREATER
+        public string ParentId => _content.Parent() != null ? _entityIdentityService.GetId(_content.Parent().Id) : null;
+#else
         public string ParentId => _content.Parent != null ? _entityIdentityService.GetId(_content.Parent.Id) : null;
+#endif
         public IDictionary<string, IEnterspeedProperty> Properties { get; }
     }
 }

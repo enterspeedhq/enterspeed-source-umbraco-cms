@@ -21,7 +21,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IEnterspeedGuardService _enterspeedGuardService;
+#if NET10_0_OR_GREATER
+        private readonly IDictionaryItemService _dictionaryItemService;
+#else
         private readonly ILocalizationService _localizationService;
+#endif
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
 
         public EnterspeedDictionaryItemPublishJobHandler(
@@ -29,14 +33,22 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IEnterspeedGuardService enterspeedGuardService,
+#if NET10_0_OR_GREATER
+            IDictionaryItemService dictionaryItemService,
+#else
             ILocalizationService localizationService,
+#endif
             IEnterspeedConnectionProvider enterspeedConnectionProvider)
         {
             _enterspeedPropertyService = enterspeedPropertyService;
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _enterspeedGuardService = enterspeedGuardService;
+#if NET10_0_OR_GREATER
+            _dictionaryItemService = dictionaryItemService;
+#else
             _localizationService = localizationService;
+#endif
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
         }
 
@@ -63,9 +75,15 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
         protected virtual IDictionaryItem GetDictionaryItem(EnterspeedJob job)
         {
             var isDictionaryId = Guid.TryParse(job.EntityId, out var dictionaryId);
+#if NET10_0_OR_GREATER
+            var dictionaryItem = isDictionaryId
+                ? _dictionaryItemService.GetAsync(dictionaryId).GetAwaiter().GetResult()
+                : null;
+#else
             var dictionaryItem = isDictionaryId
                 ? _localizationService.GetDictionaryItemById(dictionaryId)
                 : null;
+#endif
             if (dictionaryItem == null)
             {
                 throw new JobHandlingException($"Dictionary with id {job.EntityId} not in database");

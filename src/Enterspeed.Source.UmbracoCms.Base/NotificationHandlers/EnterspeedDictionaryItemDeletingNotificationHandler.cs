@@ -22,7 +22,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 {
     public class EnterspeedDictionaryItemDeletingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemDeletingNotification>
     {
+#if NET10_0_OR_GREATER
+        private readonly IDictionaryItemService _dictionaryItemService;
+#else
         private readonly ILocalizationService _localizationService;
+#endif
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IEnterspeedDictionaryTranslation _enterspeedDictionaryTranslation;
 
@@ -31,7 +35,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
+#if NET10_0_OR_GREATER
+            IDictionaryItemService dictionaryItemService,
+#else
             ILocalizationService localizationService,
+#endif
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
@@ -48,7 +56,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
                   serverRoleAccessor,
                   logger)
         {
+#if NET10_0_OR_GREATER
+            _dictionaryItemService = dictionaryItemService;
+#else
             _localizationService = localizationService;
+#endif
             _enterspeedJobFactory = enterspeedJobFactory;
             _enterspeedDictionaryTranslation = enterspeedDictionaryTranslation;
         }
@@ -84,7 +96,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 
                         if (descendants == null)
                         {
+#if NET10_0_OR_GREATER
+                            descendants = _dictionaryItemService.GetDescendantsAsync(dictionaryItem.Key).GetAwaiter().GetResult().ToList();
+#else
                             descendants = _localizationService.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
+#endif
                         }
 
                         foreach (var descendant in descendants)

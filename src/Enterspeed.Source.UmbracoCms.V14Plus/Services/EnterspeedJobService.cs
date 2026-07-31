@@ -79,6 +79,7 @@ public class EnterspeedJobService : IEnterspeedJobService
                     if (dictionaryItem == null) continue;
 
                     customSeedNode.Id = dictionaryItem.Id;
+                    customSeedNode.Key = dictionaryItem.Key;
                 }
 
                 dictionaryNodes.Add(customSeedNode);

@@ -4,6 +4,9 @@ using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Base.Factories;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Umbraco.Cms.Core.Models.PublishedContent;
+#if NET10_0_OR_GREATER
+using Umbraco.Extensions;
+#endif
 
 namespace Enterspeed.Source.UmbracoCms.Base.Models
 {
@@ -34,7 +37,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Models
         public string Type => _content.ContentType.Alias;
         public string Url => _urlFactory.GetUrl(_content, _content.IsDraft(_culture), _culture);
         public string[] Redirects { get; }
+#if NET10_0_OR_GREATER
+        public string ParentId => _entityIdentityService.GetId(_content.Parent(), _culture);
+#else
         public string ParentId => _entityIdentityService.GetId(_content.Parent, _culture);
+#endif
         public IDictionary<string, IEnterspeedProperty> Properties { get; }
     }
 }
