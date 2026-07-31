@@ -88,6 +88,10 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
 #if NET6_0_OR_GREATER
                             .Append<DefaultBlockGridPropertyValueConverter>()
 #endif
+#if UMBRACO_18_OR_GREATER
+                .Append<DefaultSingleBlockPropertyValueConverter>()
+                .Append<DefaultElementPickerPropertyValueConverter>()
+#endif
                 .Append<DefaultCheckboxPropertyValueConverter>()
                 .Append<DefaultCheckboxListPropertyValueConverter>()
                 .Append<DefaultColorPickerPropertyValueConverter>()
@@ -188,6 +192,9 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             // Notification handlers
             builder.AddNotificationHandler<ContentPublishingNotification, EnterspeedContentPublishingNotificationHandler>();
             builder.AddNotificationHandler<ContentCacheRefresherNotification, EnterspeedContentCacheRefresherNotificationHandler>();
+#if UMBRACO_18_OR_GREATER
+            builder.AddNotificationHandler<ElementCacheRefresherNotification, EnterspeedElementCacheRefresherNotificationHandler>();
+#endif
             builder.AddNotificationHandler<DictionaryItemSavedNotification, EnterspeedDictionaryItemSavedNotificationHandler>();
             builder.AddNotificationHandler<DictionaryItemDeletingNotification, EnterspeedDictionaryItemDeletingNotificationHandler>();
             builder.AddNotificationHandler<MediaSavedNotification, EnterspeedMediaItemSavedEventHandler>();

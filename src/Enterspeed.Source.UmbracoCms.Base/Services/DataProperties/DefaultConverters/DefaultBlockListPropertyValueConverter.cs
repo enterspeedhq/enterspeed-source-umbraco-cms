@@ -17,7 +17,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
             _serviceProvider = serviceProvider;
         }
 
-        public bool IsConverter(IPublishedPropertyType propertyType)
+        public virtual bool IsConverter(IPublishedPropertyType propertyType)
         {
             return propertyType.EditorAlias.Equals("Umbraco.BlockList");
         }
