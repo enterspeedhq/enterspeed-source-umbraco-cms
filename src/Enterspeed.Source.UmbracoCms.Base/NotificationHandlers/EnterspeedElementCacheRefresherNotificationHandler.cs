@@ -151,7 +151,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
         /// (invariant elements) or when none of the affected cultures exist on the page
         /// (e.g. an invariant page referencing a variant element).
         /// </summary>
-        private static List<string> FilterAffectedCultures(List<string> pageCultures, HashSet<string> affectedCultures)
+        internal static List<string> FilterAffectedCultures(List<string> pageCultures, HashSet<string> affectedCultures)
         {
             if (!affectedCultures.Any())
             {

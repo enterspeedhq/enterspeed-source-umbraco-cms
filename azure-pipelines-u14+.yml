@@ -176,6 +176,13 @@ stages:
               arguments: "--no-restore --configuration Release /p:UmbracoMajor=17 /p:Version=$(semVersion5)"
 
           - task: DotNetCoreCLI@2
+            displayName: Dotnet test (Umbraco 14-17 pass)
+            inputs:
+              command: test
+              projects: "tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests.csproj"
+              arguments: "--no-restore --configuration Release /p:UmbracoMajor=17"
+
+          - task: DotNetCoreCLI@2
             displayName: Dotnet pack (Umbraco 14-17 pass)
             inputs:
               command: pack
@@ -194,6 +201,7 @@ stages:
               script: |
                 rm -rf src/Enterspeed.Source.UmbracoCms.Base/obj src/Enterspeed.Source.UmbracoCms.Base/bin
                 rm -rf src/Enterspeed.Source.UmbracoCms.V14Plus/obj src/Enterspeed.Source.UmbracoCms.V14Plus/bin
+                rm -rf tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/obj tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/bin
 
           # ---- Pass 2: UmbracoMajor=18 -> 6.x package (Umbraco 18+) ----
           - task: DotNetCoreCLI@2
@@ -211,6 +219,13 @@ stages:
               command: build
               projects: "Enterspeed.Source.UmbracoCms.V14Plus.sln"
               arguments: "--no-restore --configuration Release /p:UmbracoMajor=18 /p:Version=$(semVersion6)"
+
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet test (Umbraco 18 pass)
+            inputs:
+              command: test
+              projects: "tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests.csproj"
+              arguments: "--no-restore --configuration Release /p:UmbracoMajor=18"
 
           - task: DotNetCoreCLI@2
             displayName: Dotnet pack (Umbraco 18 pass)
