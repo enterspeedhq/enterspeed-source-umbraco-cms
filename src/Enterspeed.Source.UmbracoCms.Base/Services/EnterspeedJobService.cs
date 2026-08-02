@@ -310,19 +310,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
             var allDictionaryItems = new List<IDictionaryItem>();
             foreach (var dictionarySeedNode in customSeed.DictionaryNodes)
             {
-                // Umbraco 17+ has no int-keyed dictionary lookup, so seed nodes must carry
-                // the Guid key there; older lines still receive int ids from the dashboard
-#if NET10_0_OR_GREATER
-                var dictionaryItem = dictionarySeedNode.Key.HasValue
-                    ? _umbracoLocalizationProvider.GetDictionaryItem(dictionarySeedNode.Key.Value)
-                    : null;
+                var dictionaryItem = _umbracoLocalizationProvider.GetDictionaryItem(dictionarySeedNode);
                 if (dictionaryItem == null)
                 {
                     continue;
                 }
-#else
-                var dictionaryItem = _umbracoLocalizationProvider.GetDictionaryItem(dictionarySeedNode.Id);
-#endif
 
                 allDictionaryItems.Add(dictionaryItem);
 

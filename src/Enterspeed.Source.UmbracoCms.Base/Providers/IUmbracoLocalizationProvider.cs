@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Enterspeed.Source.UmbracoCms.Base.Models.Api;
 using Umbraco.Cms.Core.Models;
 
 namespace Enterspeed.Source.UmbracoCms.Base.Providers
@@ -14,11 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Providers
     {
         IDictionaryItem GetDictionaryItem(Guid key);
 
-#if !NET10_0_OR_GREATER
-        // Umbraco 17+ has no int-keyed dictionary lookup; int-keyed callers only exist on
-        // the older package lines, where the dashboard sends integer ids
-        IDictionaryItem GetDictionaryItem(int id);
-#endif
+        IDictionaryItem GetDictionaryItem(CustomSeedNode seedNode);
 
         IEnumerable<IDictionaryItem> GetDictionaryItemDescendants(Guid? parentKey);
 

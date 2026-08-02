@@ -1,6 +1,7 @@
 #if NET10_0_OR_GREATER
 using System;
 using System.Collections.Generic;
+using Enterspeed.Source.UmbracoCms.Base.Models.Api;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 
@@ -27,6 +28,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Providers
         public IDictionaryItem GetDictionaryItem(Guid key)
         {
             return _dictionaryItemService.GetAsync(key).GetAwaiter().GetResult();
+        }
+
+        public IDictionaryItem GetDictionaryItem(CustomSeedNode seedNode)
+        {
+            return seedNode.Key.HasValue ? GetDictionaryItem(seedNode.Key.Value) : null;
         }
 
         public IEnumerable<IDictionaryItem> GetDictionaryItemDescendants(Guid? parentKey)

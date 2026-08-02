@@ -1,6 +1,7 @@
 #if !NET10_0_OR_GREATER
 using System;
 using System.Collections.Generic;
+using Enterspeed.Source.UmbracoCms.Base.Models.Api;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Services;
 
@@ -23,9 +24,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Providers
             return _localizationService.GetDictionaryItemById(key);
         }
 
-        public IDictionaryItem GetDictionaryItem(int id)
+        public IDictionaryItem GetDictionaryItem(CustomSeedNode seedNode)
         {
-            return _localizationService.GetDictionaryItemById(id);
+            return seedNode.Key.HasValue
+                ? _localizationService.GetDictionaryItemById(seedNode.Key.Value)
+                : _localizationService.GetDictionaryItemById(seedNode.Id);
         }
 
         public IEnumerable<IDictionaryItem> GetDictionaryItemDescendants(Guid? parentKey)

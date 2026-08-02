@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Enterspeed.Source.UmbracoCms.Base.Models.Api;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using NSubstitute;
 using Umbraco.Cms.Core.Models;
@@ -42,6 +43,27 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Tests.Providers
             var result = CreateSut().GetDictionaryItem(Guid.NewGuid());
 
             Assert.Null(result);
+        }
+
+        [Fact]
+        public void GetDictionaryItem_SeedNodeWithKey_ResolvesByKey()
+        {
+            var key = Guid.NewGuid();
+            var dictionaryItem = Substitute.For<IDictionaryItem>();
+            _dictionaryItemService.GetAsync(key).Returns(Task.FromResult(dictionaryItem));
+
+            var result = CreateSut().GetDictionaryItem(new CustomSeedNode { Id = 1234, Key = key });
+
+            Assert.Same(dictionaryItem, result);
+        }
+
+        [Fact]
+        public void GetDictionaryItem_SeedNodeWithoutKey_ReturnsNull()
+        {
+            var result = CreateSut().GetDictionaryItem(new CustomSeedNode { Id = 1234 });
+
+            Assert.Null(result);
+            _dictionaryItemService.DidNotReceive().GetAsync(Arg.Any<Guid>());
         }
 
         [Fact]
