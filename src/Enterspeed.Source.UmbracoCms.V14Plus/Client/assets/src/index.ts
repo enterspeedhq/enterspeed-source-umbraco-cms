@@ -1,6 +1,6 @@
 import { UmbEntryPointOnInit } from "@umbraco-cms/backoffice/extension-api";
 import { UMB_AUTH_CONTEXT } from "@umbraco-cms/backoffice/auth";
-import { OpenAPI } from "./generated/core/OpenAPI.ts";
+import { client } from "./generated/client.gen.ts";
 
 // load up the manifests here.
 import { manifests as dashboardManifests } from "./dashboards/manifest.ts";
@@ -21,13 +21,17 @@ export const onInit: UmbEntryPointOnInit = (_host, extensionRegistry) => {
     }
 
     const umbOpenApi = _auth.getOpenApiConfiguration();
-    OpenAPI.TOKEN = async () => (await umbOpenApi.token()) ?? "";
-    OpenAPI.BASE = umbOpenApi.base ?? "";
-    // Backoffice 14-17 exposes withCredentials (boolean); 18 replaced it with
-    // the fetch credentials option. The bundle serves all hosts at runtime.
-    OpenAPI.WITH_CREDENTIALS =
-      "withCredentials" in umbOpenApi
-        ? (umbOpenApi as { withCredentials: boolean }).withCredentials
-        : umbOpenApi.credentials === "include";
+    client.setConfig({
+      baseUrl: umbOpenApi.base ?? "",
+      auth: async () => (await umbOpenApi.token()) ?? "",
+      // Backoffice 14-17 exposes withCredentials (boolean); 18 exposes the fetch
+      // credentials option directly. The bundle serves all hosts at runtime.
+      credentials:
+        "withCredentials" in umbOpenApi
+          ? (umbOpenApi as { withCredentials: boolean }).withCredentials
+            ? "include"
+            : "same-origin"
+          : umbOpenApi.credentials ?? "same-origin",
+    });
   });
 };
