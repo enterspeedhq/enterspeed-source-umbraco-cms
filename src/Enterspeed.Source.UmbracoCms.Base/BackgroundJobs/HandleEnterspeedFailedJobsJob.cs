@@ -1,50 +1,40 @@
-// Umbraco 9-11 only: from Umbraco 13 (net8.0) the recurring work runs via the
-// IRecurringBackgroundJob system instead - see Base/BackgroundJobs/
-#if !NET8_0_OR_GREATER
+#if NET8_0_OR_GREATER
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
-using Umbraco.Cms.Infrastructure.HostedServices;
 
-namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
+namespace Enterspeed.Source.UmbracoCms.Base.BackgroundJobs
 {
-    public class HandleEnterspeedFailedJobsHostedService : RecurringHostedServiceBase
+    /// <summary>
+    /// Retries failed Enterspeed jobs when failed-jobs processing is enabled.
+    /// </summary>
+    public class HandleEnterspeedFailedJobsJob : EnterspeedRecurringJobBase
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public HandleEnterspeedFailedJobsHostedService(
-            ILogger<HandleEnterspeedFailedJobsHostedService> logger,
-            IServiceProvider serviceProvider)
-                : base(logger, TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(10))
+        public HandleEnterspeedFailedJobsJob(IServiceProvider serviceProvider)
+            : base(TimeSpan.FromMinutes(1), TimeSpan.FromSeconds(10))
         {
             _serviceProvider = serviceProvider;
         }
 
-        public override Task PerformExecuteAsync(object state)
+        public override Task RunJobAsync(CancellationToken cancellationToken)
         {
             using (var serviceScope = _serviceProvider.CreateScope())
             {
                 var serviceProvider = serviceScope.ServiceProvider;
-                var runtimeState = serviceProvider.GetRequiredService<IRuntimeState>();
                 var enterspeedJobsHandlingService = serviceProvider.GetRequiredService<IEnterspeedJobsHandlingService>();
-                var logger = serviceProvider.GetRequiredService<ILogger<HandleEnterspeedFailedJobsHostedService>>();
+                var logger = serviceProvider.GetRequiredService<ILogger<HandleEnterspeedFailedJobsJob>>();
                 var serverRoleAccessor = serviceProvider.GetRequiredService<IServerRoleAccessor>();
                 var configurationService = serviceProvider.GetRequiredService<IEnterspeedConfigurationService>();
 
                 var configuration = configurationService.GetConfiguration();
 
-                // Don't do anything if the site is not running.
-                if (runtimeState.Level != RuntimeLevel.Run)
-                {
-                    return Task.CompletedTask;
-                }
-
-                if (!configurationService.GetConfiguration().IsConfigured)
+                if (!configuration.IsConfigured)
                 {
                     return Task.CompletedTask;
                 }

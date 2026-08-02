@@ -1,50 +1,38 @@
-// Umbraco 9-11 only: from Umbraco 13 (net8.0) the recurring work runs via the
-// IRecurringBackgroundJob system instead - see Base/BackgroundJobs/
-#if !NET8_0_OR_GREATER
+#if NET8_0_OR_GREATER
 using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core;
-using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
-using Umbraco.Cms.Infrastructure.HostedServices;
-#if NET5_0
-using Umbraco.Cms.Core.Scoping;
-#else
 using Umbraco.Cms.Infrastructure.Scoping;
-#endif
 
-namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
+namespace Enterspeed.Source.UmbracoCms.Base.BackgroundJobs
 {
-    public class InvalidateEnterspeedJobsHostedService : RecurringHostedServiceBase
+    /// <summary>
+    /// Invalidates Enterspeed jobs that have been stuck in the processing state for too long.
+    /// </summary>
+    public class InvalidateEnterspeedJobsJob : EnterspeedRecurringJobBase
     {
         private readonly IServiceProvider _serviceProvider;
 
-        public InvalidateEnterspeedJobsHostedService(IServiceProvider serviceProvider, ILogger<InvalidateEnterspeedJobsHostedService> logger)
-            : base(logger, TimeSpan.FromMinutes(10), TimeSpan.FromSeconds(1))
+        public InvalidateEnterspeedJobsJob(IServiceProvider serviceProvider)
+            : base(TimeSpan.FromMinutes(10), TimeSpan.FromSeconds(1))
         {
             _serviceProvider = serviceProvider;
         }
 
-        public override Task PerformExecuteAsync(object state)
+        public override Task RunJobAsync(CancellationToken cancellationToken)
         {
             using (var serviceScope = _serviceProvider.CreateScope())
             {
                 var serviceProvider = serviceScope.ServiceProvider;
-                var runtimeState = serviceProvider.GetRequiredService<IRuntimeState>();
                 var enterspeedJobsHandlingService = serviceProvider.GetRequiredService<IEnterspeedJobsHandlingService>();
-                var logger = serviceProvider.GetRequiredService<ILogger<InvalidateEnterspeedJobsHostedService>>();
+                var logger = serviceProvider.GetRequiredService<ILogger<InvalidateEnterspeedJobsJob>>();
                 var serverRoleAccessor = serviceProvider.GetRequiredService<IServerRoleAccessor>();
                 var configurationService = serviceProvider.GetRequiredService<IEnterspeedConfigurationService>();
                 var scopeProvider = serviceProvider.GetRequiredService<IScopeProvider>();
-
-                // Don't do anything if the site is not running.
-                if (runtimeState.Level != RuntimeLevel.Run)
-                {
-                    return Task.CompletedTask;
-                }
 
                 if (!configurationService.GetConfiguration().IsConfigured)
                 {
@@ -62,9 +50,9 @@ namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
                 {
                     logger.LogInformation("Enterspeed jobs does not run on servers with {role} role.", serverRoleAccessor.CurrentServerRole.ToString());
                 }
-
-                return Task.CompletedTask;
             }
+
+            return Task.CompletedTask;
         }
     }
 }
