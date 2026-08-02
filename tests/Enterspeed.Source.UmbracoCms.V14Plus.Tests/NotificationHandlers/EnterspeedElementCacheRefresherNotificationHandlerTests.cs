@@ -219,6 +219,36 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Tests.NotificationHandlers
         }
 
         [Fact]
+        public void Handle_VariantPage_AffectedCulturesMatchRegardlessOfCasing()
+        {
+            _configurationService.IsPublishConfigured().Returns(true);
+
+            _relationService.GetByChildId(100, Constants.Conventions.RelationTypes.RelatedElementAlias)
+                .Returns(new[] { Relation(200, 100) });
+
+            var contentType = Substitute.For<IPublishedContentType>();
+            contentType.Variations.Returns(ContentVariation.Culture);
+            var publishedPage = Substitute.For<IPublishedContent>();
+            publishedPage.ContentType.Returns(contentType);
+            _cultureProvider.GetCulturesForCultureVariant(publishedPage).Returns(new List<string> { "en-us", "da-dk" });
+            _contentCache.GetById(200).Returns(publishedPage);
+
+            var job = new EnterspeedJob();
+            _jobFactory.GetPublishJob(publishedPage, "da-dk", EnterspeedContentState.Publish).Returns(job);
+
+            var payload = new ElementCacheRefresher.JsonPayload(100, Guid.NewGuid(), TreeChangeTypes.RefreshNode)
+            {
+                PublishedCultures = new[] { "da-DK" },
+            };
+
+            CreateSut().Handle(CreateNotification(payload));
+
+            _jobFactory.Received(1).GetPublishJob(publishedPage, "da-dk", EnterspeedContentState.Publish);
+            _jobFactory.DidNotReceive().GetPublishJob(publishedPage, "en-us", EnterspeedContentState.Publish);
+            _jobRepository.Received(1).Save(Arg.Is<IList<EnterspeedJob>>(jobs => jobs.Count == 1 && jobs[0] == job));
+        }
+
+        [Fact]
         public void Handle_PreviewConfigured_EnqueuesPreviewJobForSavedPage()
         {
             _configurationService.IsPreviewConfigured().Returns(true);

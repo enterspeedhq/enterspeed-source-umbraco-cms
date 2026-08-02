@@ -1,4 +1,5 @@
 #if UMBRACO_18_OR_GREATER
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Enterspeed.Source.UmbracoCms.Base.Data.Models;
@@ -87,7 +88,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers.Umbraco18
             // untouched for them.
             var publishDocumentIds = new HashSet<int>();
             var previewDocumentIds = new HashSet<int>();
-            var affectedCultures = new HashSet<string>();
+            var affectedCultures = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var payload in jsonPayloads)
             {
                 if ((payload.ChangeTypes & TreeChangeTypes.RefreshAll) == TreeChangeTypes.RefreshAll)
