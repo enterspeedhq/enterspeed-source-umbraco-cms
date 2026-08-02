@@ -354,3 +354,8 @@ src/Enterspeed.Source.UmbracoCms.V14+/wwwroot/App_Plugins/Enterspeed.Source.Umbr
 src/Enterspeed.Source.UmbracoCms.V14Plus/wwwroot/App_Plugins/Enterspeed.Source.UmbracoCms
 tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/appsettings-schema*.json
 tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/umbraco-package-schema.json
+
+# Local working documents for the Umbraco 18 story (kept locally, not in the repo)
+documentation/umbraco-18-support-plan.md
+documentation/umbraco-18-test-plan.md
+documentation/local-demo-sites.md
