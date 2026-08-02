@@ -11,7 +11,6 @@ using Enterspeed.Source.UmbracoCms.Base.Models.Api;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewDictionaries
 {
@@ -21,11 +20,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewDictionaries
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IEnterspeedGuardService _enterspeedGuardService;
-#if NET10_0_OR_GREATER
-        private readonly IDictionaryItemService _dictionaryItemService;
-#else
-        private readonly ILocalizationService _localizationService;
-#endif
+        private readonly IUmbracoLocalizationProvider _umbracoLocalizationProvider;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
 
         public EnterspeedPreviewDictionaryItemPublishJobHandler(
@@ -33,22 +28,14 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewDictionaries
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IEnterspeedGuardService enterspeedGuardService,
-#if NET10_0_OR_GREATER
-            IDictionaryItemService dictionaryItemService,
-#else
-            ILocalizationService localizationService,
-#endif
+            IUmbracoLocalizationProvider umbracoLocalizationProvider,
             IEnterspeedConnectionProvider enterspeedConnectionProvider)
         {
             _enterspeedPropertyService = enterspeedPropertyService;
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _enterspeedGuardService = enterspeedGuardService;
-#if NET10_0_OR_GREATER
-            _dictionaryItemService = dictionaryItemService;
-#else
-            _localizationService = localizationService;
-#endif
+            _umbracoLocalizationProvider = umbracoLocalizationProvider;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
         }
 
@@ -75,15 +62,9 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewDictionaries
         protected virtual IDictionaryItem GetDictionaryItem(EnterspeedJob job)
         {
             var isDictionaryId = Guid.TryParse(job.EntityId, out var dictionaryId);
-#if NET10_0_OR_GREATER
             var dictionaryItem = isDictionaryId
-                ? _dictionaryItemService.GetAsync(dictionaryId).GetAwaiter().GetResult()
+                ? _umbracoLocalizationProvider.GetDictionaryItem(dictionaryId)
                 : null;
-#else
-            var dictionaryItem = isDictionaryId
-                ? _localizationService.GetDictionaryItemById(dictionaryId)
-                : null;
-#endif
             if (dictionaryItem == null)
             {
                 throw new JobHandlingException($"Dictionary with id {job.EntityId} not in database");

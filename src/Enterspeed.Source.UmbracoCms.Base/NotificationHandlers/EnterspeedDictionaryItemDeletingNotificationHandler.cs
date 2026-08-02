@@ -4,6 +4,7 @@ using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Base.Factories;
 using Enterspeed.Source.UmbracoCms.Base.Models;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Events;
@@ -22,11 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 {
     public class EnterspeedDictionaryItemDeletingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemDeletingNotification>
     {
-#if NET10_0_OR_GREATER
-        private readonly IDictionaryItemService _dictionaryItemService;
-#else
-        private readonly ILocalizationService _localizationService;
-#endif
+        private readonly IUmbracoLocalizationProvider _umbracoLocalizationProvider;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IEnterspeedDictionaryTranslation _enterspeedDictionaryTranslation;
 
@@ -35,11 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
-#if NET10_0_OR_GREATER
-            IDictionaryItemService dictionaryItemService,
-#else
-            ILocalizationService localizationService,
-#endif
+            IUmbracoLocalizationProvider umbracoLocalizationProvider,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
@@ -56,11 +49,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
                   serverRoleAccessor,
                   logger)
         {
-#if NET10_0_OR_GREATER
-            _dictionaryItemService = dictionaryItemService;
-#else
-            _localizationService = localizationService;
-#endif
+            _umbracoLocalizationProvider = umbracoLocalizationProvider;
             _enterspeedJobFactory = enterspeedJobFactory;
             _enterspeedDictionaryTranslation = enterspeedDictionaryTranslation;
         }
@@ -96,11 +85,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 
                         if (descendants == null)
                         {
-#if NET10_0_OR_GREATER
-                            descendants = _dictionaryItemService.GetDescendantsAsync(dictionaryItem.Key).GetAwaiter().GetResult().ToList();
-#else
-                            descendants = _localizationService.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
-#endif
+                            descendants = _umbracoLocalizationProvider.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
                         }
 
                         foreach (var descendant in descendants)
