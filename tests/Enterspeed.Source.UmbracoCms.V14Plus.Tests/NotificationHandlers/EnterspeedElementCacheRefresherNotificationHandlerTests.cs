@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Base.Factories;
-using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers;
+using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers.Umbraco18;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.Logging;
@@ -107,10 +107,85 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Tests.NotificationHandlers
             _jobFactory.GetPublishJob(publishedPage, "en-us", EnterspeedContentState.Publish).Returns(job);
 
             CreateSut().Handle(CreateNotification(
-                new ElementCacheRefresher.JsonPayload(100, Guid.NewGuid(), TreeChangeTypes.RefreshNode),
-                new ElementCacheRefresher.JsonPayload(101, Guid.NewGuid(), TreeChangeTypes.RefreshNode)));
+                new ElementCacheRefresher.JsonPayload(100, Guid.NewGuid(), TreeChangeTypes.RefreshNode) { PublishedCultures = new[] { "*" } },
+                new ElementCacheRefresher.JsonPayload(101, Guid.NewGuid(), TreeChangeTypes.RefreshNode) { PublishedCultures = new[] { "*" } }));
 
             _jobRepository.Received(1).Save(Arg.Is<IList<EnterspeedJob>>(jobs => jobs.Count == 1 && jobs[0] == job));
+        }
+
+        [Fact]
+        public void Handle_DraftOnlySave_DoesNotEnqueuePublishJobs()
+        {
+            // A RefreshNode payload without culture information is a draft-only save;
+            // the publish source must stay untouched (test plan C3)
+            _configurationService.IsPublishConfigured().Returns(true);
+            _configurationService.IsPreviewConfigured().Returns(true);
+
+            _relationService.GetByChildId(100, Constants.Conventions.RelationTypes.RelatedElementAlias)
+                .Returns(new[] { Relation(200, 100) });
+
+            var publishedPage = CreateInvariantPublishedContent("en-us");
+            _contentCache.GetById(200).Returns(publishedPage);
+            var savedPage = CreateInvariantPublishedContent("en-us");
+            _contentCache.GetById(true, 200).Returns(savedPage);
+
+            var previewJob = new EnterspeedJob();
+            _jobFactory.GetPublishJob(savedPage, "en-us", EnterspeedContentState.Preview).Returns(previewJob);
+
+            CreateSut().Handle(CreateNotification(
+                new ElementCacheRefresher.JsonPayload(100, Guid.NewGuid(), TreeChangeTypes.RefreshNode)));
+
+            _jobFactory.DidNotReceive().GetPublishJob(Arg.Any<IPublishedContent>(), Arg.Any<string>(), EnterspeedContentState.Publish);
+            _jobRepository.Received(1).Save(Arg.Is<IList<EnterspeedJob>>(jobs => jobs.Count == 1 && jobs[0] == previewJob));
+        }
+
+        [Fact]
+        public void Handle_ElementRemoved_EnqueuesPublishJobsDespiteMissingCultureInfo()
+        {
+            // Deletes carry no culture info but must reingest referencing pages so the
+            // removed element drops out of their payloads (test plan C5)
+            _configurationService.IsPublishConfigured().Returns(true);
+
+            _relationService.GetByChildId(100, Constants.Conventions.RelationTypes.RelatedElementAlias)
+                .Returns(new[] { Relation(200, 100) });
+
+            var publishedPage = CreateInvariantPublishedContent("en-us");
+            _contentCache.GetById(200).Returns(publishedPage);
+
+            var job = new EnterspeedJob();
+            _jobFactory.GetPublishJob(publishedPage, "en-us", EnterspeedContentState.Publish).Returns(job);
+
+            CreateSut().Handle(CreateNotification(
+                new ElementCacheRefresher.JsonPayload(100, Guid.NewGuid(), TreeChangeTypes.Remove)));
+
+            _jobRepository.Received(1).Save(Arg.Is<IList<EnterspeedJob>>(jobs => jobs.Count == 1 && jobs[0] == job));
+        }
+
+        [Fact]
+        public void Handle_RefreshAll_FansOutToAllElementReferencingDocuments()
+        {
+            // RefreshAll payloads carry no element id (Umbraco publishes them with id -1/0),
+            // so the fan-out must resolve every umbElement relation instead
+            _configurationService.IsPublishConfigured().Returns(true);
+
+            _relationService.GetByRelationTypeAlias(Constants.Conventions.RelationTypes.RelatedElementAlias)
+                .Returns(new[] { Relation(200, 100), Relation(201, 101) });
+
+            var page200 = CreateInvariantPublishedContent("en-us");
+            var page201 = CreateInvariantPublishedContent("en-us");
+            _contentCache.GetById(200).Returns(page200);
+            _contentCache.GetById(201).Returns(page201);
+
+            var job200 = new EnterspeedJob();
+            var job201 = new EnterspeedJob();
+            _jobFactory.GetPublishJob(page200, "en-us", EnterspeedContentState.Publish).Returns(job200);
+            _jobFactory.GetPublishJob(page201, "en-us", EnterspeedContentState.Publish).Returns(job201);
+
+            CreateSut().Handle(CreateNotification(
+                new ElementCacheRefresher.JsonPayload(0, Guid.Empty, TreeChangeTypes.RefreshAll)));
+
+            _relationService.DidNotReceiveWithAnyArgs().GetByChildId(0, null);
+            _jobRepository.Received(1).Save(Arg.Is<IList<EnterspeedJob>>(jobs => jobs.Count == 2));
         }
 
         [Fact]

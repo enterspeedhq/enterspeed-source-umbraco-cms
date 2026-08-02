@@ -10,14 +10,16 @@ using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Cache;
 using Umbraco.Cms.Core.Events;
+using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Notifications;
 using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Services.Changes;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Core.Web;
 using Umbraco.Cms.Infrastructure.Scoping;
 using Umbraco.Extensions;
 
-namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
+namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers.Umbraco18
 {
     /// <summary>
     /// When a library element changes, Umbraco does not fire ContentCacheRefresherNotification
@@ -77,13 +79,45 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
             // Resolve the documents referencing the changed elements (deduplicated across
             // payloads), and collect the cultures the element change affects so variant
             // pages are only reingested for those cultures.
-            var referencingDocumentIds = new HashSet<int>();
+            //
+            // A RefreshNode payload without culture information is a draft-only save:
+            // publish and unpublish operations always carry PublishedCultures or
+            // UnpublishedCultures ("*" for invariant elements), plain saves carry neither.
+            // Draft saves only affect the preview source, so the publish source is left
+            // untouched for them.
+            var publishDocumentIds = new HashSet<int>();
+            var previewDocumentIds = new HashSet<int>();
             var affectedCultures = new HashSet<string>();
             foreach (var payload in jsonPayloads)
             {
+                if ((payload.ChangeTypes & TreeChangeTypes.RefreshAll) == TreeChangeTypes.RefreshAll)
+                {
+                    // Bulk refresh: the payload carries no element id, so fan out to every
+                    // document referencing any element - the same special case Umbraco's
+                    // Delivery API output-cache eviction applies for RefreshAll
+                    var allElementRelations = _relationService.GetByRelationTypeAlias(Constants.Conventions.RelationTypes.RelatedElementAlias)
+                        ?? Enumerable.Empty<IRelation>();
+                    foreach (var relation in allElementRelations)
+                    {
+                        publishDocumentIds.Add(relation.ParentId);
+                        previewDocumentIds.Add(relation.ParentId);
+                    }
+
+                    continue;
+                }
+
+                var hasCultureSignal = (payload.PublishedCultures != null && payload.PublishedCultures.Any())
+                    || (payload.UnpublishedCultures != null && payload.UnpublishedCultures.Any());
+                var isDraftSaveOnly = payload.ChangeTypes == TreeChangeTypes.RefreshNode && !hasCultureSignal;
+
                 foreach (var relation in _relationService.GetByChildId(payload.Id, Constants.Conventions.RelationTypes.RelatedElementAlias))
                 {
-                    referencingDocumentIds.Add(relation.ParentId);
+                    previewDocumentIds.Add(relation.ParentId);
+
+                    if (!isDraftSaveOnly)
+                    {
+                        publishDocumentIds.Add(relation.ParentId);
+                    }
                 }
 
                 if (payload.PublishedCultures != null)
@@ -97,7 +131,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
                 }
             }
 
-            if (!referencingDocumentIds.Any())
+            if (!publishDocumentIds.Any() && !previewDocumentIds.Any())
             {
                 return;
             }
@@ -107,17 +141,21 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
             using (var context = _umbracoContextFactory.EnsureUmbracoContext())
             {
                 var umb = context.UmbracoContext;
-                foreach (var documentId in referencingDocumentIds)
-                {
-                    var publishedNode = umb.Content.GetById(documentId);
-                    var savedNode = umb.Content.GetById(true, documentId);
 
-                    // Unpublished pages are not ingested, so only fan out to published
-                    // referencing pages for the publish state. Ingesting re-resolves the
-                    // elements from the published element cache, so draft element content
-                    // can never end up in the publish source.
-                    if (publishedNode != null && isPublishConfigured)
+                // Unpublished pages are not ingested, so only fan out to published
+                // referencing pages for the publish state. Ingesting re-resolves the
+                // elements from the published element cache, so draft element content
+                // can never end up in the publish source.
+                if (isPublishConfigured)
+                {
+                    foreach (var documentId in publishDocumentIds)
                     {
+                        var publishedNode = umb.Content.GetById(documentId);
+                        if (publishedNode == null)
+                        {
+                            continue;
+                        }
+
                         var cultures = publishedNode.ContentType.VariesByCulture()
                             ? _umbracoCultureProvider.GetCulturesForCultureVariant(publishedNode)
                             : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(publishedNode) };
@@ -127,9 +165,18 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
                             jobs.Add(_enterspeedJobFactory.GetPublishJob(publishedNode, culture, EnterspeedContentState.Publish));
                         }
                     }
+                }
 
-                    if (savedNode != null && isPreviewConfigured)
+                if (isPreviewConfigured)
+                {
+                    foreach (var documentId in previewDocumentIds)
                     {
+                        var savedNode = umb.Content.GetById(true, documentId);
+                        if (savedNode == null)
+                        {
+                            continue;
+                        }
+
                         var cultures = savedNode.ContentType.VariesByCulture()
                             ? _umbracoCultureProvider.GetCulturesForCultureVariant(savedNode)
                             : new List<string> { _umbracoCultureProvider.GetCultureForNonCultureVariant(savedNode) };

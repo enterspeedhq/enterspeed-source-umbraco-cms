@@ -2,7 +2,7 @@
 using System;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters
+namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters.Umbraco18
 {
     /// <summary>
     /// Handles the Umbraco.SingleBlock editor introduced in Umbraco 18. The v18 upgrade

@@ -24,10 +24,16 @@ using Enterspeed.Source.UmbracoCms.Base.BackgroundJobs;
 using Enterspeed.Source.UmbracoCms.Base.HostedServices;
 #endif
 using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers;
+#if UMBRACO_18_OR_GREATER
+using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers.Umbraco18;
+#endif
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties;
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters;
+#if UMBRACO_18_OR_GREATER
+using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters.Umbraco18;
+#endif
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultGridConverters;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;

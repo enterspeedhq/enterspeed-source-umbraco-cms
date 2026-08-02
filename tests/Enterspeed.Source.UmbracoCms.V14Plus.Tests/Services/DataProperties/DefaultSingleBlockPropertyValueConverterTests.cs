@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using Enterspeed.Source.Sdk.Api.Models.Properties;
 using Enterspeed.Source.UmbracoCms.Base.Services;
-using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters;
+using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters.Umbraco18;
 using NSubstitute;
 using Umbraco.Cms.Core.Models.Blocks;
 using Umbraco.Cms.Core.Models.PublishedContent;

@@ -6,7 +6,7 @@ using Enterspeed.Source.UmbracoCms.Base.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.Models.PublishedContent;
 
-namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters
+namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters.Umbraco18
 {
     public class DefaultElementPickerPropertyValueConverter : IEnterspeedPropertyValueConverter
     {
