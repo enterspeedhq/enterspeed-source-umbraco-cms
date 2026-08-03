@@ -8,8 +8,9 @@ using Umbraco.Cms.Infrastructure.Migrations.Upgrade;
 namespace Enterspeed.Source.UmbracoCms.Base.Components
 {
     /// <summary>
-    /// Umbraco 17+ flavour: IComponent and the sync Upgrader.Execute were removed, so the
-    /// component is an IAsyncComponent and the migration plan runs via ExecuteAsync.
+    /// Umbraco 17+ flavour: the component is an IAsyncComponent and the migration plan runs
+    /// via ExecuteAsync (Umbraco 18 removed IComponent and the sync Upgrader.Execute;
+    /// Umbraco 17 marks them obsolete).
     /// </summary>
     public partial class EnterspeedJobsComponent : IAsyncComponent
     {

@@ -8,9 +8,9 @@ using Umbraco.Cms.Core.Services;
 namespace Enterspeed.Source.UmbracoCms.Base.Providers
 {
     /// <summary>
-    /// Umbraco 17+ flavour: ILocalizationService is removed, so dictionary items and
-    /// languages come from IDictionaryItemService and ILanguageService. The new services
-    /// are async-only; the sync bridging for our sync call chains lives here and only here.
+    /// Umbraco 17+ flavour: dictionary items and languages come from IDictionaryItemService
+    /// and ILanguageService (Umbraco 18 removed ILocalizationService; 17 marks it obsolete).
+    /// The new services are async-only; the sync bridging lives here and only here.
     /// </summary>
     public class UmbracoLocalizationProvider : IUmbracoLocalizationProvider
     {

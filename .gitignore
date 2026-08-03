@@ -359,3 +359,4 @@ tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/umbraco-package-schema.json
 documentation/umbraco-18-support-plan.md
 documentation/umbraco-18-test-plan.md
 documentation/local-demo-sites.md
+documentation/umbraco-version-impact-and-manual-test-rationale.md
