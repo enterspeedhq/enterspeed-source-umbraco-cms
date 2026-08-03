@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Changed
 - The Enterspeed swagger document's schema and operation ids now match the naming Umbraco 18 produces (e.g. `ApiResponseOfSeedResponse`, `PostClearPendingJobs`), so the 5.x and 6.x documents generate identical TypeScript clients. Dev-time only - runtime API routes are unchanged
 - Dictionary and language lookups now go through a new `IUmbracoLocalizationProvider` abstraction instead of injecting `ILocalizationService` directly. If you subclass `EnterspeedDictionaryItemPublishJobHandler`, `EnterspeedPreviewDictionaryItemPublishJobHandler`, `EnterspeedPostJobsHandler`, `EnterspeedDictionaryItemDeletingNotificationHandler` or `EnterspeedJobService`, their constructor signatures have changed accordingly
-- The recurring work (job processing, failed jobs, invalidation) now runs via Umbraco's `IRecurringBackgroundJob` system on Umbraco 13+ instead of `RecurringHostedServiceBase` hosted services (which remain on the 4.x line for Umbraco 9-11). Behaviour is unchanged, incl. the `RunJobsOnAllServerRoles` setting; jobs additionally only run on the MainDom instance. This prevents concurrent ticks from sharing Umbraco's ambient scope stack (observed on Umbraco 18 as scope-disposal errors that held database locks)
+- The recurring work (job processing, failed jobs, invalidation) now runs via Umbraco's `IRecurringBackgroundJob` system on Umbraco 13+ instead of `RecurringHostedServiceBase` hosted services (which remain on the 4.x line for Umbraco 9-12). Behaviour is unchanged, incl. the `RunJobsOnAllServerRoles` setting; jobs additionally only run on the MainDom instance. This prevents concurrent ticks from sharing Umbraco's ambient scope stack (observed on Umbraco 18 as scope-disposal errors that held database locks)
 
 ## [6.0.0 - 2026-07-31]
 ### Added
@@ -75,6 +75,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Breaking
 - `Umbraco.Source.Cms namespace` has been updated to `Umbraco.Source.Cms.Base`
 - `EnterspeedComposer` must now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer`
+
+## [4.5.0 - Unreleased]
+### Fixed
+- Custom seeding a dictionary node whose dictionary item no longer exists now skips that node instead of failing the seed with a null reference exception
+
+### Changed
+- Dictionary and language lookups now go through a new `IUmbracoLocalizationProvider` abstraction instead of injecting `ILocalizationService` directly. If you subclass `EnterspeedDictionaryItemPublishJobHandler`, `EnterspeedPreviewDictionaryItemPublishJobHandler`, `EnterspeedPostJobsHandler`, `EnterspeedDictionaryItemDeletingNotificationHandler` or `EnterspeedJobService`, their constructor signatures have changed accordingly
+- On Umbraco 13 the recurring work (job processing, failed jobs, invalidation) now runs via Umbraco's `IRecurringBackgroundJob` system instead of `RecurringHostedServiceBase` hosted services, which remain in place on Umbraco 9-12. Behaviour is unchanged, incl. the `RunJobsOnAllServerRoles` setting; jobs additionally only run on the MainDom instance
 
 ## [4.4.3 - 2026-03-24]
 ### Fixed
