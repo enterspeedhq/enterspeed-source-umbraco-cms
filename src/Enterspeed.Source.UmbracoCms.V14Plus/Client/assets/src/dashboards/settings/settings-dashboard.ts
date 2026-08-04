@@ -1,4 +1,7 @@
 import "../shared/server-message.element";
+import "../shared/notification-list.element";
+
+import type { EnterspeedNotificationListData } from "../shared/notification-list.element";
 
 import {
   html,
@@ -17,6 +20,10 @@ import {
   EnterspeedUmbracoConfigurationResponse,
 } from "../../generated";
 
+// Subset of Umbraco's UmbNotificationColor that this dashboard uses. Declared locally rather than imported so it does
+// not depend on the type being exported under the same name across Umbraco 14-17.
+type NotificationColor = "positive" | "warning" | "danger";
+
 @customElement("enterspeed-settings-dashboard")
 export class enterspeedSettingsDashboard extends UmbLitElement {
   #enterspeedContext: EnterspeedContext;
@@ -26,14 +33,15 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
     | EnterspeedUmbracoConfigurationResponse
     | null
     | undefined;
-  #buttonState: string;
 
   @state()
   loadingConfiguration = true;
 
+  @state()
+  buttonState = "";
+
   constructor() {
     super();
-    this.#buttonState = "";
 
     this.consumeContext(
       UMB_NOTIFICATION_CONTEXT,
@@ -43,26 +51,24 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
     );
 
     this.#enterspeedContext = new EnterspeedContext(this);
+  }
+
+  connectedCallback() {
+    super.connectedCallback();
     this.getConfiguration();
   }
 
-  getConfiguration() {
-    this.#buttonState = "busy";
-    this.#enterspeedContext
-      .getEnterspeedConfiguration()
-      .then((response) => {
-        this.#enterspeedConfiguration = response.data?.data?.configuration;
-        this.loadingConfiguration = false;
-      })
-      .catch((error) => {
-        this.#notificationContext?.peek("danger", {
-          data: {
-            headline: "Error loading configuration",
-            message: error?.data?.message ?? error?.message ?? "An unexpected error occurred",
-          },
-        });
-      });
-    this.#buttonState = "";
+  async getConfiguration() {
+    this.buttonState = "busy";
+    try {
+      const response = await this.#enterspeedContext.getEnterspeedConfiguration();
+      this.#enterspeedConfiguration = response.data?.data?.configuration;
+      this.loadingConfiguration = false;
+    } catch (error) {
+      this.#notify("danger", "Error loading configuration", this.#messageFrom(error));
+    } finally {
+      this.buttonState = "";
+    }
   }
 
   async testConfigurationConnection() {
@@ -70,92 +76,155 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
       !this.#enterspeedConfiguration?.apiKey ||
       !this.#enterspeedConfiguration.baseUrl
     ) {
-      this.#notificationContext?.peek("danger", {
-        data: {
-          message: "Missing api key or base url",
-        },
-      });
+      this.#notify("danger", "Cannot test connection", "Enter an API key and a base url first.");
       return;
     }
 
-    this.#buttonState = "busy";
-    this.#enterspeedContext
-      .testConfigurationConnection(this.#enterspeedConfiguration)
-      .then((response) => {
-        if (response.data?.success) {
-          this.#notificationContext?.peek("positive", {
-            data: {
-              headline: "Connection successful",
-              message: "The connection to Enterspeed was successful.",
-            },
-          });
-        } else {
-          this.notifyErrors(response, "");
-        }
-      })
-      .catch((error) => {
-        this.#notificationContext?.peek("danger", {
-          data: {
-            headline: "Connection failed",
-            message: error?.data?.message ?? error?.message ?? "An unexpected error occurred",
-          },
-        });
-      });
-
-    this.#buttonState = "";
+    this.buttonState = "busy";
+    try {
+      const response = await this.#enterspeedContext.testConfigurationConnection(
+        this.#enterspeedConfiguration
+      );
+      if (response.data?.success) {
+        this.#notify(
+          "positive",
+          "Connection successful",
+          response.data.message ?? "The connection to Enterspeed was successful."
+        );
+      } else {
+        // Publishing still works when only the preview key fails, so that is not a failed connection.
+        this.#notifyFailure(response, "Connection failed", "Preview connection failed");
+      }
+    } catch (error) {
+      this.#notify("danger", "Connection failed", this.#messageFrom(error));
+    } finally {
+      this.buttonState = "";
+    }
   }
 
   async saveConfiguration() {
-    if (this.#enterspeedConfiguration != null) {
-      this.#enterspeedContext
-        .saveConfiguration(this.#enterspeedConfiguration)
-        .then((response) => {
-          if (response.data?.success) {
-            this.#notificationContext?.peek("positive", {
-              data: {
-                headline: "Configuration saved",
-                message: "The configuration has been saved.",
-              },
-            });
-          } else {
-            this.notifyErrors(response, "Error saving configuration");
-          }
-        })
-        .catch((error) => {
-          this.#notificationContext?.peek("danger", {
-            data: {
-              headline: "Error saving configuration",
-              message: error?.data?.message ?? error?.message ?? "An unexpected error occurred",
-            },
-          });
-        });
+    if (this.#enterspeedConfiguration == null) {
+      return;
+    }
+
+    this.buttonState = "busy";
+    try {
+      const response = await this.#enterspeedContext.saveConfiguration(
+        this.#enterspeedConfiguration
+      );
+      if (response.data?.success) {
+        // An invalid preview api key does not block the save, so it comes back as a success carrying errors.
+        const errors = response.data.errors;
+        if (errors && Object.keys(errors).length > 0) {
+          this.#notifyList(
+            "warning",
+            "Configuration saved",
+            this.#keyStatuses(errors),
+            this.#hint(errors)
+          );
+        } else {
+          this.#notify(
+            "positive",
+            "Configuration saved",
+            response.data.message ?? "The configuration has been saved."
+          );
+        }
+      } else {
+        this.#notifyFailure(response, "Error saving configuration");
+      }
+    } catch (error) {
+      this.#notify("danger", "Error saving configuration", this.#messageFrom(error));
+    } finally {
+      this.buttonState = "";
     }
   }
 
-  notifyErrors(response: any, errorMessage: string) {
-    let status = response.data.statusCode;
-    errorMessage = errorMessage || "Something went wrong";
-    if (status === 401) {
-      this.#notificationContext?.peek("danger", {
-        data: {
-          headline: "Error saving configuration",
-          message: response.data.message ?? "Unknown error",
-        },
-      });
-    } else if (status === 404) {
-      this.#notificationContext?.peek("danger", {
-        data: {
-          message: "Url does not exist",
-        },
-      });
+  // Reports whatever the server returned rather than branching on the status code. A failing publish api key is an
+  // error; a preview-only failure leaves publishing working, so it is only a warning.
+  #notifyFailure(response: any, headline: string, warningHeadline?: string) {
+    const errors = response?.data?.errors;
+    const publishFailed = !errors || "publishApiKey" in errors;
+    const statuses = this.#keyStatuses(errors);
+
+    if (statuses.length > 0) {
+      this.#notifyList(
+        publishFailed ? "danger" : "warning",
+        publishFailed ? headline : warningHeadline ?? headline,
+        statuses,
+        this.#hint(errors)
+      );
     } else {
-      this.#notificationContext?.peek("danger", {
-        data: {
-          message: errorMessage,
-        },
-      });
+      this.#notify(
+        publishFailed ? "danger" : "warning",
+        headline,
+        this.#messageFrom(response)
+      );
     }
   }
+
+  // Reports every key that was checked rather than only the failures, so a mixed result also confirms which key does
+  // work. Only meaningful when the server returned per key errors - without them the request never reached validation,
+  // and claiming a key is valid would be a guess.
+  #keyStatuses(errors: Record<string, string | null> | null | undefined) {
+    if (!errors || Object.keys(errors).length === 0) {
+      return [];
+    }
+
+    const statuses = [errors.publishApiKey ?? "Publish API key is valid"];
+    if (this.#enterspeedConfiguration?.previewApiKey) {
+      statuses.push(errors.previewApiKey ?? "Preview API key is valid");
+    }
+
+    return statuses;
+  }
+
+  #hint(errors: Record<string, string | null> | null | undefined) {
+    const failures = errors
+      ? Object.values(errors).filter(Boolean).length
+      : 0;
+
+    return failures > 1
+      ? "Verify your API keys under Settings > Data sources in the Enterspeed app."
+      : "Verify the API key under Settings > Data sources in the Enterspeed app.";
+  }
+
+  #messageFrom(source: any) {
+    return (
+      source?.data?.message ??
+      source?.error?.message ??
+      source?.message ??
+      "An unexpected error occurred"
+    );
+  }
+
+  #notify(color: NotificationColor, headline: string, message: string) {
+    this.#notificationContext?.peek(color, {
+      data: { headline, message },
+    });
+  }
+
+  // Uses the list layout so each key reads as its own line rather than one paragraph. The hint is given once here
+  // instead of being repeated in every message. `message` is kept populated so the payload still satisfies Umbraco's
+  // default notification data, which is what renders if the custom element is ever unavailable.
+  #notifyList(
+    color: NotificationColor,
+    headline: string,
+    messages: string[],
+    hint: string
+  ) {
+    const data: EnterspeedNotificationListData & { message: string } = {
+      headline,
+      messages,
+      hint,
+      message: messages.join(" "),
+    };
+
+    this.#notificationContext?.peek(color, {
+      elementName: "enterspeed-notification-list",
+      data,
+    });
+  }
+
 
   render() {
     if (!this.loadingConfiguration) {
@@ -189,7 +258,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Enterspeed base url"
               label="enterspeed base url"
               .disabled=${this.#enterspeedConfiguration
-          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.baseUrl}
               @input="${(e: any) => {
           this.#enterspeedConfiguration!.baseUrl = e.target.value;
@@ -211,7 +280,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Media domain (optional)"
               label="Media domain (optional)"
               .disabled=${this.#enterspeedConfiguration
-          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.mediaDomain ?? ""}
               @input="${(e: any) => {
           this.#enterspeedConfiguration!.mediaDomain = e.target.value;
@@ -236,7 +305,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Enterspeed API Key"
               label="Enterspeed API Key"
               .disabled=${this.#enterspeedConfiguration
-          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.apiKey ?? ""}
               @input="${(e: any) => {
           this.#enterspeedConfiguration!.apiKey = e.target.value;
@@ -257,7 +326,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               placeholder="Enterspeed preview API Key (optional)"
               label="Enterspeed preview API Key (optional)"
               .disabled=${this.#enterspeedConfiguration
-          ?.configuredFromSettingsFile || this.#buttonState === "busy"}
+          ?.configuredFromSettingsFile || this.buttonState === "busy"}
               .value=${this.#enterspeedConfiguration?.previewApiKey ?? ""}
               @input="${(e: any) => {
           this.#enterspeedConfiguration!.previewApiKey = e.target.value;
@@ -272,7 +341,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               look="primary"
               color="positive"
               label="Basic"
-              .disabled=${this.#buttonState == "busy" ||
+              .disabled=${this.buttonState == "busy" ||
         !this.#enterspeedConfiguration?.apiKey ||
         !this.#enterspeedConfiguration?.baseUrl ||
         this.#enterspeedConfiguration?.configuredFromSettingsFile}
@@ -285,7 +354,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               look="primary"
               color="default"
               label="Basic"
-              .disabled=${this.#buttonState == "busy" ||
+              .disabled=${this.buttonState == "busy" ||
         !this.#enterspeedConfiguration?.apiKey ||
         !this.#enterspeedConfiguration?.baseUrl}
               @click="${() => this.testConfigurationConnection()}"
