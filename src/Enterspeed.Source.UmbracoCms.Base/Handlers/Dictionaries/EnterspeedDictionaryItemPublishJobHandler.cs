@@ -11,7 +11,6 @@ using Enterspeed.Source.UmbracoCms.Base.Models.Api;
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Umbraco.Cms.Core.Models;
-using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
 {
@@ -21,7 +20,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
         private readonly IEnterspeedIngestService _enterspeedIngestService;
         private readonly IEntityIdentityService _entityIdentityService;
         private readonly IEnterspeedGuardService _enterspeedGuardService;
-        private readonly ILocalizationService _localizationService;
+        private readonly IUmbracoLocalizationProvider _umbracoLocalizationProvider;
         private readonly IEnterspeedConnectionProvider _enterspeedConnectionProvider;
 
         public EnterspeedDictionaryItemPublishJobHandler(
@@ -29,14 +28,14 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
             IEnterspeedIngestService enterspeedIngestService,
             IEntityIdentityService entityIdentityService,
             IEnterspeedGuardService enterspeedGuardService,
-            ILocalizationService localizationService,
+            IUmbracoLocalizationProvider umbracoLocalizationProvider,
             IEnterspeedConnectionProvider enterspeedConnectionProvider)
         {
             _enterspeedPropertyService = enterspeedPropertyService;
             _enterspeedIngestService = enterspeedIngestService;
             _entityIdentityService = entityIdentityService;
             _enterspeedGuardService = enterspeedGuardService;
-            _localizationService = localizationService;
+            _umbracoLocalizationProvider = umbracoLocalizationProvider;
             _enterspeedConnectionProvider = enterspeedConnectionProvider;
         }
 
@@ -64,7 +63,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers.Dictionaries
         {
             var isDictionaryId = Guid.TryParse(job.EntityId, out var dictionaryId);
             var dictionaryItem = isDictionaryId
-                ? _localizationService.GetDictionaryItemById(dictionaryId)
+                ? _umbracoLocalizationProvider.GetDictionaryItem(dictionaryId)
                 : null;
             if (dictionaryItem == null)
             {

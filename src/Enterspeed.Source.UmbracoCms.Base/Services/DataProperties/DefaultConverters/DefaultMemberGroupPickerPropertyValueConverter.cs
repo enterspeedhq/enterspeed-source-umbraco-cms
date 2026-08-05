@@ -31,7 +31,11 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConve
             if (!string.IsNullOrWhiteSpace(value))
             {
                 var memberGroupIds = value.Split(new[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+#if NET10_0_OR_GREATER
+                var memberGroups = _memberGroupService.GetByIdsAsync(memberGroupIds.Select(int.Parse)).GetAwaiter().GetResult().ToList();
+#else
                 var memberGroups = _memberGroupService.GetByIds(memberGroupIds.Select(int.Parse)).ToList();
+#endif
                 foreach (var memberGroup in memberGroups)
                 {
                     var memberGroupObject = ConvertToEnterspeedProperty(memberGroup);

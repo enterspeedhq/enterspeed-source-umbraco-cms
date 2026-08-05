@@ -6,13 +6,14 @@
   "scripts": {
     "build": "tsc && vite build",
     "watch": "vite build --watch",
-    "generate": "openapi --input http://localhost:21142/umbraco/swagger/enterspeed/swagger.json --output src/generated --postfixServices Resource --useOptions"
+    "generate": "openapi-ts -i http://localhost:21142/umbraco/openapi/enterspeed.json -o src/generated",
+    "generate:u17": "openapi-ts -i http://localhost:21143/umbraco/swagger/enterspeed/swagger.json -o src/generated"
   },
   "dependencies": {
     "lit": "^3.1.3"
   },
   "devDependencies": {
-    "@umbraco-cms/backoffice": "^14.0.0",
+    "@umbraco-cms/backoffice": "18.0.2",
     "typescript": "^5.2.2",
     "vite": "^5.0.8",
     "eslint-config-prettier": "^9.1.0",
@@ -23,6 +24,6 @@
     "eslint-plugin-local-rules": "^2.0.1",
     "eslint-plugin-storybook": "^0.6.15",
     "eslint-plugin-wc": "^2.0.4",
-    "openapi-typescript-codegen": "^0.25.0"
+    "@hey-api/openapi-ts": "^0.99.0"
   }
 }

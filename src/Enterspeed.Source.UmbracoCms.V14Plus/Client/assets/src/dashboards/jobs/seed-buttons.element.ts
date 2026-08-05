@@ -11,7 +11,7 @@ import { html } from "lit";
 @customElement("enterspeed-seed-buttons")
 export class enterspeedSeedButtonsElement extends UmbLitElement {
   #enterspeedContext!: EnterspeedContext;
-  #notificationContext!: UmbNotificationContext;
+  #notificationContext?: UmbNotificationContext;
   #seedResponse: SeedResponse | undefined | null;
 
   private interval: any;
@@ -30,12 +30,9 @@ export class enterspeedSeedButtonsElement extends UmbLitElement {
     this.#initGetNumberOfPendingJobs();
 
     this.#enterspeedContext = new EnterspeedContext(this);
-    this.consumeContext(
-      UMB_NOTIFICATION_CONTEXT,
-      (instance: UmbNotificationContext) => {
-        this.#notificationContext = instance;
-      }
-    );
+    this.consumeContext(UMB_NOTIFICATION_CONTEXT, (instance) => {
+      this.#notificationContext = instance;
+    });
   }
 
   render() {

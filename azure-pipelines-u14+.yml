@@ -1,57 +1,82 @@
 variables:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  # 5.x line: Umbraco 14-17 (UmbracoMajor=17 pass)
   majorVersion: 5
   minorVersion: 3
-  patchVersion: 6
+  patchVersion: 7
   version: $[format('{0}.{1}.{2}', variables.majorVersion, variables.minorVersion, variables.patchVersion)]
+  # 6.x line: Umbraco 18+ (UmbracoMajor=18 pass)
+  major18Version: 6
+  minor18Version: 0
+  patch18Version: 0
+  version18: $[format('{0}.{1}.{2}', variables.major18Version, variables.minor18Version, variables.patch18Version)]
 
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
     # Versioning: 1.0.0
     releaseOnNuget: true
-    semVersion: $[format('{0}', variables.version)]
-    buildName: $[format('{0}', variables.semVersion)]
+    semVersion5: $[format('{0}', variables.version)]
+    semVersion6: $[format('{0}', variables.version18)]
+    buildName: $[format('{0} / {1}', variables.semVersion5, variables.semVersion6)]
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
     # Versioning: 1.0.0-develop.123
     releaseOnNuget: false
-    semVersionBase: $[format('{0}-develop', variables.version)]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Develop - {0}', variables.semVersion)]
+    semVersion5Base: $[format('{0}-develop', variables.version)]
+    semVersion5Rev: $[counter(variables.semVersion5Base, 0)]
+    semVersion5: $[format('{0}.{1}', variables.semVersion5Base, variables.semVersion5Rev)]
+    semVersion6Base: $[format('{0}-develop', variables.version18)]
+    semVersion6Rev: $[counter(variables.semVersion6Base, 0)]
+    semVersion6: $[format('{0}.{1}', variables.semVersion6Base, variables.semVersion6Rev)]
+    buildName: $[format('Develop - {0} / {1}', variables.semVersion5, variables.semVersion6)]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/release/') }}:
     # Versioning: 1.0.0-alpha.branch.123
     releaseOnNuget: false
-    semVersionBase: $[format('{0}-alpha.{1}', variables.version, variables['Build.SourceBranchName'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Release - {0}', variables.semVersion)]
+    semVersion5Base: $[format('{0}-alpha.{1}', variables.version, variables['Build.SourceBranchName'])]
+    semVersion5Rev: $[counter(variables.semVersion5Base, 0)]
+    semVersion5: $[format('{0}.{1}', variables.semVersion5Base, variables.semVersion5Rev)]
+    semVersion6Base: $[format('{0}-alpha.{1}', variables.version18, variables['Build.SourceBranchName'])]
+    semVersion6Rev: $[counter(variables.semVersion6Base, 0)]
+    semVersion6: $[format('{0}.{1}', variables.semVersion6Base, variables.semVersion6Rev)]
+    buildName: $[format('Release - {0} / {1}', variables.semVersion5, variables.semVersion6)]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/') }}:
     # Versioning: 1.0.0-feature.branch.123
     releaseOnNuget: false
-    semVersionBase: $[format('{0}-feature.{1}', variables.version, variables['Build.SourceBranchName'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Feature - {0}', variables.semVersion)]
+    semVersion5Base: $[format('{0}-feature.{1}', variables.version, variables['Build.SourceBranchName'])]
+    semVersion5Rev: $[counter(variables.semVersion5Base, 0)]
+    semVersion5: $[format('{0}.{1}', variables.semVersion5Base, variables.semVersion5Rev)]
+    semVersion6Base: $[format('{0}-feature.{1}', variables.version18, variables['Build.SourceBranchName'])]
+    semVersion6Rev: $[counter(variables.semVersion6Base, 0)]
+    semVersion6: $[format('{0}.{1}', variables.semVersion6Base, variables.semVersion6Rev)]
+    buildName: $[format('Feature - {0} / {1}', variables.semVersion5, variables.semVersion6)]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/pull/') }}: # Pull requests
     # Versioning: 1.0.0-pr.1.123
     releaseOnNuget: false
-    semVersionBase: $[format('{0}-pr.{1}', variables.version, variables['System.PullRequest.PullRequestId'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Pull Request - {0}', variables.semVersion)]
+    semVersion5Base: $[format('{0}-pr.{1}', variables.version, variables['System.PullRequest.PullRequestId'])]
+    semVersion5Rev: $[counter(variables.semVersion5Base, 0)]
+    semVersion5: $[format('{0}.{1}', variables.semVersion5Base, variables.semVersion5Rev)]
+    semVersion6Base: $[format('{0}-pr.{1}', variables.version18, variables['System.PullRequest.PullRequestId'])]
+    semVersion6Rev: $[counter(variables.semVersion6Base, 0)]
+    semVersion6: $[format('{0}.{1}', variables.semVersion6Base, variables.semVersion6Rev)]
+    buildName: $[format('Pull Request - {0} / {1}', variables.semVersion5, variables.semVersion6)]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/bugfix/') }}:
     # Versioning: 1.0.0-bugfix.branch.123
     releaseOnNuget: false
-    semVersionBase: $[format('{0}-bugfix.{1}', variables.version, variables['Build.SourceBranchName'])]
-    semVersionRev: $[counter(variables.semVersionBase, 0)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Bugfix - {0}', variables.semVersion)]
+    semVersion5Base: $[format('{0}-bugfix.{1}', variables.version, variables['Build.SourceBranchName'])]
+    semVersion5Rev: $[counter(variables.semVersion5Base, 0)]
+    semVersion5: $[format('{0}.{1}', variables.semVersion5Base, variables.semVersion5Rev)]
+    semVersion6Base: $[format('{0}-bugfix.{1}', variables.version18, variables['Build.SourceBranchName'])]
+    semVersion6Rev: $[counter(variables.semVersion6Base, 0)]
+    semVersion6: $[format('{0}.{1}', variables.semVersion6Base, variables.semVersion6Rev)]
+    buildName: $[format('Bugfix - {0} / {1}', variables.semVersion5, variables.semVersion6)]
   ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/prerelease/') }}:
     # Versioning: 1.0.0-alpha.123
     releaseOnNuget: true
-    semVersionBase: $[format('{0}-alpha', variables.version)]
-    semVersionRev: $[counter(variables.semVersionBase, 1)]
-    semVersion: $[format('{0}.{1}', variables.semVersionBase, variables.semVersionRev)]
-    buildName: $[format('Prerelease - {0}', variables.semVersion)]
+    semVersion5Base: $[format('{0}-alpha', variables.version)]
+    semVersion5Rev: $[counter(variables.semVersion5Base, 1)]
+    semVersion5: $[format('{0}.{1}', variables.semVersion5Base, variables.semVersion5Rev)]
+    semVersion6Base: $[format('{0}-alpha', variables.version18)]
+    semVersion6Rev: $[counter(variables.semVersion6Base, 1)]
+    semVersion6: $[format('{0}.{1}', variables.semVersion6Base, variables.semVersion6Rev)]
+    buildName: $[format('Prerelease - {0} / {1}', variables.semVersion5, variables.semVersion6)]
   
 name: $(BuildID) - $(buildName)
 
@@ -120,8 +145,9 @@ stages:
           - task: NodeTool@0
             inputs:
               versionSource: 'spec'
-              versionSpec: '18.x'
-          
+              versionSpec: '24.x'
+
+          # npm client build once - the bundle is shared by both pack passes
           - task: Npm@1
             inputs:
               command: 'install'
@@ -131,33 +157,85 @@ stages:
               command: 'custom'
               workingDir: './src/Enterspeed.Source.UmbracoCms.V14Plus/Client/assets'
               customCommand: 'run build'
-            
-          # Restore packages
+
+          # ---- Pass 1: UmbracoMajor=17 -> 5.x package (Umbraco 14-17) ----
           - task: DotNetCoreCLI@2
-            displayName: Dotnet restore
+            displayName: Dotnet restore (Umbraco 14-17 pass)
             inputs:
               command: restore
               projects: "./Enterspeed.Source.UmbracoCms.V14Plus.sln"
               feedsToUse: config
               nugetConfigPath: "$(System.DefaultWorkingDirectory)/NuGet.Config"
+              restoreArguments: "/p:UmbracoMajor=17"
 
-          # Build solution
           - task: DotNetCoreCLI@2
-            displayName: Dotnet build
+            displayName: Dotnet build (Umbraco 14-17 pass)
             inputs:
               command: build
               projects: "Enterspeed.Source.UmbracoCms.V14Plus.sln"
-              arguments: "--no-restore --configuration Release /p:Version=$(semVersion)"
+              arguments: "--no-restore --configuration Release /p:UmbracoMajor=17 /p:Version=$(semVersion5)"
 
-          # Pack NuGet
           - task: DotNetCoreCLI@2
-            displayName: Dotnet pack
+            displayName: Dotnet test (Umbraco 14-17 pass)
+            inputs:
+              command: test
+              projects: "tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests.csproj"
+              arguments: "--no-restore --configuration Release /p:UmbracoMajor=17"
+
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet pack (Umbraco 14-17 pass)
             inputs:
               command: pack
-              outputDir: "$(Build.ArtifactStagingDirectory)/NuGet"
+              outputDir: "$(Build.ArtifactStagingDirectory)/NuGet/5x"
               packagesToPack: "src/Enterspeed.Source.UmbracoCms.V14Plus/*.csproj"
+              buildProperties: "UmbracoMajor=17;Version=$(semVersion5)"
               versioningScheme: byEnvVar
-              versionEnvVar: semVersion
+              versionEnvVar: semVersion5
+
+          # The two passes have different TargetFrameworks and package graphs,
+          # so intermediate outputs must not leak from one pass into the other
+          - task: Bash@3
+            displayName: Clean intermediate outputs between passes
+            inputs:
+              targetType: inline
+              script: |
+                rm -rf src/Enterspeed.Source.UmbracoCms.Base/obj src/Enterspeed.Source.UmbracoCms.Base/bin
+                rm -rf src/Enterspeed.Source.UmbracoCms.V14Plus/obj src/Enterspeed.Source.UmbracoCms.V14Plus/bin
+                rm -rf tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/obj tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/bin
+
+          # ---- Pass 2: UmbracoMajor=18 -> 6.x package (Umbraco 18+) ----
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet restore (Umbraco 18 pass)
+            inputs:
+              command: restore
+              projects: "./Enterspeed.Source.UmbracoCms.V14Plus.sln"
+              feedsToUse: config
+              nugetConfigPath: "$(System.DefaultWorkingDirectory)/NuGet.Config"
+              restoreArguments: "/p:UmbracoMajor=18"
+
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet build (Umbraco 18 pass)
+            inputs:
+              command: build
+              projects: "Enterspeed.Source.UmbracoCms.V14Plus.sln"
+              arguments: "--no-restore --configuration Release /p:UmbracoMajor=18 /p:Version=$(semVersion6)"
+
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet test (Umbraco 18 pass)
+            inputs:
+              command: test
+              projects: "tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests/Enterspeed.Source.UmbracoCms.V14Plus.Tests.csproj"
+              arguments: "--no-restore --configuration Release /p:UmbracoMajor=18"
+
+          - task: DotNetCoreCLI@2
+            displayName: Dotnet pack (Umbraco 18 pass)
+            inputs:
+              command: pack
+              outputDir: "$(Build.ArtifactStagingDirectory)/NuGet/6x"
+              packagesToPack: "src/Enterspeed.Source.UmbracoCms.V14Plus/*.csproj"
+              buildProperties: "UmbracoMajor=18;Version=$(semVersion6)"
+              versioningScheme: byEnvVar
+              versionEnvVar: semVersion6
 
           # Publish artifacts
           - task: PublishPipelineArtifact@1
@@ -190,7 +268,8 @@ stages:
                   inputs:
                     targetType: inline
                     script: |
-                      git tag $(semVersion)
+                      git tag $(semVersion5)
+                      git tag $(semVersion6)
                       git push --tags
 
                 - task: NuGetCommand@2

@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
+        <UmbracoMajor Condition="'$(UmbracoMajor)' == ''">17</UmbracoMajor>
+    </PropertyGroup>
+
+    <PropertyGroup>
         <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>disable</Nullable>
@@ -16,6 +20,11 @@
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README-NUGET.md</PackageReadmeFile>
         <Product>Enterspeed.Source.UmbracoCms</Product>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(UmbracoMajor)' == '18'">
+        <TargetFrameworks>net10.0</TargetFrameworks>
+        <DefineConstants>$(DefineConstants);UMBRACO_18_OR_GREATER</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
@@ -35,11 +44,29 @@
         <PackageReference Include="Umbraco.Cms.Web.Website" Version="15.0.0"/>
         <PackageReference Include="Umbraco.Cms.Core" Version="15.0.0"/>
     </ItemGroup>
-    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0' and '$(UmbracoMajor)' != '18'">
         <PackageReference Include="Umbraco.Cms" Version="17.0.0"/>
         <PackageReference Include="Umbraco.Cms.Web.Website" Version="17.0.0"/>
         <PackageReference Include="Umbraco.Cms.Core" Version="17.0.0"/>
     </ItemGroup>
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0' and '$(UmbracoMajor)' == '18'">
+        <PackageReference Include="Umbraco.Cms" Version="[18.0.2, 19.0.0)"/>
+        <PackageReference Include="Umbraco.Cms.Web.Website" Version="[18.0.2, 19.0.0)"/>
+        <PackageReference Include="Umbraco.Cms.Core" Version="[18.0.2, 19.0.0)"/>
+        <!-- Direct reference required: the package's InterceptorsNamespaces targets ship in
+             build/ (not buildTransitive/), so they only auto-apply on a direct reference;
+             it also pins Microsoft.OpenApi to avoid version conflicts that make custom
+             documents silently disappear -->
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7"/>
+    </ItemGroup>
+    <!-- Swashbuckle is removed in Umbraco 18; these files are replaced by
+         Configuration\Umbraco18\EnterspeedOpenApiConfiguration.cs -->
+    <ItemGroup Condition="'$(UmbracoMajor)' == '18'">
+        <Compile Remove="Configuration\ConfigureEnterspeedApiSwaggerGenOptions.cs"/>
+        <Compile Remove="Configuration\EnterspeedSchemaIdSelector.cs"/>
+        <Compile Remove="Configuration\EnterspeedOperationIdSelector.cs"/>
+    </ItemGroup>
+
     <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
         <ItemGroup>
             <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'"/>
@@ -47,10 +74,6 @@
     </Target>
 
     <ItemGroup>
-        <Content Include="App_Plugins\Enterspeed.Dashboard\**\*.*">
-            <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-            <CopyToPublishDirectory>Always</CopyToPublishDirectory>
-        </Content>
         <None Include="build\**\*.*">
             <Pack>True</Pack>
             <PackagePath>buildTransitive</PackagePath>

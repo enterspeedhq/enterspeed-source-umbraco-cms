@@ -5,9 +5,9 @@ using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Base.Factories;
 using Enterspeed.Source.UmbracoCms.Base.Models;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.Logging;
-using Umbraco.Cms.Core.Services;
 
 namespace Enterspeed.Source.UmbracoCms.Base.Handlers
 {
@@ -15,7 +15,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
     {
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
         private readonly IEnterspeedConfigurationService _configuration;
-        private readonly ILocalizationService _localizationService;
+        private readonly IUmbracoLocalizationProvider _umbracoLocalizationProvider;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly EnterspeedJobHandlerCollection _enterspeedJobHandlerCollection;
         private readonly ILogger<EnterspeedPostJobsHandler> _logger;
@@ -25,7 +25,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
         public EnterspeedPostJobsHandler(IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobFactory enterspeedJobFactory,
             IEnterspeedConfigurationService configuration,
-            ILocalizationService localizationService,
+            IUmbracoLocalizationProvider umbracoLocalizationProvider,
             EnterspeedJobHandlerCollection enterspeedJobHandlerCollection,
             ILogger<EnterspeedPostJobsHandler> logger,
             IEnterspeedConfigurationService enterspeedConfigurationService)
@@ -33,7 +33,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
             _enterspeedJobRepository = enterspeedJobRepository;
             _enterspeedJobFactory = enterspeedJobFactory;
             _configuration = configuration;
-            _localizationService = localizationService;
+            _umbracoLocalizationProvider = umbracoLocalizationProvider;
             _enterspeedJobHandlerCollection = enterspeedJobHandlerCollection;
             _logger = logger;
             _enterspeedConfigurationService = enterspeedConfigurationService;
@@ -84,7 +84,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Handlers
                     j.EntityType == EnterspeedJobEntityType.Dictionary &&
                     !j.EntityId.Equals(UmbracoDictionariesRootEntity.EntityId))) return;
 
-            var languageIsoCodes = _localizationService.GetAllLanguages()
+            var languageIsoCodes = _umbracoLocalizationProvider.GetAllLanguages()
                 .Select(s => s.IsoCode)
                 .ToList();
 

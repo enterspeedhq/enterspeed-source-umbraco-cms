@@ -1,16 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
+		<UmbracoMajor Condition="'$(UmbracoMajor)' == ''">17</UmbracoMajor>
+	</PropertyGroup>
+
+	<PropertyGroup>
 		<TargetFrameworks>net5.0;net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
 		<ImplicitUsings>disable</ImplicitUsings>
 		<Nullable>disable</Nullable>
 		<Authors>Enterspeed</Authors>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(UmbracoMajor)' == '18'">
+		<TargetFrameworks>net10.0</TargetFrameworks>
+		<DefineConstants>$(DefineConstants);UMBRACO_18_OR_GREATER</DefineConstants>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="Enterspeed.Source.UmbracoCms.V14Plus.Tests" />
+	</ItemGroup>
+
 	<ItemGroup Condition="'$(TargetFramework)' != 'net10.0'">
 		<PackageReference Include="Enterspeed.Source.Sdk" Version="2.0.4" />
 	</ItemGroup>
 	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
-		<PackageReference Include="Enterspeed.Source.Sdk" Version="2.0.7-alpha.2" />
+		<PackageReference Include="Enterspeed.Source.Sdk" Version="2.0.7" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)' == 'net5.0'">
@@ -36,9 +49,13 @@
 		<PackageReference Include="Umbraco.Cms.Core" Version="15.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="15.0.0" />
 	</ItemGroup>
-	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0' and '$(UmbracoMajor)' != '18'">
 		<PackageReference Include="Umbraco.Cms.Core" Version="17.0.0" />
 		<PackageReference Include="Umbraco.Cms.Web.Website" Version="17.0.0" />
+	</ItemGroup>
+	<ItemGroup Condition="'$(TargetFramework)' == 'net10.0' and '$(UmbracoMajor)' == '18'">
+		<PackageReference Include="Umbraco.Cms.Core" Version="[18.0.2, 19.0.0)" />
+		<PackageReference Include="Umbraco.Cms.Web.Website" Version="[18.0.2, 19.0.0)" />
 	</ItemGroup>
 	<Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
 		<ItemGroup>

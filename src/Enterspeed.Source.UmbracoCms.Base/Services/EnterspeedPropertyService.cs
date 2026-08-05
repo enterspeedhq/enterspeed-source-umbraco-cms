@@ -118,8 +118,13 @@ namespace Enterspeed.Source.UmbracoCms.Base.Services
 
         private IDomain GetDomain(IPublishedContent content, string culture)
         {
+#if NET10_0_OR_GREATER
+            var domain = _domainService.GetAssignedDomainsAsync(content.Key, false).GetAwaiter().GetResult()
+                ?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
+#else
             var domain = _domainService.GetAssignedDomains(content.Id, false)
                 ?.FirstOrDefault(p => string.Equals(p.LanguageIsoCode, culture, StringComparison.InvariantCultureIgnoreCase));
+#endif
             return domain;
         }
 

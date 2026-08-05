@@ -10,6 +10,7 @@ import { EnterspeedFailedJob } from "../../types";
 import {
   UUIBooleanInputEvent,
   UUISelectEvent,
+  UUISelectOption,
 } from "@umbraco-cms/backoffice/external/uui";
 import "../../components/pagination/pagination.element";
 import "../shared/server-message.element";
@@ -46,11 +47,11 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
 
   @state()
   private deleteModes = [
-    <Option>{
+    <UUISelectOption>{
       name: "Everything",
       value: "Everything",
     },
-    <Option>{ name: "Selected", value: "Selected" },
+    <UUISelectOption>{ name: "Selected", value: "Selected" },
   ];
 
   @state()
@@ -66,11 +67,11 @@ export class enterspeedFailedJobsElement extends UmbLitElement {
 
   #setDefaultDeleteModes() {
     this.deleteModes = [
-      <Option>{
+      <UUISelectOption>{
         name: "Everything",
         value: "Everything",
       },
-      <Option>{ name: "Selected", value: "Selected" },
+      <UUISelectOption>{ name: "Selected", value: "Selected" },
     ];
   }
 

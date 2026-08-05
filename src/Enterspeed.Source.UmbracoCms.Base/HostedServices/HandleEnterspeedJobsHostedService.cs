@@ -1,4 +1,7 @@
-﻿using System;
+// Umbraco 9-11 only: from Umbraco 13 (net8.0) the recurring work runs via the
+// IRecurringBackgroundJob system instead - see Base/BackgroundJobs/
+#if !NET8_0_OR_GREATER
+using System;
 using System.Threading.Tasks;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,12 +10,6 @@ using Umbraco.Cms.Core;
 using Umbraco.Cms.Core.Services;
 using Umbraco.Cms.Core.Sync;
 using Umbraco.Cms.Infrastructure.HostedServices;
-
-#if NET5_0
-
-#else
-using Umbraco.Cms.Infrastructure.Scoping;
-#endif
 
 namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
 {
@@ -62,3 +59,4 @@ namespace Enterspeed.Source.UmbracoCms.Base.HostedServices
         }
     }
 }
+#endif

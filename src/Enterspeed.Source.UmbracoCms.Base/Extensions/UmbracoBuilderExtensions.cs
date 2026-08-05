@@ -18,17 +18,30 @@ using Enterspeed.Source.UmbracoCms.Base.Handlers.Media;
 using Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewContent;
 using Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewDictionaries;
 using Enterspeed.Source.UmbracoCms.Base.Handlers.PreviewMedia;
+#if NET8_0_OR_GREATER
+using Enterspeed.Source.UmbracoCms.Base.BackgroundJobs;
+#else
 using Enterspeed.Source.UmbracoCms.Base.HostedServices;
+#endif
 using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers;
+#if UMBRACO_18_OR_GREATER
+using Enterspeed.Source.UmbracoCms.Base.NotificationHandlers.Umbraco18;
+#endif
 using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties;
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters;
+#if UMBRACO_18_OR_GREATER
+using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultConverters.Umbraco18;
+#endif
 using Enterspeed.Source.UmbracoCms.Base.Services.DataProperties.DefaultGridConverters;
 using Microsoft.Extensions.DependencyInjection;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Core.Mapping;
 using Umbraco.Cms.Core.Notifications;
+#if NET8_0_OR_GREATER
+using Umbraco.Extensions;
+#endif
 
 namespace Enterspeed.Source.UmbracoCms.Base.Extensions
 {
@@ -61,6 +74,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             builder.Services.AddTransient<IEnterspeedJobsHandlingService, EnterspeedJobsHandlingService>();
             builder.Services.AddSingleton<IEnterspeedValidationService, EnterspeedValidationService>();
             builder.Services.AddTransient<IUmbracoCultureProvider, UmbracoCultureProvider>();
+            builder.Services.AddTransient<IUmbracoLocalizationProvider, UmbracoLocalizationProvider>();
 
             builder.Services.AddSingleton<IEnterspeedConfigurationEditorProvider, EnterspeedConfigurationEditorProvider>();
             builder.Services.AddSingleton<IEnterspeedIngestService, EnterspeedIngestService>();
@@ -87,6 +101,10 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
                 .Append<DefaultBlockListPropertyValueConverter>()
 #if NET6_0_OR_GREATER
                             .Append<DefaultBlockGridPropertyValueConverter>()
+#endif
+#if UMBRACO_18_OR_GREATER
+                .Append<DefaultSingleBlockPropertyValueConverter>()
+                .Append<DefaultElementPickerPropertyValueConverter>()
 #endif
                 .Append<DefaultCheckboxPropertyValueConverter>()
                 .Append<DefaultCheckboxListPropertyValueConverter>()
@@ -188,6 +206,9 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             // Notification handlers
             builder.AddNotificationHandler<ContentPublishingNotification, EnterspeedContentPublishingNotificationHandler>();
             builder.AddNotificationHandler<ContentCacheRefresherNotification, EnterspeedContentCacheRefresherNotificationHandler>();
+#if UMBRACO_18_OR_GREATER
+            builder.AddNotificationHandler<ElementCacheRefresherNotification, EnterspeedElementCacheRefresherNotificationHandler>();
+#endif
             builder.AddNotificationHandler<DictionaryItemSavedNotification, EnterspeedDictionaryItemSavedNotificationHandler>();
             builder.AddNotificationHandler<DictionaryItemDeletingNotification, EnterspeedDictionaryItemDeletingNotificationHandler>();
             builder.AddNotificationHandler<MediaSavedNotification, EnterspeedMediaItemSavedEventHandler>();
@@ -198,10 +219,19 @@ namespace Enterspeed.Source.UmbracoCms.Base.Extensions
             // Components
             builder.Components().Append<EnterspeedJobsComponent>();
 
-            // Hosted Services
+            // Recurring work: background jobs on Umbraco 13+ (the job runner gates on
+            // runtime level, server role and MainDom, and isolates execution contexts);
+            // plain hosted services on the Umbraco 9-11 lines where the job system
+            // does not exist
+#if NET8_0_OR_GREATER
+            builder.Services.AddRecurringBackgroundJob<HandleEnterspeedJobsJob>();
+            builder.Services.AddRecurringBackgroundJob<InvalidateEnterspeedJobsJob>();
+            builder.Services.AddRecurringBackgroundJob<HandleEnterspeedFailedJobsJob>();
+#else
             builder.Services.AddHostedService<HandleEnterspeedJobsHostedService>();
             builder.Services.AddHostedService<InvalidateEnterspeedJobsHostedService>();
             builder.Services.AddHostedService<HandleEnterspeedFailedJobsHostedService>();
+#endif
 
             return builder;
         }

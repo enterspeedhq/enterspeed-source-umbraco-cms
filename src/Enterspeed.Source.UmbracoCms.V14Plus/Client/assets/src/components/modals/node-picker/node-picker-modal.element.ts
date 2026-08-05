@@ -7,13 +7,15 @@ import {
   css,
 } from "@umbraco-cms/backoffice/external/lit";
 import { UmbElementMixin } from "@umbraco-cms/backoffice/element-api";
-import type { UmbModalContext } from "@umbraco-cms/backoffice/modal";
+import type {
+  UmbModalContext,
+  UmbModalExtensionElement,
+} from "@umbraco-cms/backoffice/modal";
 import {
   NodePickerData,
   NodePickerValue,
   EnterspeedUniqueItemModelImpl,
 } from "./node-picker-modal.token";
-import { UmbModalExtensionElement } from "@umbraco-cms/backoffice/extension-registry";
 import {
   UMB_DOCUMENT_TREE_ALIAS,
   UmbDocumentItemRepository,
@@ -205,10 +207,16 @@ export default class EnterspeedNodePickerModal
       if (nodes != null) {
         for (let node of nodes) {
           if (node != null) {
+            // Backoffice 14-17 exposes the document name directly; 18 moved it
+            // to the variants. The bundle serves all hosts at runtime.
+            let nodeName =
+              (node as { name?: string }).name ??
+              node.variants?.[0]?.name ??
+              "";
             let mappedNode = new EnterspeedUniqueItemModelImpl(
               this.#includeDescendants,
               node.unique,
-              node.name,
+              nodeName,
               node.documentType.icon,
               this.#documentType
             );

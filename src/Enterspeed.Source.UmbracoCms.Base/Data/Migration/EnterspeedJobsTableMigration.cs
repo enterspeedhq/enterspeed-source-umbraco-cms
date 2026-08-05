@@ -1,17 +1,17 @@
-﻿using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
+using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Enterspeed.Source.UmbracoCms.Base.Data.Migration
 {
-    public class EnterspeedJobsTableMigration : MigrationBase
+    public class EnterspeedJobsTableMigration : EnterspeedMigrationBase
     {
         public EnterspeedJobsTableMigration(IMigrationContext context)
             : base(context)
         {
         }
 
-        protected override void Migrate()
+        protected override void ExecuteMigration()
         {
             Logger.LogDebug("Running migration {MigrationStep}", "JobsTableMigration");
 

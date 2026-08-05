@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <UmbracoMajor Condition="'$(UmbracoMajor)' == ''">17</UmbracoMajor>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <!-- Mirror the pack passes: UmbracoMajor=18 compiles the 18-only surface
+         (and its tests) in, so both passes can run the suite -->
+    <PropertyGroup Condition="'$(UmbracoMajor)' == '18'">
+        <DefineConstants>$(DefineConstants);UMBRACO_18_OR_GREATER</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1"/>
+        <PackageReference Include="NSubstitute" Version="5.3.0"/>
+        <PackageReference Include="xunit" Version="2.9.3"/>
+        <PackageReference Include="xunit.runner.visualstudio" Version="3.1.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\Enterspeed.Source.UmbracoCms.Base\Enterspeed.Source.UmbracoCms.Base.csproj"/>
+        <ProjectReference Include="..\..\src\Enterspeed.Source.UmbracoCms.V14Plus\Enterspeed.Source.UmbracoCms.V14Plus.csproj"/>
+    </ItemGroup>
+
+    <Target Name="RemoveLuceneAnalyzer" BeforeTargets="CoreCompile">
+        <ItemGroup>
+            <Analyzer Remove="@(Analyzer)" Condition="%(FileName) == 'Lucene.Net.CodeAnalysis.CSharp'"/>
+        </ItemGroup>
+    </Target>
+
+</Project>

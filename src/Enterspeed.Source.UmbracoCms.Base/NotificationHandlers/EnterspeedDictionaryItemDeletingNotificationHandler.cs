@@ -4,6 +4,7 @@ using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Repositories;
 using Enterspeed.Source.UmbracoCms.Base.Factories;
 using Enterspeed.Source.UmbracoCms.Base.Models;
+using Enterspeed.Source.UmbracoCms.Base.Providers;
 using Enterspeed.Source.UmbracoCms.Base.Services;
 using Microsoft.Extensions.Logging;
 using Umbraco.Cms.Core.Events;
@@ -22,7 +23,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 {
     public class EnterspeedDictionaryItemDeletingNotificationHandler : BaseEnterspeedNotificationHandler, INotificationHandler<DictionaryItemDeletingNotification>
     {
-        private readonly ILocalizationService _localizationService;
+        private readonly IUmbracoLocalizationProvider _umbracoLocalizationProvider;
         private readonly IEnterspeedJobFactory _enterspeedJobFactory;
         private readonly IEnterspeedDictionaryTranslation _enterspeedDictionaryTranslation;
 
@@ -31,7 +32,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
             IEnterspeedJobRepository enterspeedJobRepository,
             IEnterspeedJobsHandlingService enterspeedJobsHandlingService,
             IUmbracoContextFactory umbracoContextFactory,
-            ILocalizationService localizationService,
+            IUmbracoLocalizationProvider umbracoLocalizationProvider,
             IScopeProvider scopeProvider,
             IEnterspeedJobFactory enterspeedJobFactory,
             IAuditService auditService,
@@ -48,7 +49,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
                   serverRoleAccessor,
                   logger)
         {
-            _localizationService = localizationService;
+            _umbracoLocalizationProvider = umbracoLocalizationProvider;
             _enterspeedJobFactory = enterspeedJobFactory;
             _enterspeedDictionaryTranslation = enterspeedDictionaryTranslation;
         }
@@ -84,7 +85,7 @@ namespace Enterspeed.Source.UmbracoCms.Base.NotificationHandlers
 
                         if (descendants == null)
                         {
-                            descendants = _localizationService.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
+                            descendants = _umbracoLocalizationProvider.GetDictionaryItemDescendants(dictionaryItem.Key).ToList();
                         }
 
                         foreach (var descendant in descendants)

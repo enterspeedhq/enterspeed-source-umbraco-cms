@@ -1,17 +1,17 @@
-﻿using Enterspeed.Source.UmbracoCms.Base.Data.Models;
+using Enterspeed.Source.UmbracoCms.Base.Data.Models;
 using Enterspeed.Source.UmbracoCms.Base.Data.Schemas;
 using Umbraco.Cms.Infrastructure.Migrations;
 
 namespace Enterspeed.Source.UmbracoCms.Base.Data.Migration
 {
-    public class AddContentStateToJobsTable : MigrationBase
+    public class AddContentStateToJobsTable : EnterspeedMigrationBase
     {
         public AddContentStateToJobsTable(IMigrationContext context)
             : base(context)
         {
         }
 
-        protected override void Migrate()
+        protected override void ExecuteMigration()
         {
             var jobsTable = Database.PocoDataFactory.ForType(typeof(EnterspeedJobSchema));
             var jobsTableName = jobsTable.TableInfo.TableName;

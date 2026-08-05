@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Umbraco.Cms.Api.Common.OpenApi;
@@ -17,7 +17,12 @@ public class EnterspeedOperationIdSelector : OperationIdSelector
         {
             if (actionDescriptor.ControllerTypeInfo.Namespace != null && actionDescriptor.ControllerTypeInfo.Namespace.ToLowerInvariant().Contains("enterspeed"))
             {
-                return $"{apiDescription.ActionDescriptor.RouteValues["action"]}";
+                // Match the operation id format Umbraco 18's UmbracoOperationIdTransformer
+                // produces (verb prefix + action name, e.g. PostClearPendingJobs), so the
+                // 17 and 18 documents generate identical clients
+                var httpMethod = apiDescription.HttpMethod ?? "GET";
+                var verb = char.ToUpperInvariant(httpMethod[0]) + httpMethod[1..].ToLowerInvariant();
+                return $"{verb}{apiDescription.ActionDescriptor.RouteValues["action"]}";
             }
         }
 
