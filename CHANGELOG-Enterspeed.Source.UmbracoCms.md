@@ -8,10 +8,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - Fixed missing error feedback when saving a configuration fails
 - Fixed an issue where changes to `baseUrl` and `mediaDomain` were not saved
-
-## [4.4.4 - 2026-10-22] 
-### Fixed
-- Fixed missing error feedback when saving a configuration fails
  
 ## [5.3.6 - 2026-04-24]
 ### Fixed
@@ -63,6 +59,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Breaking
 - `Umbraco.Source.Cms namespace` has been updated to `Umbraco.Source.Cms.Base`
 - `EnterspeedComposer` must now be referenced on `Enterspeed.Source.UmbracoCms.V14Plus.EnterspeedComposer`
+
+## [4.4.4 - 2026-10-22] 
+### Fixed
+- Fixed missing error feedback when saving a configuration fails
 
 ## [4.4.3 - 2026-03-24]
 ### Fixed
