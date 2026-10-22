@@ -193,7 +193,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .value=${this.#enterspeedConfiguration?.baseUrl}
               @input="${(e: any) => {
           this.#enterspeedConfiguration!.baseUrl = e.target.value;
-        }})}"
+        }}"
               @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
@@ -215,7 +215,7 @@ export class enterspeedSettingsDashboard extends UmbLitElement {
               .value=${this.#enterspeedConfiguration?.mediaDomain ?? ""}
               @input="${(e: any) => {
           this.#enterspeedConfiguration!.mediaDomain = e.target.value;
-        }})}"
+        }}"
               @change=${() => this.requestUpdate()}
             ></uui-input>
           </div>
