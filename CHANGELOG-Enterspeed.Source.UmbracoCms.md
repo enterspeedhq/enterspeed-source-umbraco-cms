@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ### Fixed
 - Fixed missing error feedback when saving a configuration fails
 - Fixed an issue where changes to `baseUrl` and `mediaDomain` were not saved
+
+## [4.4.4 - 2026-10-22] 
+### Fixed
+- Fixed missing error feedback when saving a configuration fails
  
 ## [5.3.6 - 2026-04-24]
 ### Fixed
