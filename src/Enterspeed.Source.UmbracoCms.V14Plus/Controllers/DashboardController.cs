@@ -29,6 +29,12 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
     [ApiExplorerSettings(GroupName = "Dashboard")]
     public class DashboardController : EnterspeedBaseController
     {
+        internal const string PublishApiKeyError = "publishApiKey";
+        internal const string PreviewApiKeyError = "previewApiKey";
+
+        private const string PublishKeyName = "Publish";
+        private const string PreviewKeyName = "Preview";
+
         private readonly IServerRoleAccessor _serverRoleAccessor;
         private readonly IEnterspeedJobsHandlingService _enterspeedJobsHandlingService;
         private readonly IEnterspeedJobRepository _enterspeedJobRepository;
@@ -162,10 +168,13 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
                         .GetLeftPart(UriPartial.Authority);
             }
 
-            var response = TestConnection(configuration);
-            if (!response.Success)
+            var validation = ValidateConfiguration(configuration);
+
+            // The publish API key is required, so nothing is saved when it is invalid. An invalid preview API key only
+            // disables preview, so the configuration is still saved and the failure is reported as a warning.
+            if (validation.Errors != null && validation.Errors.ContainsKey(PublishApiKeyError))
             {
-                return Ok(response);
+                return Ok(validation);
             }
 
             try
@@ -190,7 +199,9 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
                 new Response
                 {
                     Status = HttpStatusCode.OK,
-                    Success = true
+                    Success = true,
+                    Message = validation.Message,
+                    Errors = validation.Errors
                 });
         }
 
@@ -276,32 +287,95 @@ namespace Enterspeed.Source.UmbracoCms.V14Plus.Controllers
         [ProducesResponseType(typeof(Response), 200)]
         public IActionResult TestConfigurationConnection(EnterspeedUmbracoConfiguration configuration)
         {
-            return Ok(TestConnections(configuration));
+            return Ok(ValidateConfiguration(configuration));
         }
 
-        private Response TestConnections(EnterspeedUmbracoConfiguration configuration)
+        // Both keys are always checked, so a single request reports the state of both, per key in Response.Errors.
+        private Response ValidateConfiguration(EnterspeedUmbracoConfiguration configuration)
         {
-            var publishConfiguration = configuration.GetPublishConfiguration();
-            var previewConfiguration = configuration.GetPreviewConfiguration();
+            var errors = new Dictionary<string, string>();
+            Response failedResponse = null;
+            var publishRejected = false;
+            var previewRejected = false;
 
-            var publishResponse = TestConnection(publishConfiguration);
-            if (!publishResponse.Success || previewConfiguration == null)
+            var publishKeyMissing = DescribeMissingKey(configuration.ApiKey, PublishKeyName);
+            if (publishKeyMissing != null)
             {
-                if (!publishResponse.Success && publishResponse.StatusCode == 401)
+                errors.Add(PublishApiKeyError, publishKeyMissing);
+            }
+            else
+            {
+                var publishResponse = TestConnection(configuration.GetPublishConfiguration());
+                if (!publishResponse.Success)
                 {
-                    publishResponse.Message = "Publish API key is invalid";
+                    errors.Add(PublishApiKeyError, DescribeFailure(publishResponse, PublishKeyName));
+                    publishRejected = publishResponse.StatusCode == 401;
+                    failedResponse = publishResponse;
                 }
-
-                return publishResponse;
             }
 
-            var previewResponse = TestConnection(previewConfiguration);
-            if (!previewResponse.Success && previewResponse.StatusCode == 401)
+            // The preview API key is optional, so it is only verified when one has been entered.
+            var previewConfigured = !string.IsNullOrWhiteSpace(configuration.PreviewApiKey);
+            if (previewConfigured)
             {
-                previewResponse.Message = "Preview API key is invalid";
+                var previewResponse = TestConnection(configuration.GetPreviewConfiguration());
+                if (!previewResponse.Success)
+                {
+                    errors.Add(PreviewApiKeyError, DescribeFailure(previewResponse, PreviewKeyName));
+                    previewRejected = previewResponse.StatusCode == 401;
+                    failedResponse ??= previewResponse;
+                }
             }
 
-            return previewResponse;
+            if (errors.Count == 0)
+            {
+                return new Response
+                {
+                    Status = HttpStatusCode.OK,
+                    Success = true,
+                    Message = previewConfigured
+                        ? "Publish and preview API keys are valid"
+                        : "Publish API key is valid"
+                };
+            }
+
+            // Both keys rejected for the same reason is said once, rather than repeating the same sentence per key.
+            var bothRejected = publishRejected && previewRejected;
+            var statements = bothRejected
+                ? "Publish and preview API keys were rejected by Enterspeed"
+                : string.Join(". ", errors.Values);
+
+            return new Response
+            {
+                Status = failedResponse?.Status ?? HttpStatusCode.BadRequest,
+                Success = false,
+                Message = $"{statements}. {DescribeAdvice(errors.Count)}",
+                Errors = errors,
+                Exception = failedResponse?.Exception
+            };
+        }
+
+        private static string DescribeAdvice(int failureCount) => failureCount > 1
+            ? "The keys are either incorrect or not valid API keys - please verify them in the Enterspeed app."
+            : "The key is either incorrect or not a valid API key - please verify it in the Enterspeed app.";
+
+        // Only checks presence. Validating the key format is left to Enterspeed, so a format change there does not
+        // need a release of this package.
+        private static string DescribeMissingKey(string apiKey, string keyName) =>
+            string.IsNullOrWhiteSpace(apiKey) ? $"{keyName} API key is required" : null;
+
+        // Prefers the message Enterspeed returned. It sends no body for an unauthorized request today, hence the
+        // fallbacks, which cannot tell an unrecognised key from a malformed one.
+        private static string DescribeFailure(Response response, string keyName)
+        {
+            if (!string.IsNullOrWhiteSpace(response.Message))
+            {
+                return $"{keyName} API key: {response.Message}";
+            }
+
+            return response.StatusCode == 401
+                ? $"{keyName} API key was rejected by Enterspeed"
+                : $"{keyName} API key could not be verified (HTTP {response.StatusCode})";
         }
 
         private Response TestConnection(EnterspeedConfiguration configuration)
